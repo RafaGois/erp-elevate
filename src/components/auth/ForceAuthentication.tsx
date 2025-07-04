@@ -17,8 +17,8 @@ export default function ForceAuthentication(props: ForceAuthenticationProps) {
           <script
             dangerouslySetInnerHTML={{
               __html: `
-                if(!document?.cookie?.includes("mmm-frameport-v2-auth")) {
-                    window.location.href = "/"
+                if(!document?.cookie?.includes("elevate-auth")) {
+                    window.location.href = "/auth"
                 }
               `,
             }}
