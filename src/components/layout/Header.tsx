@@ -9,7 +9,7 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
   return (
     <div
-      className="flex py-4 pr-8 border-b"
+      className="flex p-5 pr-8 border-b"
       style={{ gridArea: "cabecalho" }}
     >
       <SidebarTrigger className="mr-3" />

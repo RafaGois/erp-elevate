@@ -3,7 +3,7 @@
 //import ForceAuthentication from "../auth/ForceAuthentication";
 import Header from "./Header";
 import Content from "./Content";
-import React, { useRef } from "react";
+import React from "react";
 
 import { Barlow } from "next/font/google";
 import { SidebarProvider } from "../ui/sidebar";
@@ -24,7 +24,6 @@ interface LayoutProps {
 
 export default function Layout(props: LayoutProps) {
   const { theme } = useTheme();
-  const ref = useRef<HTMLElement>(null);
 
   return (
     /* <ForceAuthentication> */
