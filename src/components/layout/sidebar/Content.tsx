@@ -32,7 +32,7 @@ interface SidebarSubItem {
   title: string;
   url: string;
   icon: LucideIcon;
-  isActive?: boolean
+  isActive?: boolean;
   items?: SidebarSubSubItem[];
 }
 
@@ -69,9 +69,8 @@ export default function Content(props: ContentProps) {
                       <SidebarMenuButton tooltip={item.title}>
                         {item.icon && <item.icon />}
                         <span>{item.title}</span>
-                  
+
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                       
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
@@ -81,9 +80,7 @@ export default function Content(props: ContentProps) {
                             key={subItem.title}
                             onClick={() => setOpen(false)}
                           >
-                            <SidebarMenuSubButton
-                              asChild
-                            >
+                            <SidebarMenuSubButton asChild>
                               <Link href={item.url + subItem.url}>
                                 <small>{subItem.title}</small>
                               </Link>
