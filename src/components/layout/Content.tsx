@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import useAuth from "@/data/hooks/useAuth";
 
-export default function Content(props: any) {
+export default function Content(props) {
   const { reloading } = useAppData();
   const { loading: loadingAuth } = useAuth();
 

@@ -1,4 +1,4 @@
-
+import { app } from "./config";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut} from "firebase/auth";
 import { query, collection, where, getDocs, setDoc, doc, getFirestore } from "firebase/firestore";
 
@@ -8,15 +8,11 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 async function loginWithEmailAndPassword(username: string, password: string) {
-    try {
-        await signInWithEmailAndPassword(auth, username, password);
-    } catch (error) {
-        console.log(error);  
-    }
+    const result = await signInWithEmailAndPassword(auth, username, password);
+    return result;
 }
 
 async function loginWithGoogle() {
-    try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         const q = query(collection(db, "users"), where("uid", "==", user.uid));
@@ -27,10 +23,7 @@ async function loginWithGoogle() {
                 name: user.displayName,
             });
         }
-        console.log(result);
-    } catch (error) {
-        console.log(error);
-    }
+        return result;
 }
 
 function logout() {

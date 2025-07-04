@@ -13,12 +13,12 @@ export default function AppSidebar() {
         {
           title: "Movimentações",
           icon: DollarSign,
-          url: "/Movimentations",
+          url: "/movimentations",
           
           items: [
             {
               title: "Registros",
-              url: "/Registers",
+              url: "/",
             },
             {
               title: "Saidas",
@@ -56,7 +56,7 @@ export default function AppSidebar() {
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarHeader>
         <div className="flex justify-center gap-2">
-          <ZapOff /> Controle
+          <ZapOff /> Controle Elevate
         </div>
       </SidebarHeader>
       <Content items={data} />

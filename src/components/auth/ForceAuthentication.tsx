@@ -44,7 +44,7 @@ export default function ForceAuthentication(props: ForceAuthenticationProps) {
   } else if (loading) {
     return renderLoading();
   } else {
-    router.push("/");
+    router.push("/auth");
     return null;
   }
 }

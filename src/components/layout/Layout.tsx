@@ -11,6 +11,7 @@ import AppSidebar from "./sidebar/AppSidebar";
 
 import { useTheme } from "next-themes";
 import Head from "next/head";
+import ForceAuthentication from "../auth/ForceAuthentication";
 
 const barlow = Barlow({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ export default function Layout(props: LayoutProps) {
   const { theme } = useTheme();
 
   return (
-    /* <ForceAuthentication> */
+    <ForceAuthentication> 
     <div>
       <Head>
         <title>Sistema de Gerenciamento de Recursos</title>
@@ -43,6 +44,6 @@ export default function Layout(props: LayoutProps) {
         </main>
       </SidebarProvider>
       </div>
-    /* </ForceAuthentication> */
+     </ForceAuthentication> 
   );
 }

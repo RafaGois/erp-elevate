@@ -1,21 +1,26 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
+import { app } from "@/firebase/config";
+import { getAuth } from "firebase/auth";
 
 import Cookies from "js-cookie";
-import axios from "axios";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import AuthContextProps from "../../interfaces/AuthContextProps";
+import User from "@/models/user";
+
+import { User as FirebaseUser} from "firebase/auth";
+import { loginWithEmailAndPassword, loginWithGoogle } from "@/firebase/authentications";
 
 const AuthContext = createContext<AuthContextProps>({});
 
 function manageCookie(logged: boolean, token: string | null) {
   if (logged) {
-    Cookies.set("mmm-frameport-v2-auth", logged + "", { expires: 1 });
-    if (token) Cookies.set("mmm-frameport-v2-token", token, { expires: 1 });
+    Cookies.set("elevate-auth", logged + "", { expires: 1 });
+    if (token) Cookies.set("elevate-token", token, { expires: 1 });
   } else {
-    Cookies.remove("mmm-frameport-v2-auth");
-    Cookies.remove("mmm-frameport-v2-token");
+    Cookies.remove("elevate-auth");
+    Cookies.remove("elevate-token");
     localStorage.setItem("selectedTab", "/Current/Line1");
   }
 }
@@ -24,17 +29,33 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export function AuthProvider(props: AuthProviderProps) {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState/* <User> */(null);
+async function standardizedUser(firebaseUser: FirebaseUser): Promise<User> {
+  const token = await firebaseUser.getIdToken();
+  return new User(
+    firebaseUser?.uid,
+    firebaseUser?.displayName ?? "",
+    firebaseUser?.email ?? "",
+    "",
+    token,
+    firebaseUser.providerId
+  );
+}
 
-  async function confingSection(recivedUser: any/* : User */) {
-    if (recivedUser?.token) {
-      setUser(recivedUser);
-      manageCookie(true, recivedUser.token);
+export function AuthProvider(props: AuthProviderProps) {
+  const auth = getAuth(app);
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  async function confingSection(recivedUser: User | FirebaseUser | null) {
+    if (recivedUser?.email) {
+      const firebaseUser = await standardizedUser(recivedUser as FirebaseUser);
+      setUser(firebaseUser);
+      manageCookie(true, firebaseUser?.token ?? null);
       setLoading(false);
-      localStorage.setItem("uid", recivedUser.id + "");
-      return recivedUser.id;
+      localStorage.setItem("uid", recivedUser.uid + "");
+      return recivedUser.uid;
     } else {
       setUser(null);
       manageCookie(false, null);
@@ -42,21 +63,25 @@ export function AuthProvider(props: AuthProviderProps) {
       return false;
     }
   }
-  async function login(recivedUser: any/* : User */) {
-    setLoading(true);
+  async function login(recivedUser: User) {
     try {
-      if (!recivedUser.username || !recivedUser.password) {
-        throw new Error("Informe todos os valores.");
-      }
+      setLoading(true);
+      const resp = await loginWithEmailAndPassword(recivedUser.email, recivedUser.password);
+      await confingSection(resp?.user);
+      router.push("/movimentations");
+      return resp?.user?.uid;
+    } finally {
+      setLoading(false);
+    }
+  }
 
-      const response = await axios.post/*< : User>*/(
-        "https://mmm-frameport-production.up.railway.app/screen/users/login",
-        recivedUser
-      );
-      confingSection(response.data);
-      //todo validar entrar na ultima tela salva localmente, senao na current line 1
-      router.push("/Current/Line1");
-      return response.data.id;
+  async function loginGoogle() {
+    try {
+      const result = await loginWithGoogle();
+      const user = result.user;
+      await confingSection(user);
+      router.push("/movimentations");
+      return user?.uid;
     } finally {
       setLoading(false);
     }
@@ -71,41 +96,13 @@ export function AuthProvider(props: AuthProviderProps) {
     }
   }
 
-  async function register(recivedUser: any/* : User */) {
-    try {
-      if (!recivedUser.name || !recivedUser.username || !recivedUser.password) {
-        throw new Error("Informe todos os valores.");
-      }
-
-      setLoading(true);
-      await axios.post/*< : User>*/(
-        "https://mmm-frameport-production.up.railway.app/screen/users",
-        recivedUser
-      );
-    } catch (err: any) {
-      throw new Error(err?.response?.data[0] ?? err?.message?? "Erro ao executar operação.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    const token = Cookies.get("mmm-frameport-v2-token");
-
-    if (!token) confingSection(null);
-    setLoading(true);
-    axios
-      .post/*< : User>*/(
-        "https://mmm-frameport-production.up.railway.app/screen/users/validate",
-        { token: token }
-      )
-      .then((resp) => {
-        confingSection(resp.data);
-      })
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .catch((err) => {
-        confingSection(null);
-      });
+    if(Cookies.get('elevate-auth')) {
+      const cancelar = auth.onIdTokenChanged(confingSection)
+      return () => cancelar()
+  } else {
+      setLoading(false)
+  }
   }, []);
 
   return (
@@ -113,8 +110,8 @@ export function AuthProvider(props: AuthProviderProps) {
       value={{
         user,
         login,
+        loginGoogle,
         logout,
-        register,
         loading,
       }}
     >

@@ -1,20 +1,23 @@
 export default class User {
-    private _uid: string;
-    private _name: string;
+    private _uid?: string;
+    private _name?: string;
     private _email: string;
-    private _token: string;
-    private _provider: string;
+    private _password: string;
+    private _token?: string;
+    private _provider?: string;
     
     constructor(
-        uid: string,
-        name: string,
         email: string,
-        token: string,
-        provider: string,
+        password: string,
+        uid?: string,
+        name?: string,
+        token?: string,
+        provider?: string,
     ) {
         this._uid = uid;
         this._name = name;
         this._email = email;
+        this._password = password;
         this._token = token;
         this._provider = provider;
     }
@@ -29,6 +32,10 @@ export default class User {
 
     get email() {
         return this._email;
+    }
+
+    get password() {
+        return this._password;
     }
 
     get token() {

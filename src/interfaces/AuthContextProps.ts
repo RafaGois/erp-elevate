@@ -1,9 +1,9 @@
-import User from "../models/User";
+import User from "@/models/user";
 
 export default interface AuthContextProps {
-  user?: User;
-  login?: (recivedUser: User) => Promise<number>;
-  register?: (recivedUser: User) => Promise<void>;
+  user?: User | null;
+  login?: (recivedUser: User) => Promise<string>;
+  loginGoogle?: () => Promise<string>;
   logout?: () => void;
   loading?: boolean;
 }

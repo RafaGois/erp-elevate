@@ -51,8 +51,8 @@ export default function Footer() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user?.name}</span>
-                  <span className="truncate text-xs">{user?.Level?.name}</span>
+                  <span className="truncate font-semibold">{user?.name}Nome do cidadão </span>
+                  <span className="truncate text-xs">colocar algo aq</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -74,7 +74,7 @@ export default function Footer() {
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user?.name}</span>
                     <span className="truncate text-xs">
-                      {user?.Level?.name}
+                      {/* user?.Level?.name */}
                     </span>
                   </div>
                 </div>
