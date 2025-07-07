@@ -10,7 +10,7 @@ interface ToolkitModalProps<T> {
   setAction?: (action: ModalAction | null) => void;
 
   selectedObject?: T;
-  setSelectedObject?: (selectedObject: T) => void;
+  setSelectedObject?: (selectedObject: T | null) => void;
 
   refetch: () => Promise<UseQueryResult<T[], Error>>;
 

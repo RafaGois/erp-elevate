@@ -11,10 +11,10 @@ import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
 
 interface ModalProps<T> {
-  action: ModalAction;
-  setAction: (newAction: ModalAction | null) => void;
+  action?: ModalAction;
+  setAction?: (newAction: ModalAction | null) => void;
 
-  setSelectedObject: (newSelectedObject: T | null) => void;
+  setSelectedObject?: (newSelectedObject: T | null) => void;
 
   title: string;
   description: string;
@@ -30,9 +30,9 @@ export default function Modal<T>(props: ModalProps<T>) {
   const { reloading } = useAppData();
 
   function handleClose() {
-    props?.form?.reset();
-    props?.setAction(null);
-    props?.setSelectedObject(null);
+    props.form?.reset();
+    if (props.setAction) props.setAction(null);
+    if (props.setSelectedObject) props.setSelectedObject(null);
   }
 
   return (

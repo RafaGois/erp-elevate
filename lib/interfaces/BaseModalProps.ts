@@ -10,5 +10,5 @@ export interface BaseModalProps<T> {
     refetch?: () => Promise<UseQueryResult<T[], Error>>;
 
     selectedObject?: (T & ExtraAttributes) | null;
-    setSelectedObject?: (selectedObject: T) => void;
+    setSelectedObject?: (selectedObject: T | null) => void;
 }

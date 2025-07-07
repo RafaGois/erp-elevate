@@ -18,7 +18,7 @@ export default function AppSidebar() {
           items: [
             {
               title: "Registros",
-              url: "/",
+              url: "/movimentations",
             },
             {
               title: "Saidas",
@@ -58,11 +58,11 @@ export default function AppSidebar() {
         {
           title: "Inventário",
           icon: Warehouse,
-          url: "/",
+          url: "/inventory",
           items: [
             {
               title: "Registros",
-              url: "/Registers",
+              url: "/inventory",
             },
           ],
         },

@@ -1,3 +1,5 @@
+"use client"
+
 import { DataTable } from "@/templates/layout/components/datatable/DataTable";
 import FloatingMenu from "@/templates/layout/components/datatable/FloatingMenu";
 import Layout from "@/templates/layout/Layout";

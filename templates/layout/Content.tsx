@@ -28,8 +28,8 @@ export default function Content(props) {
   }, [reloading, loadingAuth]);
 
   return (
-    <div className="flex flex-col flex-1">
-      props.children
+    <div className="flex flex-col p-4 flex-1">
+      {props.children}
       <Toaster />
     </div>
   );
