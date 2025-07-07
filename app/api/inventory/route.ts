@@ -7,9 +7,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(users); */
     return NextResponse.json([{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}])
     
-  } catch (error) {
+  } catch (error ) {
     return NextResponse.json(
-      { error: 'Erro ao buscar usuários' }, 
+      { error: (error as Error).message || 'Erro ao buscar usuários' }, 
       { status: 500 }
     );
   }
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Erro ao criar usuário' }, 
+      { error: (error as Error).message || 'Erro ao criar usuário' }, 
       { status: 400 }
     );
   }

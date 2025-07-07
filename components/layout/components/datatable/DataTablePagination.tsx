@@ -1,6 +1,6 @@
 import { type Table } from "@tanstack/react-table";
 
-import { Button } from "@/templates/ui/button";
+import { Button } from "@/components/ui/button";
 
 import {
   ChevronLeft,
@@ -14,7 +14,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/templates/ui/select";
+} from "@/components/ui/select";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;

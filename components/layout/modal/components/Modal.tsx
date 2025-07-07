@@ -1,4 +1,4 @@
-import { Button } from "@/templates/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/templates/ui/dialog";
+} from "@/components/ui/dialog";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
 

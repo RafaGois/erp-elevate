@@ -4,7 +4,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/templates/ui/form";
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/templates/ui/select";
+} from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 
 interface SelectFormProps {

@@ -2,8 +2,8 @@
 
 import type { Table } from "@tanstack/react-table";
 
-import { Input } from "@/templates/ui/input";
-import { Button } from "@/templates/ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 
 interface DataTableToolbarProps<TData> {

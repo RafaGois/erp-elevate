@@ -1,12 +1,12 @@
-import { Button } from "@/templates/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/templates/ui/dropdown-menu";
-import { useToast } from "@/templates/hooks/use-toast";
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/hooks/use-toast";
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 import { Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";

@@ -2,7 +2,7 @@ import InventoryItem from "@/lib/models/InventoryItem";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
-import { Form } from "@/templates/ui/form";
+import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 
 type InventoryItemModalProps = BaseModalProps<InventoryItem>;
