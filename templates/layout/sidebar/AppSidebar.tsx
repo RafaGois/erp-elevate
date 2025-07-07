@@ -1,5 +1,5 @@
 import { Sidebar, SidebarHeader } from "../../ui/sidebar";
-import { Calendar, DollarSign, FolderDot, ZapOff } from "lucide-react";
+import { Calendar, DollarSign, FolderDot, Warehouse, ZapOff } from "lucide-react";
 
 import Content from "./Content";
 import Footer from "./Footer";
@@ -30,7 +30,7 @@ export default function AppSidebar() {
     },
     {
       title: "Projetos",
-      url: "/Projects",
+      url: "/projects",
       icon: FolderDot,
       items: [
         {
@@ -45,6 +45,24 @@ export default function AppSidebar() {
             {
               title: "Saidas",
               url: "/Packages",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Inventário",
+      url: "/inventory",
+      icon: FolderDot,
+      items: [
+        {
+          title: "Inventário",
+          icon: Warehouse,
+          url: "/",
+          items: [
+            {
+              title: "Registros",
+              url: "/Registers",
             },
           ],
         },

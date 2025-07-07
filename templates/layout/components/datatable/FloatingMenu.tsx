@@ -1,25 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/templates/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/hooks/use-toast";
+} from "@/templates/ui/dropdown-menu";
+import { useToast } from "@/templates/hooks/use-toast";
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import {
-  Copy,
-  Edit2,
-  MoreHorizontal,
-  Trash2,
-} from "lucide-react";
+import { Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
 import ModalAction from "@/lib/enums/modalAction";
 
 interface WithId {
-  id: number;
-  cubic?: number;
+  id: string;
 }
 
 interface FloatingMenuProps<T> {
@@ -63,8 +57,7 @@ export default function FloatingMenu<T extends WithId>(
           <Edit2 />
           <DropdownMenuLabel>Editar</DropdownMenuLabel>
         </DropdownMenuItem>
-        
-        
+
         <DropdownMenuItem
           onClick={() => {
             props.setSelectedObject(props.selectedObject);

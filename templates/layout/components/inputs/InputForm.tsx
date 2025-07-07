@@ -6,8 +6,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/templates/ui/form";
+import { Input } from "@/templates/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
 interface InputFormProps {
@@ -31,7 +31,6 @@ export default function InputForm(props: InputFormProps) {
     <FormField
       control={props.form.control}
       name={props.name}
-      
       rules={{
         required: props?.required ? "Campo obrigatório" : false,
       }}

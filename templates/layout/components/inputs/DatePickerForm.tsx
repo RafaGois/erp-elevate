@@ -4,20 +4,20 @@ import { CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/templates/ui/button";
+import { Calendar } from "@/templates/ui/calendar";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/templates/ui/form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/templates/ui/popover";
 import { format } from "date-fns";
 
 export function DatePickerForm({ form, label }: { form: any; label: string }) {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "../components/theme-provider";
+import { ThemeProvider } from "../templates/theme-provider";
 
 import { AuthProvider } from "../data/contexts/AuthContext";
 import { AppProvider } from "../data/contexts/AppContext";

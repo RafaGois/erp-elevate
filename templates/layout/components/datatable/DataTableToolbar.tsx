@@ -2,9 +2,9 @@
 
 import type { Table } from "@tanstack/react-table";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import ModalAction  from "@/lib/enums/modalAction";
+import { Input } from "@/templates/ui/input";
+import { Button } from "@/templates/ui/button";
+import ModalAction from "@/lib/enums/modalAction";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -13,7 +13,7 @@ interface DataTableToolbarProps<TData> {
 
 export function DataTableToolbar<TData>({
   table,
-  setAction
+  setAction,
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex items-center justify-between py-4">

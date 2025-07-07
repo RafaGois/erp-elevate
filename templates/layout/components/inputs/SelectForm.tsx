@@ -4,7 +4,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "@/templates/ui/form";
 import {
   Select,
   SelectContent,
@@ -12,7 +12,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/templates/ui/select";
 import { UseFormReturn } from "react-hook-form";
 
 interface SelectFormProps {
@@ -31,18 +31,20 @@ interface SelectFormProps {
   allOptions?: boolean;
 
   key?: number;
-  isLoading?: boolean
+  isLoading?: boolean;
 }
 
 export default function SelectForm(props: SelectFormProps) {
   function listOptions() {
-    return props?.options?.sort((a,b) => a.name.localeCompare(b.name))?.map((o: { id: number; name: string }) => {
-      return (
-        <SelectItem key={o.id + "-" + o.name} value={o.id + ""}>
-          {o.name}
-        </SelectItem>
-      );
-    });
+    return props?.options
+      ?.sort((a, b) => a.name.localeCompare(b.name))
+      ?.map((o: { id: number; name: string }) => {
+        return (
+          <SelectItem key={o.id + "-" + o.name} value={o.id + ""}>
+            {o.name}
+          </SelectItem>
+        );
+      });
   }
 
   return (
@@ -67,7 +69,11 @@ export default function SelectForm(props: SelectFormProps) {
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder={props.isLoading ? "Carregando..." : "Informe uma opção"}/>
+                <SelectValue
+                  placeholder={
+                    props.isLoading ? "Carregando..." : "Informe uma opção"
+                  }
+                />
               </SelectTrigger>
             </FormControl>
             <SelectContent className="fixed z-50">
