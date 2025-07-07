@@ -7,7 +7,7 @@ import { Label } from "../../templates/ui/label";
 import Image from "next/image";
 
 import useAuth from "../../data/hooks/useAuth";
-import User from "../../models/user";
+import User from "../../lib/models/user";
 
 export default function Auth() {
   const { login, loginGoogle } = useAuth();

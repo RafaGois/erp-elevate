@@ -7,10 +7,13 @@ import { getAuth } from "firebase/auth";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import AuthContextProps from "../../interfaces/AuthContextProps";
-import User from "../../models/user";
+import User from "../../lib/models/user";
 
-import { User as FirebaseUser} from "firebase/auth";
-import { loginWithEmailAndPassword, loginWithGoogle } from "../../firebase/authentications";
+import { User as FirebaseUser } from "firebase/auth";
+import {
+  loginWithEmailAndPassword,
+  loginWithGoogle,
+} from "../../firebase/authentications";
 
 const AuthContext = createContext<AuthContextProps>({});
 
@@ -66,7 +69,10 @@ export function AuthProvider(props: AuthProviderProps) {
   async function login(recivedUser: User) {
     try {
       setLoading(true);
-      const resp = await loginWithEmailAndPassword(recivedUser.email, recivedUser.password);
+      const resp = await loginWithEmailAndPassword(
+        recivedUser.email,
+        recivedUser.password
+      );
       await confingSection(resp?.user);
       router.push("/movimentations");
       return resp?.user?.uid;
@@ -97,12 +103,12 @@ export function AuthProvider(props: AuthProviderProps) {
   }
 
   useEffect(() => {
-    if(Cookies.get('elevate-auth')) {
-      const cancelar = auth.onIdTokenChanged(confingSection)
-      return () => cancelar()
-  } else {
-      setLoading(false)
-  }
+    if (Cookies.get("elevate-auth")) {
+      const cancelar = auth.onIdTokenChanged(confingSection);
+      return () => cancelar();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   return (

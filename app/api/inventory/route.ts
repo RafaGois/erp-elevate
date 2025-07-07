@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
     /* const users = await fetchUsers();
     return NextResponse.json(users); */
     return NextResponse.json([{id: 1, name: "Item 1"}, {id: 2, name: "Item 2"}])
+    
   } catch (error) {
     return NextResponse.json(
       { error: 'Erro ao buscar usuários' }, 
