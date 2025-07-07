@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import service from '../services/user.service';
 import { apiResponse } from '../utils/apiResponse';
-//import { apiResponse } from '../utils/apiResponse';
 
 async function getAllItems(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -17,10 +16,14 @@ async function getAllItems(req: NextApiRequest, res: NextApiResponse) {
 async function createItem(req: NextApiRequest, res: NextApiResponse) {
     try {
 
-        const item = await service.createUser(req.body);
-        res.status(201).json(apiResponse(true, item));
+        console.log(JSON.parse(req.body));
+        
+        const item = await service.createUser(JSON.parse(req.body));
+        
+        return item;
+        //res.status(201).json(apiResponse(true, item));
     } catch (err) {
-        res.status(500).json(apiResponse(false, null, (err as Error).message || 'Failed to create item.'));
+        return res.status(500).json(apiResponse(false, null, (err as Error).message || 'Failed to create item.'));
     }
 }
 

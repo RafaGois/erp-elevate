@@ -8,5 +8,5 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  await controller.createItem(req, res);
+  return controller.createItem(req, res);
 }
