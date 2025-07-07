@@ -79,3 +79,13 @@ export default function Inventory() {
     </Layout>
   );
 }
+
+/* 
+
+tabela de item de inventario
+
+id
+nome
+
+
+*/

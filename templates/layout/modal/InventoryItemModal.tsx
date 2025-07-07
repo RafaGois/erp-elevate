@@ -2,6 +2,7 @@ import InventoryItem from "@/lib/models/InventoryItem";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
+import { Form } from "@/templates/ui/form";
 import InputForm from "../components/inputs/InputForm";
 
 type InventoryItemModalProps = BaseModalProps<InventoryItem>;
@@ -19,15 +20,19 @@ export default function InventoryItemModal(props: InventoryItemModalProps) {
       form={form}
       onSubmit={form.handleSubmit((data) => console.log(data))}
     >
-        <InputForm
+      <Form {...form}>
+        <form className="py-6">
+          <InputForm
             name="name"
             label="Nome"
             placeholder="Nome do item"
             type="text"
             required
             form={form}
-        />
-        
+            defaultValue={props.selectedObject?.name}
+          />
+        </form>
+      </Form>
     </Modal>
   );
 }
