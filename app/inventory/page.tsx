@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DataTable } from "@/templates/layout/components/datatable/DataTable";
 import FloatingMenu from "@/templates/layout/components/datatable/FloatingMenu";
@@ -12,7 +12,9 @@ import { useState } from "react";
 import ToolkitModal from "@/templates/layout/modal/components/ToolkitModal";
 
 export default function Inventory() {
-  const [selectedObject, setSelectedObject] = useState<InventoryItem | null>(null);
+  const [selectedObject, setSelectedObject] = useState<InventoryItem | null>(
+    null
+  );
   const [action, setAction] = useState<ModalAction | null>(null);
 
   const columns: ColumnDef<InventoryItem>[] = [
@@ -68,9 +70,6 @@ export default function Inventory() {
         setAction={setAction}
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
-        refetch={null}
-
-
       />
     </Layout>
   );

@@ -6,13 +6,13 @@ import { cloneElement, isValidElement, ReactElement } from "react";
 
 
 interface ToolkitModalProps<T> {
-  action?: ModalAction;
+  action?: ModalAction | null;
   setAction?: (action: ModalAction | null) => void;
 
-  selectedObject?: T;
+  selectedObject?: T | null;
   setSelectedObject?: (selectedObject: T | null) => void;
 
-  refetch: () => Promise<UseQueryResult<T[], Error>>;
+  refetch?: () => Promise<UseQueryResult<T[], Error>>;
 
   ordidaryModal?: ReactElement<BaseModalProps<T>>;
   listModal?: ReactElement<BaseModalProps<T>>;
@@ -25,9 +25,9 @@ export default function ToolkitModal<T>(props: ToolkitModalProps<T>) {
       return cloneElement(modal, {
         selectedObject: props.selectedObject as T & ExtraAttributes,
         setSelectedObject: props.setSelectedObject,
-        action: props.action,
-        setAction: props.setAction,
-        refetch: props.refetch,
+        action: props?.action as ModalAction,
+        setAction: props?.setAction,
+        refetch: props?.refetch,
         ...modal.props,
       });
     }

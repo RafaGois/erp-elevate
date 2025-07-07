@@ -9,7 +9,7 @@ import { Toaster } from "../ui/sonner";
 
 import useAuth from "../../data/hooks/useAuth";
 
-export default function Content(props) {
+export default function Content(props: { children: React.ReactNode }) {
   const { reloading } = useAppData();
   const { loading: loadingAuth } = useAuth();
 
