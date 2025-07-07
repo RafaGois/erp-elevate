@@ -33,7 +33,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  setAction,
+  setAction
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,

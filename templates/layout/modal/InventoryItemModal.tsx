@@ -15,11 +15,9 @@ export default function InventoryItemModal(props: InventoryItemModalProps) {
       description="Adicione um item de inventário"
       action={props.action}
       setAction={props.setAction}
-      //selectedObject={props.selectedObject}
       setSelectedObject={props.setSelectedObject}
       form={form}
       onSubmit={form.handleSubmit((data) => console.log(data))}
-
     >
         <InputForm
             name="name"

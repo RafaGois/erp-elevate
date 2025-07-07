@@ -10,6 +10,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/templates/layout/modal/components/ToolkitModal";
+import InventoryItemModal from "@/templates/layout/modal/InventoryItemModal";
 
 export default function Inventory() {
   const [selectedObject, setSelectedObject] = useState<InventoryItem | null>(
@@ -62,14 +63,18 @@ export default function Inventory() {
     },
   ];
 
+  console.log(selectedObject);
+  console.log(action);
+  
   return (
     <Layout breadcrumb="/inventory">
-      <DataTable columns={columns} data={[]} />
+      <DataTable columns={columns} data={[]} setAction={setAction} />
       <ToolkitModal
         action={action}
         setAction={setAction}
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
+        ordidaryModal={<InventoryItemModal />}
       />
     </Layout>
   );
