@@ -6,7 +6,7 @@ async function findAll(): Promise<User[]> {
 }
 
 async function createUser(user: User): Promise<User> {
-    return await repository.create({name: "Rafeal"});
+    return await repository.create(user);
 }
 
 

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import service from '../services/user.service';
 import { apiResponse } from '../utils/apiResponse';
+import { NextRequest, NextResponse } from 'next/server';
 
 async function getAllItems(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -13,12 +14,12 @@ async function getAllItems(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-async function createItem(req: NextApiRequest, res: NextApiResponse) {
+async function createItem(req: NextRequest, res: NextResponse) {
     try {
 
-        console.log(JSON.parse(req.body));
+        console.log(req.json());
         
-        const item = await service.createUser(JSON.parse(req.body));
+        const item = await service.createUser(req.json());
         
         return item;
         //res.status(201).json(apiResponse(true, item));
