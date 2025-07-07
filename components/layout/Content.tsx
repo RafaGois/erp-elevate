@@ -5,9 +5,9 @@ import useAppData from "../../data/hooks/useAppData";
 //import LoadingLayout from "@/components/screens/loading/LoadingLayout";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "../ui/sonner";
 
-import useAuth from "@/data/hooks/useAuth";
+import useAuth from "../../data/hooks/useAuth";
 
 export default function Content(props) {
   const { reloading } = useAppData();
@@ -29,7 +29,7 @@ export default function Content(props) {
 
   return (
     <div className="flex flex-col flex-1">
-      props.children 
+      props.children
       <Toaster />
     </div>
   );

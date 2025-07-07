@@ -1,4 +1,4 @@
-import { Sidebar, SidebarHeader } from "@/components/ui/sidebar";
+import { Sidebar, SidebarHeader } from "../../ui/sidebar";
 import { Calendar, DollarSign, FolderDot, ZapOff } from "lucide-react";
 
 import Content from "./Content";
@@ -14,7 +14,7 @@ export default function AppSidebar() {
           title: "Movimentações",
           icon: DollarSign,
           url: "/movimentations",
-          
+
           items: [
             {
               title: "Registros",

@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { app } from "@/firebase/config";
+import { app } from "../../firebase/config";
 import { getAuth } from "firebase/auth";
 
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import AuthContextProps from "../../interfaces/AuthContextProps";
-import User from "@/models/user";
+import User from "../../models/user";
 
 import { User as FirebaseUser} from "firebase/auth";
-import { loginWithEmailAndPassword, loginWithGoogle } from "@/firebase/authentications";
+import { loginWithEmailAndPassword, loginWithGoogle } from "../../firebase/authentications";
 
 const AuthContext = createContext<AuthContextProps>({});
 

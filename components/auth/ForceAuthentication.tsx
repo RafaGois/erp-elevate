@@ -38,7 +38,7 @@ export default function ForceAuthentication(props: ForceAuthenticationProps) {
       </div>
     );
   }
-  
+
   if (!loading && user?.token) {
     return renderContent();
   } else if (loading) {

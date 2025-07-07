@@ -1,4 +1,4 @@
-import Layout from "@/components/layout/Layout";
+import Layout from "../../components/layout/Layout";
 
 export default function Dashboard() {
   return (
@@ -7,4 +7,3 @@ export default function Dashboard() {
     </Layout>
   );
 }
-

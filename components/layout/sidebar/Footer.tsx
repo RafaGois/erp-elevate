@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,15 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import useAuth from "@/data/hooks/useAuth";
+} from "../../ui/sidebar";
+import useAuth from "../../../data/hooks/useAuth";
 import {
   ChevronsUpDown,
   LogOut,
@@ -26,7 +26,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-
 
 export default function Footer() {
   const { user, logout } = useAuth();
@@ -51,7 +50,9 @@ export default function Footer() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user?.name}Nome do cidadão </span>
+                  <span className="truncate font-semibold">
+                    {user?.name}Nome do cidadão{" "}
+                  </span>
                   <span className="truncate text-xs">colocar algo aq</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
@@ -89,7 +90,7 @@ export default function Footer() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              
+
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem
@@ -114,4 +115,4 @@ export default function Footer() {
       </SidebarMenu>
     </SidebarFooter>
   );
-};
+}
