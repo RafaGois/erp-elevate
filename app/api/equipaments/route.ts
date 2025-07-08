@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as service from '@/lib/services/user.service';
+import * as service from '@/lib/services/equipament.service';
 import { HttpError } from 'http-errors';
-import User from '@/lib/models/user';
 import { handleError } from '@/lib/utils/withErrorHandler';
-
+import Equipament  from '@/lib/models/equipament';
 
 export async function GET() {
     try {
@@ -18,7 +17,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
 
-      const body = await request.json() as User;
+      const body = await request.json() as Equipament;
       const data = await service.create(body);
 
       return NextResponse.json(data, { status: 200 });

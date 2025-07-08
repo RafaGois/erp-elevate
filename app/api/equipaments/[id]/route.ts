@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server';
 
-import * as service from '@/lib/services/user.service';
+import * as service from '@/lib/services/equipament.service';
 import { handleError } from "@/lib/utils/withErrorHandler";
 import { HttpError } from "http-errors";
-import User from "@/lib/models/user";
+import Equipament from "@/lib/models/equipament";
 
 export async function GET(
     request: NextRequest,
@@ -30,7 +30,7 @@ export async function PUT(
         const body = await request.json();
 
         const id = (await params).id;
-        const data = await service.update(id, body as Partial<User>);
+        const data = await service.update(id, body as Partial<Equipament>);
 
         return NextResponse.json(data, { status: 200 });
     } catch (err) {
