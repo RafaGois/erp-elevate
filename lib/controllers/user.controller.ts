@@ -1,35 +1,78 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import service from '../services/user.service';
+import * as service from '../services/user.service';
 import { apiResponse } from '../utils/apiResponse';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-async function getAllItems(req: NextApiRequest, res: NextApiResponse) {
+export async function getAllItems() {
     try {
-        const items = await service.findAll();
-        
-        //res.status(200).json(apiResponse(true, items));
-        return items;
-    } catch (err) {
-        res.status(500).json(apiResponse(false, null, (err as Error).message || 'Failed to fetch items.'));
+        const users = await service.findAll();
+        return apiResponse(true, users);
+    } catch {
+        throw new Error('Failed to fetch users.');
     }
 }
 
-async function createItem(req: NextRequest, res: NextResponse) {
+export async function createItem(req: NextRequest) {
     try {
-
-        console.log(req.json());
-        
-        const item = await service.createUser(req.json());
-        
-        return item;
-        //res.status(201).json(apiResponse(true, item));
-    } catch (err) {
-        return res.status(500).json(apiResponse(false, null, (err as Error).message || 'Failed to create item.'));
+        const body = await req.json();
+        const createdUser = await service.createUser(body);
+        return apiResponse(true, createdUser);
+    } catch {
+        throw new Error('Failed to create user.');
     }
 }
 
-export default {
-    getAllItems,
-    createItem
+export async function getItemById(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            throw new Error('User ID is required.');
+        }
+
+        const user = await service.findById(id);
+        if (!user) {
+            throw new Error('User not found.');
+        }
+
+        return apiResponse(true, user);
+    } catch {
+        throw new Error('Failed to fetch user.');
+    }
 }
+
+export async function updateItem(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            throw new Error('User ID is required.');
+        }
+
+        const body = await req.json();
+        const updatedUser = await service.updateUser(id, body);
+
+        return apiResponse(true, updatedUser);
+    } catch {
+        throw new Error('Failed to update user.');
+    }
+}
+
+export async function deleteItem(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            throw new Error('User ID is required.');
+        }
+
+        await service.remove(id);
+        return apiResponse(true, null, 'User deleted successfully.');
+    } catch {
+        throw new Error('Failed to delete user.');
+    }
+}
+
 
