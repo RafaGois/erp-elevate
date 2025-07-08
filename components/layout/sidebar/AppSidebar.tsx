@@ -8,21 +8,16 @@ export default function AppSidebar() {
   const data = [
     {
       title: "Financeiro",
-      url: "/Financeiro",
+      url: "/",
       items: [
         {
           title: "Movimentações",
           icon: DollarSign,
           url: "/movimentations",
-
           items: [
             {
               title: "Registros",
-              url: "/movimentations",
-            },
-            {
-              title: "Saidas",
-              url: "/Packages",
+              url: "/",
             },
           ],
         },
@@ -51,18 +46,18 @@ export default function AppSidebar() {
       ],
     },
     {
-      title: "Inventário",
-      url: "/inventory",
+      title: "Equipamentos",
+      url: "/equipaments",
       icon: FolderDot,
       items: [
         {
-          title: "Inventário",
+          title: "Equipamentos",
           icon: Warehouse,
-          url: "/inventory",
+          url: "/",
           items: [
             {
-              title: "Registros",
-              url: "/inventory",
+              title: "Inventário",
+              url: "/",
             },
           ],
         },
