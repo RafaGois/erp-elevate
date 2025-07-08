@@ -11,7 +11,6 @@ export default class InventoryItem {
         this._price = price;
     }
 
-
     get id(): string {
         return this._id;
     }

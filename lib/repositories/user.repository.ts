@@ -38,7 +38,7 @@ async function remove(id: string): Promise<void> {
   await deleteDoc(docRef);
 }
 
-export default {
+export {
   findAll,
   create,
   findById,

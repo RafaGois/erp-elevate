@@ -1,12 +1,12 @@
 import createHttpError from "http-errors";
 import User from "../models/user";
-import repository from "../repositories/user.repository";
+import * as repository from "../repositories/user.repository";
 
 async function findAll(): Promise<User[]> {
     return await repository.findAll();
 }
 
-async function createUser(user: User): Promise<User> {
+async function create(user: User): Promise<User> {
     return await repository.create(user);
 }
 
@@ -18,13 +18,15 @@ async function findById(id: string): Promise<User | null> {
     return user;
 }
 
-async function updateUser(id: string, user: Partial<User>): Promise<User> {
+async function update(id: string, user: Partial<User>): Promise<Partial<User>> {
+    console.log({id, user});
+    
     const existingUser = await repository.findById(id);
     if (!existingUser) {
         throw createHttpError(404, `Usuário com o id '${id}' não encontrado.`);
     }
     await repository.update(id, user);
-    return existingUser;
+    return user;
 }
 
 async function remove(id: string): Promise<User> {
@@ -38,9 +40,9 @@ async function remove(id: string): Promise<User> {
 
 export {
     findAll,
-    createUser,
+    create,
     findById,
-    updateUser,
+    update,
     remove,
 }
 
