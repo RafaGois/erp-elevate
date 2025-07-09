@@ -32,7 +32,7 @@ export default function ConfirmDialog<T extends WithUid>(props: ConfirmDialogPro
       props.refetch();
       toast.success("Registro removido com sucesso.");
     } catch (err) {
-      toast.error("Erro ao remover registro.");
+      toast.error(err as string);
     }
   }
 

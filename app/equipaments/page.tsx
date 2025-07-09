@@ -14,11 +14,13 @@ import { useQuery } from "@tanstack/react-query";
 import Equipament from "@/lib/models/Equipament";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import EquipamentModal from "@/components/layout/modal/EquipamentModal";
+import useAppData from "@/data/hooks/useAppData";
 
 export default function Inventory() {
   const [selectedObject, setSelectedObject] = useState<Equipament | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
-
+  const { setReloading } = useAppData();
+  
   const columns: ColumnDef<Equipament>[] = [
     {
       header: ({ column }) => {
@@ -96,9 +98,8 @@ export default function Inventory() {
   );
 
   async function remove(uid: string) {
-    //setReloading(true);
+    setReloading(true);
     await axios.delete(`/api/equipaments/${uid}`);
-    refetch();
   }
 
   return (
@@ -111,7 +112,7 @@ export default function Inventory() {
         setSelectedObject={setSelectedObject}
         refetch={refetch}
         ordidaryModal={<EquipamentModal />}
-        confirmModal={<ConfirmDialog remove={remove} />}
+        confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </Layout>
   );
