@@ -11,6 +11,7 @@ import Equipament from "@/lib/models/Equipament";
 import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import TextAreaForm from "../components/inputs/TextAreaForm";
 
 type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 
@@ -104,15 +105,16 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
             required
             form={form}
           />
-          <InputForm
+          <TextAreaForm
             name="observation"
             label="Observação"
             placeholder="Observação"
             type="text"
             required
             form={form}
+            //form={form}
           />
-          <MultiSelectForm 
+          <MultiSelectForm
             label="Equipamentos"
             options={equipaments ?? []}
             onValueChange={setSelectedEquipaments}

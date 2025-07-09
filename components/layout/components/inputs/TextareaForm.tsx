@@ -12,7 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { UseFormReturn } from "react-hook-form";
 
 interface TextareaFormProps {
-  form: UseFormReturn;
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   form: UseFormReturn<any>;
   name: string;
   label: string;
   placeholder?: string;
@@ -24,7 +25,7 @@ interface TextareaFormProps {
   className?: string;
 }
 
-export function TextareaForm(props: TextareaFormProps) {
+export default function TextAreaForm(props: TextareaFormProps) {
   return (
     <FormField
       control={props.form.control}
