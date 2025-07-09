@@ -20,13 +20,20 @@ type ConfirmDialogProps<T extends WithUid> = BaseModalProps<T> & {
   message?: string;
 
   remove: (uid: string) => Promise<void>;
+  refetch: () => void;
 };
 
 export default function ConfirmDialog<T extends WithUid>(props: ConfirmDialogProps<T>) {
   async function handleClick() {
-    await props.remove(props?.selectedObject?.uid ?? "");
-    if (props.setAction) props.setAction(null);
-    toast.success("Registro removido com sucesso.");
+    
+    try {
+      await props.remove(props?.selectedObject?.uid ?? "");
+      if (props.setAction) props.setAction(null);
+      props.refetch();
+      toast.success("Registro removido com sucesso.");
+    } catch (err) {
+      toast.error("Erro ao remover registro.");
+    }
   }
 
   return (

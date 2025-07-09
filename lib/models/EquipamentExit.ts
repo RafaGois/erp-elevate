@@ -40,4 +40,8 @@ export default class EquipamentExit {
     get date() {
         return this._date;
     }
+
+    set equipaments(equipaments: Equipament[]) {
+        this._equipaments = equipaments;
+    }
 }

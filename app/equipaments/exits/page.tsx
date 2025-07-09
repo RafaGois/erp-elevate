@@ -9,12 +9,13 @@ import EquipamentExitModal from "@/components/layout/modal/EquipamentExitModal";
 import { Button } from "@/components/ui/button";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
-import EquipamentExit from "@/lib/models/Equipament";
+import EquipamentExit from "@/lib/models/EquipamentExit";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
+
 
 export default function Movimentations() {
   const [selectedObject, setSelectedObject] = useState<EquipamentExit | null>(
@@ -40,28 +41,17 @@ export default function Movimentations() {
       accessorKey: "name",
     },
     {
-      header: "Valor",
-      accessorKey: "price",
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <span>
-            {item.price.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })}
-          </span>
-        );
-      },
+      header: "Observação",
+      accessorKey: "observation",
     },
     {
-      header: "Data de compra",
-      accessorKey: "purchaseDate",
+      header: "Data",
+      accessorKey: "date",
       cell: ({ row }) => {
         const item = row.original;
         return (
           <span>
-            {new Date(item?.purchaseDate)?.toLocaleDateString("pt-BR")}
+            {new Date(item?.date)?.toLocaleDateString("pt-BR")}
           </span>
         );
       },
@@ -98,8 +88,7 @@ export default function Movimentations() {
 
   async function remove(uid: string) {
     setReloading(true);
-    await axios.delete(`/api/exits/${uid}`);
-    refetch();
+      await axios.delete(`/api/equipamentExits/${uid}`);
   }
 
   return (
@@ -112,7 +101,7 @@ export default function Movimentations() {
         setSelectedObject={setSelectedObject}
         refetch={refetch}
         ordidaryModal={<EquipamentExitModal />}
-        confirmModal={<ConfirmDialog remove={remove} />}
+        confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </Layout>
   );

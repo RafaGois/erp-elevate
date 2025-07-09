@@ -10,10 +10,13 @@ import EquipamentExit from "@/lib/models/EquipamentExit";
 import Equipament from "@/lib/models/Equipament";
 import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 
 export default function EquipamentExitModal(props: EquipamentExitModalProps) {
+  const [selectedEquipaments, setSelectedEquipaments] = useState<string[]>([]);
+
   const form = useForm<EquipamentExit>({
     defaultValues: {
       name: props.selectedObject?.name,
@@ -38,7 +41,16 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
   });
 
   async function handleSubmit(data: Partial<EquipamentExit>) {
+
     try {
+
+      if (data.equipaments?.length == 0) {
+        toast.error("Selecione pelo menos um equipamento.");
+        return;
+      }
+
+      data.equipaments = equipaments?.filter((equipament) => selectedEquipaments.includes(equipament.uid)) ?? [];
+
       if (props.selectedObject?.uid) {
         await update(data);
         toast.success("Equipamento atualizado com sucesso.");
@@ -58,11 +70,11 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
   }
 
   async function create(data: Partial<EquipamentExit>) {
-    await axios.post("/api/equipaments", data);
+    await axios.post("/api/equipamentExits", data);
   }
 
   async function update(data: Partial<EquipamentExit>) {
-    await axios.put(`/api/equipaments/${props.selectedObject?.uid}`, data);
+    await axios.put(`/api/equipamentExits/${props.selectedObject?.uid}`, data);
   }
 
   async function handleClose() {
@@ -103,14 +115,13 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
           <MultiSelectForm 
             label="Equipamentos"
             options={equipaments ?? []}
-            onValueChange={(value) => {
-              console.log(value);
-            }}
+            onValueChange={setSelectedEquipaments}
+            defaultValue={props.selectedObject?.equipaments?.map((equipament) => equipament.uid) ?? []}
           />
           <InputForm
-            name="purchaseDate"
-            label="Data de compra"
-            placeholder="Data de compra"
+            name="date"
+            label="Data"
+            placeholder="Data"
             type="date"
             required
             form={form}
