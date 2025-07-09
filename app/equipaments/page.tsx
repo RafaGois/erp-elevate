@@ -9,11 +9,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import InventoryItemModal from "@/components/layout/modal/EquipamentModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Equipament from "@/lib/models/equipament";
+import Equipament from "@/lib/models/Equipament";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
+import EquipamentModal from "@/components/layout/modal/EquipamentModal";
 
 export default function Inventory() {
   const [selectedObject, setSelectedObject] = useState<Equipament | null>(null);
@@ -77,21 +77,23 @@ export default function Inventory() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Equipament[]>({
-    queryKey: ["data_equipaments"],
-    //refetchInterval: 60000,
-    //staleTime: Infinity,
-    refetchOnMount: "always",
-    queryFn: async () => {
-      try {
-        const res = await axios.get(`/api/equipaments`);
-        return res.data;
-      } catch (err) {
-        console.log(err);
-        return [];
-      }
-    },
-  });
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Equipament[]>(
+    {
+      queryKey: ["data_equipaments"],
+      //refetchInterval: 60000,
+      //staleTime: Infinity,
+      refetchOnMount: "always",
+      queryFn: async () => {
+        try {
+          const res = await axios.get(`/api/equipaments`);
+          return res.data;
+        } catch (err) {
+          console.log(err);
+          return [];
+        }
+      },
+    }
+  );
 
   async function remove(uid: string) {
     //setReloading(true);
@@ -108,7 +110,7 @@ export default function Inventory() {
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
         refetch={refetch}
-        ordidaryModal={<InventoryItemModal />}
+        ordidaryModal={<EquipamentModal />}
         confirmModal={<ConfirmDialog remove={remove} />}
       />
     </Layout>

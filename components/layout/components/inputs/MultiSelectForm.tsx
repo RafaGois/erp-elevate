@@ -61,7 +61,7 @@ interface MultiSelectProps extends VariantProps<typeof multiSelectVariants> {
    */
   options: {
     /** The text to display for the option. */
-    id: number;
+    uid: string;
     name: string;
     /** The unique value associated with the option. */
     /** Optional icon component to display alongside the option. */
@@ -72,10 +72,10 @@ interface MultiSelectProps extends VariantProps<typeof multiSelectVariants> {
    * Callback function triggered when the selected values change.
    * Receives an array of the new selected values.
    */
-  onValueChange: (value: number[]) => void;
+  onValueChange: (value: string[]) => void;
 
   /** The default selected values when the component mounts. */
-  defaultValue?: number[];
+  defaultValue?: string[];
 
   /**
    * Placeholder text to be displayed when no values are selected.
@@ -139,7 +139,7 @@ export const MultiSelectForm = React.forwardRef<
     ref
   ) => {
     const [selectedValues, setSelectedValues] =
-      React.useState<number[]>(defaultValue);
+      React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
 
@@ -156,9 +156,9 @@ export const MultiSelectForm = React.forwardRef<
       } */
     };
 
-    const toggleOption = (option: number) => {
+    const toggleOption = (option: string) => {
       const newSelectedValues = selectedValues?.includes(option)
-        ? selectedValues?.filter((value) => value !== option)
+        ? selectedValues?.filter((value: string) => value !== option)
         : [...selectedValues, option];
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
@@ -183,7 +183,7 @@ export const MultiSelectForm = React.forwardRef<
       if (selectedValues?.length === options?.length) {
         handleClear();
       } else {
-        const allValues = options?.map((option) => option.id);
+        const allValues = options?.map((option) => option.uid);
         setSelectedValues(allValues);
         onValueChange(allValues);
       }
@@ -290,11 +290,11 @@ export const MultiSelectForm = React.forwardRef<
                 {options
                   //?.sort((a, b) => a.name.localeCompare(b.name))
                   ?.map((option) => {
-                    const isSelected = selectedValues?.includes(option.id);
+                    const isSelected = selectedValues?.includes(option.uid);
                     return (
                       <CommandItem
-                        key={option.id + "-" + option?.name}
-                        onSelect={() => toggleOption(option.id)}
+                        key={option.uid + "-" + option?.name}
+                        onSelect={() => toggleOption(option.uid)}
                         className="cursor-pointer"
                       >
                         <div

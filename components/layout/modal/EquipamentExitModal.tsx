@@ -1,4 +1,4 @@
-import Equipament from "@/lib/models/Equipament";
+
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
@@ -6,19 +6,38 @@ import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import axios from "axios";
 import { toast } from "sonner";
+import EquipamentExit from "@/lib/models/EquipamentExit";
+import Equipament from "@/lib/models/Equipament";
+import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
+import { useQuery } from "@tanstack/react-query";
 
-type EquipamentModalProps = BaseModalProps<Equipament>;
+type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 
-export default function EquipamentModal(props: EquipamentModalProps) {
-  const form = useForm<Equipament>({
+export default function EquipamentExitModal(props: EquipamentExitModalProps) {
+  const form = useForm<EquipamentExit>({
     defaultValues: {
       name: props.selectedObject?.name,
-      price: props.selectedObject?.price,
-      purchaseDate: props.selectedObject?.purchaseDate,
+      observation: props.selectedObject?.observation,
+      equipaments: props.selectedObject?.equipaments,
+      date: props.selectedObject?.date,
     },
   });
 
-  async function handleSubmit(data: Partial<Equipament>) {
+  const { data: equipaments } = useQuery<Equipament[]>({
+    queryKey: ["data_equipaments"],
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const res = await axios.get(`/api/equipaments`);
+        return res.data;
+      } catch (err) {
+        console.log(err);
+        return [];
+      }
+    },
+  });
+
+  async function handleSubmit(data: Partial<EquipamentExit>) {
     try {
       if (props.selectedObject?.uid) {
         await update(data);
@@ -38,11 +57,11 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     }
   }
 
-  async function create(data: Partial<Equipament>) {
+  async function create(data: Partial<EquipamentExit>) {
     await axios.post("/api/equipaments", data);
   }
 
-  async function update(data: Partial<Equipament>) {
+  async function update(data: Partial<EquipamentExit>) {
     await axios.put(`/api/equipaments/${props.selectedObject?.uid}`, data);
   }
 
@@ -54,7 +73,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
   }
 
   return (
-    <Modal<Equipament>
+    <Modal<EquipamentExit>
       title="Equipamento"
       description="Adicione um equipamento"
       action={props.action}
@@ -74,12 +93,19 @@ export default function EquipamentModal(props: EquipamentModalProps) {
             form={form}
           />
           <InputForm
-            name="price"
-            label="Preço"
-            placeholder="Preço"
-            type="number"
+            name="observation"
+            label="Observação"
+            placeholder="Observação"
+            type="text"
             required
             form={form}
+          />
+          <MultiSelectForm 
+            label="Equipamentos"
+            options={equipaments ?? []}
+            onValueChange={(value) => {
+              console.log(value);
+            }}
           />
           <InputForm
             name="purchaseDate"
