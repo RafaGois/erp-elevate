@@ -31,4 +31,8 @@ export default class Equipament {
     get purchaseDate() {
         return this._purchaseDate;
     }
+
+    set purchaseDate(date: Date) {
+        this._purchaseDate = date;
+    }
 }

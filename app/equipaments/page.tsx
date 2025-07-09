@@ -5,34 +5,21 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
-import InventoryItem from "@/lib/models/InventoryItem";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import InventoryItemModal from "@/components/layout/modal/EquipamentModal";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import Equipament from "@/lib/models/equipament";
+import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 
 export default function Inventory() {
-  const [selectedObject, setSelectedObject] = useState<InventoryItem | null>(
-    null
-  );
+  const [selectedObject, setSelectedObject] = useState<Equipament | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
 
-  const columns: ColumnDef<InventoryItem>[] = [
-    {
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Id
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      accessorKey: "id",
-    },
+  const columns: ColumnDef<Equipament>[] = [
     {
       header: ({ column }) => {
         return (
@@ -48,12 +35,39 @@ export default function Inventory() {
       accessorKey: "name",
     },
     {
+      header: "Valor",
+      accessorKey: "price",
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <span>
+            {item.price.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Data de compra",
+      accessorKey: "purchaseDate",
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <span>
+            {new Date(item?.purchaseDate)?.toLocaleDateString("pt-BR")}
+          </span>
+        );
+      },
+    },
+    {
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<InventoryItem>
+          <FloatingMenu<Equipament>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -63,17 +77,40 @@ export default function Inventory() {
     },
   ];
 
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Equipament[]>({
+    queryKey: ["data_equipaments"],
+    //refetchInterval: 60000,
+    //staleTime: Infinity,
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const res = await axios.get(`/api/equipaments`);
+        return res.data;
+      } catch (err) {
+        console.log(err);
+        return [];
+      }
+    },
+  });
+
+  async function remove(uid: string) {
+    //setReloading(true);
+    await axios.delete(`/api/equipaments/${uid}`);
+    refetch();
+  }
+
   return (
     <Layout breadcrumb="/equipaments">
-      <DataTable columns={columns} data={[]} setAction={setAction} />
+      <DataTable columns={columns} data={data ?? []} setAction={setAction} />
       <ToolkitModal
         action={action}
         setAction={setAction}
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
+        refetch={refetch}
         ordidaryModal={<InventoryItemModal />}
+        confirmModal={<ConfirmDialog remove={remove} />}
       />
     </Layout>
   );
 }
-

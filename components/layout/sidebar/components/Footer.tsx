@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,15 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "../../ui/sidebar";
-import useAuth from "../../../data/hooks/useAuth";
+} from "@/components/ui/sidebar";
+import useAuth from "@/data/hooks/useAuth";
 import {
   ChevronsUpDown,
   LogOut,
@@ -44,7 +44,6 @@ export default function Footer() {
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={"user.avatar"} alt={user?.name} />
                   <AvatarFallback className="rounded-lg">
                     <User2Icon size={16} />
                   </AvatarFallback>
@@ -67,7 +66,6 @@ export default function Footer() {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    {/* <AvatarImage src={"user.avatar"} alt={user.name} /> */}
                     <AvatarFallback className="rounded-lg">
                       <User2Icon size={16} />
                     </AvatarFallback>

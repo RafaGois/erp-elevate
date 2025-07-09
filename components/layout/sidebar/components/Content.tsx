@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight, type LucideIcon } from "lucide-react";
 
 import {
   SidebarContent,
@@ -14,17 +14,16 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from "../../ui/sidebar";
+} from "../../../ui/sidebar";
 import Link from "next/link";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../../ui/collapsible";
+} from "../../../ui/collapsible";
 
 interface SidebarItem {
   title: string;
-  url: string;
   items?: SidebarSubItem[];
 }
 
@@ -58,7 +57,6 @@ export default function Content(props: ContentProps) {
             <SidebarGroupContent>
               {item.items?.map((item) => (
                 <Collapsible
-                  //onOpenChange={() => handleToggle(item.url)}
                   key={item.url}
                   asChild
                   open={item.isActive}
@@ -68,7 +66,7 @@ export default function Content(props: ContentProps) {
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton tooltip={item.title}>
                         {item.icon && <item.icon />}
-                        <span>{item.title}</span>
+                        <span className="text-[12px]">{item.title}</span>
 
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>

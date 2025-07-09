@@ -1,45 +1,43 @@
-import { Sidebar, SidebarHeader } from "../../ui/sidebar";
-import { Calendar, DollarSign, FolderDot, Warehouse, ZapOff } from "lucide-react";
+import { Sidebar } from "../../ui/sidebar";
+import { Calendar, DollarSign, Warehouse } from "lucide-react";
 
-import Content from "./Content";
-import Footer from "./Footer";
+import Header from "./components/Header";
+import Content from "./components/Content";
+import Footer from "./components/Footer";
 
 export default function AppSidebar() {
   const data = [
     {
       title: "Financeiro",
-      url: "/",
       items: [
         {
-          title: "Movimentações",
+          title: "Financeiro",
           icon: DollarSign,
-          url: "/movimentations",
+          url: "/finances",
           items: [
             {
-              title: "Registros",
-              url: "/",
+              title: "Dashboard",
+              url: "/dashboard",
             },
+            {
+              title: "Movimentações",
+              url: "/movimentations",
+            }
           ],
         },
       ],
     },
     {
       title: "Projetos",
-      url: "/projects",
-      icon: FolderDot,
       items: [
         {
           title: "Projetos",
           icon: Calendar,
-          url: "/",
+          url: "/projects",
           items: [
             {
               title: "Registros",
-              url: "/Registers",
-            },
-            {
-              title: "Saidas",
-              url: "/Packages",
+              url: "/registers",
             },
           ],
         },
@@ -47,17 +45,19 @@ export default function AppSidebar() {
     },
     {
       title: "Equipamentos",
-      url: "/equipaments",
-      icon: FolderDot,
       items: [
         {
-          title: "Equipamentos",
+          title: "Inventário",
           icon: Warehouse,
-          url: "/",
+          url: "/equipaments",
           items: [
             {
-              title: "Inventário",
+              title: "Registros",
               url: "/",
+            },
+            {
+              title: "Saídas",
+              url: "/exits",
             },
           ],
         },
@@ -67,11 +67,7 @@ export default function AppSidebar() {
 
   return (
     <Sidebar variant="sidebar" collapsible="icon">
-      <SidebarHeader>
-        <div className="flex justify-center gap-2">
-          <ZapOff /> Controle Elevate
-        </div>
-      </SidebarHeader>
+      <Header />
       <Content items={data} />
       <Footer />
     </Sidebar>

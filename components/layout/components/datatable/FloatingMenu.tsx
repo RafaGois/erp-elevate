@@ -13,7 +13,7 @@ import { Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
 import ModalAction from "@/lib/enums/modalAction";
 
 interface WithId {
-  id: string;
+  uid: string;
 }
 
 interface FloatingMenuProps<T> {
@@ -38,9 +38,9 @@ export default function FloatingMenu<T extends WithId>(
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => {
-            navigator.clipboard.writeText(props.selectedObject.id + "");
+            navigator.clipboard.writeText(props.selectedObject.uid + "");
             toast({
-              title: `ID ${props.selectedObject.id} copiado com sucesso.`,
+              title: `ID ${props.selectedObject.uid} copiado com sucesso.`,
             });
           }}
         >
