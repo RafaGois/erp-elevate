@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as service from '@/lib/services/user.service';
 import { HttpError } from 'http-errors';
-import {User} from '@/lib/models/User';
+import { User } from '@/lib/models/User';
 import { handleError } from '@/lib/utils/withErrorHandler';
 
 
