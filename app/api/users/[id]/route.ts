@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import * as service from '@/lib/services/user.service';
 import { handleError } from "@/lib/utils/withErrorHandler";
 import { HttpError } from "http-errors";
-import User from "@/lib/models/User";
+import {User} from "@/lib/models/User";
 
 export async function GET(
     request: NextRequest,

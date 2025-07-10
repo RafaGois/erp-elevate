@@ -1,4 +1,4 @@
-export default class User {
+export class User {
     private _uid?: string;
     private _name?: string;
     private _email: string;

@@ -7,7 +7,7 @@ import { Label } from "../../components/ui/label";
 import Image from "next/image";
 
 import useAuth from "../../data/hooks/useAuth";
-import User from "../../lib/models/User";
+import {User} from "../../lib/models/User";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 

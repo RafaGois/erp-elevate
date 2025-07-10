@@ -1,4 +1,4 @@
-import User from "../models/User";
+import {User} from "../models/User";
 
 export default interface AuthContextProps {
   user?: User | null;

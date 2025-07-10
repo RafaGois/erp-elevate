@@ -1,6 +1,6 @@
 import { addDoc, getDocs, collection, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
-import User from "../models/User";
+import {User} from "../models/User";
 import db from "@/lib/config/firestore"
 
 async function findAll(): Promise<User[]> {

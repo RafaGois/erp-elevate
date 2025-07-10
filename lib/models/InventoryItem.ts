@@ -1,4 +1,4 @@
-export default class InventoryItem {
+export class InventoryItem {
     private _id: string;
     private _name: string;
     private _description: string;

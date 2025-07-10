@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import User from "../models/User";
+import { User } from "../models/User";
 import * as repository from "../repositories/user.repository";
 
 async function findAll(): Promise<User[]> {
