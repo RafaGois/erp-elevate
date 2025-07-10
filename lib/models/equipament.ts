@@ -1,3 +1,5 @@
+
+
 export default class Equipament {
     private _uid: string;
     private _name: string;
