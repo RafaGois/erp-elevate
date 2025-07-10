@@ -1,4 +1,4 @@
-import Equipament from "@/lib/models/Equipament";
+import Equipament from "./Equipament";
 
 export default class EquipamentExit {
     private _uid: string;

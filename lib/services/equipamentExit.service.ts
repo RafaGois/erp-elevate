@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import EquipamentExit from "../models/EquipamentExit";
+import { EquipamentExit } from "../models";
 import * as repository from "../repositories/equipamentExit.repository";
 
 async function findAll(): Promise<EquipamentExit[]> {

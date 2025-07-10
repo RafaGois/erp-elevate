@@ -3,7 +3,7 @@ export default class Equipament {
     private _name: string;
     private _price: number;
     private _purchaseDate: Date;
-    
+
     constructor(
         uid: string,
         name: string,

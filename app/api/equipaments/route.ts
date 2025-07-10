@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as service from '@/lib/services/equipament.service';
 import { HttpError } from 'http-errors';
 import { handleError } from '@/lib/utils/withErrorHandler';
-import Equipament from '@/lib/models/Equipament';
+import { Equipament } from '@/lib/models';
 
 export async function GET() {
   try {

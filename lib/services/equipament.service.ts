@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import Equipament from "../models/Equipament";
+import { Equipament } from "../models";
 import * as repository from "../repositories/equipament.repository";
 
 async function findAll(): Promise<Equipament[]> {

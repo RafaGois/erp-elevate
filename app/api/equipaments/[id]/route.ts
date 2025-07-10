@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import * as service from '@/lib/services/equipament.service';
 import { handleError } from "@/lib/utils/withErrorHandler";
 import { HttpError } from "http-errors";
-import Equipament from "@/lib/models/Equipament";
+import { Equipament } from "@/lib/models";
 
 export async function GET(
     request: NextRequest,

@@ -1,7 +1,7 @@
 import { addDoc, getDocs, collection, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 import db from "@/lib/config/firestore"
-import Equipament from "../models/Equipament";
+import { Equipament } from "../models";
 
 async function findAll(): Promise<Equipament[]> {
   const querySnapshot = await getDocs(collection(db, "equipaments"));
