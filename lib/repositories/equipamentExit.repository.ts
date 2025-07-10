@@ -1,7 +1,7 @@
 import { addDoc, getDocs, collection, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 import db from "@/lib/config/firestore"
-import EquipamentExit, { IEquipamentExit } from "../models/EquipamentExit";
+import EquipamentExit from "../models/EquipamentExit";
 
 async function findAll(): Promise<EquipamentExit[]> {
   const querySnapshot = await getDocs(collection(db, "equipamentExits"));
@@ -25,7 +25,7 @@ async function findById(id: string): Promise<EquipamentExit | null> {
   return null;
 }
 
-async function update(id: string, data: Partial<IEquipamentExit>): Promise<EquipamentExit> {
+async function update(id: string, data: Partial<EquipamentExit>): Promise<EquipamentExit> {
   const docRef = doc(db, "equipamentExits", id);
   await updateDoc(docRef, data);
 

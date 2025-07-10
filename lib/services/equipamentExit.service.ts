@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import EquipamentExit, { IEquipamentExit } from "../models/EquipamentExit";
+import EquipamentExit from "../models/EquipamentExit";
 import * as repository from "../repositories/equipamentExit.repository";
 
 async function findAll(): Promise<EquipamentExit[]> {
@@ -18,9 +18,7 @@ async function findById(id: string): Promise<EquipamentExit | null> {
     return equipamentExit;
 }
 
-async function update(id: string, equipamentExit: Partial<IEquipamentExit>): Promise<Partial<IEquipamentExit>> {
-    console.log({ id, equipamentExit });
-
+async function update(id: string, equipamentExit: Partial<EquipamentExit>): Promise<Partial<EquipamentExit>> {
     const existingEquipament = await repository.findById(id);
     if (!existingEquipament) {
         throw createHttpError(404, `Equipamento com o id '${id}' não encontrado.`);
