@@ -1,4 +1,4 @@
-import Equipament from "@/lib/models/Equipament";
+import {Equipament} from "@/lib/models";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
