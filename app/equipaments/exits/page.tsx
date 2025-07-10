@@ -16,7 +16,6 @@ import axios from "axios";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
-
 export default function Movimentations() {
   const [selectedObject, setSelectedObject] = useState<EquipamentExit | null>(
     null
@@ -49,9 +48,13 @@ export default function Movimentations() {
       accessorKey: "date",
       cell: ({ row }) => {
         const item = row.original;
+        
+        const correctDate = new Date(item.date);
+        correctDate.setDate(correctDate.getDate() + 1);
+
         return (
           <span>
-            {new Date(item?.date)?.toLocaleDateString("pt-BR")}
+            {correctDate?.toLocaleDateString("pt-BR")}
           </span>
         );
       },
@@ -88,7 +91,7 @@ export default function Movimentations() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-      await axios.delete(`/api/equipamentExits/${uid}`);
+    await axios.delete(`/api/equipamentExits/${uid}`);
   }
 
   return (

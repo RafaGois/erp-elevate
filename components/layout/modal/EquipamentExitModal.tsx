@@ -22,9 +22,11 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
       name: props.selectedObject?.name,
       observation: props.selectedObject?.observation,
       equipaments: props.selectedObject?.equipaments,
-      date: props.selectedObject?.date,
+      date: props.selectedObject?.date ?? new Date(),
     },
   });
+
+  console.log(props.selectedObject?.date ?? new Date());
 
   const { data: equipaments } = useQuery<Equipament[]>({
     queryKey: ["data_equipaments"],
@@ -87,8 +89,8 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
 
   return (
     <Modal<EquipamentExit>
-      title="Equipamento"
-      description="Adicione um equipamento"
+      title="Saida de Equipamentos"
+      description="Adicione uma saida para seus equipamentos."
       action={props.action}
       setAction={props.setAction}
       setSelectedObject={props.setSelectedObject}
@@ -112,7 +114,6 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
             type="text"
             required
             form={form}
-            //form={form}
           />
           <MultiSelectForm
             label="Equipamentos"

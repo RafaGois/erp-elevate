@@ -27,7 +27,7 @@ interface ModalProps<T> {
 }
 
 export default function Modal<T>(props: ModalProps<T>) {
-  const { reloading } = useAppData();
+  const { reloading, setReloading} = useAppData();
 
   function handleClose() {
     props.form?.reset();
@@ -40,6 +40,7 @@ export default function Modal<T>(props: ModalProps<T>) {
       open={!!props?.action}
       onOpenChange={(isOpen) => {
         if (!isOpen) handleClose();
+        setReloading?.(false);
       }}
     >
       <DialogContent>
