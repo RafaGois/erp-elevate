@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "../../components/ui/button";
-import { Card, CardContent } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
-import useAuth from "../../data/hooks/useAuth";
-import {User} from "../../lib/models/User";
+import useAuth from "@/data/hooks/useAuth";
+import { User } from "@/lib/models/User";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 
