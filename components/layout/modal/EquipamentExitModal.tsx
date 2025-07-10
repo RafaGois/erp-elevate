@@ -11,7 +11,7 @@ import Equipament from "@/lib/models/Equipament";
 import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import TextAreaForm from "../components/inputs/TextAreaForm";
+import TextAreaForm from "@/components/layout/components/inputs/TextareaForm";
 
 type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 
@@ -118,7 +118,7 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
             label="Equipamentos"
             options={equipaments ?? []}
             onValueChange={setSelectedEquipaments}
-            defaultValue={props.selectedObject?.equipaments?.map((equipament) => equipament.uid) ?? []}
+            defaultValue={props?.selectedObject?.equipaments?.map((equipament) => equipament.uid) ?? []}
           />
           <InputForm
             name="date"

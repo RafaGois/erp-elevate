@@ -6,8 +6,8 @@ import { getAuth } from "firebase/auth";
 
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import AuthContextProps from "../../interfaces/AuthContextProps";
-import User from "../../lib/models/user";
+import AuthContextProps from "@/lib/interfaces/AuthContextProps";
+import User from "@/lib/models/user";
 
 import { User as FirebaseUser } from "firebase/auth";
 import {

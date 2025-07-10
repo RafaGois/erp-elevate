@@ -87,7 +87,7 @@ export default function Movimentations() {
   });
 
   async function remove(uid: string) {
-    setReloading(true);
+    setReloading?.(true);
       await axios.delete(`/api/equipamentExits/${uid}`);
   }
 

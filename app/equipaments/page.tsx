@@ -41,7 +41,7 @@ export default function Inventory() {
       accessorKey: "price",
       cell: ({ row }) => {
         const item = row.original;
-        return (
+        return item?.price && (
           <span>
             {item.price.toLocaleString("pt-BR", {
               style: "currency",
@@ -56,7 +56,7 @@ export default function Inventory() {
       accessorKey: "purchaseDate",
       cell: ({ row }) => {
         const item = row.original;
-        return (
+        return item?.purchaseDate && (
           <span>
             {new Date(item?.purchaseDate)?.toLocaleDateString("pt-BR")}
           </span>
@@ -98,7 +98,7 @@ export default function Inventory() {
   );
 
   async function remove(uid: string) {
-    setReloading(true);
+    setReloading?.(true);
     await axios.delete(`/api/equipaments/${uid}`);
   }
 

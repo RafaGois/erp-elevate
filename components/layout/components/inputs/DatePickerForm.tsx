@@ -19,8 +19,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
+import { UseFormReturn } from "react-hook-form";
 
-export function DatePickerForm({ form, label }: { form: any; label: string }) {
+export function DatePickerForm({ form, label }: { form: UseFormReturn; label: string }) {
   return (
     <FormField
       control={form.control}

@@ -1,6 +1,6 @@
 "use client";
 
-import AppContextProps from "../../interfaces/AppContextProps"
+import AppContextProps from "@/lib/interfaces/AppContextProps"
 import { createContext, useEffect, useState} from "react"
 
 const AppContext = createContext<AppContextProps>({});

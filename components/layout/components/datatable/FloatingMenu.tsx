@@ -6,11 +6,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/hooks/use-toast";
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 import { Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
 import ModalAction from "@/lib/enums/modalAction";
+import { toast } from "sonner";
 
 interface WithId {
   uid: string;
@@ -25,8 +25,6 @@ interface FloatingMenuProps<T> {
 export default function FloatingMenu<T extends WithId>(
   props: FloatingMenuProps<T>
 ) {
-  const { toast } = useToast();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,9 +37,7 @@ export default function FloatingMenu<T extends WithId>(
         <DropdownMenuItem
           onClick={() => {
             navigator.clipboard.writeText(props.selectedObject.uid + "");
-            toast({
-              title: `ID ${props.selectedObject.uid} copiado com sucesso.`,
-            });
+            toast.success(`ID ${props.selectedObject.uid} copiado com sucesso.`);
           }}
         >
           <Copy />
