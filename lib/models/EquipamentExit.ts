@@ -1,6 +1,14 @@
 import Equipament from "@/lib/models/Equipament";
 
-export default class EquipamentExit {
+export interface IEquipamentExit {
+    uid: string;
+    name: string;
+    observation: string;
+    equipaments: Equipament[];
+    date: Date;
+}
+
+export default class EquipamentExit implements IEquipamentExit {
     private _uid: string;
     private _name: string;
     private _observation: string;

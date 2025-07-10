@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import EquipamentExit from "../models/EquipamentExit";
+import EquipamentExit, { IEquipamentExit } from "../models/EquipamentExit";
 import * as repository from "../repositories/equipamentExit.repository";
 
 async function findAll(): Promise<EquipamentExit[]> {
@@ -18,7 +18,7 @@ async function findById(id: string): Promise<EquipamentExit | null> {
     return equipamentExit;
 }
 
-async function update(id: string, equipamentExit: Partial<EquipamentExit>): Promise<Partial<EquipamentExit>> {
+async function update(id: string, equipamentExit: Partial<IEquipamentExit>): Promise<Partial<IEquipamentExit>> {
     console.log({ id, equipamentExit });
 
     const existingEquipament = await repository.findById(id);

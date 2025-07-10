@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as service from '@/lib/services/equipamentExit.service';
 import { HttpError } from 'http-errors';
 import { handleError } from '@/lib/utils/withErrorHandler';
-import EquipamentExit from '@/lib/models/EquipamentExit';
+import { IEquipamentExit } from '@/lib/models/EquipamentExit';
 
 export async function GET() {
   try {
@@ -17,8 +17,8 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
 
-    const body = await request.json() as EquipamentExit;
-    const data = await service.create(body);
+    const body = await request.json() as IEquipamentExit;
+    const data = await service.create(body as any);
 
     return NextResponse.json(data, { status: 200 });
   } catch (err) {

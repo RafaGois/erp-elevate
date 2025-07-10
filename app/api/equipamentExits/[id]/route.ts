@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import * as service from '@/lib/services/equipamentExit.service';
 import { handleError } from "@/lib/utils/withErrorHandler";
 import { HttpError } from "http-errors";
-import EquipamentExit from "@/lib/models/EquipamentExit";
+import { IEquipamentExit } from "@/lib/models/EquipamentExit";
 
 export async function GET(
     request: NextRequest,
@@ -30,7 +30,7 @@ export async function PUT(
         const body = await request.json();
 
         const id = (await params).id;
-        const data = await service.update(id, body as Partial<EquipamentExit>);
+        const data = await service.update(id, body as Partial<IEquipamentExit>);
 
         return NextResponse.json(data, { status: 200 });
     } catch (err) {
