@@ -56,9 +56,13 @@ export default function Inventory() {
       accessorKey: "purchaseDate",
       cell: ({ row }) => {
         const item = row.original;
+
+        const correctDate = new Date(item?.purchaseDate);
+        correctDate.setDate(correctDate.getDate() + 1);
+
         return item?.purchaseDate && (
           <span>
-            {new Date(item?.purchaseDate)?.toLocaleDateString("pt-BR")}
+            {correctDate?.toLocaleDateString("pt-BR")}
           </span>
         );
       },
