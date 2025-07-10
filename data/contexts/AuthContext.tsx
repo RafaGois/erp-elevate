@@ -74,7 +74,7 @@ export function AuthProvider(props: AuthProviderProps) {
         recivedUser.password
       );
       await confingSection(resp?.user);
-      router.push("/movimentations");
+      router.push("/equipaments");
       return resp?.user?.uid;
     } finally {
       setLoading(false);
@@ -86,7 +86,7 @@ export function AuthProvider(props: AuthProviderProps) {
       const result = await loginWithGoogle();
       const user = result.user;
       await confingSection(user);
-      router.push("/movimentations");
+      router.push("/equipaments");
       return user?.uid;
     } finally {
       setLoading(false);
