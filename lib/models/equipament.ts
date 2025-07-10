@@ -1,11 +1,4 @@
-export interface IEquipament {
-    uid: string;
-    name: string;
-    price: number;
-    purchaseDate: Date;
-}
-
-export default class Equipament implements IEquipament {
+export default class Equipament {
     private _uid: string;
     private _name: string;
     private _price: number;
