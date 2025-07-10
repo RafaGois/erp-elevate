@@ -1,6 +1,6 @@
-import { Equipament } from ".";
+import { Equipament } from "@/lib/models/Equipament";
 
-export default class EquipamentExit {
+export class EquipamentExit {
     private _uid: string;
     private _name: string;
     private _observation: string;

@@ -1,4 +1,4 @@
-export default class Equipament {
+export class Equipament {
     private _uid: string;
     private _name: string;
     private _price: number;

@@ -1,7 +1,7 @@
 import { addDoc, getDocs, collection, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 import db from "@/lib/config/firestore"
-import { EquipamentExit } from "../models";
+import { EquipamentExit } from "../models/EquipamentExit";
 
 async function findAll(): Promise<EquipamentExit[]> {
   const querySnapshot = await getDocs(collection(db, "equipamentExits"));

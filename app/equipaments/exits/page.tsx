@@ -9,7 +9,7 @@ import EquipamentExitModal from "@/components/layout/modal/EquipamentExitModal";
 import { Button } from "@/components/ui/button";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
-import { EquipamentExit } from "@/lib/models";
+import { EquipamentExit } from "@/lib/models/EquipamentExit";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";

@@ -7,7 +7,7 @@ import { Label } from "../../components/ui/label";
 import Image from "next/image";
 
 import useAuth from "../../data/hooks/useAuth";
-import User from "../../lib/models/user";
+import User from "../../lib/models/User";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 
@@ -34,7 +34,10 @@ export default function Auth() {
           <Card className="overflow-hidden p-0">
             <CardContent className="grid p-0 md:grid-cols-2">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className="p-6 md:p-8">
+                <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="p-6 md:p-8"
+                >
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center text-center">
                       <h1 className="text-2xl font-bold">Bem vindo de volta</h1>

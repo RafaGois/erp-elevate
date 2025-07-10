@@ -1,4 +1,3 @@
-
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
@@ -6,7 +5,8 @@ import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import axios from "axios";
 import { toast } from "sonner";
-import {EquipamentExit, Equipament} from "@/lib/models";
+import { Equipament } from "@/lib/models/Equipament";
+import { EquipamentExit } from "@/lib/models/EquipamentExit";
 import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -41,15 +41,16 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
   });
 
   async function handleSubmit(data: Partial<EquipamentExit>) {
-
     try {
-
       if (data.equipaments?.length == 0) {
         toast.error("Selecione pelo menos um equipamento.");
         return;
       }
 
-      data.equipaments = equipaments?.filter((equipament) => selectedEquipaments.includes(equipament.uid)) ?? [];
+      data.equipaments =
+        equipaments?.filter((equipament) =>
+          selectedEquipaments.includes(equipament.uid)
+        ) ?? [];
 
       if (props.selectedObject?.uid) {
         await update(data);
@@ -117,7 +118,11 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
             label="Equipamentos"
             options={equipaments ?? []}
             onValueChange={setSelectedEquipaments}
-            defaultValue={props?.selectedObject?.equipaments?.map((equipament) => equipament.uid) ?? []}
+            defaultValue={
+              props?.selectedObject?.equipaments?.map(
+                (equipament) => equipament.uid
+              ) ?? []
+            }
           />
           <InputForm
             name="date"

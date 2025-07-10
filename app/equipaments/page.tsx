@@ -11,7 +11,7 @@ import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import {Equipament} from "@/lib/models";
+import {Equipament} from "@/lib/models/Equipament";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import EquipamentModal from "@/components/layout/modal/EquipamentModal";
 import useAppData from "@/data/hooks/useAppData";
