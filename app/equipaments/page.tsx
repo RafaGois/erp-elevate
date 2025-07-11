@@ -15,6 +15,7 @@ import {Equipament} from "@/lib/models/Equipament";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import EquipamentModal from "@/components/layout/modal/EquipamentModal";
 import useAppData from "@/data/hooks/useAppData";
+import DataCard from "@/components/layout/components/card/DataCard";
 
 export default function Inventory() {
   const [selectedObject, setSelectedObject] = useState<Equipament | null>(null);
@@ -108,6 +109,13 @@ export default function Inventory() {
 
   return (
     <Layout breadcrumb="/equipaments">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <DataCard title="Total" value={data?.length ?? 0} />
+        <DataCard title="Valor total" value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0} />
+        <DataCard title="Valor total" value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0} />
+        <DataCard title="Valor total" value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0} />
+        <DataCard title="Valor total" value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0} />
+      </div>
       <DataTable columns={columns} data={data ?? []} setAction={setAction} />
       <ToolkitModal
         action={action}

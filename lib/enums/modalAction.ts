@@ -5,6 +5,7 @@ enum ModalAction {
     Scanner = "scanner",
     List = "list",
     Print = "print",
+    Finish = "finish",
 }
 
 export default ModalAction;

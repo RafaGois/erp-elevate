@@ -8,12 +8,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import { Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
+import { CheckCheck, Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
 import ModalAction from "@/lib/enums/modalAction";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Equipament } from "@/lib/models/Equipament";
 
 interface WithId {
   uid: string;
+  equipaments?: Equipament[];
 }
 
 interface FloatingMenuProps<T> {
@@ -22,9 +25,17 @@ interface FloatingMenuProps<T> {
   setAction: (newAction: ModalAction) => void;
 }
 
+
+
 export default function FloatingMenu<T extends WithId>(
   props: FloatingMenuProps<T>
 ) {
+
+  const hasEquipaments = props.selectedObject?.equipaments?.length ?? 0;
+
+  console.log(props.selectedObject);
+  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,13 +48,27 @@ export default function FloatingMenu<T extends WithId>(
         <DropdownMenuItem
           onClick={() => {
             navigator.clipboard.writeText(props.selectedObject.uid + "");
-            toast.success(`ID ${props.selectedObject.uid} copiado com sucesso.`);
+            toast.success(
+              `ID ${props.selectedObject.uid} copiado com sucesso.`
+            );
           }}
         >
           <Copy />
           Copiar ID
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className={cn(
+            hasEquipaments < 1 && "hidden"
+          )}
+          onClick={() => {
+            props.setSelectedObject(props.selectedObject);
+            props.setAction(ModalAction.Finish);
+          }}
+        >
+          <CheckCheck strokeWidth={3} />
+          <DropdownMenuLabel>Finalizar</DropdownMenuLabel>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             props.setSelectedObject(props.selectedObject);
@@ -53,7 +78,6 @@ export default function FloatingMenu<T extends WithId>(
           <Edit2 />
           <DropdownMenuLabel>Editar</DropdownMenuLabel>
         </DropdownMenuItem>
-
         <DropdownMenuItem
           onClick={() => {
             props.setSelectedObject(props.selectedObject);

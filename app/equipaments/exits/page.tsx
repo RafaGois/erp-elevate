@@ -48,15 +48,11 @@ export default function Movimentations() {
       accessorKey: "date",
       cell: ({ row }) => {
         const item = row.original;
-        
+
         const correctDate = new Date(item.date);
         correctDate.setDate(correctDate.getDate() + 1);
 
-        return (
-          <span>
-            {correctDate?.toLocaleDateString("pt-BR")}
-          </span>
-        );
+        return <span>{correctDate?.toLocaleDateString("pt-BR")}</span>;
       },
     },
     {
@@ -64,6 +60,8 @@ export default function Movimentations() {
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
+        console.log(item);
+        
         return (
           <FloatingMenu<EquipamentExit>
             selectedObject={item}
@@ -96,7 +94,11 @@ export default function Movimentations() {
 
   return (
     <Layout breadcrumb="equipaments/exits">
-      <DataTable columns={columns} data={data ?? []} setAction={setAction} />
+      <DataTable
+        columns={columns}
+        data={data?.[0]?.uid ? data : []}
+        setAction={setAction}
+      />
       <ToolkitModal
         action={action}
         setAction={setAction}
