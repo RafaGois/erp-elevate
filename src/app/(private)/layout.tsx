@@ -14,13 +14,14 @@ export default function PrivateLayout({
   breadcrumb: string;
 }) {
   const { theme } = useTheme();
+
   return (
     <>
       <SidebarProvider className={theme} defaultOpen={true}>
         <AppSidebar />
         <main
           id="content-id"
-          className={` ${theme} flex flex-col overflow-auto h-vh w-svw `}
+          className={`${theme} flex flex-col overflow-auto h-vh w-svw `}
         >
           <Header breadcrumb={breadcrumb} />
           <Content>{children}</Content>

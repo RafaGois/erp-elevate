@@ -31,7 +31,7 @@ export default function middleware(request: NextRequest) {
   }
 
   if (authToken && publicRoute && publicRoute.whenAuthenticated === "redirect") {
-    return NextResponse.redirect(new URL("/equipments/", request.url));
+    return NextResponse.redirect(new URL("/equipaments/", request.url));
   }
 
   if (!authToken && !publicRoute) {

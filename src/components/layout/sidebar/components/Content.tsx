@@ -75,7 +75,7 @@ export default function Content(props: ContentProps) {
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem
-                            key={subItem.title}
+                            key={item.url + "-" + subItem.title}
                             onClick={() => setOpen(false)}
                           >
                             <SidebarMenuSubButton asChild>

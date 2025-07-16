@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -30,6 +31,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
+    "gsap": "^3.13.0",
     "http-errors": "^2.0.0",
     "icons-react": "^3.7.1",
     "js-cookie": "^3.0.5",

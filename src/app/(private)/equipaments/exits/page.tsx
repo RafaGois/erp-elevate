@@ -2,7 +2,6 @@
 
 import { DataTable } from "@/components/layout/components/datatable/DataTable";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
-import Layout from "@/components/layout/Layout";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import EquipamentExitModal from "@/components/layout/modal/EquipamentExitModal";
@@ -93,7 +92,7 @@ export default function Movimentations() {
   }
 
   return (
-    <Layout breadcrumb="equipaments/exits">
+    <>
       <DataTable
         columns={columns}
         data={data?.[0]?.uid ? data : []}
@@ -108,6 +107,6 @@ export default function Movimentations() {
         ordidaryModal={<EquipamentExitModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
-    </Layout>
+    </>
   );
 }
