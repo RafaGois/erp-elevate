@@ -17,7 +17,8 @@ export default function MenuItem(props: {
       {
         width: "100%",
         height: 5,
-        backgroundColor: "#bdfa3c",
+        //backgroundColor: "#bdfa3c",
+        background: "linear-gradient(to right, #d3d61e, #bdfa3c)",
       },
       "<"
     );

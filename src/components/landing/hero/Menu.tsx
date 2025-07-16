@@ -29,7 +29,7 @@ export default function Menu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const container = useRef<HTMLDivElement | null>(null);
-  const tl = useRef(null);
+  const tl = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
