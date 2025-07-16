@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MenuIcon, X } from "lucide-react";
+import { ArrowUpRight, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
@@ -47,14 +47,18 @@ export default function Menu() {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           ease: "power4.inOut",
         })
-        .to(".menu-item-link-item-holder", {
-          xPercent: 0,
-          duration: 1,
-          stagger: 0.1,
-          ease: "power4.inOut",
-          delay: -0.75,
-          opacity: 1,
-        }, "+=0.1");
+        .to(
+          ".menu-item-link-item-holder",
+          {
+            xPercent: 0,
+            duration: 1,
+            stagger: 0.1,
+            ease: "power4.inOut",
+            delay: -0.75,
+            opacity: 1,
+          },
+          "+=0.1"
+        );
     },
     { scope: container }
   );
@@ -83,11 +87,7 @@ export default function Menu() {
     <div ref={container} className="justify-between flex w-full">
       <div>logo</div>
       <div className="flex-row gap-[2rem] hidden sm:flex">
-        <a
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={() => null}
-          href=""
-        >
+        <a onMouseEnter={handleMouseEnter} onMouseLeave={() => null} href="">
           Sobre nós
         </a>
         <a href="">Trabalhos</a>
@@ -103,18 +103,42 @@ export default function Menu() {
       <div
         className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh /bg-[#bdfa3c] bg-black z-50 flex-col items-center justify-center p-4`}
       >
-        <div className="flex w-full justify-end">
-          <X className="cursor-pointer" onClick={toggleMenu} />
+        <div className="flex w-full justify-between">
+          <p>ELEVATE PRO MEDIA</p>
+          <div>
+            <p
+              className="text-white text-sm uppercase cursor-pointer underline"
+              onClick={toggleMenu}
+            >
+              FECHAR
+            </p>
+          </div>
         </div>
         <div className="flex flex-col justify-center gap-4 flex-1">
           {menuLinks.map((link) => (
             <MenuItem key={link.href} link={link} toggleMenu={toggleMenu} />
           ))}
         </div>
+        <div className="flex flex-col gap-4 w-full">
+          <a className="flex items-center gap-1" href="INSTAGRAM">
+            INSTAGRAM
+            <ArrowUpRight size={14} />
+          </a>
+          <a className="flex items-center gap-1" href="LINKEDIN">
+            LINKEDIN
+            <ArrowUpRight size={14} />
+          </a>
+          <a className="flex items-center gap-1" href="DRIBBLE">
+            DRIBBLE
+            <ArrowUpRight size={14} />
+          </a>
+        </div>
         <div className="flex w-full justify-end">
-          <Button variant="outline">
-            <Link href="/auth">Entrar</Link>
-          </Button>
+          <Link href="/auth">
+            <p className="text-white text-sm uppercase cursor-pointer underline">
+              Entrar
+            </p>
+          </Link>
         </div>
       </div>
     </div>

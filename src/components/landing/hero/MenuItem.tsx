@@ -16,8 +16,7 @@ export default function MenuItem(props: {
       e.currentTarget.querySelector(".dot"),
       {
         width: "100%",
-        height: 5,
-        //backgroundColor: "#bdfa3c",
+        height: 4,
         background: "linear-gradient(to right, #d3d61e, #bdfa3c)",
       },
       "<"
