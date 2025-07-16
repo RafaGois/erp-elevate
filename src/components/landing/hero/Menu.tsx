@@ -33,16 +33,25 @@ export default function Menu() {
 
   useGSAP(
     () => {
-      gsap.set(".menu-item-link-item-holder", { xPercent: 100, opacity: 0 });
+      gsap.set(".menu-item-link-item-holder .menu-close", { xPercent: 100, opacity: 0 });
+      gsap.set(".menu-logo", { opacity: 0, xPercent: -100 });
 
       tl.current = gsap
         .timeline({ paused: true })
+        .to(".menu-start-button", {
+          rotate: 90,
+          duration: 0.2,
+          ease: "power4.inOut",
+        })
+        .to(".menu-start-button", {
+          opacity: 0,
+        }, "<")
         .to(".menu-overlay", {
           display: "flex",
           duration: 0.7,
           clipPath: "polygon(0% 100%, 0% 0%, 100% 100%, 0% 100%)",
           ease: "power4.inOut",
-        })
+        },"<")
         .to(".menu-overlay", {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           ease: "power4.inOut",
@@ -58,7 +67,12 @@ export default function Menu() {
             opacity: 1,
           },
           "+=0.1"
-        );
+        ).to(".menu-logo, .menu-close", {
+          opacity: 1,
+          xPercent: 0,
+          duration: 0.2,
+          ease: "power4.inOut",
+        });
     },
     { scope: container }
   );
@@ -97,17 +111,17 @@ export default function Menu() {
       <Button variant="outline" className="hidden sm:flex">
         <Link href="/auth">Entrar</Link>
       </Button>
-      <div className="flex sm:hidden w-full justify-end">
-        <MenuIcon className="cursor-pointer" onClick={toggleMenu} />
+      <div className=" flex sm:hidden w-full justify-end">
+        <MenuIcon className="menu-start-button cursor-pointer" onClick={toggleMenu} />
       </div>
       <div
         className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh /bg-[#bdfa3c] bg-black z-50 flex-col items-center justify-center p-4`}
       >
         <div className="flex w-full justify-between">
-          <p>ELEVATE PRO MEDIA</p>
+          <p className="menu-logo">ELEVATE PRO MEDIA</p>
           <div>
             <p
-              className="text-white text-sm uppercase cursor-pointer underline"
+              className="menu-close text-white text-sm uppercase cursor-pointer underline"
               onClick={toggleMenu}
             >
               FECHAR
