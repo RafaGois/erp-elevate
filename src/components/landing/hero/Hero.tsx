@@ -13,3 +13,5 @@ export default function Hero() {
     </div>
   );
 }
+
+//https://www.youtube.com/watch?v=Tyt2Sq1UMAY&ab_channel=Codegrid
