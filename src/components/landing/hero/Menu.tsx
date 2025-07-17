@@ -143,14 +143,14 @@ export default function Menu() {
           key="sobre-nos"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={() => null}
-          href=""
+          href="#about-us"
         >
           Sobre nós
         </a>
-        <a key="trabalhos" href="">
+        <a key="trabalhos" href="#works">
           Trabalhos
         </a>
-        <a key="clientes" href="">
+        <a key="clientes" href="#clients">
           Clinetes
         </a>
         <a key="contato" href="#contact">

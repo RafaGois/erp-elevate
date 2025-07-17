@@ -1,5 +1,5 @@
 export default function AboutUs() {
-  return <div className="min-h-lvh flex flex-col">
+  return <div id="about-us" className="min-h-lvh flex flex-col">
     <div className="flex flex-col p-4">
       <h2 className="text-4xl font-bold">Sobre nós</h2>
       <p>
