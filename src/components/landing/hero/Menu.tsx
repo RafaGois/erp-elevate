@@ -33,7 +33,16 @@ export default function Menu() {
 
   useGSAP(
     () => {
-      gsap.set(".menu-item-link-item-holder .menu-close", { xPercent: 100, opacity: 0 });
+      gsap.set(".menu-item-link-item-holder, .menu-close, .enter-menu-button", {
+        xPercent: 100,
+        opacity: 0,
+      });
+
+      gsap.set(".link-menu-item", {
+        x: -60,
+        opacity: 0,
+      });
+
       gsap.set(".menu-logo", { opacity: 0, xPercent: -100 });
 
       tl.current = gsap
@@ -43,15 +52,23 @@ export default function Menu() {
           duration: 0.2,
           ease: "power4.inOut",
         })
-        .to(".menu-start-button", {
-          opacity: 0,
-        }, "<")
-        .to(".menu-overlay", {
-          display: "flex",
-          duration: 0.7,
-          clipPath: "polygon(0% 100%, 0% 0%, 100% 100%, 0% 100%)",
-          ease: "power4.inOut",
-        },"<")
+        .to(
+          ".menu-start-button",
+          {
+            opacity: 0,
+          },
+          "<"
+        )
+        .to(
+          ".menu-overlay",
+          {
+            display: "flex",
+            duration: 0.7,
+            clipPath: "polygon(0% 100%, 0% 0%, 100% 100%, 0% 100%)",
+            ease: "power4.inOut",
+          },
+          "<"
+        )
         .to(".menu-overlay", {
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           ease: "power4.inOut",
@@ -66,13 +83,30 @@ export default function Menu() {
             delay: -0.75,
             opacity: 1,
           },
-          "+=0.1"
-        ).to(".menu-logo, .menu-close", {
-          opacity: 1,
-          xPercent: 0,
-          duration: 0.2,
-          ease: "power4.inOut",
-        });
+          "-=0.5"
+        )
+        .to(
+          ".menu-logo, .menu-close, .enter-menu-button",
+          {
+            opacity: 1,
+            xPercent: 0,
+            duration: 0.2,
+            ease: "expo.inOut",
+            stagger: 0.1,
+          },
+          "+=0.3"
+        )
+        .to(
+          ".link-menu-item",
+          {
+            x: 0,
+            duration: 0.2,
+            ease: "expo.inOut",
+            stagger: 0.15,
+            opacity: 1,
+          },
+          "<"
+        );
     },
     { scope: container }
   );
@@ -112,7 +146,10 @@ export default function Menu() {
         <Link href="/auth">Entrar</Link>
       </Button>
       <div className=" flex sm:hidden w-full justify-end">
-        <MenuIcon className="menu-start-button cursor-pointer" onClick={toggleMenu} />
+        <MenuIcon
+          className="menu-start-button cursor-pointer"
+          onClick={toggleMenu}
+        />
       </div>
       <div
         className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh /bg-[#bdfa3c] bg-black z-50 flex-col items-center justify-center p-4`}
@@ -134,20 +171,23 @@ export default function Menu() {
           ))}
         </div>
         <div className="flex flex-col gap-4 w-full">
-          <a className="flex items-center gap-1" href="INSTAGRAM">
+          <a
+            className="link-menu-item flex items-center gap-1"
+            href="INSTAGRAM"
+          >
             INSTAGRAM
             <ArrowUpRight size={14} />
           </a>
-          <a className="flex items-center gap-1" href="LINKEDIN">
+          <a className="link-menu-item flex items-center gap-1" href="LINKEDIN">
             LINKEDIN
             <ArrowUpRight size={14} />
           </a>
-          <a className="flex items-center gap-1" href="DRIBBLE">
+          <a className="link-menu-item flex items-center gap-1" href="DRIBBLE">
             DRIBBLE
             <ArrowUpRight size={14} />
           </a>
         </div>
-        <div className="flex w-full justify-end">
+        <div className="enter-menu-button flex w-full justify-end">
           <Link href="/auth">
             <p className="text-white text-sm uppercase cursor-pointer underline">
               Entrar
