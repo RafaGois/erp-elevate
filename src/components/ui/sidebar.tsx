@@ -55,7 +55,6 @@ function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
-  className,
   style,
   children,
   ...props
