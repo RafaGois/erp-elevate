@@ -66,12 +66,8 @@ export default function MenuItem(props: {
   }
 
   return (
-    <div
-      key={props.link.href}
-      className="menu-item-link-item"
-    >
+    <div key={props.link.href} className="menu-item-link-item">
       <div
-        key={props.link.href}
         className="menu-item-link-item-holder"
         onClick={props.toggleMenu}
         onMouseEnter={handleMouseEnter}

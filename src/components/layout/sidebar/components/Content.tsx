@@ -57,7 +57,7 @@ export default function Content(props: ContentProps) {
             <SidebarGroupContent>
               {item.items?.map((item) => (
                 <Collapsible
-                  key={item.url}
+                  key={item.url + "-" + item.title}
                   asChild
                   open={item.isActive}
                   className="group/collapsible"
@@ -75,7 +75,9 @@ export default function Content(props: ContentProps) {
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem
-                            key={item.url + "-" + subItem.title}
+                            key={
+                              item.url + "-" + subItem.url + "-" + subItem.title
+                            }
                             onClick={() => setOpen(false)}
                           >
                             <SidebarMenuSubButton asChild>

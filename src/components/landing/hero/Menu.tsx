@@ -8,18 +8,22 @@ import MenuItem from "./MenuItem";
 
 const menuLinks = [
   {
+    key: "sobre-nos",
     label: "Sobre nós",
     href: "#about",
   },
   {
+    key: "trabalhos",
     label: "Trabalhos",
     href: "#works",
   },
   {
+    key: "clientes",
     label: "Clientes",
     href: "#clients",
   },
   {
+    key: "contato",
     label: "Contato",
     href: "#contact",
   },
@@ -135,12 +139,23 @@ export default function Menu() {
     <div ref={container} className="justify-between flex w-full">
       <div>logo</div>
       <div className="flex-row gap-[2rem] hidden sm:flex">
-        <a onMouseEnter={handleMouseEnter} onMouseLeave={() => null} href="">
+        <a
+          key="sobre-nos"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={() => null}
+          href=""
+        >
           Sobre nós
         </a>
-        <a href="">Trabalhos</a>
-        <a href="">Clinetes</a>
-        <a href="#contact">Contato</a>
+        <a key="trabalhos" href="">
+          Trabalhos
+        </a>
+        <a key="clientes" href="">
+          Clinetes
+        </a>
+        <a key="contato" href="#contact">
+          Contato
+        </a>
       </div>
       <Button variant="outline" className="hidden sm:flex">
         <Link href="/auth">Entrar</Link>
