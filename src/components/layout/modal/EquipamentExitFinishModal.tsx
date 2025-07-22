@@ -56,6 +56,7 @@ export default function EquipamentExitFinishModal(props: EquipamentExitModalProp
     >
       <Form {...form}>
         <form className="space-y-8">
+          {/* talvez transformar isso em um componente mais simples, só precisa saber se todos os valores foram validados */}
           <InputMultiCheckbox
             items={props.selectedObject?.equipaments ?? []}
             form={form}

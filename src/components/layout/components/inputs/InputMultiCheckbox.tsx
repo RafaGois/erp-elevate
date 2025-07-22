@@ -11,14 +11,14 @@ interface InputMultiCheckboxProps {
     form: UseFormReturn<EquipamentExit>
 }
 
-function teste(items: Equipament[]) {
+/* function teste(items: Equipament[]) {
   return items.map((item) => {
     return {
       id: item.uid,
       label: item.name
     }
   })
-}
+} */
 
 export default function InputMultiCheckbox(props: InputMultiCheckboxProps) {
     return (
