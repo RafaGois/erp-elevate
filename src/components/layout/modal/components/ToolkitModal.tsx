@@ -17,6 +17,7 @@ interface ToolkitModalProps<T> {
   ordidaryModal?: ReactElement<BaseModalProps<T>>;
   listModal?: ReactElement<BaseModalProps<T>>;
   confirmModal?: ReactElement<BaseModalProps<T>>;
+  finishModal?: ReactElement<BaseModalProps<T>>;
 }
 
 export default function ToolkitModal<T>(props: ToolkitModalProps<T>) {
@@ -40,6 +41,8 @@ export default function ToolkitModal<T>(props: ToolkitModalProps<T>) {
     return injectProps(props.ordidaryModal!);
   } else if (props.action == ModalAction.Delete) {
     return injectProps(props.confirmModal!);
+  } else if (props.action == ModalAction.Finish) {
+    return injectProps(props.finishModal!);
   } else {
     return injectProps(props.listModal!);
   }

@@ -4,6 +4,7 @@ import { DataTable } from "@/components/layout/components/datatable/DataTable";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
+import EquipamentExitFinishModal from "@/components/layout/modal/EquipamentExitFinishModal";
 import EquipamentExitModal from "@/components/layout/modal/EquipamentExitModal";
 import { Button } from "@/components/ui/button";
 import useAppData from "@/data/hooks/useAppData";
@@ -59,7 +60,6 @@ export default function Movimentations() {
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
-        console.log(item);
 
         return (
           <FloatingMenu<EquipamentExit>
@@ -106,6 +106,7 @@ export default function Movimentations() {
         refetch={refetch}
         ordidaryModal={<EquipamentExitModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
+        finishModal={<EquipamentExitFinishModal />}
       />
     </>
   );
