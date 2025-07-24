@@ -28,7 +28,7 @@ export default function Content(props: { children: React.ReactNode }) {
   }, [reloading, loadingAuth]);
 
   return (
-    <div className="flex flex-col p-4 rounded border">
+    <div className="flex flex-col p-4 @container/main">
       {props.children}
       <Toaster />
     </div>

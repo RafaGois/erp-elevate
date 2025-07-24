@@ -19,7 +19,7 @@ export default function PrivateLayout({
       <SidebarProvider>
         <AppSidebar  />
         <SidebarInset>
-          <main className={`${theme} @container/main flex-col overflow-auto bg-background`}>
+          <main className={`${theme} flex-col overflow-auto bg-background rounded-lg`}>
             <Header breadcrumb={breadcrumb} />
             <Content>{children}</Content>
           </main>
