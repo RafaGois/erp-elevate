@@ -56,15 +56,15 @@ export default function Hero() {
       className="flex flex-col items-center h-screen p-4 box-border"
     >
       <Menu />
-      <div className="flex flex-col items-start justify-center h-full w-full">
-        <small className="text-[#c99011]">
+      <div className="flex flex-col items-start justify-end h-full w-full">
+        <small className="text-[#7D6B58] tracking-widest">
           Transformando sua presença digital em autoridade
         </small>
-        <h1 className="text-4xl font-bold titulo relative">
+        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
           <span className="texto">ELEVATE PRO</span>
         </h1>
-        <h1 className="text-4xl font-bold titulo relative">
+        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
           <span className="texto">MEDIA</span>
         </h1>

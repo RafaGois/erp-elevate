@@ -66,7 +66,7 @@ export default function AppSidebar() {
   ];
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon">
+    <Sidebar variant="inset" collapsible="offcanvas">
       <Header />
       <Content items={data} />
       <Footer />

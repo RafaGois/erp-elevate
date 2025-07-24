@@ -3,7 +3,7 @@
 import Content from "@/components/layout/Content";
 import Header from "@/components/layout/Header";
 import AppSidebar from "@/components/layout/sidebar/AppSidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
 
 export default function PrivateLayout({
@@ -16,17 +16,14 @@ export default function PrivateLayout({
   const { theme } = useTheme();
 
   return (
-    <>
-      <SidebarProvider className={theme} defaultOpen={true}>
-        <AppSidebar />
-        <main
-          id="content-id"
-          className={`${theme} flex flex-col overflow-auto h-vh w-svw `}
-        >
-          <Header breadcrumb={breadcrumb} />
-          <Content>{children}</Content>
-        </main>
+      <SidebarProvider>
+        <AppSidebar  />
+        <SidebarInset>
+          <main className={`${theme} @container/main flex-col overflow-auto bg-background`}>
+            <Header breadcrumb={breadcrumb} />
+            <Content>{children}</Content>
+          </main>
+        </SidebarInset>
       </SidebarProvider>
-    </>
   );
 }

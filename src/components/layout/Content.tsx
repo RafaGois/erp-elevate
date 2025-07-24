@@ -17,10 +17,10 @@ export default function Content(props: { children: React.ReactNode }) {
     if (reloading || loadingAuth) {
       toast("Atualizando dados", {
         description: "Aguarde enquanto os dados são carregados.",
-        action: {
+/*         action: {
           label: "Undo",
           onClick: () => console.log("Undo"),
-        },
+        }, */
       });
     } else {
       toast.dismiss();
@@ -28,7 +28,7 @@ export default function Content(props: { children: React.ReactNode }) {
   }, [reloading, loadingAuth]);
 
   return (
-    <div className="flex flex-col p-4 flex-1">
+    <div className="flex flex-col p-4 rounded border">
       {props.children}
       <Toaster />
     </div>
