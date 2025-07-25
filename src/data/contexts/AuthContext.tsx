@@ -57,6 +57,7 @@ export function AuthProvider(props: AuthProviderProps) {
       setUser(firebaseUser);
       manageCookie(true, firebaseUser?.token ?? null);
       setLoading(false);
+      Cookies.set("elevate-token", firebaseUser?.token ?? "");
       localStorage.setItem("uid", recivedUser.uid + "");
       return recivedUser.uid;
     } else {

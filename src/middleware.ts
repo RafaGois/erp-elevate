@@ -14,7 +14,7 @@ const REDIRECT_WHEN_UNAUTHENTICATED = "/auth";
 export default function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const publicRoute = publicRoutes.find((route) => path === route.path);
-  const authToken = request.cookies.get("token");
+  const authToken = request.cookies.get("elevate-token");
 
   //todo: quando faz login salva o jtw ou o uid do usuario nos cookies
   //nao sera mais necessario p authcotext hehe
