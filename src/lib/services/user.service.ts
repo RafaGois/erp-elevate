@@ -19,8 +19,6 @@ async function findById(id: string): Promise<User | null> {
 }
 
 async function update(id: string, user: Partial<User>): Promise<Partial<User>> {
-    console.log({ id, user });
-
     const existingUser = await repository.findById(id);
     if (!existingUser) {
         throw createHttpError(404, `Usuário com o id '${id}' não encontrado.`);

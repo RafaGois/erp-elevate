@@ -30,8 +30,6 @@ export default function FloatingMenu<T extends WithId>(
 ) {
   const hasEquipaments = props.selectedObject?.equipaments?.length ?? 0;
 
-  console.log(props.selectedObject.equipaments);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

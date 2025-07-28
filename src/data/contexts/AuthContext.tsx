@@ -61,9 +61,11 @@ export function AuthProvider(props: AuthProviderProps) {
       localStorage.setItem("uid", recivedUser.uid + "");
       return recivedUser.uid;
     } else {
+      console.log("entrou no else");
       setUser(null);
       manageCookie(false, null);
       setLoading(false);
+      router.push("/auth");
       return false;
     }
   }

@@ -19,8 +19,6 @@ async function findById(id: string): Promise<Equipament | null> {
 }
 
 async function update(id: string, equipament: Partial<Equipament>): Promise<Partial<Equipament>> {
-    console.log({ id, equipament });
-
     const existingEquipament = await repository.findById(id);
     if (!existingEquipament) {
         throw createHttpError(404, `Equipamento com o id '${id}' não encontrado.`);

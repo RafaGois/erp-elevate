@@ -26,8 +26,6 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
     },
   });
 
-  console.log(props.selectedObject?.date ?? new Date());
-
   const { data: equipaments } = useQuery<Equipament[]>({
     queryKey: ["data_equipaments"],
     refetchOnMount: "always",

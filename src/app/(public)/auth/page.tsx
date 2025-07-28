@@ -22,8 +22,6 @@ export default function Auth() {
   //todo usar o react-hook-form
   async function handleSubmit(data: User) {
     const user = new User(data.email, data.password, "", "", "", "");
-    console.log(user);
-
     await login?.(user);
   }
 

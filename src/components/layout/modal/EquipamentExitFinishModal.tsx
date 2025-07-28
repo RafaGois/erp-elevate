@@ -1,15 +1,16 @@
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
+//import Checkbox from "../components/inputs/Checkbox";
 import axios from "axios";
 import { toast } from "sonner";
 import { EquipamentExit } from "@/lib/models/EquipamentExit";
-import InputMultiCheckbox from "../components/inputs/InputMultiCheckbox";
 
 type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 
-export default function EquipamentExitFinishModal(props: EquipamentExitModalProps) {
+export default function EquipamentExitFinishModal(
+  props: EquipamentExitModalProps
+) {
   const form = useForm<EquipamentExit>();
 
   async function handleSubmit(data: Partial<EquipamentExit>) {
@@ -19,10 +20,9 @@ export default function EquipamentExitFinishModal(props: EquipamentExitModalProp
         return;
       }
 
-    
       await update(data);
       toast.success("Equipamento atualizado com sucesso.");
-      
+
       handleClose();
     } catch (error) {
       toast.error(
@@ -44,6 +44,8 @@ export default function EquipamentExitFinishModal(props: EquipamentExitModalProp
     if (props?.refetch) props.refetch();
   }
 
+  console.log(props.selectedObject?.equipaments);
+
   return (
     <Modal<EquipamentExit>
       title="Finalizar Saida de Equipamentos"
@@ -54,15 +56,9 @@ export default function EquipamentExitFinishModal(props: EquipamentExitModalProp
       form={form}
       onSubmit={form.handleSubmit(handleSubmit)}
     >
-      <Form {...form}>
-        <form className="space-y-8">
-          {/* talvez transformar isso em um componente mais simples, só precisa saber se todos os valores foram validados */}
-          <InputMultiCheckbox
-            items={props.selectedObject?.equipaments ?? []}
-            form={form}
-          />
-        </form>
-      </Form>
+      <div className="flex flex-col gap-3">
+        
+      </div>
     </Modal>
   );
 }
