@@ -110,12 +110,8 @@ export default function Inventory() {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
         <DataCard title="Total" value={data?.length ?? 0} />
-        <DataCard
-          title="Valor total"
-          value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0}
-        />
         <DataCard
           title="Valor total"
           value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0}

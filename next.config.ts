@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
                         key: "Cross-Origin-Opener-Policy",
                         value: "unsafe-none",
                     },
-                ]
+                ],
             }
         ]
     }

@@ -14,7 +14,7 @@ interface DataCardProps {
 
 export default function DataCard({ title, value }: DataCardProps) {
   return (
-    <Card>
+    <Card className="@container/card">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {/* <CardDescription>Card Description</CardDescription> */}
