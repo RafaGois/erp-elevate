@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-br" suppressHydrationWarning>
       <head>
         <title>Elevate Pro Media</title>
         {/* <link rel="icon" href="/logommm.ico" /> */}
@@ -40,7 +40,7 @@ export default function RootLayout({
                 attribute="class"
                 defaultTheme="system"
                 enableSystem
-                disableTransitionOnChange
+                //disableTransitionOnChange
               >
                 {children}
               </ThemeProvider>

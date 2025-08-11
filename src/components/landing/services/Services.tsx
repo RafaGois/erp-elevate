@@ -46,7 +46,7 @@ const services = [
 
 export default function Services() {
   const container = useRef<HTMLDivElement | null>(null);
-  const tl = useRef<gsap.core.Timeline | null>(null);
+  //const tl = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {

@@ -1,6 +1,4 @@
-import { app } from "./config";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
@@ -14,7 +12,6 @@ import {
   getDocs,
   setDoc,
   doc,
-  getFirestore,
 } from "firebase/firestore";
 
 import { auth, db } from "./config";
@@ -58,7 +55,9 @@ function recoverPassword(email: string) {
   try {
     sendPasswordResetEmail(auth, email);
     alert("Email de recuperação enviado");
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
+    
   }
 }
 

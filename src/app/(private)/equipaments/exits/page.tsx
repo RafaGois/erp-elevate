@@ -80,6 +80,8 @@ export default function Movimentations() {
         const res = await axios.get(`/api/equipamentExits`);
         return res.data;
       } catch (err) {
+        console.log(err);
+        
         return [];
       }
     },

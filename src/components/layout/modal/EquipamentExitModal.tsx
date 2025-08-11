@@ -34,6 +34,8 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
         const res = await axios.get(`/api/equipaments`);
         return res.data;
       } catch (err) {
+        console.log(err);
+        
         return [];
       }
     },

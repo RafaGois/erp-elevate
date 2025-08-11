@@ -4,7 +4,7 @@ import Image from "next/image";
 import Lenis from "lenis";
 
 import "./styles.css";
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
@@ -86,18 +86,8 @@ export default function Categories() {
           2 * (1 - t) * t * arcControlPointY +
           t * t * arcEndY;
         return { x, y };
-      }
+      }      
 
-      // Função getImgProgressState com tipagem
-      function getImgProgressState(index: number, overallProgress: number) {
-        const startTime = index * config.gap;
-        const endTime = startTime + config.speed;
-        if (overallProgress < startTime) return -1;
-        if (overallProgress > endTime) return 2;
-        return (overallProgress - startTime) / config.speed;
-      }
-
-      // imagesRefs.current.forEach((img) => gsap.set(img, {opacity: 0})); // This line is removed as per the new_code
     },
     { scope: container }
   );
