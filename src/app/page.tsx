@@ -1,4 +1,5 @@
 import AboutUs from "@/components/landing/aboutus/AboutUs";
+import Categories from "@/components/landing/categories/Categories";
 import Hero from "@/components/landing/hero/Hero";
 import Services from "@/components/landing/services/Services";
 

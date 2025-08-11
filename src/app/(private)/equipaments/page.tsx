@@ -15,11 +15,20 @@ import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import EquipamentModal from "@/components/layout/modal/EquipamentModal";
 import useAppData from "@/data/hooks/useAppData";
 import DataCard from "@/components/layout/components/card/DataCard";
+import { auth } from "@/firebase/config";
 
 export default function Inventory() {
   const [selectedObject, setSelectedObject] = useState<Equipament | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
+  const user = auth.currentUser;
+ 
+  async function getUser() {
+    const user = await auth.currentUser;
+    console.log("usuario logado sla", user);
+  }
+
+  getUser();
 
   const columns: ColumnDef<Equipament>[] = [
     {
@@ -96,7 +105,6 @@ export default function Inventory() {
           const res = await axios.get(`/api/equipaments`);
           return res.data;
         } catch (err) {
-          console.log(err);
           return [];
         }
       },

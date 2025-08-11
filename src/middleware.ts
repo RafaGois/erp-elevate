@@ -3,49 +3,41 @@ import { NextResponse, type MiddlewareConfig, type NextRequest } from "next/serv
 const publicRoutes = [
   { path: "/", whenAuthenticated: "next" },
   { path: "/auth", whenAuthenticated: "redirect" },
-  { path: "/projects", whenAuthenticated: "next" },
-  { path: "/projects/registers", whenAuthenticated: "next" },
-  //{ path: "/teste", whenAuthenticated: "next" },
 ] as const;
 
 //https://www.youtube.com/watch?v=nlc-l2nW_J0&list=WL&index=59&ab_channel=Rocketseat
 const REDIRECT_WHEN_UNAUTHENTICATED = "/auth";
+/* const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".ico"]; */
+
 
 export default function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-  const publicRoute = publicRoutes.find((route) => path === route.path);
-  const authToken = request.cookies.get("elevate-token");
-
-  //todo: quando faz login salva o jtw ou o uid do usuario nos cookies
-  //nao sera mais necessario p authcotext hehe
-  // puxar a validacao do uid que tem no useeffect para aqui
-
-  if (!authToken && publicRoute) {
+  const { pathname } = request.nextUrl;
+  
+/*    if (IMAGE_EXTENSIONS.some((ext) => pathname.endsWith(ext))) {
     return NextResponse.next();
-  }
+  }  */
+   
+  
+    //const token = request.cookies.get('token')?.value
+    const token = request.cookies.get("elevate-token");
 
-  if (!authToken && !publicRoute) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = REDIRECT_WHEN_UNAUTHENTICATED;
 
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  if (authToken && publicRoute && publicRoute.whenAuthenticated === "redirect") {
-    return NextResponse.redirect(new URL("/equipaments/", request.url));
-  }
-
-  if (!authToken && !publicRoute) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = REDIRECT_WHEN_UNAUTHENTICATED;
-
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  return NextResponse.next();
+    // Se for rota pública, libera
+    if (publicRoutes.find((route) => route.path == pathname)) {      
+      return NextResponse.next()
+    }
+  
+    // Se não tiver token, bloqueia e redireciona para login
+    if (!token) {
+      const loginUrl = new URL(REDIRECT_WHEN_UNAUTHENTICATED, request.url)
+      return NextResponse.redirect(loginUrl)
+    }
+  
+    // Se tiver token, libera
+    return NextResponse.next()
 }
 
 export const config: MiddlewareConfig = {
-  matcher: '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
 };
 

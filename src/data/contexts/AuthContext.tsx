@@ -52,6 +52,7 @@ export function AuthProvider(props: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
 
   async function confingSection(recivedUser: User | FirebaseUser | null) {
+
     if (recivedUser?.email) {
       const firebaseUser = await standardizedUser(recivedUser as FirebaseUser);
       setUser(firebaseUser);
@@ -61,7 +62,6 @@ export function AuthProvider(props: AuthProviderProps) {
       localStorage.setItem("uid", recivedUser.uid + "");
       return recivedUser.uid;
     } else {
-      console.log("entrou no else");
       setUser(null);
       manageCookie(false, null);
       setLoading(false);
@@ -111,6 +111,7 @@ export function AuthProvider(props: AuthProviderProps) {
       return () => cancelar();
     } else {
       setLoading(false);
+      confingSection(null);
     }
   }, []);
 

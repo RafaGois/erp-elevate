@@ -10,6 +10,7 @@ export async function GET() {
     return NextResponse.json(data, { status: 200 });
 
   } catch (err) {
+    console.log(err);
     return handleError(err as HttpError);
   }
 };

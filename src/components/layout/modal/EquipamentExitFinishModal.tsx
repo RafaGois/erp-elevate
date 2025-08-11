@@ -44,8 +44,6 @@ export default function EquipamentExitFinishModal(
     if (props?.refetch) props.refetch();
   }
 
-  console.log(props.selectedObject?.equipaments);
-
   return (
     <Modal<EquipamentExit>
       title="Finalizar Saida de Equipamentos"

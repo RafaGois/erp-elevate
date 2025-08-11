@@ -13,10 +13,6 @@ export default function Hero() {
     () => {
       const elementos = container.current?.querySelectorAll("h1");
 
-      elementos?.forEach((el) => {
-        gsap.set(el.querySelector(".texto"), { opacity: 0 });
-      });
-
       if (elementos && elementos.length > 0) {
         tl.current = gsap.timeline();
 
@@ -26,6 +22,7 @@ export default function Hero() {
               el.querySelector(".barra"),
               { width: "0%" },
               {
+                delay: 1,
                 duration: 0.6,
                 width: "100%",
                 ease: "power4.inOut",
@@ -36,7 +33,7 @@ export default function Hero() {
               i * 0.3 // começa cada animação 0.3s depois da anterior
             )
             .to(el.querySelector(".texto"), {
-              opacity: 1,
+              display: "block",
               duration: 0.6,
               ease: "power4.inOut",
             }, "0.5");
@@ -51,7 +48,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div
+    <header
       ref={container}
       className="flex flex-col items-center h-screen p-4 box-border"
     >
@@ -62,14 +59,14 @@ export default function Hero() {
         </small>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
-          <span className="texto">ELEVATE PRO</span>
+          <span className="texto hidden">ELEVATE PRO</span>
         </h1>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
-          <span className="texto">MEDIA</span>
+          <span className="texto hidden">MEDIA</span>
         </h1>
       </div>
-    </div>
+    </header>
   );
 }
 

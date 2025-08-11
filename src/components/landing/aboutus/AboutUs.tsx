@@ -1,6 +1,53 @@
+"use client";
+
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+
 export default function AboutUs() {
+  const container = useRef<HTMLDivElement | null>(null);
+
+  useGSAP(
+    () => {
+      
+      if (!container?.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      counterAnim("#businessCounter", 50);
+      counterAnim("#projectsCounter", 100);
+      counterAnim("#clientsApprovalCounter", 90);
+      counterAnim("#otherCounter", 60);
+
+      function counterAnim(id: string, value: number) {
+        if (!container?.current) return;
+
+        gsap.to(container.current.querySelector(id), {
+          innerText: value,
+          duration: 1.5,
+          snap: {
+            innerText: (value > 200) ? 10 : 1,
+          },
+          scrollTrigger: {
+            trigger: container.current.querySelector(id),
+            start: "top 85%",
+            markers: true,
+          }
+        });
+      }
+
+      
+    },
+    { scope: container }
+  );
+
   return (
-    <div id="about-us" className="min-h-lvh flex flex-col p-4">
+    <section
+      ref={container}
+      id="about-us"
+      className="min-h-lvh flex flex-col p-4"
+    >
       <div className="flex flex-col md:flex-row justify-between mb-20">
         <h2 className="text-4xl font-bold text-nowrap">Sobre nós</h2>
         <p className="max-w-md">
@@ -30,28 +77,52 @@ export default function AboutUs() {
             <p className="text-sm text-[#ababab] opacity-70">
               Empresas Atendidas
             </p>
-            <h3 className="text-2xl font-bold text-nowrap">+99</h3>
+            <div className="flex text-2xl font-bold text-nowrap">
+              <p>+</p>
+            <h3 id="businessCounter">0</h3>
+            </div>
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
             <p className="text-sm text-[#ababab] opacity-70">
               Projetos Concluídos
             </p>
-            <h3 className="text-2xl font-bold text-nowrap">+999</h3>
+            <div className="flex text-2xl font-bold text-nowrap">
+              <p>+</p>
+              <h3
+                id="projectsCounter"
+              >
+                0
+              </h3>
+            </div>
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
             <p className="text-sm text-[#ababab] opacity-70">
-              Aprovação de Clientes
+              Aprovaçao de Clientes
             </p>
-            <h3 className="text-2xl font-bold text-nowrap">90%</h3>
+            <div className="flex text-2xl font-bold text-nowrap">
+              <h3
+                id="clientsApprovalCounter"
+                >d
+                0
+              </h3>
+                <p>%</p>
+            </div>
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
             <p className="text-sm text-[#ababab] opacity-70">
-              Empresas Atendidas
+              Projetos Concluídos
             </p>
-            <h3 className="text-2xl font-bold text-nowrap">+99</h3>
+            <div className="flex text-2xl font-bold text-nowrap">
+              <p>+</p>
+              <h3
+                id="otherCounter"
+              >
+                0
+              </h3>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

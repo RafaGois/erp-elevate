@@ -87,9 +87,7 @@ export default function Footer() {
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator  /> */}
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
@@ -102,7 +100,7 @@ export default function Footer() {
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
-              <DropdownMenuSeparator />
+              {/* <DropdownMenuSeparator /> */}
               <DropdownMenuItem className="cursor-pointer" onClick={logout}>
                 <LogOut size={16} />
                 Sair

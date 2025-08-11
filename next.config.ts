@@ -1,23 +1,14 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-    async headers() {
-        return [
-            {
-                source: "/auth",
-                headers: [
-                    {
-                        key: "Cross-Origin-Embedder-Policy",
-                        value: "unsafe-none",
-                    },
-                    {
-                        key: "Cross-Origin-Opener-Policy",
-                        value: "unsafe-none",
-                    },
-                ],
-            }
-        ]
-    }
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Other Next.js config options...
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

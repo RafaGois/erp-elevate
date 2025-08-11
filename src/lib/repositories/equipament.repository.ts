@@ -1,9 +1,12 @@
 import { addDoc, getDocs, collection, doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
-import db from "@/lib/config/firestore"
+import { db, auth } from "@/firebase/config";
 import { Equipament } from "../models/Equipament";
 
 async function findAll(): Promise<Equipament[]> {
+  const user = auth;
+  console.log("usuario logado", user.currentUser);
+
   const querySnapshot = await getDocs(collection(db, "equipaments"));
 
   return querySnapshot.docs.map((doc) => ({ uid: doc.id, ...doc.data() } as Equipament));

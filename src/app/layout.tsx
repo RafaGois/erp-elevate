@@ -30,7 +30,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <title>Elevate Pro Media</title>
-        <link rel="icon" href="/logommm.ico" />
+        {/* <link rel="icon" href="/logommm.ico" /> */}
       </head>
       <body className={`antialiased ${spaceGrotesk.className}`}>
         <QueryClientProvider client={queryClient}>

@@ -16,14 +16,16 @@ export default function PrivateLayout({
   const { theme } = useTheme();
 
   return (
-      <SidebarProvider>
-        <AppSidebar  />
-        <SidebarInset>
-          <main className={`${theme} flex-col overflow-auto bg-background rounded-lg`}>
-            <Header breadcrumb={breadcrumb} />
-            <Content>{children}</Content>
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <main
+          className={`${theme} flex-col overflow-auto bg-background rounded-lg`}
+        >
+          <Header breadcrumb={breadcrumb} />
+          <Content>{children}</Content>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
