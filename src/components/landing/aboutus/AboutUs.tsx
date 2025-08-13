@@ -35,8 +35,8 @@ export default function AboutUs() {
           end: "bottom 90%",
         }
       }).from(container.current.querySelector(".card-2"), {
-        xPercent: 50,
-        rotate: 20,
+        xPercent: 70,
+        rotate: 40,
         //duration: 1,
         scrollTrigger: {
           trigger: container.current.querySelector(".card-2"),
@@ -45,8 +45,9 @@ export default function AboutUs() {
           end: "bottom 90%",
         }
       }).from(container.current.querySelector(".card-3"), {
-        xPercent: 50,
+        xPercent: 30,
         rotate: -20,
+        yPercent: 10,
         scrollTrigger: {
           trigger: container.current.querySelector(".card-3"),
           scrub: true,

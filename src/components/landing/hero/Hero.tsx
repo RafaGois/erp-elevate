@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Menu from "./Menu";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { LavaLamp } from "@/components/ui/fluid-blob";
 
 export default function Hero() {
   const container = useRef<HTMLDivElement | null>(null);
@@ -56,25 +57,26 @@ export default function Hero() {
   }, []);
 
   return (
-    <header
+    <section
       ref={container}
-      className={`flex flex-col items-center h-screen p-4 text-white bg-black`}
+      className={`flex flex-col items-center h-screen  text-white bg-black relative`}
     >
+       <LavaLamp/>
       <Menu />
-      <div className="flex flex-col items-start justify-end h-full w-full">
+      <div className="flex flex-col items-start justify-end h-full w-full p-8">
         <small className="text-[#7D6B58] tracking-widest texto-titulo">
           Transformando sua presença digital em autoridade
         </small>
-        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
+        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative tracking-tight mix-blend-exclusion text-white">
           <span className="h-full bg-white absolute barra"></span>
           <span className="texto opacity-0">ELEVATE PRO</span>
         </h1>
-        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
+        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo tracking-tight mix-blend-exclusion text-white relative">
           <span className="h-full bg-white absolute barra"></span>
           <span className="texto opacity-0">MEDIA</span>
         </h1>
       </div>
-    </header>
+    </section>
   );
 }
 

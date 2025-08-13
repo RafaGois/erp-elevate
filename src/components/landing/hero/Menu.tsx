@@ -132,7 +132,7 @@ export default function Menu() {
   }
 
   return (
-    <div ref={container} className="justify-between flex w-full">
+    <div ref={container} className="justify-between flex w-full p-4">
       <Image
         src="https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png"
         alt="logo"
