@@ -62,8 +62,17 @@ export default function Services() {
         const title = serviceElement.querySelector("#title");
         const description = serviceElement.querySelector("#description");
 
-        //gsap.set(description, { opacity: 0 });
-        gsap.set(title, { opacity: 0.5 });
+        gsap.set(title, { opacity: 0 });
+        //gsap.set(title, { opacity: 0.5 });
+
+        gsap.to(title, {
+          opacity: 0.5,
+          scrollTrigger: {
+            trigger: title,
+            start: "top 85%",
+            toggleActions: "play reverse reverse reverse",
+          }
+        })
 
         const splitWord = new SplitText(description, {
           type: "chars",
@@ -88,9 +97,13 @@ export default function Services() {
                 ease: "power2.out",
               },
               {
-                opacity: 1,
+                opacity: 1, 
                 y: 0,
-                 
+                stagger: {
+                  each: 1, //intervalo de 1 segundo entre as animações de forma individual
+		amount: 1, //intervalo de 1 segundo entre as animações de forma de grupo
+		from: "end" //começa as animações no final (start/end/center/edges)
+                }
               },
               0
             );
@@ -126,11 +139,11 @@ export default function Services() {
       <div id="service" key={service.id + "-" + i}>
         <h2
           id="title"
-          className={` text-3xl text-[#dadada] cursor-pointer select-none uppercase`}
+          className={`text-center text-3xl text-[#dadada] cursor-pointer select-none uppercase `}
         >
           {service.name}
         </h2>
-        <blockquote className="wrapper">
+        <blockquote className="wrapper text-center">
           <small id="description">
             {service.description}
           </small>
@@ -142,7 +155,7 @@ export default function Services() {
   return (
     <div
       ref={container}
-      className="flex flex-col items-center justify-center p-4 min-h-svh"
+      className="flex flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))]" 
     >
       <div className="w-full">
         <h2 className="text-4xl font-bold text-left">Serviços</h2>

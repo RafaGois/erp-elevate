@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
-import { app } from "../../firebase/config";
+import { app } from "@/lib/firebase/config";
 import { getAuth } from "firebase/auth";
 
 import Cookies from "js-cookie";
@@ -13,12 +13,12 @@ import { User as FirebaseUser } from "firebase/auth";
 import {
   loginWithEmailAndPassword,
   loginWithGoogle,
-} from "../../firebase/authentications";
+} from "@/lib/firebase/authentications";
 
 const AuthContext = createContext<AuthContextProps>({});
 
 function manageCookie(logged: boolean, token: string | null) {
-  if (logged) {
+  if (logged ) {
     Cookies.set("elevate-auth", logged + "", { expires: 1 });
     if (token) Cookies.set("elevate-token", token, { expires: 1 });
   } else {

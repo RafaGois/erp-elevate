@@ -9,6 +9,7 @@ export default function Hero() {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
+
   useGSAP(
     () => {
       const elementos = container.current?.querySelectorAll("h1");
@@ -33,11 +34,18 @@ export default function Hero() {
               i * 0.3 // começa cada animação 0.3s depois da anterior
             )
             .to(el.querySelector(".texto"), {
-              display: "block",
+              opacity: 1,
               duration: 0.6,
               ease: "power4.inOut",
-            }, "0.5");
+            }, "<0.5")
+            
+            //todo texto aparece dai
         });
+
+        tl.current.from(".texto-titulo", {
+              y: 80,
+              opacity: 0
+            })
       }
     },
     { scope: container }
@@ -50,20 +58,20 @@ export default function Hero() {
   return (
     <header
       ref={container}
-      className="flex flex-col items-center h-screen p-4 box-border"
+      className={`flex flex-col items-center h-screen p-4 text-white bg-black`}
     >
       <Menu />
       <div className="flex flex-col items-start justify-end h-full w-full">
-        <small className="text-[#7D6B58] tracking-widest">
+        <small className="text-[#7D6B58] tracking-widest texto-titulo">
           Transformando sua presença digital em autoridade
         </small>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
-          <span className="texto hidden">ELEVATE PRO</span>
+          <span className="texto opacity-0">ELEVATE PRO</span>
         </h1>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative">
           <span className="h-full bg-white absolute barra"></span>
-          <span className="texto hidden">MEDIA</span>
+          <span className="texto opacity-0">MEDIA</span>
         </h1>
       </div>
     </header>

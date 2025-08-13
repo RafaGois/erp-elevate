@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import MenuItem from "./MenuItem";
+import Image from "next/image";
 
 const menuLinks = [
   {
@@ -34,19 +35,10 @@ export default function Menu() {
 
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
+  const initTl = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
-      gsap.set(".menu-item-link-item-holder, .menu-close, .enter-menu-button", {
-        xPercent: 100,
-        opacity: 0,
-      });
-
-      gsap.set(".link-menu-item", {
-        x: -60,
-        opacity: 0,
-      });
-
       gsap.set(".menu-logo", { opacity: 0, xPercent: -100 });
 
       tl.current = gsap
@@ -55,6 +47,7 @@ export default function Menu() {
           rotate: 90,
           duration: 0.2,
           ease: "power4.inOut",
+          x: 60,
         })
         .to(
           ".menu-start-button",
@@ -78,18 +71,6 @@ export default function Menu() {
           ease: "power4.inOut",
         })
         .to(
-          ".menu-item-link-item-holder",
-          {
-            xPercent: 0,
-            duration: 1,
-            stagger: 0.1,
-            ease: "power4.inOut",
-            delay: -0.75,
-            opacity: 1,
-          },
-          "-=0.5"
-        )
-        .to(
           ".menu-logo, .menu-close, .enter-menu-button",
           {
             opacity: 1,
@@ -111,6 +92,21 @@ export default function Menu() {
           },
           "<"
         );
+
+      initTl.current = gsap
+        .timeline()
+        .from(".navitem", {
+          y: -100,
+          delay: 1,
+          stagger: {
+            from: "start",
+            each: 0.5,
+            amount: 0.5,
+          },
+        })
+        .from(".logo-img, .login-button", {
+          opacity: 0,
+        });
     },
     { scope: container }
   );
@@ -137,37 +133,52 @@ export default function Menu() {
 
   return (
     <div ref={container} className="justify-between flex w-full">
-      <div>logo</div>
+      <Image
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png"
+        alt="logo"
+        height={50}
+        width={50}
+        className="logo-img"
+      />
+
       <div className="flex-row gap-[2rem] hidden sm:flex">
         <a
           key="sobre-nos"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={() => null}
+          className="navitem"
           href="#about-us"
         >
           Sobre nós
         </a>
-        <a key="trabalhos" href="#works">
+        <a className="navitem" key="trabalhos" href="#works">
           Trabalhos
         </a>
-        <a key="clientes" href="#clients">
+        <a className="navitem" key="clientes" href="#clients">
           Clinetes
         </a>
-        <a key="contato" href="#contact">
+        <a className="navitem" key="contato" href="#contact">
           Contato
         </a>
       </div>
-      <Button variant="outline" className="hidden sm:flex">
-        <Link href="/auth">Entrar</Link>
-      </Button>
-      <div className=" flex sm:hidden w-full justify-end">
-        <MenuIcon
-          className="menu-start-button cursor-pointer"
+      <div className="login-button">
+        <Button
+          variant="outline"
+          className="hidden sm:flex bg-white text-black "
+        >
+          <Link href="/auth">Entrar</Link>
+        </Button>
+      </div>
+      <div className=" flex sm:hidden w-full justify-end items-center">
+        <p
+          className="menu-start-button text-sm underline cursor-pointer"
           onClick={toggleMenu}
-        />
+        >
+          MENU
+        </p>
       </div>
       <div
-        className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh /bg-[#bdfa3c] bg-black z-50 flex-col items-center justify-center p-4`}
+        className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh bg-[#bdfa3c] /bg-black z-50 flex-col items-center justify-center p-4`}
       >
         <div className="flex w-full justify-between">
           <p className="menu-logo">ELEVATE PRO MEDIA</p>

@@ -4,7 +4,7 @@ import Services from "@/components/landing/services/Services";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+     <div className="flex flex-col">
       <Hero />
       <AboutUs />
       <Services />
