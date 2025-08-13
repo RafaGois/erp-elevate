@@ -39,7 +39,6 @@ export default function ScrollText() {
             start: "top 80%",
             end: "top 55%",
             scrub: true,
-            markers: true,
             toggleActions: "play play reverse reverse",
           },
           onComplete: () => {

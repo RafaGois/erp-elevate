@@ -140,7 +140,6 @@ export default function Menu() {
         width={50}
         className="logo-img"
       />
-
       <div className="flex-row gap-[2rem] hidden sm:flex">
         <a
           key="sobre-nos"

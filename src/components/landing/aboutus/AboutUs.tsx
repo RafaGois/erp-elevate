@@ -69,7 +69,6 @@ export default function AboutUs() {
             trigger: container.current.querySelector(id),
             start: "top 85%",
             toggleActions: "play reverse reverse reverse"
-            //markers: true,
           },
         });
       }

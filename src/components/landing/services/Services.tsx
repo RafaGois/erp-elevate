@@ -5,6 +5,7 @@ import React, { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
 import { gsap } from "gsap";
 import { ImageTrail } from "@/components/ui/image-trail";
+import { ArrowUpRight } from "lucide-react";
 
 const services = [
   {
@@ -70,7 +71,8 @@ export default function Services() {
 
       servicesElements?.forEach((serviceElement) => {
         const title = serviceElement.querySelector("#title");
-        const description = serviceElement.querySelector("#description");
+        const barra = serviceElement.querySelector(".barra");
+        const arrow = serviceElement.querySelector(".arrow");
 
         gsap.set(title, { opacity: 0 });
         //gsap.set(title, { opacity: 0.5 });
@@ -84,39 +86,20 @@ export default function Services() {
           },
         });
 
-        const splitWord = new SplitText(description, {
-          type: "chars",
-          linesClass: "ts-line",
-        });
-
-        splitWord.chars.forEach((word) => gsap.set(word, { opacity: 0 }));
-
         function hoverAnim() {
           return gsap
             .timeline({ paused: true })
             .to(title, {
               opacity: 1,
-              fontWeight: 500,
-            })
-            .fromTo(
-              splitWord.chars,
-              {
-                y: -20,
-                opacity: 0,
-                stagger: 0.05,
-                ease: "power2.out",
-              },
-              {
-                opacity: 1,
-                y: 0,
-                stagger: {
-                  each: 1, //intervalo de 1 segundo entre as animações de forma individual
-                  amount: 1, //intervalo de 1 segundo entre as animações de forma de grupo
-                  from: "end", //começa as animações no final (start/end/center/edges)
-                },
-              },
-              0
-            );
+              fontWeight: 900,
+              letterSpacing: 5,
+              duration: 0.3
+            }).to(barra, {
+              width: "100%",
+              ease: "power4.out"
+            }).to(arrow, {
+              opacity: 1,
+            }, "0.4")
         }
 
         serviceElement.addEventListener("mouseenter", () => hoverAnim().play());
@@ -126,16 +109,14 @@ export default function Services() {
             .timeline({ paused: true })
             .to(title, {
               opacity: 0.5,
-              //fontWeight: 500,
+              fontWeight: 300,
+              letterSpacing: 1,
+              duration: 0.4
+            }).to(barra, {
+              width: "0%"
+            }).to(arrow, {
+              opacity: 0,
             })
-            .to(
-              splitWord.chars,
-              {
-                opacity: 0,
-                //transformOrigin: "top center",
-              },
-              0
-            );
         }
 
         serviceElement.addEventListener("mouseleave", () => hoverExit().play());
@@ -146,16 +127,17 @@ export default function Services() {
 
   function renderServices() {
     return services.map((service, i) => (
-      <div id="service" key={service.id + "-" + i}>
+      <div id="service" key={service.id + "-" + i} className="flex items-end ">
+        <div>
         <h2
           id="title"
           className={`text-center text-4xl tracking-wider text-[#dadada] cursor-pointer select-none uppercase `}
-        >
+          >
           {service.name}
         </h2>
-        <blockquote className="wrapper text-center">
-          <small id="description">{service.description}</small>
-        </blockquote>
+        <div className="barra h-[1px] w-min bg-white"></div>
+          </div>
+          <ArrowUpRight size={30} className="text-white arrow opacity-0"/>
       </div>
     ));
   }
