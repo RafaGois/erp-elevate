@@ -163,28 +163,30 @@ export default function Services() {
   return (
     <div
       ref={container}
-      className="flex  flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))]"
+      className="flex flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))] relative overflow-hidden"
     >
       <div className="absolute top-0 left-0 z-0"></div>
-      <ImageTrail >
-        {images.map((url, index) => (
-          <div
-            key={index}
-            className="flex relative overflow-hidden w-24 h-24 rounded-lg"
-          >
-            <img
-              src={url}
-              alt={`Trail image ${index + 1}`}
-              className="object-cover absolute inset-0 hover:scale-110 transition-transform"
-            />
-          </div>
-        ))}
-      </ImageTrail>
-      <div className="w-full">
+      <div className="absolute inset-0 z-10">
+        <ImageTrail containerRef={container}>
+          {images.map((url, index) => (
+            <div
+              key={index}
+              className="flex relative overflow-hidden w-24 h-24 rounded-lg"
+            >
+              <img
+                src={url}
+                alt={`Trail image ${index + 1}`}
+                className="object-cover absolute inset-0 hover:scale-110 transition-transform"
+              />
+            </div>
+          ))}
+        </ImageTrail>
+      </div>
+      <div className="w-full z-20 relative">
         <h2 className="text-4xl font-bold text-left">Serviços</h2>
         <p className="text-left">blablabla</p>
       </div>
-      <div className="flex flex-1 flex-col gap-4 justify-center min-h-svh">
+      <div className="flex flex-1 flex-col gap-4 justify-center min-h-svh z-20 relative">
         {renderServices()}
       </div>
     </div>

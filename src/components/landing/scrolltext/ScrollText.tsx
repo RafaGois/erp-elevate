@@ -82,9 +82,9 @@ console.log(container.current.querySelector(".arte-word"));
         </h1>
         <p className="text-white text-wrap text-center opacity-0">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi,
-          necessitatibus harum! Asperiores incidunt saepe blanditiis suscipit
+          necessitatibus harum!<br /> Asperiores incidunt saepe blanditiis suscipit 
           molestias neque quaerat! Ab suscipit nesciunt dolorum vitae aliquam
-          ullam reiciendis odit amet quae.
+          ullam reiciendis <br />odit amet quae.
         </p>
       </div>
     </section>

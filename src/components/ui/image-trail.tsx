@@ -111,7 +111,7 @@ const ImageTrail = ({
   })
 
   return (
-    <div className="relative w-full h-full pointer-events-none">
+    <div className="relative w-full h-full pointer-events-none overflow-hidden">
       {trailRef.current.map((item) => (
         <TrailItem key={item.id} item={item} onComplete={removeFromTrail} />
       ))}
@@ -142,11 +142,12 @@ const TrailItem = ({ item, onComplete }: TrailItemProps) => {
     <motion.div
       ref={scope}
       key={item.id}
-      className="absolute"
+      className="absolute pointer-events-none"
       style={{
         left: item.x,
         top: item.y,
         rotate: item.rotation,
+        zIndex: 1000,
       }}
     >
       {item.child}
