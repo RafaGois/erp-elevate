@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { gsap } from "gsap";
+import { Particles } from "@/components/ui/particles";
 
 export default function ScrollText() {
   const container = useRef<HTMLDivElement | null>(null);
@@ -46,7 +47,6 @@ export default function ScrollText() {
               opacity: 1,
               delay: 0.5,
             });
-console.log(container.current.querySelector(".arte-word"));
 
             container.current.querySelector(".arte-word").classList.add(
                 "bg-gradient-to-r",
@@ -70,7 +70,7 @@ console.log(container.current.querySelector(".arte-word"));
   return (
     <section
       ref={container}
-      className="w-full h-svh md:h-[50svw] bg-black flex flex-col items-center justify-center p-4"
+      className="w-full h-svh md:h-[50svw] bg-black flex flex-col items-center justify-center p-4 relative"
     >
       <div className="">
         <h1 className="text-center text-7xl font-bold text-white">
@@ -86,6 +86,13 @@ console.log(container.current.querySelector(".arte-word"));
           ullam reiciendis <br />odit amet quae.
         </p>
       </div>
+      <Particles
+        className="absolute inset-0"
+        quantity={100}
+        ease={80}
+        color={"#FFFFFF"}
+        refresh
+      />
     </section>
   );
 }
