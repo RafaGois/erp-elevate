@@ -6,49 +6,56 @@ import { SplitText } from "gsap/SplitText";
 import { gsap } from "gsap";
 import { ImageTrail } from "@/components/ui/image-trail";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 const services = [
   {
     id: 1,
     name: "INSTITUCIONAL",
     description: "Descrição do serviço 1",
+    route: "institutional"
   },
   {
     id: 2,
     name: "ESPORTE",
     description: "Descrição do serviço 2",
+    route: "sport"
   },
   {
     id: 3,
     name: "GASTRONOMIA",
     description: "Descrição do serviço 3",
+    route: "food"
   },
   {
     id: 4,
     name: "CASAMENTOS",
     description: "Descrição do serviço 4",
+    route: "wedding"
   },
   {
     id: 5,
     name: "EVENTOS",
     description: "Descrição do serviço 5",
+    route: "event"
   },
   {
     id: 6,
     name: "INAUGURAÇÕES",
     description: "Descrição do serviço 5",
+    route: "inauguration"
   },
   {
     id: 7,
     name: "Programação",
     description:
       "Desenvolvimento de soluções digitais sob medida para o seu negócio",
+      route: "programming"
   },
 ];
 
 export default function Services() {
   const container = useRef<HTMLDivElement | null>(null);
-  //const tl = useRef<gsap.core.Timeline | null>(null);
 
   const images = [
     "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
@@ -127,23 +134,24 @@ export default function Services() {
 
   function renderServices() {
     return services.map((service, i) => (
-      <div id="service" key={service.id + "-" + i} className="flex items-end ">
+      <Link href={"/galery/" + service.route} id="service" key={service.id + "-" + i} className="flex items-end ">
         <div>
         <h2
           id="title"
-          className={`text-center text-4xl tracking-wider text-[#dadada] cursor-pointer select-none uppercase `}
+          className={`text-center text-4xl  text-[#dadada] cursor-pointer select-none uppercase `}
           >
           {service.name}
         </h2>
         <div className="barra h-[1px] w-min bg-white"></div>
           </div>
           <ArrowUpRight size={30} className="text-white arrow opacity-0"/>
-      </div>
+      </Link>
     ));
   }
 
   return (
     <div
+    id="services"
       ref={container}
       className="flex flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))] relative overflow-hidden"
     >
@@ -164,7 +172,7 @@ export default function Services() {
           ))}
         </ImageTrail>
       </div>
-      <div className="w-full z-20 relative">
+      <div className="w-full z-20 relative text-white">
         <h2 className="text-4xl font-bold text-left">Serviços</h2>
         <p className="text-left">blablabla</p>
       </div>

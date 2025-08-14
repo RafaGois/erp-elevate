@@ -39,8 +39,6 @@ export default function Menu() {
 
   useGSAP(
     () => {
-      gsap.set(".menu-logo", { opacity: 0, xPercent: -100 });
-
       tl.current = gsap
         .timeline({ paused: true })
         .to(".menu-start-button", {
@@ -163,7 +161,7 @@ export default function Menu() {
       <div className="login-button">
         <Button
           variant="outline"
-          className="hidden sm:flex bg-white text-black "
+          className="flex bg-white text-black "
         >
           <Link href="/auth">Entrar</Link>
         </Button>
