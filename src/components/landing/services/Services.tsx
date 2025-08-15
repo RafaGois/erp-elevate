@@ -72,8 +72,6 @@ export default function Services() {
 
       gsap.registerPlugin(SplitText);
 
-      gsap.set(".wrapper", { autoAlpha: 1 });
-
       const servicesElements = container.current?.querySelectorAll("#service");
 
       servicesElements?.forEach((serviceElement) => {

@@ -10,7 +10,6 @@ export default function Hero() {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
-
   useGSAP(
     () => {
       const elementos = container.current?.querySelectorAll("h1");
@@ -34,19 +33,23 @@ export default function Hero() {
               },
               i * 0.3 // começa cada animação 0.3s depois da anterior
             )
-            .to(el.querySelector(".texto"), {
-              opacity: 1,
-              duration: 0.6,
-              ease: "power4.inOut",
-            }, "<0.5")
-            
-            //todo texto aparece dai
+            .to(
+              el.querySelector(".texto"),
+              {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power4.inOut",
+              },
+              "<0.5"
+            );
+
+          //todo texto aparece dai
         });
 
         tl.current.from(".texto-titulo", {
-              y: 80,
-              opacity: 0
-            })
+          y: 80,
+          opacity: 0,
+        });
       }
     },
     { scope: container }
@@ -62,7 +65,7 @@ export default function Hero() {
       className={`flex flex-col items-center h-screen text-white bg-black relative`}
       id="hero"
     >
-       <LavaLamp/>
+      <LavaLamp />
       <Menu />
       <div className="flex flex-col items-start justify-end h-full w-full p-8">
         <small className="text-[#7D6B58] tracking-widest texto-titulo">

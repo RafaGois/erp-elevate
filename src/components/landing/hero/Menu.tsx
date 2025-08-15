@@ -101,10 +101,11 @@ export default function Menu() {
             each: 0.5,
             amount: 0.5,
           },
+        }).to(".", {
+          display: "block",
+          opacity: 1,
         })
-        .from(".logo-img, .login-button", {
-          opacity: 0,
-        });
+       
     },
     { scope: container }
   );
@@ -166,9 +167,9 @@ export default function Menu() {
           <Link href="/auth">Entrar</Link>
         </Button>
       </div>
-      <div className=" flex sm:hidden w-full justify-end items-center">
+      <div className="flex md:hidden w-full justify-end items-center">
         <p
-          className="menu-start-button text-sm underline cursor-pointer"
+          className="menu-start-button text-sm text-white underline cursor-pointer"
           onClick={toggleMenu}
         >
           MENU

@@ -101,7 +101,7 @@ export default function AboutUs() {
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png"
             alt="us"
             fill 
-            className="object-cover rounded-xl"
+            className="object-cover rounded-xl hover:scale-95 hover:transition hover:rotate-1"
           />
         </div>
       </div>
