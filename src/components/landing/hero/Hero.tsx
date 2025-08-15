@@ -60,6 +60,7 @@ export default function Hero() {
     <section
       ref={container}
       className={`flex flex-col items-center h-screen text-white bg-black relative`}
+      id="hero"
     >
        <LavaLamp/>
       <Menu />
