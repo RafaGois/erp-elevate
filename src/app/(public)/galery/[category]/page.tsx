@@ -5,7 +5,7 @@ import ImageDataProps from "@/lib/interfaces/ImageDataProps";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-export const galleryImages: ImageDataProps[] = [
+const galleryImages: ImageDataProps[] = [
   {
     id: 1,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png",
@@ -68,7 +68,7 @@ export const galleryImages: ImageDataProps[] = [
   },
 ];
 
-export default function Food() {
+export default function GaleryPage() {
   const params = useParams<{ category: string }>();
 
   function imagesFilteredByService() {
