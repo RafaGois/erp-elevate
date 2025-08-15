@@ -89,7 +89,7 @@ export default function Services() {
           scrollTrigger: {
             trigger: title,
             start: "top 85%",
-            toggleActions: "play reverse reverse reverse",
+            toggleActions: "play pause pause pause",
           },
         });
 

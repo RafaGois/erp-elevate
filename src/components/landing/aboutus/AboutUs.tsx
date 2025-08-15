@@ -68,7 +68,7 @@ export default function AboutUs() {
           scrollTrigger: {
             trigger: container.current.querySelector(id),
             start: "top 85%",
-            toggleActions: "play reverse reverse reverse"
+            toggleActions: "play pause pause pause"
           },
         });
       }
@@ -94,9 +94,9 @@ export default function AboutUs() {
         </p>
       </div>
       <div className="grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-8">
-        <div className="card-1 md:col-span-2 md:row-span-2 rounded-xl bg-stone-900">1</div>
-        <div className="card-2 row-start-2 md:row-start-auto md:col-start-3 rounded-xl bg-stone-900">2</div>
-        <div className="card-3 relative row-start-3 md:col-start-3 md:row-start-2 min-h-64">
+        <div className="card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">1</div>
+        <div className="card-2 row-start-2 md:row-start-auto md:col-start-3  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">2</div>
+        <div className="card-3 relative row-start-3 md:col-start-3 md:row-start-2 min-h-64  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png"
             alt="us"
