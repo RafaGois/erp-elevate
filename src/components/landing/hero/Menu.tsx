@@ -101,11 +101,7 @@ export default function Menu() {
             each: 0.5,
             amount: 0.5,
           },
-        }).to(".", {
-          display: "block",
-          opacity: 1,
         })
-       
     },
     { scope: container }
   );

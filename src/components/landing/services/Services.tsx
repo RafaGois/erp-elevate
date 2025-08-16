@@ -13,44 +13,37 @@ const services = [
     id: 1,
     name: "INSTITUCIONAL",
     description: "Descrição do serviço 1",
-    route: "institutional"
+    route: "institutional",
   },
   {
     id: 2,
     name: "ESPORTE",
-    description: "Descrição do serviço 2",
-    route: "sport"
+    route: "sport",
   },
   {
     id: 3,
     name: "GASTRONOMIA",
-    description: "Descrição do serviço 3",
-    route: "food"
+    route: "food",
   },
   {
     id: 4,
     name: "CASAMENTOS",
-    description: "Descrição do serviço 4",
-    route: "wedding"
+    route: "wedding",
   },
   {
     id: 5,
     name: "EVENTOS",
-    description: "Descrição do serviço 5",
-    route: "event"
-  },
-  {
-    id: 6,
-    name: "INAUGURAÇÕES",
-    description: "Descrição do serviço 5",
-    route: "inauguration"
+    route: "event",
   },
   {
     id: 7,
+    name: "Retratos",
+    route: "programming",
+  },
+  {
+    id: 8,
     name: "Programação",
-    description:
-      "Desenvolvimento de soluções digitais sob medida para o seu negócio",
-      route: "programming"
+    route: "programming",
   },
 ];
 
@@ -98,13 +91,19 @@ export default function Services() {
               opacity: 1,
               fontWeight: 900,
               letterSpacing: 5,
-              duration: 0.3
-            }).to(barra, {
+              duration: 0.3,
+            })
+            .to(barra, {
               width: "100%",
-              ease: "power4.out"
-            }).to(arrow, {
-              opacity: 1,
-            }, "0.4")
+              ease: "power4.out",
+            })
+            .to(
+              arrow,
+              {
+                opacity: 1,
+              },
+              "0.4"
+            );
         }
 
         serviceElement.addEventListener("mouseenter", () => hoverAnim().play());
@@ -116,12 +115,14 @@ export default function Services() {
               opacity: 0.5,
               fontWeight: 300,
               letterSpacing: 1,
-              duration: 0.4
-            }).to(barra, {
-              width: "0%"
-            }).to(arrow, {
-              opacity: 0,
+              duration: 0.4,
             })
+            .to(barra, {
+              width: "0%",
+            })
+            .to(arrow, {
+              opacity: 0,
+            });
         }
 
         serviceElement.addEventListener("mouseleave", () => hoverExit().play());
@@ -132,24 +133,29 @@ export default function Services() {
 
   function renderServices() {
     return services.map((service, i) => (
-      <Link href={"/galery/" + service.route} id="service" key={service.id + "-" + i} className="flex items-end ">
+      <Link
+        href={"/galery/" + service.route}
+        id="service"
+        key={service.id + "-" + i}
+        className="flex items-end "
+      >
         <div>
-        <h2
-          id="title"
-          className={`text-center text-4xl  text-[#dadada] cursor-pointer select-none uppercase `}
+          <h2
+            id="title"
+            className={`text-center text-4xl  text-[#dadada] cursor-pointer select-none uppercase `}
           >
-          {service.name}
-        </h2>
-        <div className="barra h-[1px] w-min bg-white"></div>
-          </div>
-          <ArrowUpRight size={30} className="text-white arrow opacity-0"/>
+            {service.name}
+          </h2>
+          <div className="barra h-[1px] w-min bg-white"></div>
+        </div>
+        <ArrowUpRight size={30} className="text-white arrow opacity-0" />
       </Link>
     ));
   }
 
   return (
     <div
-    id="services"
+      id="services"
       ref={container}
       className="flex flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))] relative overflow-hidden"
     >
