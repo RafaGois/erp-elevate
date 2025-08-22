@@ -21,40 +21,62 @@ export default function AboutUs() {
       counterAnim("#clientsApprovalCounter", 90);
       counterAnim("#otherCounter", 60);
 
-
       tl.current = gsap.timeline();
-      
-      tl.current?.from(container.current.querySelector(".card-1"), {
-        xPercent: -20,
-        rotate: -20,
-        //duration: 1,
-        scrollTrigger: {
-          trigger: container.current.querySelector(".card-1"),
-          scrub: true,
-          start: "top 90%",
-          end: "bottom 90%",
-        }
-      }).from(container.current.querySelector(".card-2"), {
-        xPercent: 70,
-        rotate: 40,
-        //duration: 1,
-        scrollTrigger: {
-          trigger: container.current.querySelector(".card-2"),
-          scrub: true,
-          start: "top 90%",
-          end: "bottom 90%",
-        }
-      }).from(container.current.querySelector(".card-3"), {
-        xPercent: 30,
-        rotate: -20,
-        yPercent: 10,
-        scrollTrigger: {
-          trigger: container.current.querySelector(".card-3"),
-          scrub: true,
-          start: "top 90%",
-          end: "bottom 90%",
-        }
-      })
+
+      tl.current
+        ?.fromTo(
+          container.current.querySelector(".card-1"),
+          {
+            xPercent: -10,
+            rotate: -20,
+          },
+          {
+            xPercent: 0,
+            rotate: 0,
+            scrollTrigger: {
+              trigger: container.current.querySelector(".card-1"),
+              scrub: true,
+              start: "top 90%",
+              end: "bottom 90%",
+            },
+          }
+        )
+        .fromTo(
+          container.current.querySelector(".card-2"),
+          {
+            xPercent: 70,
+            rotate: 40,
+          },
+          {
+            x: 0,
+            rotate: 0,
+            scrollTrigger: {
+              trigger: container.current.querySelector(".card-2"),
+              scrub: true,
+              start: "top 90%",
+              end: "bottom 90%",
+            },
+          }
+        )
+        .fromTo(
+          container.current.querySelector(".card-3"),
+          {
+            xPercent: 30,
+            rotate: -20,
+            yPercent: 10,
+          },
+          {
+            x: 0,
+            rotate: 0,
+            y: 0,
+            scrollTrigger: {
+              trigger: container.current.querySelector(".card-3"),
+              scrub: true,
+              start: "top 90%",
+              end: "bottom 90%",
+            },
+          }
+        );
 
       function counterAnim(id: string, value: number) {
         if (!container?.current) return;
@@ -68,14 +90,10 @@ export default function AboutUs() {
           scrollTrigger: {
             trigger: container.current.querySelector(id),
             start: "top 85%",
-            toggleActions: "play pause pause pause"
+            toggleActions: "play pause pause pause",
           },
         });
       }
-      
-      
-
-
     },
     { scope: container }
   );
@@ -89,18 +107,22 @@ export default function AboutUs() {
       <div className="flex flex-col md:flex-row justify-between mb-20">
         <h2 className="text-4xl font-bold text-nowrap">Sobre nós</h2>
         <p className="max-w-md">
-          A Elevate Pro Media é uma agência de marketing digital que oferece
+          A Elevate Pro Media é uma agência d e marketing digital que oferece
           soluções inovadoras para empresas que desejam se destacar no mercado.
         </p>
       </div>
       <div className="grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-8">
-        <div className="card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">1</div>
-        <div className="card-2 row-start-2 md:row-start-auto md:col-start-3  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">2</div>
+        <div className="card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+          1
+        </div>
+        <div className="card-2 row-start-2 md:row-start-auto md:col-start-3  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+          2
+        </div>
         <div className="card-3 relative row-start-3 md:col-start-3 md:row-start-2 min-h-64  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png"
             alt="us"
-            fill 
+            fill
             className="object-cover rounded-xl hover:scale-95 hover:transition hover:rotate-1"
           />
         </div>

@@ -24,10 +24,17 @@ export default function Clients() {
             className="object-contain grayscale"
           />
         </div>
-
+        <div className="relative w-24 h-16 flex items-center justify-center">
+          <Image
+            src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/thebest_by4xvj.webp"
+            alt="logo_thebest"
+            fill
+            className="object-contain grayscale"
+          />
+        </div>
         <div className="relative w-16 h-12 flex items-center justify-center">
           <Image
-            src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/record_bhncr4.png"
+            src="https://res.cloudinary.com/dn454izoh/image/upload/v1755375444/logoberto_yjra27.avif"
             alt="logo_record"
             fill
             className="object-contain grayscale"
