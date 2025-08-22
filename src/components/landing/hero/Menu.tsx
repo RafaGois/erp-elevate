@@ -9,14 +9,14 @@ import Image from "next/image";
 
 const menuLinks = [
   {
-    key: "sobre-nos",
+    key: "about-us",
     label: "Sobre nós",
-    href: "#about",
+    href: "#about-us",
   },
   {
-    key: "trabalhos",
-    label: "Trabalhos",
-    href: "#works",
+    key: "services",
+    label: "Serviços",
+    href: "#services",
   },
   {
     key: "clientes",
@@ -118,14 +118,6 @@ export default function Menu() {
     setIsOpen(!isOpen);
   }
 
-  function handleMouseEnter(e: React.MouseEvent<HTMLAnchorElement>) {
-    gsap.to(e.target, {
-      scale: 1.1,
-      duration: 0.5,
-      ease: "power4.inOut",
-    });
-  }
-
   return (
     <div ref={container} className="justify-between flex w-full p-4">
       <Image
@@ -136,33 +128,24 @@ export default function Menu() {
         className="logo-img"
       />
       <div className="flex-row gap-[2rem] hidden sm:flex">
-        <a
+        <Link
           key="sobre-nos"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={() => null}
           className="navitem"
           href="#about-us"
         >
           Sobre nós
-        </a>
-        <a className="navitem" key="trabalhos" href="#works">
-          Trabalhos
-        </a>
-        <a className="navitem" key="clientes" href="#clients">
-          Clinetes
-        </a>
-        <a className="navitem" key="contato" href="#contact">
+        </Link>
+        <Link className="navitem" key="services" href="#services">
+          Serviços
+        </Link>
+        <Link className="navitem" key="clientes" href="#clients">
+          Clientes
+        </Link>
+        <Link className="navitem" key="contato" href="#contact">
           Contato
-        </a>
+        </Link>
       </div>
-      <div className="login-button">
-        <Button
-          variant="outline"
-          className="flex bg-white text-black "
-        >
-          <Link href="/auth">Entrar</Link>
-        </Button>
-      </div>
+      <Link className="text-white" href="/auth">Entrar</Link>
       <div className="flex md:hidden w-full justify-end items-center">
         <p
           className="menu-start-button text-sm text-white underline cursor-pointer"

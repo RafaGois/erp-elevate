@@ -172,6 +172,8 @@ export default function Services() {
                 src={url}
                 alt={`Trail image ${index + 1}`}
                 className="object-cover absolute inset-0 hover:scale-110 transition-transform"
+                width={200}
+                height={100}
               />
             </div>
           ))}

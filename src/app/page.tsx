@@ -2,7 +2,6 @@
 
 import AboutUs from "@/components/landing/aboutus/AboutUs";
 import Footer from "@/components/landing/footer/Footer";
-import GalleryScroll from "@/components/landing/galeryscroll/GalleryScroll";
 import Hero from "@/components/landing/hero/Hero";
 import ScrollText from "@/components/landing/scrolltext/ScrollText";
 import Services from "@/components/landing/services/Services";
@@ -12,6 +11,7 @@ import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
 
 export default function Home() {
   const container = useRef<HTMLDivElement | null>(null);
@@ -31,17 +31,18 @@ export default function Home() {
   return (
     <div
       ref={container}
-      id="smooth-wrapper"
-      className="flex flex-col overflow-x-hidden overflow-y-clip"
+      className="overflow-x-hidden relative"
     >
-      <div id="smooth-content">
-        <Hero />
-        <ScrollText />
-        <AboutUs />
-        <Services />
-        <GalleryScroll />
-        <Testimonials />
-        <Footer />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <Hero />
+          <ScrollText />
+          <AboutUs />
+          <Services />
+          <InstitutionalVideo />
+          <Testimonials />
+          <Footer />
+        </div>
       </div>
     </div>
   );
