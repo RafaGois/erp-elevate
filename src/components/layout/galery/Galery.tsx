@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import ImageCard from "./image/ImageCard";
 import { useState } from "react";
 import ImageModal from "./image/ImageModal";

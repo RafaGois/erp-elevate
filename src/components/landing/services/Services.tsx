@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ImageTrail } from "@/components/ui/image-trail";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const services = [
   {
@@ -167,7 +168,7 @@ export default function Services() {
               key={index}
               className="flex relative overflow-hidden w-24 h-24 rounded-lg"
             >
-              <img
+              <Image
                 src={url}
                 alt={`Trail image ${index + 1}`}
                 className="object-cover absolute inset-0 hover:scale-110 transition-transform"
