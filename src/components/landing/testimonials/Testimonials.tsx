@@ -15,18 +15,39 @@ export default function Testimonials() {
   useGSAP(
     () => {
       tl.current = gsap
-        .timeline()
-        .to(container.current.querySelector(".card-" + (selectedCard - 1)), {
-          zIndex: 1,
-          xPercent: 30,
-          yPercent: 10,
-          rotate: 10,
+        .timeline({
+          scrollTrigger: {
+            trigger: container.current.querySelector(".approved-text"),
+            start: "top 65%",
+            markers: true,
+          }
         })
-        .from(container.current.querySelector(".card-" + selectedCard), {
-          zIndex: 999,
-          xPercent: 30,
-          yPercent: 10,
-          rotate: 10,
+        .from(container.current.querySelector(".approved-text"), {
+          opacity: 0,
+          y: 40,
+          duration: 1,
+          
+        }, "<").from(container.current.querySelector(".testimonials-title"), {
+          opacity: 0,
+          y: 40,
+          duration: 1,
+        }, "<")
+        .from(container.current.querySelector(".testimonials-description"), {
+          opacity: 0,
+          y: -40,
+          duration: 1,
+        }, "<").from(container.current.querySelector(".testimonials-buttons"), {
+          opacity: 0,
+          y: -40,
+          duration: 1,
+        }).from(container.current.querySelector(".box-1"), {
+          opacity: 0,
+          x: 40,
+          duration: 1,
+        }).from(container.current.querySelector(".box-2"), {
+          opacity: 0,
+          x: -40,
+          duration: 1,
         });
     },
     { scope: container }
@@ -109,18 +130,18 @@ export default function Testimonials() {
   }, [cards]);
 
   return (
-    <section ref={container} className="bg-black h-svh w-full flex p-16">
+    <section ref={container} className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16">
       <div className="flex-1 flex flex-col justify-center">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 approved-text">
           <Star size={18} color="#eba434" />
           <small className="text-white/60">Aprovados pelos melhores</small>
         </div>
-        <h1 className="text-white text-8xl font-bold">Nossos Clientes</h1>
-        <p className="text-white/40">
+        <h1 className="text-white text-8xl font-bold testimonials-title">Nossos Clientes</h1>
+        <p className="text-white/40 testimonials-description">
           Não acredite apenas na nossa palavra. Veja o que nossos clientes têm a
           dizer sobre o nosso trabalho
         </p>
-        <div className="py-4 flex gap-2 w-[100px]">
+        <div className="py-4 flex gap-2 w-[100px] testimonials-buttons">
           <div
             onClick={() => setSelectedCard(1)}
             className={cn(
@@ -143,8 +164,8 @@ export default function Testimonials() {
       </div>
       <div className="flex-1 flex justify-center items-center relative">
         {renderCards()}
-        <div className="h-24 w-24 bg-white/5 top-12 right-14 absolute rounded-2xl"></div>
-        <div className="h-24 w-24 bg-white/5 bottom-12 left-14 absolute rounded-2xl"></div>
+        <div className="h-24 w-24 bg-white/5 top-12 right-14 absolute rounded-2xl box-1"></div>
+        <div className="h-24 w-24 bg-white/5 bottom-12 left-14 absolute rounded-2xl box-2"></div>
       </div>
     </section>
   );

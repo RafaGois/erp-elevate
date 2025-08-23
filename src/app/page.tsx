@@ -12,6 +12,8 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
+import Clients from "@/components/landing/clients/Clients";
+import CalLToAction from "@/components/landing/CTA/CallToAction";
 
 export default function Home() {
   const container = useRef<HTMLDivElement | null>(null);
@@ -41,6 +43,8 @@ export default function Home() {
           <Services />
           <InstitutionalVideo />
           <Testimonials />
+          <Clients />
+          <CalLToAction />
           <Footer />
         </div>
       </div>

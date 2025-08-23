@@ -2,12 +2,13 @@ import Image from "next/image";
 
 export default function Clients() {
   return (
-    <div className="h-[25svh] w-full bg-black text-white flex flex-col justify-center items-center">
-      <h1>
-        Nossos Melhores <br /> Clientes
+    <div className="h-[100svh] w-full bg-black text-white flex flex-col justify-center items-center">
+      <h1 className="text-center text-6xl font-bold">
+        Os Melhores estão aqui
       </h1>
+      <p className="text-lg text-white/50">Seja um deles!</p>
       <div className="flex justify-evenly items-center gap-4">
-        <div className="relative w-24 h-16 flex items-center justify-center">
+        <div className="relative w-24 h-16 flex items-center justify-center opacity-70">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/anacapri_looigo.png"
             alt="logo_anacapri"
@@ -16,7 +17,7 @@ export default function Clients() {
           />
         </div>
 
-        <div className="relative w-24 h-16 flex items-center justify-center">
+        <div className="relative w-36 h-18 flex items-center justify-center opacity-70">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/thebest_by4xvj.webp"
             alt="logo_thebest"
@@ -24,15 +25,7 @@ export default function Clients() {
             className="object-contain grayscale"
           />
         </div>
-        <div className="relative w-24 h-16 flex items-center justify-center">
-          <Image
-            src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/thebest_by4xvj.webp"
-            alt="logo_thebest"
-            fill
-            className="object-contain grayscale"
-          />
-        </div>
-        <div className="relative w-16 h-12 flex items-center justify-center">
+        <div className="relative w-28 h-24 flex items-center justify-center opacity-70">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755375444/logoberto_yjra27.avif"
             alt="logo_record"
@@ -41,28 +34,6 @@ export default function Clients() {
           />
         </div>
       </div>
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-        }
-        
-        .animate-scroll:hover {
-          animation-play-state: paused;
-        }
-        
-        .shadow-3xl {
-          box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
-        }
-      `}</style>
     </div>
   );
 }

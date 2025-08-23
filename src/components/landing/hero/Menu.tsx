@@ -11,22 +11,22 @@ const menuLinks = [
   {
     key: "about-us",
     label: "Sobre nós",
-    href: "#about-us",
+    href: "/#about-us",
   },
   {
     key: "services",
     label: "Serviços",
-    href: "#services",
+    href: "/#services",
   },
   {
     key: "clientes",
     label: "Clientes",
-    href: "#clients",
+    href: "/#clients",
   },
   {
     key: "contato",
     label: "Contato",
-    href: "#contact",
+    href: "/#contact",
   },
 ];
 
