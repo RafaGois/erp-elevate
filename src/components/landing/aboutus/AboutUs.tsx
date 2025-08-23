@@ -111,9 +111,21 @@ export default function AboutUs() {
           soluções inovadoras para empresas que desejam se destacar no mercado.
         </p>
       </div>
-      <div className="grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-8">
-        <div className="card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
-          1
+      <div className="grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-4">
+        <div className="p-4 card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-center overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+          <h1 className="text-4xl">A elevate</h1>
+          <p>
+            Nascemos em 2019 com um propósito claro: entregar sempre mais do que
+            o combinado. Desde então, crescemos lado a lado com nossos clientes,
+            construindo relações sólidas baseadas em confiança, dedicação e
+            resultados. <br />
+            Somos especialistas em estratégia de social media, cobertura de
+            eventos, desenvolvimento de sistemas e digitalização de empresas,
+            oferecendo soluções completas para fortalecer a presença digital e
+            impulsionar negócios. <br />
+            Nosso diferencial está no cuidado em cada detalhe, unindo técnica,
+            criatividade e inovação para transformar ideias em resultados reais.
+          </p>
         </div>
         <div className="card-2 row-start-2 md:row-start-auto md:col-start-3  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
           2
@@ -127,7 +139,7 @@ export default function AboutUs() {
           />
         </div>
       </div>
-      <div className="bg-[#262626] p-4 rounded-lg">
+      <div className="px-8 pt-8 rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
         <div>
           <h2 className="text-2xl font-bold text-nowrap">
             Nossas conquistas e números

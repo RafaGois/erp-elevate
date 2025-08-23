@@ -1,4 +1,5 @@
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -60,9 +61,11 @@ const ImageModal: React.FC<ImageModalProps> = ({
         )}
 
         {/* Image */}
-        <img
+        <Image
           src={currentImage.src}
           alt={currentImage.alt}
+          width={1200}
+          height={800}
           className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
         />
 

@@ -1,4 +1,5 @@
 import { Expand } from "lucide-react";
+import Image from "next/image";
 
 interface ImageCardProps {
     src: string;
@@ -13,9 +14,11 @@ interface ImageCardProps {
         className={`group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer ${className}`}
         onClick={onClick}
       >
-        <img
+        <Image
           src={src}
           alt={alt}
+          width={400}
+          height={300}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />

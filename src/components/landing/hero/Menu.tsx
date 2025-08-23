@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { ArrowUpRight, MenuIcon } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";

@@ -2,11 +2,7 @@ import Image from "next/image";
 
 export default function Clients() {
   return (
-    <div className="h-[100svh] w-full bg-black text-white flex flex-col justify-center items-center">
-      <h1 className="text-center text-6xl font-bold">
-        Os Melhores estão aqui
-      </h1>
-      <p className="text-lg text-white/50">Seja um deles!</p>
+    <div className=" w-full bg-black text-white flex flex-col justify-center items-center">
       <div className="flex justify-evenly items-center gap-4">
         <div className="relative w-24 h-16 flex items-center justify-center opacity-70">
           <Image

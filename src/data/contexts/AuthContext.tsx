@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 import { app } from "@/lib/firebase/config";
 import { getAuth } from "firebase/auth";
 
@@ -51,7 +51,7 @@ export function AuthProvider(props: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  async function confingSection(recivedUser: User | FirebaseUser | null) {
+  const confingSection = useCallback(async (recivedUser: User | FirebaseUser | null) => {
 
     if (recivedUser?.email) {
       const firebaseUser = await standardizedUser(recivedUser as FirebaseUser);
@@ -68,7 +68,8 @@ export function AuthProvider(props: AuthProviderProps) {
       router.push("/auth");
       return false;
     }
-  }
+  }, [router]);
+
   async function login(recivedUser: User) {
     try {
       setLoading(true);
@@ -113,7 +114,7 @@ export function AuthProvider(props: AuthProviderProps) {
       setLoading(false);
       confingSection(null);
     }
-  }, []);
+  }, [auth, confingSection]);
 
   return (
     <AuthContext.Provider

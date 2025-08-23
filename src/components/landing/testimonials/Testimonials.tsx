@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Quote, Star } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 
 export default function Testimonials() {
-  const cards = [1, 2, 3];
+  const cards = useMemo(() => [1, 2, 3], []);
   const [selectedCard, setSelectedCard] = useState(cards[0]);
 
   const container = useRef<HTMLDivElement | null>(null);
@@ -74,8 +74,8 @@ export default function Testimonials() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <p className="text-white relative z-40">
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
-            nesciunt dolor. Corporis obcaecati"
+            &ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
+            nesciunt dolor. Corporis obcaecati&rdquo;
             <Quote
               size={32}
               className="absolute -top-2 -left-4 z-10 opacity-20"
@@ -115,7 +115,7 @@ export default function Testimonials() {
         });
       }
     });
-  }, [selectedCard]);
+  }, [selectedCard, cards]);
 
   useEffect(() => {
     const interval = setInterval(() => {

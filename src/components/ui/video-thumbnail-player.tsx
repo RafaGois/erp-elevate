@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Play, X } from "lucide-react";
+import Image from "next/image";
 
 // Interface for component props
 interface VideoPlayerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -66,9 +67,11 @@ const VideoPlayer = React.forwardRef<HTMLDivElement, VideoPlayerProps>(
           {...props}
         >
           {/* Thumbnail Image */}
-          <img
+          <Image
             src={thumbnailUrl}
             alt={`Thumbnail for ${title}`}
+            width={400}
+            height={300}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           {/* Overlay Gradient */}
