@@ -8,8 +8,11 @@ export default function InstitutionalVideo() {
       videoUrl="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
       title="Nos Conheça"
       description="Um pouquinho da nossa história para você."
-      className="rounded-xl max-w-2xl"
+      className="rounded-xl max-w-2xl z-30"
     />
+    <div className="bg-white opacity-5 absolute z-10 w-80 h-64 rounded-xl right-[33%] bottom-[20%] ">
+
+    </div>
   </div>
   );
 }

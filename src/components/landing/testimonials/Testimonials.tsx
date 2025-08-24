@@ -19,7 +19,6 @@ export default function Testimonials() {
           scrollTrigger: {
             trigger: container.current.querySelector(".approved-text"),
             start: "top 65%",
-            markers: true,
           }
         })
         .from(container.current.querySelector(".approved-text"), {
@@ -89,8 +88,8 @@ export default function Testimonials() {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-bold">Nome do cidadao</h1>
-            <p className="text-xs">Cargo, Nome da empresa</p>
+            <h1 className="font-bold text-white">Nome do cidadao</h1>
+            <p className="text-xs text-white/50">Cargo, Nome da empresa</p>
           </div>
         </div>
       </div>

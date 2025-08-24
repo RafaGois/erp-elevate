@@ -114,7 +114,6 @@ const VideoPlayer = React.forwardRef<HTMLDivElement, VideoPlayerProps>(
               <iframe
                 src={videoUrl}
                 title={title}
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="h-full w-full rounded-lg"

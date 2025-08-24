@@ -52,12 +52,12 @@ export default function Services() {
   const container = useRef<HTMLDivElement | null>(null);
 
   const images = [
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
-    "https://images.unsplash.com/photo-1426604966848-d7adac402bff",
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977445/corporativas-77_ycyseo.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977443/CORPORATIVAS-24-2_iubjla.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977397/BERTO-2_sezqmf.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04__bpefdy.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04_-44_ovnkt3.jpg",
   ].map((url) => `${url}?auto=format&fit=crop&w=300&q=80`);
 
   useGSAP(

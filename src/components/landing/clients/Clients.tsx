@@ -28,6 +28,16 @@ export default function Clients() {
             fill
             className="object-contain grayscale"
           />
+          
+        </div>
+        <div className="relative w-14 h-16 flex items-center justify-center opacity-70">
+          <Image
+            src="https://res.cloudinary.com/dn454izoh/image/upload/v1755194592/record_bhncr4.png"
+            alt="logo_record"
+            fill
+            className="object-contain grayscale"
+          />
+          
         </div>
       </div>
     </div>

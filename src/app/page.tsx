@@ -27,14 +27,29 @@ export default function Home() {
         effects: true,
         smoothTouch: 0.4, // much shorter smoothing time on touch devices (default is NO smoothing on touch devices)
       });
+
+      const cursor = container.current.querySelector(".cursor")
+      container.current.addEventListener("mousemove", (e) => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        // Atualizar cursor customizado
+        gsap.to(cursor, {
+          x: mouseX,
+          y: mouseY,
+          duration: 0.1,
+          ease: "power2.out",
+        });
+      });
     },
     { scope: container }
   );
   return (
     <div
       ref={container}
-      className="overflow-x-hidden relative"
+      className="overflow-x-hidden relative cursor-none"
     >
+      <div className="cursor fixed h-5 w-5 bg-amber-300 rounded-full cursor-none z-50 mix-blend-difference "></div>
       <div id="smooth-wrapper">
         <div id="smooth-content">
           <Hero />
