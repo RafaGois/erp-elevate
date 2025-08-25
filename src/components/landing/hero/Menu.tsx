@@ -10,22 +10,22 @@ const menuLinks = [
   {
     key: "about-us",
     label: "Sobre nós",
-    href: "/#about-us",
+    href: "#about-us",
   },
   {
     key: "services",
     label: "Serviços",
-    href: "/#services",
+    href: "#services",
   },
   {
     key: "clientes",
     label: "Clientes",
-    href: "/#clients",
+    href: "#clients",
   },
   {
     key: "contato",
     label: "Contato",
-    href: "/#contact",
+    href: "#contact",
   },
 ];
 
@@ -35,6 +35,27 @@ export default function Menu() {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const initTl = useRef<gsap.core.Timeline | null>(null);
+
+  // Função para bloquear/desbloquear o scroll
+  const toggleScroll = (shouldBlock: boolean) => {
+    if (shouldBlock) {
+      // Bloquear scroll
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${window.scrollY}px`;
+    } else {
+      // Restaurar scroll
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+  };
 
   useGSAP(
     () => {
@@ -108,17 +129,33 @@ export default function Menu() {
   useEffect(() => {
     if (isOpen) {
       tl.current?.play();
+      toggleScroll(true); // Bloquear scroll quando abrir
     } else {
       tl.current?.reverse();
+      toggleScroll(false); // Restaurar scroll quando fechar
     }
+
+    // Cleanup para restaurar scroll quando componente for desmontado
+    return () => {
+      if (isOpen) {
+        toggleScroll(false);
+      }
+    };
   }, [isOpen]);
+
+  // Cleanup adicional para garantir que o scroll seja restaurado
+  useEffect(() => {
+    return () => {
+      toggleScroll(false);
+    };
+  }, []);
 
   function toggleMenu() {
     setIsOpen(!isOpen);
   }
 
   return (
-    <div ref={container} className="justify-between flex w-full p-4">
+    <div ref={container} className="flex justify-between w-full p-4 z-50">
       <Image
         src="https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png"
         alt="logo"
@@ -127,24 +164,63 @@ export default function Menu() {
         className="logo-img"
       />
       <div className="flex-row gap-[2rem] hidden sm:flex">
-        <Link
+        <a
           key="sobre-nos"
-          className="navitem"
+          className="navitem cursor-pointer"
           href="#about-us"
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById('about-us');
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
         >
           Sobre nós
-        </Link>
-        <Link className="navitem" key="services" href="#services">
+        </a>
+        <a 
+          className="navitem cursor-pointer" 
+          key="services" 
+          href="#services"
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById('services');
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+        >
           Serviços
-        </Link>
-        <Link className="navitem" key="clientes" href="#clients">
+        </a>
+        <a 
+          className="navitem cursor-pointer" 
+          key="clientes" 
+          href="#clients"
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById('clients');
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+        >
           Clientes
-        </Link>
-        <Link className="navitem" key="contato" href="#contact">
+        </a>
+        <a 
+          className="navitem cursor-pointer" 
+          key="contato" 
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById('contact');
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+        >
           Contato
-        </Link>
+        </a>
       </div>
-      <Link className="text-white" href="/auth">Entrar</Link>
       <div className="flex md:hidden w-full justify-end items-center">
         <p
           className="menu-start-button text-sm text-white underline cursor-pointer"
@@ -154,7 +230,7 @@ export default function Menu() {
         </p>
       </div>
       <div
-        className={`hidden menu-overlay fixed top-0 left-0 w-lvw h-lvh bg-[#bdfa3c] /bg-black z-50 flex-col items-center justify-center p-4`}
+        className={`hidden menu-overlay fixed w-full h-screen overflow-hidden top-0 left-0 /bg-[#bdfa3c] bg-black z-[99999] flex-col items-center justify-center p-4`}
       >
         <div className="flex w-full justify-between">
           <p className="menu-logo">ELEVATE PRO MEDIA</p>
@@ -173,21 +249,21 @@ export default function Menu() {
           ))}
         </div>
         <div className="flex flex-col gap-4 w-full">
-          <a
+          <Link
             className="link-menu-item flex items-center gap-1"
             href="INSTAGRAM"
           >
             INSTAGRAM
             <ArrowUpRight size={14} />
-          </a>
-          <a className="link-menu-item flex items-center gap-1" href="LINKEDIN">
+          </Link>
+          <Link className="link-menu-item flex items-center gap-1" href="LINKEDIN">
             LINKEDIN
             <ArrowUpRight size={14} />
-          </a>
-          <a className="link-menu-item flex items-center gap-1" href="DRIBBLE">
+          </Link>
+          <Link className="link-menu-item flex items-center gap-1" href="DRIBBLE">
             DRIBBLE
             <ArrowUpRight size={14} />
-          </a>
+          </Link>
         </div>
         <div className="enter-menu-button flex w-full justify-end">
           <Link href="/auth">

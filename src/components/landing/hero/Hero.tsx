@@ -13,8 +13,6 @@ export default function Hero() {
   useGSAP(
     () => {
       const elementos = container.current?.querySelectorAll("h1");
-
-      if (elementos && elementos.length > 0) {
         tl.current = gsap.timeline();
 
         elementos.forEach((el, i) => {
@@ -50,14 +48,10 @@ export default function Hero() {
           y: 80,
           opacity: 0,
         });
-      }
+      
     },
     { scope: container }
   );
-
-  useEffect(() => {
-    tl.current?.play();
-  }, []);
 
   return (
     <section
@@ -65,8 +59,8 @@ export default function Hero() {
       className={`flex flex-col items-center h-screen text-white bg-black relative`}
       id="hero"
     >
-      <LavaLamp />
       <Menu />
+      
       <div className="flex flex-col items-start justify-end h-full w-full p-8">
         <small className="text-[#7D6B58] tracking-widest texto-titulo">
           Transformando sua presença digital em autoridade

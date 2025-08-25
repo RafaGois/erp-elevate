@@ -65,18 +65,24 @@ export default function MenuItem(props: {
       );
   }
 
+  // Função para fechar menu e permitir navegação
+  const handleClick = () => {
+    props.toggleMenu();
+  };
+
   return (
     <div key={props.link.href} className="menu-item-link-item">
       <div
         className="menu-item-link-item-holder"
-        onClick={props.toggleMenu}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
       >
         <Link
-          className="menu-link text-5xl font-bold flex items-end"
+          className="menu-link text-5xl font-bold flex items-end cursor-pointer"
           key={props.link.href}
           href={props.link.href}
+          scroll={false}
         >
           {props.link.label}
           <ArrowUpRight
