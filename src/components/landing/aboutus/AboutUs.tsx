@@ -12,7 +12,7 @@ export default function AboutUs() {
 
   useGSAP(
     () => {
-      if (!container?.current) return;
+      //if (!container?.current) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
@@ -21,62 +21,28 @@ export default function AboutUs() {
       counterAnim("#clientsApprovalCounter", 90);
       counterAnim("#otherCounter", 60);
 
-      tl.current = gsap.timeline();
-
-      tl.current
-        ?.fromTo(
-          container.current.querySelector(".card-1"),
-          {
-            xPercent: -10,
-            rotate: -20,
+      tl.current = gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: container.current.querySelector(".card-1"),
+            scrub: true,
+            start: "top 90%",
+            end: "bottom 80%",
           },
-          {
-            xPercent: 0,
-            rotate: 0,
-            scrollTrigger: {
-              trigger: container.current.querySelector(".card-1"),
-              scrub: true,
-              start: "top 90%",
-              end: "bottom 90%",
-            },
-          }
-        )
-        .fromTo(
-          container.current.querySelector(".card-2"),
-          {
-            xPercent: 70,
-            rotate: 40,
-          },
-          {
-            x: 0,
-            rotate: 0,
-            scrollTrigger: {
-              trigger: container.current.querySelector(".card-2"),
-              scrub: true,
-              start: "top 90%",
-              end: "bottom 90%",
-            },
-          }
-        )
-        .fromTo(
-          container.current.querySelector(".card-3"),
-          {
-            xPercent: 30,
-            rotate: -20,
-            yPercent: 10,
-          },
-          {
-            x: 0,
-            rotate: 0,
-            y: 0,
-            scrollTrigger: {
-              trigger: container.current.querySelector(".card-3"),
-              scrub: true,
-              start: "top 90%",
-              end: "bottom 90%",
-            },
-          }
-        );
+        })
+        .from(container.current.querySelector(".card-1"), {
+          x: -100,
+          rotate: -20,
+        })
+        .from(container.current.querySelector(".card-2"), {
+          x: 70,
+          rotate: 20,
+        })
+        .from(container.current.querySelector(".card-3"), {
+          x: 50,
+          rotate: -10,
+          y: 10,
+        });
 
       function counterAnim(id: string, value: number) {
         if (!container?.current) return;

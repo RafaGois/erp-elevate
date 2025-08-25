@@ -57,7 +57,7 @@ export default function Testimonials() {
       <div
         key={i + "-" + card}
         className={cn(
-          "flex flex-col justify-center items-center border absolute w-[calc(100%-12rem)] h-[calc(100%-10rem)] card-" +
+          "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] card-" +
             card,
           "rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
           "p-8",
@@ -132,10 +132,10 @@ export default function Testimonials() {
     <section ref={container} className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16">
       <div className="flex-1 flex flex-col justify-center">
         <div className="flex items-center gap-2 approved-text">
-          <Star size={18} color="#eba434" />
+          <Star size={18} color="#eba434" fill="#eba434"/>
           <small className="text-white/60">Aprovados pelos melhores</small>
         </div>
-        <h1 className="text-white text-8xl font-bold testimonials-title">Nossos Clientes</h1>
+        <h1 className="text-white text-7xl sm:text-8xl font-bold testimonials-title">Nossos Clientes</h1>
         <p className="text-white/40 testimonials-description">
           Não acredite apenas na nossa palavra. Veja o que nossos clientes têm a
           dizer sobre o nosso trabalho

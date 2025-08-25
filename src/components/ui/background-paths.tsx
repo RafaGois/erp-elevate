@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useRef } from "react";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -56,6 +57,62 @@ export function BackgroundPaths({
   title?: string;
 }) {
   const words = title.split(" ");
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  // Verificar se os elementos estão visíveis
+  const isTitleInView = useInView(titleRef, { once: true, amount: 0.3 });
+  const isButtonInView = useInView(buttonRef, { once: true, amount: 0.3 });
+
+  // Variantes de animação para o título - Minimalista e formal
+  const titleVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.2,
+        ease: "easeOut" as const,
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  // Variantes para cada caractere do título - Movimento sutil
+  const charVariants = {
+    hidden: {
+      opacity: 0,
+      y: 8,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+
+  // Variantes para o botão - Entrada elegante
+  const buttonVariants = {
+    hidden: {
+      opacity: 0,
+      y: 15,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.0,
+        ease: "easeOut" as const,
+        delay: 0.4,
+      },
+    },
+  };
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
@@ -71,20 +128,19 @@ export function BackgroundPaths({
           transition={{ duration: 2 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">
+          <motion.h1
+            ref={titleRef}
+            variants={titleVariants}
+            initial="hidden"
+            animate={isTitleInView ? "visible" : "hidden"}
+            className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter"
+          >
             {words.map((word, wordIndex) => (
               <span key={wordIndex} className="inline-block mr-4 last:mr-0">
                 {word.split("").map((letter, letterIndex) => (
                   <motion.span
                     key={`${wordIndex}-${letterIndex}`}
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{
-                      delay: wordIndex * 0.1 + letterIndex * 0.03,
-                      type: "spring",
-                      stiffness: 150,
-                      damping: 25,
-                    }}
+                    variants={charVariants}
                     className="inline-block text-transparent bg-clip-text 
                                         bg-gradient-to-r from-neutral-900 to-neutral-700/80 
                                         dark:from-white dark:to-white/80"
@@ -94,37 +150,41 @@ export function BackgroundPaths({
                 ))}
               </span>
             ))}
-          </h1>
+          </motion.h1>
 
-          <div
+          <motion.div
+            ref={buttonRef}
+            variants={buttonVariants}
+            initial="hidden"
+            animate={isButtonInView ? "visible" : "hidden"}
             className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10 
                         dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg 
                         overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
-              <a
-                href="https://wa.me/5549991893950?text=Olá! Vim pelo site e gostaria%20de%20mais%20informa%C3%A7%C3%B5es!"
-                target="_blank"
-              >
-            <Button
-              variant="ghost"
-              className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+            <a
+              href="https://wa.me/5549991893950?text=Olá! Vim pelo site e gostaria%20de%20mais%20informa%C3%A7%C3%B5es!"
+              target="_blank"
+            >
+              <Button
+                variant="ghost"
+                className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
                             bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
                             text-black dark:text-white transition-all duration-300 
                             group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
                             hover:shadow-md dark:hover:shadow-neutral-800/50"
-            >
+              >
                 <span className="opacity-90 group-hover:opacity-100 transition-opacity">
                   Entre em contato
                 </span>
-              <span
-                className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
-                transition-all duration-300"
+                <span
+                  className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
+                  transition-all duration-300"
                 >
-                →
-              </span>
-            </Button>
-                  </a>
-          </div>
+                  →
+                </span>
+              </Button>
+            </a>
+          </motion.div>
         </motion.div>
       </div>
     </div>
