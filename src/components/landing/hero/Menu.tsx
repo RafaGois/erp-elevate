@@ -220,7 +220,9 @@ export default function Menu() {
         >
           Contato
         </a>
+        
       </div>
+      <Link href="/auth" className="underline hidden sm:flex">ENTRAR</Link>
       <div className="flex md:hidden w-full justify-end items-center">
         <p
           className="menu-start-button text-sm text-white underline cursor-pointer"
