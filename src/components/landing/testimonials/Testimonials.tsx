@@ -3,25 +3,41 @@ import { cn } from "@/lib/utils";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Quote, Star } from "lucide-react";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import AudioPlayer from "./AudioPlayer";
 
 
 const testimonials = [
   {
+    id: 0,
     name: "Jonathan Garcia",
     job: "Proprietário",
     company: "Garcia Líder",
-    testimonial: "Seloko, gostei dimaisiiii, nem dormi de ansiedade!",
+    testimonial: "O trabalho foi acima da média, fora da curva e superou todas as expectativas e tudo o que tinha imaginado! Entragaram muito além do combiando!",
     picture: "https://res.cloudinary.com/dn454izoh/image/upload/v1756757946/Captura_de_Tela_2025-09-01_%C3%A0s_17.15.56_lsa7yb.png",
-    audio: "https://res.cloudinary.com/dn454izoh/video/upload/v1756756533/WhatsApp_Audio_2025-09-01_at_16.23.06_rey6pk.ogg"
+  },
+  {
+    id: 1,
+    name: "Sandra",
+    job: "Proprietária",
+    company:"Divina Massa e Hotdog Haus",
+    testimonial:"Muito além do que eu podia imaginar!",
+    picture: "https://res.cloudinary.com/dn454izoh/image/upload/v1756767430/logo_512x512_v1630122655_ooc95e.png",
+    audio: "https://res.cloudinary.com/dn454izoh/video/upload/v1756769526/WhatsApp_Audio_2025-09-01_at_16.22.33_n2ukfp.ogg"
+  },
+  {
+    id: 2,
+    name: "Vanessa Bornhiati",
+    job: "Proprietária",
+    company:"Ademicon Curitibanos e Caçador",
+    testimonial:"Parabéns meninos, vocês são D+, entregam tudo!!! Somos fãs de vocês e desejamos cada vez mais sucesso!!! Voem Alto!",
+    picture:"https://res.cloudinary.com/dn454izoh/image/upload/v1756767493/channels4_profile_fgzly6.jpg"
   },
 ]
 
 
 export default function Testimonials() {
-  const cards = useMemo(() => [1, 2, 3], []);
-  const [selectedCard, setSelectedCard] = useState(cards[0]);
+  const [selectedCard, setSelectedCard] = useState(testimonials[0].id);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   const container = useRef<HTMLDivElement | null>(null);
@@ -94,12 +110,14 @@ export default function Testimonials() {
               className="absolute -top-2 -left-4 z-10 opacity-20"
             />
           </p>
-          <AudioPlayer onAudioStateChange={setIsAudioPlaying} />
+          {t?.audio ? (
+            <AudioPlayer onAudioStateChange={setIsAudioPlaying} url={t.audio}/>
+          ) : ""}
         </div>
         <div className="w-full h-[1px] bg-white/10"></div>
         <div className="py-4 flex w-full items-center gap-4">
-          <Avatar>
-            <AvatarImage sizes="36px" src={t.picture} />
+          <Avatar className="w-10 h-10">
+            <AvatarImage src={t.picture} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
@@ -111,25 +129,42 @@ export default function Testimonials() {
     ));
   }
 
+  function renderCardsOptions() {
+    return testimonials.map((t) => {
+      return (
+        <div
+            key={t.id}
+            onClick={() => setSelectedCard(t.id)}
+            className={cn(
+              "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-" + t.id
+            )}
+          ></div>
+      )
+    })
+  }
+
   useEffect(() => {
+
+    if(!container?.current) return;
+
     gsap.from(".card-" + selectedCard, {
       opacity: 0,
       xPercent: 100,
     });
 
-    cards.map((card) => {
-      if (card == selectedCard) {
-        gsap.to(container.current.querySelector(".bar-" + card), {
+    testimonials.map((card) => {
+      if (card.id == selectedCard) {
+        gsap.to(container?.current?.querySelector(".bar-" + card.id), {
           flexGrow: 1,
         });
       } else {
-        gsap.to(container.current.querySelector(".bar-" + card), {
+        gsap.to(container.current.querySelector(".bar-" + card.id), {
           flexGrow: 0,
           flexShrink: 1,
         });
       }
     });
-  }, [selectedCard, cards]);
+  }, [selectedCard]);
 
   useEffect(() => {
     // Só executa a rotação automática se nenhum áudio estiver tocando
@@ -137,14 +172,14 @@ export default function Testimonials() {
 
     const interval = setInterval(() => {
       setSelectedCard((prev) => {
-        const currentIndex = cards.indexOf(prev);
-        const nextIndex = (currentIndex + 1) % cards.length;
-        return cards[nextIndex];
+        const currentIndex = testimonials.find((t) => t.id == prev).id;
+        const nextIndex = (currentIndex + 1) % testimonials.length;
+        return testimonials[nextIndex].id;
       });
     }, 10 * 1000); // 10 segundos
 
     return () => clearInterval(interval);
-  }, [cards, isAudioPlaying]);
+  }, [testimonials, isAudioPlaying]);
 
   return (
     <section ref={container} className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16">
@@ -159,24 +194,7 @@ export default function Testimonials() {
           dizer sobre o nosso trabalho
         </p>
         <div className="py-4 flex gap-2 w-[100px] testimonials-buttons">
-          <div
-            onClick={() => setSelectedCard(1)}
-            className={cn(
-              "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-1"
-            )}
-          ></div>
-          <div
-            onClick={() => setSelectedCard(2)}
-            className={cn(
-              "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-2"
-            )}
-          ></div>
-          <div
-            onClick={() => setSelectedCard(3)}
-            className={cn(
-              "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-3"
-            )}
-          ></div>
+          {renderCardsOptions()}
         </div>
       </div>
       <div className="flex-1 flex justify-center items-center relative">

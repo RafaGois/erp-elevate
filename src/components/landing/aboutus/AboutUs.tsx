@@ -101,7 +101,13 @@ export default function AboutUs() {
         
         </div>
         <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 flex items-center justify-center">
-          2
+          <h1>Nossos valores</h1>
+          <p>
+            ⚪ Criatividade em Primeiro Lugar
+            ⚪ Entrega Além do Combinado
+            ⚪ Comunicação Clara e Transparente
+
+          </p>
         </div>
         <div className="card-3 md:col-start-3 md:row-start-2 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 relative">
           <Image

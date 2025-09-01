@@ -61,6 +61,14 @@ export default function Clients() {
             className="object-contain grayscale logo-record"
           />
         </div>
+        <div className="relative w-24 h-28 flex items-center justify-center opacity-70">
+          <Image
+            src="https://res.cloudinary.com/dn454izoh/image/upload/v1756766682/images-removebg-preview_wbmslo.png"
+            alt="logo_ademicon"
+            fill
+            className="object-contain grayscale logo-record"
+          />
+        </div>
       </div>
     </div>
   );

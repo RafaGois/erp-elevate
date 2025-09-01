@@ -4,13 +4,13 @@ interface AudioPlayerProps {
   onAudioStateChange?: (isPlaying: boolean) => void;
 }
 
-export default function AudioPlayer({ onAudioStateChange }: AudioPlayerProps) {
+export default function AudioPlayer({ onAudioStateChange, url}) {
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [audioSrc] = useState("https://res.cloudinary.com/dn454izoh/video/upload/v1756756533/WhatsApp_Audio_2025-09-01_at_16.23.06_rey6pk.ogg"); // Caminho opcional para o áudio
+    const [audioSrc] = useState(url); // Caminho opcional para o áudio
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // Notifica o componente pai sobre mudanças no estado do áudio
