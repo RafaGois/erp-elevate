@@ -60,8 +60,8 @@ const VideoPlayer = React.forwardRef<HTMLDivElement, VideoPlayerProps>(
             className
           )}
           style={{ aspectRatio }}
-          onClick={() => setIsModalOpen(true)}
-          onKeyDown={(e) => e.key === "Enter" && setIsModalOpen(true)}
+          //onClick={() => setIsModalOpen(true)}
+          //onKeyDown={(e) => e.key === "Enter" && setIsModalOpen(true)}
           tabIndex={0}
           aria-label={`Play video: ${title}`}
           {...props}
