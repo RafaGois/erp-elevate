@@ -14,6 +14,7 @@ import { useRef, useEffect } from "react";
 import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
 import Clients from "@/components/landing/clients/Clients";
 import CalLToAction from "@/components/landing/CTA/CallToAction";
+import Lenis from "lenis";
 
 export default function Home() {
   const container = useRef<HTMLDivElement | null>(null);
@@ -21,15 +22,19 @@ export default function Home() {
 
   useGSAP(
     () => {
-      gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+      const lenis = new Lenis();
+      lenis.on("scroll", ScrollTrigger.update);
 
-      smootherRef.current = ScrollSmoother.create({
-        smooth: 1.2, // how long (in seconds) it takes to "catch up" to the native scroll position
-        effects: true,
-        smoothTouch: 0.4, // much shorter smoothing time on touch devices (default is NO smoothing on touch devices)
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000); // Convert time from seconds to milliseconds
       });
 
-      const cursor = container.current.querySelector(".cursor")
+      // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+      gsap.ticker.lagSmoothing(0);
+
+      const cursor = container.current.querySelector(".cursor");
+      const cursorDot = container.current.querySelector(".cursor-point");
+
       container.current.addEventListener("mousemove", (e) => {
         const mouseX = e.clientX;
         const mouseY = e.clientY;
@@ -38,10 +43,50 @@ export default function Home() {
         gsap.to(cursor, {
           x: mouseX,
           y: mouseY,
-          duration: 0.1,
           ease: "power2.out",
+          duration: 1,
         });
+
+        gsap.to(cursorDot, {
+          x: mouseX + 20,
+          y: mouseY + 20,
+          ease: "power2.out",
+          duration: 1.4,
+        }); 
       });
+
+
+      container.current.addEventListener("mousedown", (e) => {
+       gsap.to(cursor, {
+        scale: 2,
+        backgroundColor: "#bdfa3c",
+        duration: 0.5,
+        ease: "power4.inOut",
+       })
+
+       gsap.to(cursorDot, {
+        scale: 2,
+        backgroundColor: "#bdfa3c",
+       })
+      });
+
+      container.current.addEventListener("mouseup", (e) => {
+        gsap.to(cursor, {
+         scale: 1,
+         backgroundColor: "transparent",
+         
+         ease: "bounce",
+        })
+        gsap.to(cursorDot, {
+          scale: 1,
+          backgroundColor: "#fff",
+          ease: "bounce",
+          duration: 1,
+         })
+       });
+
+       
+
     },
     { scope: container }
   );
@@ -49,7 +94,7 @@ export default function Home() {
   // Função para navegação suave com ScrollSmoother
   const scrollToSection = (sectionId: string) => {
     if (!smootherRef.current) return;
-    
+
     const targetElement = document.getElementById(sectionId);
     if (targetElement) {
       // Usar ScrollSmoother para navegação suave
@@ -63,11 +108,11 @@ export default function Home() {
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const link = target.closest('a[href^="#"]');
-      
+
       if (link) {
         e.preventDefault();
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('#')) {
+        const href = link.getAttribute("href");
+        if (href && href.startsWith("#")) {
           const sectionId = href.substring(1);
           scrollToSection(sectionId);
         }
@@ -75,32 +120,26 @@ export default function Home() {
     };
 
     // Adicionar listener para todos os cliques
-    document.addEventListener('click', handleAnchorClick);
+    document.addEventListener("click", handleAnchorClick);
 
     return () => {
-      document.removeEventListener('click', handleAnchorClick);
+      document.removeEventListener("click", handleAnchorClick);
     };
   }, []);
 
   return (
-    <div
-      ref={container}
-      className="overflow-x-hidden relative cursor-none"
-    >
-      <div className="cursor fixed h-5 w-5 bg-amber-300 rounded-full cursor-none z-50 mix-blend-difference "></div>
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <Hero />
-          <ScrollText />
-          <AboutUs />
-          <Services />
-          <InstitutionalVideo />
-          <Testimonials />
-          <Clients />
-          <CalLToAction />
-          <Footer />
-        </div>
-      </div>
+    <div ref={container} className="overflow-x-hidden relative select-none">
+      <div className="hidden cursor fixed h-12 w-12 border-1 border-white rounded-full cursor-none z-50 sm:flex justify-center items-center mix-blend-difference"></div>
+      <div className="hidden sm:flex cursor-point fixed bg-white h-2 w-2 rounded-full z-50 mix-blend-difference"></div>
+      <Hero />
+      <ScrollText />
+      <AboutUs />
+      <Services />
+      <InstitutionalVideo />
+      <Testimonials />
+      <Clients />
+      <CalLToAction />
+      <Footer />
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default function ScrollText() {
             opacity: 0.2,
           },
           {
-            duration: 0.8,
+            duration: 2,
             stagger: 0.05,
             opacity: 1,
             ease: "power2.out",
@@ -113,7 +113,7 @@ export default function ScrollText() {
           container.current.querySelectorAll(".img-scrolltext"),
           {
             scale: 0,
-            stagger: 0.4,
+            stagger: 0.6,
             transformOrigin: "50% 50%",
           },
           "<"
@@ -169,12 +169,9 @@ export default function ScrollText() {
           Aqui criamos <span className="arte-word">ARTE</span>
         </h1>
         <p className="text-white text-wrap text-center opacity-0">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi,
-          necessitatibus harum!
-          <br /> Asperiores incidunt saepe blanditiis suscipit molestias neque
-          quaerat! Ab suscipit nesciunt dolorum vitae aliquam ullam reiciendis{" "}
-          <br />
-          odit amet quae.
+        Unimos técnicas consolidadas e criatividade para transformar cada projeto em uma entrega com intenção. <br />
+         Nossa missão é ir além da estética: criamos conexões, transmitimos propósito e <br />
+          damos vida às ideias com estratégia e autenticidade.
         </p>
       </div>
       

@@ -12,36 +12,41 @@ export default function AboutUs() {
 
   useGSAP(
     () => {
-      //if (!container?.current) return;
-
       gsap.registerPlugin(ScrollTrigger);
 
       counterAnim("#businessCounter", 50);
       counterAnim("#projectsCounter", 100);
-      counterAnim("#clientsApprovalCounter", 90);
-      counterAnim("#otherCounter", 60);
+      counterAnim("#clientsApprovalCounter", 99);
+      counterAnim("#otherCounter", 30);
 
       tl.current = gsap
         .timeline({
+          paused: true,
+          
           scrollTrigger: {
-            trigger: container.current.querySelector(".card-1"),
-            scrub: true,
+            trigger: container.current.querySelector(".card-3"),
+            //scrub: true,
             start: "top 90%",
-            end: "bottom 80%",
+            toggleActions: "play pause pause pause",
+            //end: "bottom 90%",
+     
           },
         })
         .from(container.current.querySelector(".card-1"), {
           x: -100,
-          rotate: -20,
+          opacity: 0,
+          //rotate: -20,
         })
         .from(container.current.querySelector(".card-2"), {
-          x: 70,
-          rotate: 20,
+          x: -100,
+          opacity: 0,
+          //rotate: 20,
         })
         .from(container.current.querySelector(".card-3"), {
-          x: 50,
-          rotate: -10,
-          y: 10,
+          y: -100,
+          opacity: 0,
+          //rotate: -10,
+          //y: 10,
         });
 
       function counterAnim(id: string, value: number) {
@@ -77,8 +82,8 @@ export default function AboutUs() {
           soluções inovadoras para empresas que desejam se destacar no mercado.
         </p>
       </div>
-      <div className="grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-4">
-        <div className="p-4 card-1 md:col-span-2 md:row-span-2 group relative col-span-3 flex flex-col justify-center overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+      <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-4">
+        <div className="p-4 card-1 md:col-span-2 md:row-span-2 group relative flex flex-col justify-center overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64">
           <h1 className="text-4xl">A elevate</h1>
           <p>
             Nascemos em 2019 com um propósito claro: entregar sempre mais do que
@@ -93,10 +98,10 @@ export default function AboutUs() {
             criatividade e inovação para transformar ideias em resultados reais.
           </p>
         </div>
-        <div className="card-2 row-start-2 md:row-start-auto md:col-start-3  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+        <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 flex items-center justify-center">
           2
         </div>
-        <div className="card-3 relative row-start-3 md:col-start-3 md:row-start-2 min-h-64  overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+        <div className="card-3 md:col-start-3 md:row-start-2 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 relative">
           <Image
             src="https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png"
             alt="us"
@@ -118,7 +123,7 @@ export default function AboutUs() {
         <div className="flex flex-row flex-wrap gap-4 justify-evenly py-8">
           <div className="flex items-center flex-col gap-2">
             <p className="text-sm text-[#ababab] opacity-70">
-              Empresas Atendidas
+              Clientes Atendidos
             </p>
             <div className="flex text-2xl font-bold text-nowrap">
               <p>+</p>
@@ -145,7 +150,7 @@ export default function AboutUs() {
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
             <p className="text-sm text-[#ababab] opacity-70">
-              Projetos Concluídos
+              Cidades Atendidas
             </p>
             <div className="flex text-2xl font-bold text-nowrap">
               <p>+</p>

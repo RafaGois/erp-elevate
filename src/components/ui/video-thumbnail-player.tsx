@@ -91,12 +91,13 @@ const VideoPlayer = React.forwardRef<HTMLDivElement, VideoPlayerProps>(
               <p className="mt-1 text-sm text-white/80">{description}</p>
             )}
           </div>
+          
         </div>
 
         {/* Video Modal */}
         {isModalOpen && (
           <div
-            className="absolute inset-0 z-50 flex animate-in fade-in-0 items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 z-[99999] h-full w-full flex animate-in fade-in-0 items-center justify-center bg-black/80 backdrop-blur-sm"
             aria-modal="true"
             role="dialog"
           >

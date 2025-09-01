@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Menu from "./Menu";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -60,7 +60,7 @@ export default function Hero() {
       id="hero"
     >
       <Menu />
-      
+      <LavaLamp />
       <div className="flex flex-col items-start justify-end h-full w-full p-8">
         <small className="text-[#7D6B58] tracking-widest texto-titulo">
           Transformando sua presença digital em autoridade

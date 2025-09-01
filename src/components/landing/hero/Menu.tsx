@@ -114,7 +114,7 @@ export default function Menu() {
       initTl.current = gsap
         .timeline()
         .from(".navitem", {
-          y: -100,
+          scale: 0,
           delay: 1,
           stagger: {
             from: "start",
