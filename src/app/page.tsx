@@ -59,7 +59,7 @@ export default function Home() {
       container.current.addEventListener("mousedown", (e) => {
        gsap.to(cursor, {
         scale: 2,
-        backgroundColor: "#bdfa3c",
+        backgroundColor: "#fff",
         duration: 0.5,
         ease: "power4.inOut",
        })

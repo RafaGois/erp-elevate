@@ -10,6 +10,7 @@ export default function AboutUs() {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
+
   useGSAP(
     () => {
       gsap.registerPlugin(ScrollTrigger);
@@ -97,6 +98,7 @@ export default function AboutUs() {
             Nosso diferencial está no cuidado em cada detalhe, unindo técnica,
             criatividade e inovação para transformar ideias em resultados reais.
           </p>
+        
         </div>
         <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 flex items-center justify-center">
           2

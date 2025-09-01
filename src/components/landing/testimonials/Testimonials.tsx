@@ -4,10 +4,25 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Quote, Star } from "lucide-react";
 import { useEffect, useRef, useState, useMemo } from "react";
+import AudioPlayer from "./AudioPlayer";
+
+
+const testimonials = [
+  {
+    name: "Jonathan Garcia",
+    job: "Proprietário",
+    company: "Garcia Líder",
+    testimonial: "Seloko, gostei dimaisiiii, nem dormi de ansiedade!",
+    picture: "https://res.cloudinary.com/dn454izoh/image/upload/v1756757946/Captura_de_Tela_2025-09-01_%C3%A0s_17.15.56_lsa7yb.png",
+    audio: "https://res.cloudinary.com/dn454izoh/video/upload/v1756756533/WhatsApp_Audio_2025-09-01_at_16.23.06_rey6pk.ogg"
+  },
+]
+
 
 export default function Testimonials() {
   const cards = useMemo(() => [1, 2, 3], []);
   const [selectedCard, setSelectedCard] = useState(cards[0]);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
@@ -53,15 +68,15 @@ export default function Testimonials() {
   );
 
   function renderCards() {
-    return cards.map((card, i) => (
+    return testimonials.map((t, i) => (
       <div
-        key={i + "-" + card}
+        key={i + "-" + t.name}
         className={cn(
           "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] card-" +
-            card,
+            i,
           "rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
           "p-8",
-          card == selectedCard && "z-[999]"
+          i == selectedCard && "z-[999]"
         )}
       >
         <div className="flex gap-x-1.5 w-full">
@@ -71,25 +86,25 @@ export default function Testimonials() {
           <Star size={22} color="#eba434" fill="#eba434" />
           <Star size={22} color="#eba434" fill="#eba434" />
         </div>
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex flex-col  justify-center">
           <p className="text-white relative z-40">
-            &ldquo;Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus,
-            nesciunt dolor. Corporis obcaecati&rdquo;
+            &ldquo;{t.testimonial}&rdquo;
             <Quote
               size={32}
               className="absolute -top-2 -left-4 z-10 opacity-20"
             />
           </p>
+          <AudioPlayer onAudioStateChange={setIsAudioPlaying} />
         </div>
         <div className="w-full h-[1px] bg-white/10"></div>
         <div className="py-4 flex w-full items-center gap-4">
           <Avatar>
-            <AvatarImage sizes="36px" src="https://github.com/shadcn.png" />
+            <AvatarImage sizes="36px" src={t.picture} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="font-bold text-white">Nome do cidadao</h1>
-            <p className="text-xs text-white/50">Cargo, Nome da empresa</p>
+            <h1 className="font-bold text-white">{t.name}</h1>
+            <p className="text-xs text-white/50">{t.job}, {t.company}</p>
           </div>
         </div>
       </div>
@@ -117,16 +132,19 @@ export default function Testimonials() {
   }, [selectedCard, cards]);
 
   useEffect(() => {
+    // Só executa a rotação automática se nenhum áudio estiver tocando
+    if (isAudioPlaying) return;
+
     const interval = setInterval(() => {
       setSelectedCard((prev) => {
         const currentIndex = cards.indexOf(prev);
         const nextIndex = (currentIndex + 1) % cards.length;
         return cards[nextIndex];
       });
-    }, 10 * 1000); // 1 minuto
+    }, 10 * 1000); // 10 segundos
 
     return () => clearInterval(interval);
-  }, [cards]);
+  }, [cards, isAudioPlaying]);
 
   return (
     <section ref={container} className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16">
