@@ -181,7 +181,7 @@ export default function Services() {
       </div>
       <div className="w-full z-20 relative text-white">
         <h2 className="text-4xl font-bold text-left">Serviços</h2>
-        <p className="text-left">blablabla</p>
+        <p className="text-left"></p>
       </div>
       <div className="flex flex-1 flex-col gap-4 justify-center min-h-svh z-20 relative">
         {renderServices()}
