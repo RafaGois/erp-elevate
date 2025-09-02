@@ -12,6 +12,20 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
+/* export const metadata = {
+  title: "Elevate Pro Media",
+  description: "A melhor escolha de empresa de social media para você!",
+  keywords: [
+    "social media",
+    "marketing digital",
+    "elevate pro media",
+    "elevatepromeida",
+    "fotografia",
+    "sites",
+    "programação",
+  ],
+}; */
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,17 +39,11 @@ export default function RootLayout({
       </head>
       <body className={`antialiased ${spaceGrotesk.className}`}>
         <QueryClientProvider client={queryClient}>
-          
-            <AppProvider>
-              <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              >
+          <AppProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
-              </ThemeProvider>
-              </AppProvider>
-      
+            </ThemeProvider>
+          </AppProvider>
         </QueryClientProvider>
       </body>
     </html>
