@@ -5,7 +5,7 @@ import ImageDataProps from "@/lib/interfaces/ImageDataProps";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-const galleryImages: ImageDataProps[] = [
+const portraitImages: ImageDataProps[] = [
   {
     id: 1,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823361/img-2_ea0mgu.jpg",
@@ -59,24 +59,81 @@ const galleryImages: ImageDataProps[] = [
   
 ];
 
+const foodImages: ImageDataProps[] = [
+  {
+    id: 1,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825722/img-12_sbsr0x.jpg",
+    alt: "a",
+  },
+  {
+    id: 2,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825721/img-11_z7zx6p.jpg",
+    alt: "a",
+  },
+  {
+    id: 3,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-10_znymiu.jpg",
+    alt: "a",
+  },
+  {
+    id: 4,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-10_znymiu.jpg",
+    alt: "a",
+  },
+  {
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-9_etwlpt.jpg",
+    alt: "a",
+  },
+  {
+    id: 6,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825716/img-3_w8fboa.jpg",
+    alt: "a",
+  },
+  {
+    id: 7,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825717/img-4_beazxy.jpg",
+    alt: "a",
+  },
+  {
+    id: 8,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825716/img-5_kalxyz.jpg",
+    alt: "a",
+  },
+  {
+    id: 9,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825715/img-2_jx22rn.jpg",
+    alt: "a",
+  },
+  {
+    id: 10,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825714/img-1_ty56ns.jpg",
+    alt: "a",
+  },
+  {
+    id: 11,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
+    alt: "a",
+  },
+];
+
 export default function GaleryPage() {
   const params = useParams<{ category: string }>();
 
   function imagesFilteredByService() {
     switch (params.category) {
       case "institutional":
-        return galleryImages;
-        
+        return;
       case "sport":
         break;
       case "food":
-        break;
+       return foodImages;
       case "wedding":
         break;
       case "event":
         break;
-      case "inauguration":
-        break;
+      case "portrait":
+        return portraitImages;
       case "programming":
         break;
       default:
