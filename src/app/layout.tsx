@@ -4,7 +4,6 @@ import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/services/QueryClient";
-import { AuthProvider } from "@/data/contexts/AuthContext";
 import { AppProvider } from "@/data/contexts/AppContext";
 import { ThemeProvider } from "next-themes";
 
