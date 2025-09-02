@@ -13,7 +13,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useEffect } from "react";
 import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
 import Clients from "@/components/landing/clients/Clients";
-import CalLToAction from "@/components/landing/CTA/CallToAction";
+import CallToAction from "@/components/landing/CTA/CallToAction";
 import Lenis from "lenis";
 
 export default function Home() {
@@ -138,7 +138,7 @@ export default function Home() {
       <InstitutionalVideo />
       <Testimonials />
       <Clients />
-      <CalLToAction />
+      <CallToAction />
       <Footer />
     </div>
   );

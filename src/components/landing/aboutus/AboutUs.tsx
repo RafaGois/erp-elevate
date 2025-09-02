@@ -3,13 +3,13 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Sparkle } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
 export default function AboutUs() {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
-
 
   useGSAP(
     () => {
@@ -23,14 +23,13 @@ export default function AboutUs() {
       tl.current = gsap
         .timeline({
           paused: true,
-          
+
           scrollTrigger: {
             trigger: container.current.querySelector(".card-3"),
             //scrub: true,
             start: "top 90%",
             toggleActions: "play pause pause pause",
             //end: "bottom 90%",
-     
           },
         })
         .from(container.current.querySelector(".card-1"), {
@@ -98,15 +97,27 @@ export default function AboutUs() {
             Nosso diferencial está no cuidado em cada detalhe, unindo técnica,
             criatividade e inovação para transformar ideias em resultados reais.
           </p>
-        
         </div>
-        <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 flex items-center justify-center">
-          <h1>Nossos valores</h1>
-          <p className="flex flex-col">
-            ⚪ Criatividade em Primeiro Lugar
-            ⚪ Entrega Além do Combinado
-            ⚪ Comunicação Clara e Transparente
-
+        <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl p-4 flex flex-col transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 items-center justify-center">
+          <h1 className="pb-4 text-start w-full text-4xl">Nossos valores</h1>
+          <p className="flex flex-col flex-1 w-full leading-8">
+            <span className="flex items-center gap-2">
+              <Sparkle fill="#fff" size={18} /> Criatividade em Primeiro Lugar{" "}
+              <br />
+            </span>
+            <span className="flex items-center gap-2">
+              <Sparkle fill="#fff" size={18} /> Entrega Além do Combinado <br />
+            </span>
+            <span className="flex items-center gap-2">
+              <Sparkle fill="#fff" size={18} /> Comunicação Clara e Transparente{" "}
+              <br />
+            </span>
+            <span className="flex items-center gap-2">
+              <Sparkle fill="#fff" size={18} /> Dedicação Minuciosa <br />
+            </span>
+            <span className="flex items-center gap-2">
+              <Sparkle fill="#fff" size={18} /> Trabalho com Carinho <br />
+            </span>
           </p>
         </div>
         <div className="card-3 md:col-start-3 md:row-start-2 overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 relative">
