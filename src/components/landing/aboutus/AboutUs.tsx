@@ -78,8 +78,7 @@ export default function AboutUs() {
       <div className="flex flex-col md:flex-row justify-between mb-20">
         <h2 className="text-4xl font-bold text-nowrap">Sobre nós</h2>
         <p className="max-w-md">
-          A Elevate Pro Media é uma agência d e marketing digital que oferece
-          soluções inovadoras para empresas que desejam se destacar no mercado.
+         
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-4">

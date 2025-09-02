@@ -154,6 +154,26 @@ export default function Menu() {
     setIsOpen(!isOpen);
   }
 
+  function renderOptions() {
+    return menuLinks.map(ml => {
+      return (
+        <a
+        key={ml.label}
+        className="navitem cursor-pointer"
+        onClick={(e) => {
+          e.preventDefault();
+          const targetElement = document.getElementById('about-us');
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }}
+      >
+        Sobre nós
+      </a>
+      )
+    })
+  }
+
   return (
     <div ref={container} className="flex justify-between w-full p-4 z-50">
       <Image
@@ -167,7 +187,13 @@ export default function Menu() {
         <a
           key="sobre-nos"
           className="navitem cursor-pointer"
-          
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById('about-us');
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
         >
           Sobre nós
         </a>
