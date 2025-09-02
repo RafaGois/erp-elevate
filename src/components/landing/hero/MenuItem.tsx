@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { gsap } from "gsap";
 import { ArrowUpRight } from "lucide-react";
 
 export default function MenuItem(props: {
-  link: { href: string; label: string };
+  link: { href: string; label: string, key: string};
   toggleMenu: () => void;
 }) {
   function handleMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
@@ -65,10 +64,23 @@ export default function MenuItem(props: {
       );
   }
 
-  // Função para fechar menu e permitir navegação
-  const handleClick = () => {
+  // Fecha o menu e, após a animação, faz o scroll até a seção
+  const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
     props.toggleMenu();
-  };  
+
+    // Aguarda o menu fechar e o scroll ser desbloqueado
+    setTimeout(() => {
+      const targetElement = document.getElementById(props.link.key);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Atualiza o hash na URL sem recarregar
+        if (typeof window !== 'undefined') {
+          window.history.replaceState(null, '', props.link.href);
+        }
+      }
+    }, 600);
+  };
 
   return (
     <div key={props.link.href} className="menu-item-link-item">
@@ -76,20 +88,12 @@ export default function MenuItem(props: {
         className="menu-item-link-item-holder"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
       >
         <a
           className="menu-link text-5xl font-bold flex items-end cursor-pointer"
-          key={props.link.href}
-          //href={props.link.href}
-
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById(props.link.href);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
+          key={props.link.key}
+          href={props.link.href}
+          onClick={handleItemClick}
         >
           {props.link.label}
           <ArrowUpRight

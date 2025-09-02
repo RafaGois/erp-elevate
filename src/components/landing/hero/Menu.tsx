@@ -18,12 +18,12 @@ const menuLinks = [
     href: "#services",
   },
   {
-    key: "clientes",
+    key: "clients",
     label: "Clientes",
     href: "#clients",
   },
   {
-    key: "contato",
+    key: "contact",
     label: "Contato",
     href: "#contact",
   },
@@ -157,19 +157,20 @@ export default function Menu() {
   function renderOptions() {
     return menuLinks.map(ml => {
       return (
-        <a
-        key={ml.label}
-        className="navitem cursor-pointer"
-        onClick={(e) => {
-          e.preventDefault();
-          const targetElement = document.getElementById('about-us');
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }}
-      >
-        Sobre nós
-      </a>
+        <a 
+          className="navitem cursor-pointer" 
+          key={ml.key}
+          href={ml.href}
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById(ml.key);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+        >
+          {ml.label}
+        </a>
       )
     })
   }
@@ -184,62 +185,7 @@ export default function Menu() {
         className="logo-img"
       />
       <div className="flex-row gap-[2rem] hidden sm:flex">
-        <a
-          key="sobre-nos"
-          className="navitem cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById('about-us');
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-        >
-          Sobre nós
-        </a>
-        <a 
-          className="navitem cursor-pointer" 
-          key="services" 
-          href="#services"
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById('services');
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-        >
-          Serviços
-        </a>
-        <a 
-          className="navitem cursor-pointer" 
-          key="clientes" 
-          href="#clients"
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById('clients');
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-        >
-          Clientes
-        </a>
-        <a 
-          className="navitem cursor-pointer" 
-          key="contato" 
-          href="#contact"
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById('contact');
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-        >
-          Contato
-        </a>
-        
+        {renderOptions()}
       </div>
       <Link href="/auth" className="underline hidden sm:flex">ENTRAR</Link>
       <div className="flex md:hidden w-full justify-end items-center">
@@ -272,7 +218,8 @@ export default function Menu() {
         <div className="flex flex-col gap-4 w-full">
           <Link
             className="link-menu-item flex items-center gap-1"
-            href="INSTAGRAM"
+            href="https://www.instagram.com/eduardomarketingcraze?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+            target="_blank"
           >
             INSTAGRAM
             <ArrowUpRight size={14} />
