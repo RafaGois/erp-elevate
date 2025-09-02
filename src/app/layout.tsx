@@ -26,7 +26,7 @@ export default function RootLayout({
       </head>
       <body className={`antialiased ${spaceGrotesk.className}`}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
+          
             <AppProvider>
               <ThemeProvider
               attribute="class"
@@ -36,7 +36,7 @@ export default function RootLayout({
               {children}
               </ThemeProvider>
               </AppProvider>
-          </AuthProvider>
+      
         </QueryClientProvider>
       </body>
     </html>

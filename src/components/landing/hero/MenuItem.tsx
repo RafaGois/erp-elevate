@@ -68,7 +68,7 @@ export default function MenuItem(props: {
   // Função para fechar menu e permitir navegação
   const handleClick = () => {
     props.toggleMenu();
-  };
+  };  
 
   return (
     <div key={props.link.href} className="menu-item-link-item">
@@ -78,18 +78,25 @@ export default function MenuItem(props: {
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       >
-        <Link
+        <a
           className="menu-link text-5xl font-bold flex items-end cursor-pointer"
           key={props.link.href}
-          href={props.link.href}
-          scroll={false}
+          //href={props.link.href}
+
+          onClick={(e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById(props.link.href);
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
         >
           {props.link.label}
           <ArrowUpRight
             className="arrow-top-menu-item scale-0 transform -translate-x-10"
             size={28}
           />
-        </Link>
+        </a>
         <div className="dot"></div>
       </div>
     </div>

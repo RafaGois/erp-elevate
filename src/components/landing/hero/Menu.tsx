@@ -167,14 +167,7 @@ export default function Menu() {
         <a
           key="sobre-nos"
           className="navitem cursor-pointer"
-          href="#about-us"
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById('about-us');
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
+          
         >
           Sobre nós
         </a>

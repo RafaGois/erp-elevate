@@ -86,6 +86,7 @@ export default function Testimonials() {
   function renderCards() {
     return testimonials.map((t, i) => (
       <div
+      id="clients"
         key={i + "-" + t.name}
         className={cn(
           "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] card-" +
