@@ -33,6 +33,14 @@ const testimonials = [
     testimonial:"Parabéns meninos, vocês são D+, entregam tudo!!! Somos fãs de vocês e desejamos cada vez mais sucesso!!! Voem Alto!",
     picture:"https://res.cloudinary.com/dn454izoh/image/upload/v1756767493/channels4_profile_fgzly6.jpg"
   },
+  {
+    id: 3,
+    name: "Valéria Freiberger",
+    job: "Proprietária",
+    company:"Sempre Presente, Big Loja e Anacapri",
+    testimonial:"A equipe sempre nos atendeu com muito cuidado e carinho, como se o nosso negócio fosse deles. isso fez toda a diferença.",
+    picture:"https://res.cloudinary.com/dn454izoh/image/upload/v1756824814/logo-bl_ttocbz.jpg"
+  },
 ]
 
 
@@ -194,7 +202,7 @@ export default function Testimonials() {
           Não acredite apenas na nossa palavra. Veja o que nossos clientes têm a
           dizer sobre o nosso trabalho
         </p>
-        <div className="py-4 flex gap-2 w-[100px] testimonials-buttons">
+        <div className="py-4 flex gap-2 w-[110px] testimonials-buttons">
           {renderCardsOptions()}
         </div>
       </div>

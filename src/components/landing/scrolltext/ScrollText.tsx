@@ -164,8 +164,8 @@ export default function ScrollText() {
       ref={container}
       className="w-full h-svh md:h-[50svw] bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden"
     >
-      <div className="">
-        <h1 className="text-center text-7xl font-bold text-white">
+      <div className="z-50">
+        <h1 className="text-center text-7xl font-bold text-white ">
           Aqui criamos <span className="arte-word">ARTE</span>
         </h1>
         <p className="text-white text-wrap text-center opacity-0">
@@ -181,28 +181,28 @@ export default function ScrollText() {
         alt="Berto"
         height={200}
         width={100}
-        className="img-scrolltext absolute rounded-xl top-[5%] left-[5%] hover:scale-150"
+        className="img-scrolltext absolute rounded-xl top-[5%] z-40 left-[5%] hover:scale-150"
       />
       <Image
         src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977444/corporativas-66_tnuvkc.jpg"
         alt="Corporativas"
         height={200}
         width={100}
-        className="img-scrolltext absolute rounded-xl top-[15%] right-[12%]"
+        className="img-scrolltext absolute z-40 rounded-xl top-[15%] right-[12%]"
       />
       <Image
         src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg"
         alt="Divina"
         height={200}
         width={100}
-        className="img-scrolltext absolute rounded-xl bottom-[12%] left-[12%] "
+        className="img-scrolltext absolute z-40 rounded-xl bottom-[12%] left-[12%] "
       />
       <Image
         src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977397/BRUNO-34_r2kqaq.jpg"
         alt="Bruno"
         height={200}
         width={100}
-        className="img-scrolltext absolute rounded-xl bottom-[6%] right-[7%]"
+        className="img-scrolltext absolute z-40 rounded-xl bottom-[6%] right-[7%]"
       />
     </section>
   );

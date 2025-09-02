@@ -8,64 +8,55 @@ import { useParams } from "next/navigation";
 const galleryImages: ImageDataProps[] = [
   {
     id: 1,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823361/img-2_ea0mgu.jpg",
     alt: "Modern architecture building with geometric patterns",
   },
   {
     id: 2,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1754873016/floripa-1_elhte2.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823357/img-12_qqstzy.jpg",
     alt: "Portrait of woman with natural lighting",
   },
   {
     id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823356/img-11_tcjhvo.jpg",
     alt: "Landscape mountain view during sunset",
   },
   {
     id: 4,
-    src: "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=500",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823355/img-10_tbccuc.jpg",
     alt: "Close-up of colorful flowers in bloom",
   },
   {
     id: 5,
-    src: "https://images.pexels.com/photos/1770809/pexels-photo-1770809.jpeg?auto=compress&cs=tinysrgb&w=900",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-7_f5cab3.jpg",
     alt: "Urban street photography with neon lights",
   },
   {
     id: 6,
-    src: "https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=400",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-9_jzwyak.jpg",
     alt: "Abstract art with vibrant colors",
   },
   {
     id: 7,
-    src: "https://images.pexels.com/photos/3408353/pexels-photo-3408353.jpeg?auto=compress&cs=tinysrgb&w=800",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823352/img-8_hej5rx.jpg",
     alt: "Peaceful lake reflection at dawn",
   },
   {
     id: 8,
-    src: "https://images.pexels.com/photos/1525041/pexels-photo-1525041.jpeg?auto=compress&cs=tinysrgb&w=600",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-4_xplgls.jpg",
     alt: "Minimalist interior design concept",
   },
   {
     id: 9,
-    src: "https://images.pexels.com/photos/2098427/pexels-photo-2098427.jpeg?auto=compress&cs=tinysrgb&w=1000",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823346/img-1_pek9aw.jpg",
     alt: "Desert landscape with dramatic sky",
   },
   {
     id: 10,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1754873016/floripa-1_elhte2.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823348/img-3_iootpf.jpg",
     alt: "Vintage coffee shop atmosphere",
   },
-  {
-    id: 11,
-    src: "https://images.pexels.com/photos/2853592/pexels-photo-2853592.jpeg?auto=compress&cs=tinysrgb&w=500",
-    alt: "Ocean waves crashing on rocky shore",
-  },
-  {
-    id: 12,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1754873016/floripa-1_elhte2.jpg",
-    alt: "Forest pathway through tall trees",
-  },
+  
 ];
 
 export default function GaleryPage() {
@@ -75,7 +66,7 @@ export default function GaleryPage() {
     switch (params.category) {
       case "institutional":
         return galleryImages;
-        break;
+        
       case "sport":
         break;
       case "food":
