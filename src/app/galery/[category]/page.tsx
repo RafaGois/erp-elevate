@@ -5,7 +5,7 @@ import ImageDataProps from "@/lib/interfaces/ImageDataProps";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-const portraitImages: ImageDataProps[] = [
+const corporativeImages: ImageDataProps[] = [
   {
     id: 1,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-8_sjelar.jpg",
@@ -61,6 +61,26 @@ const portraitImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823348/img-3_iootpf.jpg",
     alt: "a",
   },
+  {
+    id: 12,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009525/img-1_xvdxxv.jpg",
+    alt: "a",
+  },
+  {
+    id: 13,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009529/img-2_tsdglm.jpg",
+    alt: "a",
+  },
+  {
+    id: 14,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009533/img-3_z1g7yn.jpg",
+    alt: "a",
+  },
+  {
+    id: 15,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009538/img-4_lcbvnz.jpg",
+    alt: "a",
+  },
   
 ];
 
@@ -73,11 +93,6 @@ const foodImages: ImageDataProps[] = [
   {
     id: 2,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825721/img-11_z7zx6p.jpg",
-    alt: "a",
-  },
-  {
-    id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-10_znymiu.jpg",
     alt: "a",
   },
   {
@@ -133,29 +148,15 @@ const institutionalImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009542/img-5_ybuv6b.jpg",
     alt: "a",
   },
-  {
-    id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009525/img-1_xvdxxv.jpg",
-    alt: "a",
-  },
-  {
-    id: 4,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009529/img-2_tsdglm.jpg",
-    alt: "a",
-  },
-  {
-    id: 13,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009533/img-3_z1g7yn.jpg",
-    alt: "a",
-  },
+  
   {
     id: 5,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg",
     alt: "a",
   },
   {
-    id: 6,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009538/img-4_lcbvnz.jpg",
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg",
     alt: "a",
   },
   {
@@ -185,6 +186,8 @@ const institutionalImages: ImageDataProps[] = [
   },
 ];
 
+
+
 export default function GaleryPage() {
   const params = useParams<{ category: string }>();
 
@@ -200,8 +203,8 @@ export default function GaleryPage() {
         break;
       case "event":
         break;
-      case "portrait":
-        return portraitImages;
+      case "corporative":
+        return corporativeImages;
       case "programming":
         break;
       default:

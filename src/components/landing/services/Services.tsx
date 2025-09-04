@@ -38,8 +38,8 @@ const services = [
   },
   {
     id: 7,
-    name: "Retratos",
-    route: "portrait",
+    name: "Corporativos",
+    route: "corporative",
   },
   {
     id: 8,
