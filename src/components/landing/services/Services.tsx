@@ -41,24 +41,25 @@ const services = [
     name: "Corporativos",
     route: "corporative",
   },
-  {
+/*   {
     id: 8,
     name: "Programação",
     route: "programming",
-  },
+  }, */
 ];
 
 export default function Services() {
   const container = useRef<HTMLDivElement | null>(null);
 
   const images = [
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977445/corporativas-77_ycyseo.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977443/CORPORATIVAS-24-2_iubjla.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977397/BERTO-2_sezqmf.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04__bpefdy.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1757009566/img-10_p3zhi5.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg",
     "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04_-44_ovnkt3.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-9_etwlpt.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823356/img-11_tcjhvo.jpg",
     "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-7_kfucmt.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg"
   ].map((url) => `${url}?auto=format&fit=crop&w=300&q=80`);
 
   useGSAP(
