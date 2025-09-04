@@ -39,7 +39,7 @@ const services = [
   {
     id: 7,
     name: "Retratos",
-    route: "programming",
+    route: "portrait",
   },
   {
     id: 8,
@@ -58,6 +58,7 @@ export default function Services() {
     "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04__bpefdy.jpg",
     "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
     "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04_-44_ovnkt3.jpg",
+    "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-7_kfucmt.jpg",
   ].map((url) => `${url}?auto=format&fit=crop&w=300&q=80`);
 
   useGSAP(

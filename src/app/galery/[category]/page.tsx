@@ -8,51 +8,56 @@ import { useParams } from "next/navigation";
 const portraitImages: ImageDataProps[] = [
   {
     id: 1,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823361/img-2_ea0mgu.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-8_sjelar.jpg",
     alt: "a",
   },
   {
     id: 2,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823357/img-12_qqstzy.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-7_kfucmt.jpg",
     alt: "a",
   },
   {
     id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823356/img-11_tcjhvo.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825660/img-6_hmburh.jpg",
     alt: "a",
   },
   {
     id: 4,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823355/img-10_tbccuc.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823357/img-12_qqstzy.jpg",
     alt: "a",
   },
   {
     id: 5,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-7_f5cab3.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823361/img-2_ea0mgu.jpg",
     alt: "a",
   },
   {
     id: 6,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-9_jzwyak.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823356/img-11_tcjhvo.jpg",
     alt: "a",
   },
   {
     id: 7,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823352/img-8_hej5rx.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823355/img-10_tbccuc.jpg",
     alt: "a",
   },
   {
     id: 8,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-4_xplgls.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-9_jzwyak.jpg",
     alt: "a",
   },
   {
     id: 9,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823346/img-1_pek9aw.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-7_f5cab3.jpg",
     alt: "a",
   },
   {
     id: 10,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823352/img-8_hej5rx.jpg",
+    alt: "a",
+  },
+  {
+    id: 11,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823348/img-3_iootpf.jpg",
     alt: "a",
   },
@@ -117,13 +122,76 @@ const foodImages: ImageDataProps[] = [
   },
 ];
 
+const institutionalImages: ImageDataProps[] = [
+  {
+    id: 1,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009548/img-6_r8dif4.jpg",
+    alt: "a",
+  },
+  {
+    id: 2,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009542/img-5_ybuv6b.jpg",
+    alt: "a",
+  },
+  {
+    id: 3,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009525/img-1_xvdxxv.jpg",
+    alt: "a",
+  },
+  {
+    id: 4,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009529/img-2_tsdglm.jpg",
+    alt: "a",
+  },
+  {
+    id: 13,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009533/img-3_z1g7yn.jpg",
+    alt: "a",
+  },
+  {
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg",
+    alt: "a",
+  },
+  {
+    id: 6,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009538/img-4_lcbvnz.jpg",
+    alt: "a",
+  },
+  {
+    id: 7,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009542/img-5_ybuv6b.jpg",
+    alt: "a",
+  },
+  {
+    id: 9,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009552/img-7_b502t8.jpg",
+    alt: "a",
+  },
+  {
+    id: 10,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009557/img-8_c8knql.jpg",
+    alt: "a",
+  },
+  {
+    id: 11,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009563/img-9_cvxq8f.jpg",
+    alt: "a",
+  },
+  {
+    id: 12,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009566/img-10_p3zhi5.jpg",
+    alt: "a",
+  },
+];
+
 export default function GaleryPage() {
   const params = useParams<{ category: string }>();
 
   function imagesFilteredByService() {
     switch (params.category) {
       case "institutional":
-        return;
+        return institutionalImages;
       case "sport":
         break;
       case "food":
