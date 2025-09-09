@@ -97,7 +97,7 @@ export default function Testimonials() {
       id="clients"
         key={i + "-" + t.name}
         className={cn(
-          "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] card-" +
+          "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] max-w-[30rem] max-h-[30rem] card-" +
             i,
           "rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
           "p-8",
