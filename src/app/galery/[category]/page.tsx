@@ -6,21 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const corporativeImages: ImageDataProps[] = [
-  {
-    id: 1,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-8_sjelar.jpg",
-    alt: "a",
-  },
-  {
-    id: 2,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-7_kfucmt.jpg",
-    alt: "a",
-  },
-  {
-    id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756825660/img-6_hmburh.jpg",
-    alt: "a",
-  },
+
   {
     id: 4,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823357/img-12_qqstzy.jpg",
@@ -135,6 +121,11 @@ const foodImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
     alt: "a",
   },
+  {
+    id: 12,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203002/site-9_f0blme.jpg",
+    alt: "a",
+  },
 ];
 
 const institutionalImages: ImageDataProps[] = [
@@ -150,17 +141,17 @@ const institutionalImages: ImageDataProps[] = [
   },
   
   {
-    id: 5,
+    id: 3,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg",
     alt: "a",
   },
   {
-    id: 5,
+    id: 4,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg",
     alt: "a",
   },
   {
-    id: 7,
+    id: 5,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009542/img-5_ybuv6b.jpg",
     alt: "a",
   },
@@ -184,6 +175,60 @@ const institutionalImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009566/img-10_p3zhi5.jpg",
     alt: "a",
   },
+  {
+    id: 13,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203203/site-2_zz3ohw.jpg",
+    alt: "a",
+  },
+  {
+    id: 14,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203205/site-3_hbtlto.jpg",
+    alt: "a",
+  },
+  {
+    id: 15,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203207/site-10_fobfic.jpg",
+    alt: "a",
+  },
+  {
+    id: 16,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203209/site-11_jjof5b.jpg",
+    alt: "a",
+  },
+];
+
+const sportsImages: ImageDataProps[] = [
+  {
+    id: 1,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758202823/site-8_avue00.jpg",
+    alt: "a",
+  },
+  {
+    id: 2,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758202821/site-7_sgcifo.jpg",
+    alt: "a",
+  },
+  
+  {
+    id: 3,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758202819/site-4_yy3mco.jpg",
+    alt: "a",
+  },
+  {
+    id: 4,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758202819/site-6_jw8rod.jpg",
+    alt: "a",
+  },
+  {
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758202817/site-5_ltxd3j.jpg",
+    alt: "a",
+  },
+  {
+    id: 6,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203136/site-1_nypc5i.jpg",
+    alt: "a",
+  }
 ];
 
 
@@ -196,7 +241,7 @@ export default function GaleryPage() {
       case "institutional":
         return institutionalImages;
       case "sport":
-        break;
+        return sportsImages;
       case "food":
        return foodImages;
       case "wedding":
