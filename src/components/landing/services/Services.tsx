@@ -14,32 +14,32 @@ const services = [
     id: 1,
     name: "INSTITUCIONAL",
     description: "Descrição do serviço 1",
-    route: "institutional",
+    route: "institucional",
   },
   {
     id: 2,
     name: "ESPORTE",
-    route: "sport",
+    route: "esporte",
   },
   {
     id: 3,
     name: "GASTRONOMIA",
-    route: "food",
+    route: "gastronomia",
   },
   {
     id: 4,
     name: "CASAMENTOS",
-    route: "wedding",
+    route: "casamentos",
   },
   {
     id: 5,
     name: "EVENTOS",
-    route: "event",
+    route: "eventos",
   },
   {
     id: 7,
     name: "Corporativos",
-    route: "corporative",
+    route: "corporativos",
   },
 /*   {
     id: 8,

@@ -350,19 +350,19 @@ export default function GaleryPage() {
 
   function imagesFilteredByService() {
     switch (params.category) {
-      case "institutional":
+      case "institucional":
         return institutionalImages;
-      case "sport":
+      case "esporte":
         return sportsImages;
-      case "food":
+      case "gastronomia":
        return foodImages;
-      case "wedding":
+      case "casamentos":
         return weddingImages;
-      case "event":
+      case "eventos":
         return eventsImages;
-      case "corporative":
+      case "corporativos":
         return corporativeImages;
-      case "programming":
+      case "programacao":
         break;
     }
   }
@@ -373,7 +373,7 @@ export default function GaleryPage() {
         <Link href="/#services">
           <p className="text-white underline">VOLTAR</p>
         </Link>
-        <h1 className="text-white">GALERIA</h1>
+        <h1 className="text-white uppercase">{params.category}</h1>
         <div></div>
       </div>
       <Galery images={imagesFilteredByService()} />
