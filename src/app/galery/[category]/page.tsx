@@ -228,9 +228,121 @@ const sportsImages: ImageDataProps[] = [
     id: 6,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203136/site-1_nypc5i.jpg",
     alt: "a",
-  }
+  },
+  {
+    id: 7,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206875/esporte-28_rguscs.jpg",
+    alt: "a",
+  },
+  {
+    id: 8,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206877/esporte-29_edakft.jpg",
+    alt: "a",
+  },
+  {
+    id: 9,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206881/esporte-30_pfhgme.jpg",
+    alt: "a",
+  },
 ];
 
+
+const weddingImages: ImageDataProps[] = [
+  {
+    id: 1,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206271/site-1_noco9x.jpg",
+    alt: "a",
+  },
+  {
+    id: 2,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206272/site-2_pwkf2y.jpg",
+    alt: "a",
+  },
+  {
+    id: 3,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206273/site-4_vlmhpr.jpg",
+    alt: "a",
+  },
+  {
+    id: 4,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206275/site-5_itp9ci.jpg",
+    alt: "a",
+  },
+  {
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206278/site-6_q6ps43.jpg",
+    alt: "a",
+  },
+  {
+    id: 6,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206280/site-7_e4o6g8.jpg",
+    alt: "a",
+  },
+  {
+    id: 7,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206282/site-8_giwlci.jpg",
+    alt: "a",
+  },
+  {
+    id: 8,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206285/site-9_r6dgch.jpg",
+    alt: "a",
+  },
+  {
+    id: 9,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206287/site-10_gzn53k.jpg",
+    alt: "a",
+  },
+  {
+    id: 10,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206291/site-11_gvamkv.jpg",
+    alt: "a",
+  },
+  {
+    id: 11,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206370/site-12_eifaax.jpg",
+    alt: "a",
+  },
+  {
+    id: 12,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206372/site-13_zjhoze.jpg",
+    alt: "a",
+  },
+  {
+    id: 13,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206373/site-14_p7awvj.jpg",
+    alt: "a",
+  },
+  {
+    id: 14,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758206696/site-3_npcltl.jpg",
+    alt: "a",
+  },
+ 
+]
+
+const eventsImages: ImageDataProps[] = [
+  {
+    id: 1,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04_-44_ovnkt3.jpg",
+    alt: "a",
+  },
+  {
+    id: 2,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207601/eventos-29_bttnpt.jpg",
+    alt: "a",
+  },
+  {
+    id: 3,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207604/eventos-30_e7cwyp.jpg",
+    alt: "a",
+  },
+  {
+    id: 4,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207606/eventos-31_zwlffx.jpg",
+    alt: "a",
+  },
+]
 
 
 export default function GaleryPage() {
@@ -245,15 +357,13 @@ export default function GaleryPage() {
       case "food":
        return foodImages;
       case "wedding":
-        break;
+        return weddingImages;
       case "event":
-        break;
+        return eventsImages;
       case "corporative":
         return corporativeImages;
       case "programming":
         break;
-      default:
-        return [];
     }
   }
 
