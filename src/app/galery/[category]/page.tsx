@@ -199,6 +199,16 @@ const institutionalImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328338/conex%C3%A3o_mulher-18_ovisqu.jpg",
     alt: "a",
   },
+  {
+    id: 19,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758330770/jba-4_tmjmnq.jpg",
+    alt: "a",
+  },
+  {
+    id: 20,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758330770/eventos-100_ro7fcg.jpg",
+    alt: "a",
+  },
 ];
 
 const sportsImages: ImageDataProps[] = [
