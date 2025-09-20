@@ -139,12 +139,6 @@ const institutionalImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1757009542/img-5_ybuv6b.jpg",
     alt: "a",
   },
-  
-  {
-    id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg",
-    alt: "a",
-  },
   {
     id: 4,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg",
@@ -391,13 +385,8 @@ const eventsImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-4_sbmelt.jpg",
     alt: "a",
   },
-  {
-    id: 13,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-4_sbmelt.jpg",
-    alt: "a",
-  },
     {
-    id: 14,
+    id: 13,
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328078/eventos-1_y8q4hw.jpg",
     alt: "a",
   },
