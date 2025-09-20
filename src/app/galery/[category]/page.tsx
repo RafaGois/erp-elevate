@@ -195,6 +195,16 @@ const institutionalImages: ImageDataProps[] = [
     src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758203209/site-11_jjof5b.jpg",
     alt: "a",
   },
+  {
+    id: 17,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328338/conex%C3%A3o_mulher-38_nwfxsc.jpg",
+    alt: "a",
+  },
+  {
+    id: 18,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328338/conex%C3%A3o_mulher-18_ovisqu.jpg",
+    alt: "a",
+  },
 ];
 
 const sportsImages: ImageDataProps[] = [
@@ -245,7 +255,6 @@ const sportsImages: ImageDataProps[] = [
     alt: "a",
   },
 ];
-
 
 const weddingImages: ImageDataProps[] = [
   {
@@ -324,22 +333,72 @@ const weddingImages: ImageDataProps[] = [
 const eventsImages: ImageDataProps[] = [
   {
     id: 1,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1755977622/GF12-04_-44_ovnkt3.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328082/eventos-16_uzk5em.jpg",
     alt: "a",
   },
   {
     id: 2,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207601/eventos-29_bttnpt.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328082/eventos-17_qbvvyo.jpg",
     alt: "a",
   },
   {
     id: 3,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207604/eventos-30_e7cwyp.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328082/eventos-18_rmoozw.jpg",
     alt: "a",
   },
   {
     id: 4,
-    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758207606/eventos-31_zwlffx.jpg",
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328081/eventos-15_rorzs4.jpg",
+    alt: "a",
+  },
+  {
+    id: 5,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328081/eventos-14_q8b7oo.jpg",
+    alt: "a",
+  },
+  {
+    id: 6,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328080/eventos-12_yepjcd.jpg",
+    alt: "a",
+  },
+  {
+    id: 7,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328080/eventos-13_hmh28y.jpg",
+    alt: "a",
+  },
+  {
+    id: 8,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-11_tqhgqk.jpg",
+    alt: "a",
+  },
+  {
+    id: 9,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-10_okyvt0.jpg",
+    alt: "a",
+  },
+  {
+    id: 10,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328080/eventos-2_sklojw.jpg",
+    alt: "a",
+  },
+  {
+    id: 11,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-3_jfcjef.jpg",
+    alt: "a",
+  },
+  {
+    id: 12,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-4_sbmelt.jpg",
+    alt: "a",
+  },
+  {
+    id: 13,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328079/eventos-4_sbmelt.jpg",
+    alt: "a",
+  },
+    {
+    id: 14,
+    src: "https://res.cloudinary.com/dn454izoh/image/upload/v1758328078/eventos-1_y8q4hw.jpg",
     alt: "a",
   },
 ]
