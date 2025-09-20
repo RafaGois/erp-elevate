@@ -15,10 +15,10 @@ export default function AboutUs() {
     () => {
       gsap.registerPlugin(ScrollTrigger);
 
-      counterAnim("#businessCounter", 50);
+      counterAnim("#businessCounter", 1000);
       counterAnim("#projectsCounter", 100);
-      counterAnim("#clientsApprovalCounter", 99);
-      counterAnim("#otherCounter", 30);
+      counterAnim("#clientsApprovalCounter", 60);
+      counterAnim("#otherCounter", 50);
 
       tl.current = gsap
         .timeline({
@@ -159,11 +159,11 @@ export default function AboutUs() {
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
             <p className="text-sm text-[#ababab] opacity-70">
-              Aprovaçao de Clientes
+              Eventos Atendidos
             </p>
             <div className="flex text-2xl font-bold text-nowrap">
-              <h3 id="clientsApprovalCounter">d 0</h3>
-              <p>%</p>
+              <h3 id="clientsApprovalCounter">0</h3>
+              
             </div>
           </div>
           <div className="flex items-center flex-col gap-2 grow-0">
