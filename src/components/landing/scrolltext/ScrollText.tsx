@@ -177,7 +177,7 @@ export default function ScrollText() {
       
       {/* Imagens com efeito parallax */}
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1758330770/eventos-100_ro7fcg.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1758206696/site-3_npcltl.jpg"
         alt="Berto"
         height={200}
         width={100}
@@ -198,7 +198,7 @@ export default function ScrollText() {
         className="img-scrolltext absolute z-40 rounded-xl bottom-[12%] left-[12%] "
       />
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-9_jzwyak.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg"
         alt="Bruno"
         height={200}
         width={100}
