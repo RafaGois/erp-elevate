@@ -177,28 +177,28 @@ export default function ScrollText() {
       
       {/* Imagens com efeito parallax */}
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977397/BERTO-2_sezqmf.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1758330770/eventos-100_ro7fcg.jpg"
         alt="Berto"
         height={200}
         width={100}
         className="img-scrolltext absolute rounded-xl top-[5%] z-40 left-[5%] hover:scale-150"
       />
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977444/corporativas-66_tnuvkc.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1758203203/site-2_zz3ohw.jpg"
         alt="Corporativas"
         height={200}
         width={100}
         className="img-scrolltext absolute z-40 rounded-xl top-[15%] right-[12%]"
       />
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1758203002/site-9_f0blme.jpg"
         alt="Divina"
         height={200}
         width={100}
         className="img-scrolltext absolute z-40 rounded-xl bottom-[12%] left-[12%] "
       />
       <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755977397/BRUNO-34_r2kqaq.jpg"
+        src="https://res.cloudinary.com/dn454izoh/image/upload/v1756823353/img-9_jzwyak.jpg"
         alt="Bruno"
         height={200}
         width={100}
