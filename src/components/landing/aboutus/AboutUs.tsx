@@ -28,7 +28,6 @@ export default function AboutUs() {
             trigger: container.current.querySelector(".card-1"),
             //scrub: true,
             start: "top 90%",
-            markers: true,
             toggleActions: "play pause pause pause",
             //end: "bottom 90%",
           },
