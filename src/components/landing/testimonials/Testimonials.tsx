@@ -6,43 +6,49 @@ import { Quote, Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import AudioPlayer from "./AudioPlayer";
 
-
 const testimonials = [
   {
     id: 0,
     name: "Jonathan Garcia",
     job: "Proprietário",
     company: "Garcia Líder",
-    testimonial: "O trabalho foi acima da média, fora da curva e superou todas as expectativas e tudo o que tinha imaginado! Entragaram muito além do combiando!",
-    picture: "https://res.cloudinary.com/dn454izoh/image/upload/v1756757946/Captura_de_Tela_2025-09-01_%C3%A0s_17.15.56_lsa7yb.png",
+    testimonial:
+      "O trabalho foi acima da média, fora da curva e superou todas as expectativas e tudo o que tinha imaginado! Entragaram muito além do combiando!",
+    picture:
+      "https://res.cloudinary.com/dn454izoh/image/upload/v1756757946/Captura_de_Tela_2025-09-01_%C3%A0s_17.15.56_lsa7yb.png",
   },
   {
     id: 1,
     name: "Sandra",
     job: "Proprietária",
-    company:"Divina Massa e Hotdog Haus",
-    testimonial:"Muito além do que eu podia imaginar!",
-    picture: "https://res.cloudinary.com/dn454izoh/image/upload/v1756767430/logo_512x512_v1630122655_ooc95e.png",
-    audio: "https://res.cloudinary.com/dn454izoh/video/upload/v1756769526/WhatsApp_Audio_2025-09-01_at_16.22.33_n2ukfp.ogg"
+    company: "Divina Massa e Hotdog Haus",
+    testimonial: "Muito além do que eu podia imaginar!",
+    picture:
+      "https://res.cloudinary.com/dn454izoh/image/upload/v1756767430/logo_512x512_v1630122655_ooc95e.png",
+    audio:
+      "https://res.cloudinary.com/dn454izoh/video/upload/v1756769526/WhatsApp_Audio_2025-09-01_at_16.22.33_n2ukfp.ogg",
   },
   {
     id: 2,
     name: "Vanessa Bornhiati",
     job: "Proprietária",
-    company:"Ademicon Curitibanos e Caçador",
-    testimonial:"Parabéns meninos, vocês são D+, entregam tudo!!! Somos fãs de vocês e desejamos cada vez mais sucesso!!! Voem Alto!",
-    picture:"https://res.cloudinary.com/dn454izoh/image/upload/v1756767493/channels4_profile_fgzly6.jpg"
+    company: "Ademicon Curitibanos e Caçador",
+    testimonial:
+      "Parabéns meninos, vocês são D+, entregam tudo!!! Somos fãs de vocês e desejamos cada vez mais sucesso!!! Voem Alto!",
+    picture:
+      "https://res.cloudinary.com/dn454izoh/image/upload/v1756767493/channels4_profile_fgzly6.jpg",
   },
   {
     id: 3,
     name: "Valéria Freiberger",
     job: "Proprietária",
-    company:"Sempre Presente, Big Loja e Anacapri",
-    testimonial:"A equipe sempre nos atendeu com muito cuidado e carinho, como se o nosso negócio fosse deles. isso fez toda a diferença.",
-    picture:"https://res.cloudinary.com/dn454izoh/image/upload/v1756824814/logo-bl_ttocbz.jpg"
+    company: "Sempre Presente, Big Loja e Anacapri",
+    testimonial:
+      "A equipe sempre nos atendeu com muito cuidado e carinho, como se o nosso negócio fosse deles. isso fez toda a diferença.",
+    picture:
+      "https://res.cloudinary.com/dn454izoh/image/upload/v1756824814/logo-bl_ttocbz.jpg",
   },
-]
-
+];
 
 export default function Testimonials() {
   const [selectedCard, setSelectedCard] = useState(testimonials[0].id);
@@ -58,31 +64,46 @@ export default function Testimonials() {
           scrollTrigger: {
             trigger: container.current.querySelector(".approved-text"),
             start: "top 65%",
-          }
+          },
         })
-        .from(container.current.querySelector(".approved-text"), {
-          opacity: 0,
-          y: 40,
-          duration: 1,
-          
-        }, "<").from(container.current.querySelector(".testimonials-title"), {
-          opacity: 0,
-          y: 40,
-          duration: 1,
-        }, "<")
-        .from(container.current.querySelector(".testimonials-description"), {
+        .from(
+          container.current.querySelector(".approved-text"),
+          {
+            opacity: 0,
+            y: 40,
+            duration: 1,
+          },
+          "<"
+        )
+        .from(
+          container.current.querySelector(".testimonials-title"),
+          {
+            opacity: 0,
+            y: 40,
+            duration: 1,
+          },
+          "<"
+        )
+        .from(
+          container.current.querySelector(".testimonials-description"),
+          {
+            opacity: 0,
+            y: -40,
+            duration: 1,
+          },
+          "<"
+        )
+        .from(container.current.querySelector(".testimonials-buttons"), {
           opacity: 0,
           y: -40,
           duration: 1,
-        }, "<").from(container.current.querySelector(".testimonials-buttons"), {
-          opacity: 0,
-          y: -40,
-          duration: 1,
-        }).from(container.current.querySelector(".box-1"), {
+        })
+        .from(container.current.querySelector(".box-1"), {
           opacity: 0,
           x: 40,
           duration: 1,
-        }).from(container.current.querySelector(".box-2"), {
+        })
+        .from(container.current.querySelector(".box-2"), {
           opacity: 0,
           x: -40,
           duration: 1,
@@ -94,7 +115,7 @@ export default function Testimonials() {
   function renderCards() {
     return testimonials.map((t, i) => (
       <div
-      id="clients"
+        id="clients"
         key={i + "-" + t.name}
         className={cn(
           "flex flex-col justify-center items-center border absolute w-full sm:w-[calc(100%-12rem)] h-full sm:h-[calc(100%-10rem)] max-w-[30rem] max-h-[30rem] card-" +
@@ -120,8 +141,10 @@ export default function Testimonials() {
             />
           </p>
           {t?.audio ? (
-            <AudioPlayer onAudioStateChange={setIsAudioPlaying} url={t.audio}/>
-          ) : ""}
+            <AudioPlayer onAudioStateChange={setIsAudioPlaying} url={t.audio} />
+          ) : (
+            ""
+          )}
         </div>
         <div className="w-full h-[1px] bg-white/10"></div>
         <div className="py-4 flex w-full items-center gap-4">
@@ -131,7 +154,9 @@ export default function Testimonials() {
           </Avatar>
           <div>
             <h1 className="font-bold text-white">{t.name}</h1>
-            <p className="text-xs text-white/50">{t.job}, {t.company}</p>
+            <p className="text-xs text-white/50">
+              {t.job}, {t.company}
+            </p>
           </div>
         </div>
       </div>
@@ -142,19 +167,18 @@ export default function Testimonials() {
     return testimonials.map((t) => {
       return (
         <div
-            key={t.id}
-            onClick={() => setSelectedCard(t.id)}
-            className={cn(
-              "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-" + t.id
-            )}
-          ></div>
-      )
-    })
+          key={t.id}
+          onClick={() => setSelectedCard(t.id)}
+          className={cn(
+            "h-3 w-3 bg-white/20 rounded-full cursor-pointer bar-" + t.id
+          )}
+        ></div>
+      );
+    });
   }
 
   useEffect(() => {
-
-    if(!container?.current) return;
+    if (!container?.current) return;
 
     gsap.from(".card-" + selectedCard, {
       opacity: 0,
@@ -191,16 +215,20 @@ export default function Testimonials() {
   }, [testimonials, isAudioPlaying]);
 
   return (
-    <section ref={container} className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16">
+    <section
+      ref={container}
+      className="bg-black h-svh w-full flex flex-col md:flex-row p-8 md:p-16"
+    >
       <div className="flex-1 flex flex-col justify-center">
         <div className="flex items-center gap-2 approved-text">
-          <Star size={18} color="#eba434" fill="#eba434"/>
+          <Star size={18} color="#eba434" fill="#eba434" />
           <small className="text-white/60">Aprovados pelos melhores</small>
         </div>
-        <h1 className="text-white text-7xl sm:text-8xl font-bold testimonials-title">Nossos Clientes</h1>
+        <h1 className="text-white text-7xl sm:text-8xl font-bold testimonials-title">
+          Nossos Clientes
+        </h1>
         <p className="text-white/40 testimonials-description">
-          Não acredite apenas na nossa palavra. Veja o que nossos clientes têm a
-          dizer sobre o nosso trabalho
+          Veja o que nossos melhores clientes têm a dizer sobre o nosso trabalho
         </p>
         <div className="py-4 flex gap-2 w-[110px] testimonials-buttons">
           {renderCardsOptions()}

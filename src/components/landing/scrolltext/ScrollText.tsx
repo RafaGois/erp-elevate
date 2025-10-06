@@ -134,7 +134,7 @@ export default function ScrollText() {
       ScrollTrigger.create({
         trigger: texto,
         start: "top 80%",
-        end: "bottom 20%",
+        //end: "bottom 20%",
         onEnter: () => {
           if (!isAnimating.current) {
             isAnimating.current = true;
@@ -169,9 +169,8 @@ export default function ScrollText() {
           Aqui criamos <span className="arte-word">ARTE</span>
         </h1>
         <p className="text-white text-wrap text-center opacity-0">
-        Unimos técnicas consolidadas e criatividade para transformar cada projeto em uma entrega com intenção. <br />
-         Nossa missão é ir além da estética: criamos conexões, transmitimos propósito e <br />
-          damos vida às ideias com estratégia e autenticidade.
+        Unimos sensibilidade e estratégia pra transformar ideias em arte, conexão e resultado. <br />
+        Damos vida a histórias reais, com autenticidade e propósito em cada detalhe.
         </p>
       </div>
       
