@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/services/QueryClient";
 import { AppProvider } from "@/data/contexts/AppContext";
 import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "@/data/contexts/AuthContext";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -38,13 +39,15 @@ export default function RootLayout({
         {/* <link rel="icon" href="/logommm.ico" /> */}
       </head>
       <body className={`antialiased ${spaceGrotesk.className}`}>
-        <QueryClientProvider client={queryClient}>
-          <AppProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              {children}
-            </ThemeProvider>
-          </AppProvider>
-        </QueryClientProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>
+            <AppProvider>
+              <QueryClientProvider client={queryClient}>
+                {children}
+              </QueryClientProvider>
+            </AppProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

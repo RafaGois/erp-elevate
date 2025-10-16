@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
 import useAuth from "@/data/hooks/useAuth";
@@ -12,9 +10,10 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import InputForm from "@/components/layout/components/inputs/InputForm";
 
 export default function Auth() {
-  const { login, loginGoogle } = useAuth();
+  const { login } = useAuth();
   const form = useForm<User>({
     defaultValues: {
       username: "",
@@ -22,9 +21,14 @@ export default function Auth() {
     },
   });
   //todo usar o react-hook-form
-  async function handleSubmit(data: User) {
-    const user = new User("", data.username, data.password, "", "");
-    await login?.(user);
+  async function submit(data: User) {
+    
+    try {
+      await login?.(data as User);
+    } catch (error) {
+      console.log(error);
+      //toast.error(error instanceof Error ? error.message : "Erro ao fazer login.");
+    }
   }
 
   return (
@@ -35,7 +39,7 @@ export default function Auth() {
             <CardContent className="grid p-0 md:grid-cols-2">
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(handleSubmit)}
+                  onSubmit={form.handleSubmit(submit)}
                   className="p-6 md:p-8"
                 >
                   <div className="flex flex-col gap-6">
@@ -45,27 +49,19 @@ export default function Auth() {
                         Informe os campos para acessar o sistema.
                       </p>
                     </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="username">Usuário</Label>
-                      <Input
-                        id="username"
-                        type="text"
-                        placeholder="Digite seu e-mail"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <div className="flex items-center">
-                        <Label htmlFor="password">Senha</Label>
-                        <a
-                          href="#"
-                          className="ml-auto text-sm underline-offset-2 hover:underline"
-                        >
-                          Esqueceu sua senha?
-                        </a>
-                      </div>
-                      <Input id="password" type="password" required />
-                    </div>
+
+                    <InputForm
+                      form={form}
+                      name="username"
+                      label="Usuário"
+                      type="text"
+                    />
+                    <InputForm
+                      form={form}
+                      name="password"
+                      label="Senha"
+                      type="password"
+                    />
                     <Button type="submit" className="w-full">
                       Login
                     </Button>
@@ -95,7 +91,6 @@ export default function Auth() {
                         variant="outline"
                         type="button"
                         className="w-full"
-                        onClick={loginGoogle}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +130,7 @@ export default function Auth() {
           </Card>
           <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
             Clicando em continuar você concorda com os nossos
-            <a href="#">Termos de uso</a> e{" "}
+            <a href="#"> Termos de uso</a> e{" "}
             <a href="#">Politicas de Privacidade</a>.
           </div>
         </div>

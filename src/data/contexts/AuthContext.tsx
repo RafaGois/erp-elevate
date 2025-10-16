@@ -1,19 +1,12 @@
 "use client";
 
-import { createContext, useEffect, useState, useCallback } from "react";
-import { app } from "@/lib/firebase/config";
-import { getAuth } from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import AuthContextProps from "@/lib/interfaces/AuthContextProps";
 import { User } from "@/lib/models/User";
-
-import { User as FirebaseUser } from "firebase/auth";
-import {
-  loginWithEmailAndPassword,
-  loginWithGoogle,
-} from "@/lib/firebase/authentications";
+import axios from "axios";
 
 const AuthContext = createContext<AuthContextProps>({});
 
@@ -32,66 +25,43 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-async function standardizedUser(firebaseUser: FirebaseUser): Promise<User> {
-  const token = await firebaseUser.getIdToken();
-  return new User(
-    firebaseUser?.uid,
-    firebaseUser?.displayName ?? "",
-    firebaseUser?.email ?? "",
-    "",
-    token,
-    firebaseUser.providerId
-  );
-}
-
 export function AuthProvider(props: AuthProviderProps) {
-  const auth = getAuth(app);
-
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  const confingSection = useCallback(async (recivedUser: User | FirebaseUser | null) => {
-
-    if (recivedUser?.email) {
-      const firebaseUser = await standardizedUser(recivedUser as FirebaseUser);
-      setUser(firebaseUser);
-      manageCookie(true, firebaseUser?.token ?? null);
+  async function confingSection(recivedUser: User) {
+    if (recivedUser?.token) {
+      setUser(recivedUser);
+      manageCookie(true, recivedUser.token);
       setLoading(false);
-      Cookies.set("elevate-token", firebaseUser?.token ?? "");
-      localStorage.setItem("uid", recivedUser.uid + "");
-      return recivedUser.uid;
+      localStorage.setItem("uid", recivedUser.id + "");
+      return recivedUser.id;
     } else {
       setUser(null);
       manageCookie(false, null);
       setLoading(false);
-      router.push("/auth");
       return false;
-    }
-  }, [router]);
-
-  async function login(recivedUser: User) {
-    try {
-      setLoading(true);
-      const resp = await loginWithEmailAndPassword(
-        recivedUser.email,
-        recivedUser.password
-      );
-      await confingSection(resp?.user);
-      router.push("/equipaments");
-      return resp?.user?.uid;
-    } finally {
-      setLoading(false);
     }
   }
 
-  async function loginGoogle() {
+  async function login(recivedUser: User) {
+    setLoading(true);
+
     try {
-      const result = await loginWithGoogle();
-      const user = result.user;
-      await confingSection(user);
-      router.push("/equipaments");
-      return user?.uid;
+      if (!recivedUser.username || !recivedUser.password) {
+        throw new Error("Informe todos os valores.");
+      }
+
+      const response = await axios.post<User>(
+        "http://localhost:8080/users/login",
+        recivedUser
+      );
+
+      confingSection(response.data);
+      //todo validar entrar na ultima tela salva localmente, senao na current line 1
+      router.push("/dashboard/equipaments");
+      return response.data.id;
     } finally {
       setLoading(false);
     }
@@ -106,22 +76,41 @@ export function AuthProvider(props: AuthProviderProps) {
     }
   }
 
+  async function register(recivedUser: User) {
+    setLoading(true);
+    await axios.post<User>(
+      "http://localhost:8080/users",
+      recivedUser
+    );
+    return recivedUser.id;
+  }
+
   useEffect(() => {
-    if (Cookies.get("elevate-auth")) {
-      const cancelar = auth.onIdTokenChanged(confingSection);
-      return () => cancelar();
-    } else {
-      setLoading(false);
-      confingSection(null);
-    }
-  }, [auth, confingSection]);
+
+    const token = Cookies.get("elevate-token");
+
+    if (!token) confingSection(null);
+    setLoading(true);
+    axios
+      .post<User>(
+        "http://localhost:8080/users/validate",
+        { token: token }
+      )
+      .then((resp) => {
+        confingSection(resp.data);
+      })
+      .catch((err) => {
+        confingSection(null);
+      });
+    
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         login,
-        loginGoogle,
+        register,
         logout,
         loading,
       }}
