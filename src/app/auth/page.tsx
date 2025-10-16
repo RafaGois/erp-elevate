@@ -17,13 +17,13 @@ export default function Auth() {
   const { login, loginGoogle } = useAuth();
   const form = useForm<User>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
   //todo usar o react-hook-form
   async function handleSubmit(data: User) {
-    const user = new User(data.email, data.password, "", "", "", "");
+    const user = new User("", data.username, data.password, "", "");
     await login?.(user);
   }
 
@@ -46,10 +46,10 @@ export default function Auth() {
                       </p>
                     </div>
                     <div className="grid gap-3">
-                      <Label htmlFor="email">E-mail</Label>
+                      <Label htmlFor="username">Usuário</Label>
                       <Input
-                        id="email"
-                        type="email"
+                        id="username"
+                        type="text"
                         placeholder="Digite seu e-mail"
                         required
                       />
@@ -124,11 +124,11 @@ export default function Auth() {
               </Form>
               <div className="bg-muted relative hidden md:block">
                 <Image
-                  src="https://res.cloudinary.com/dn454izoh/image/upload/v1754871382/26-04-1_yeos2v.jpg"
+                  src="https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg"
                   width={500}
                   height={500}
                   alt="img-auth"
-                  className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                  className="absolute inset-0 h-full w-full object-cover brightness-[0.8] grayscale"
                 />
               </div>
             </CardContent>
