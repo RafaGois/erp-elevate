@@ -41,6 +41,7 @@ export function AuthProvider(props: AuthProviderProps) {
       setUser(null);
       manageCookie(false, null);
       setLoading(false);
+      router.push("/auth");
       return false;
     }
   }
@@ -85,7 +86,7 @@ export function AuthProvider(props: AuthProviderProps) {
     return recivedUser.id;
   }
 
-  useEffect(() => {
+/*   useEffect(() => {
 
     const token = Cookies.get("elevate-token");
 
@@ -103,7 +104,7 @@ export function AuthProvider(props: AuthProviderProps) {
         confingSection(null);
       });
     
-  }, []);
+  }, []); */
 
   return (
     <AuthContext.Provider
