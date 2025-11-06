@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse, type MiddlewareConfig } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/lib/models/User";
 import axios from "axios";
-import useAuth from "./data/hooks/useAuth";
 
 const UNAUTH_ROUTE = "/auth";
 
@@ -14,7 +13,7 @@ export async function middleware(request: NextRequest) {
 
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
-    let res = await axios.post<User>("http://localhost:8080/users/validate", { token: token?.value });
+    await axios.post<User>("http://localhost:8080/users/validate", { token: token?.value });
     //await login?.(res.data);
     return NextResponse.next();
   } catch (err) {

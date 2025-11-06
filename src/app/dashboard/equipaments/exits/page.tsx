@@ -96,7 +96,7 @@ export default function Movimentations() {
     <>
       <DataTable
         columns={columns}
-        data={data?.[0]?.uid ? data : []}
+        data={data?.[0]?.id ? data : []}
         setAction={setAction}
       />
       <ToolkitModal

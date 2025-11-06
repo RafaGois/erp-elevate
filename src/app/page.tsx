@@ -56,7 +56,8 @@ export default function Home() {
       });
 
 
-      container.current.addEventListener("mousedown", (e) => {
+      container.current.addEventListener("mousedown", () => {
+        
        gsap.to(cursor, {
         scale: 2,
         backgroundColor: "#fff",
@@ -70,7 +71,7 @@ export default function Home() {
        })
       });
 
-      container.current.addEventListener("mouseup", (e) => {
+      container.current.addEventListener("mouseup", () => {
         gsap.to(cursor, {
          scale: 1,
          backgroundColor: "transparent",

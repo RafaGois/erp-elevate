@@ -34,7 +34,7 @@ export default function EquipamentExitFinishModal(
   }
 
   async function update(data: Partial<EquipamentExit>) {
-    await axios.put(`/api/equipamentExits/${props.selectedObject?.uid}`, data);
+    await axios.put(`/api/equipamentExits/${props.selectedObject?.id}`, data);
   }
 
   async function handleClose() {

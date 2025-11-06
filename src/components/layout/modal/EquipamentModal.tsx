@@ -83,7 +83,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
         return [];
       }
     },
-  });
+  });  
 
   return (
     <Modal<Equipament>
@@ -119,6 +119,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
             placeholder="Data de compra"
             type="date"
             required
+            defaultValue={(props.selectedObject?.purchaseDate + "").split("T")[0]}
             form={form}
           />
           <SelectForm

@@ -50,10 +50,10 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
 
       data.equipaments =
         equipaments?.filter((equipament) =>
-          selectedEquipaments.includes(equipament.uid)
+          selectedEquipaments.includes(equipament.id)
         ) ?? [];
 
-      if (props.selectedObject?.uid) {
+      if (props.selectedObject?.id) {
         await update(data);
         toast.success("Equipamento atualizado com sucesso.");
       } else {
@@ -76,7 +76,7 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
   }
 
   async function update(data: Partial<EquipamentExit>) {
-    await axios.put(`/api/equipamentExits/${props.selectedObject?.uid}`, data);
+    await axios.put(`/api/equipamentExits/${props.selectedObject?.id}`, data);
   }
 
   async function handleClose() {
@@ -120,7 +120,7 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
             onValueChange={setSelectedEquipaments}
             defaultValue={
               props?.selectedObject?.equipaments?.map(
-                (equipament) => equipament.uid
+                (equipament) => equipament.id
               ) ?? []
             }
           />

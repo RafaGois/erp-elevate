@@ -61,7 +61,7 @@ interface MultiSelectProps extends VariantProps<typeof multiSelectVariants> {
    */
   options: {
     /** The text to display for the option. */
-    uid: string;
+    id: string;
     name: string;
     /** The unique value associated with the option. */
     /** Optional icon component to display alongside the option. */
@@ -183,7 +183,7 @@ export const MultiSelectForm = React.forwardRef<
       if (selectedValues?.length === options?.length) {
         handleClear();
       } else {
-        const allValues = options?.map((option) => option.uid);
+        const allValues = options?.map((option) => option.id);
         setSelectedValues(allValues);
         onValueChange(allValues);
       }
@@ -290,11 +290,11 @@ export const MultiSelectForm = React.forwardRef<
                 {options
                   //?.sort((a, b) => a.name.localeCompare(b.name))
                   ?.map((option) => {
-                    const isSelected = selectedValues?.includes(option.uid);
+                    const isSelected = selectedValues?.includes(option.id);
                     return (
                       <CommandItem
-                        key={option.uid + "-" + option?.name}
-                        onSelect={() => toggleOption(option.uid)}
+                        key={option.id + "-" + option?.name}
+                        onSelect={() => toggleOption(option.id)}
                         className="cursor-pointer"
                       >
                         <div

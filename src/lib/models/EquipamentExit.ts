@@ -1,28 +1,28 @@
 import { Equipament } from "@/lib/models/Equipament";
 
 export class EquipamentExit {
-    private _uid: string;
+    private _id: string;
     private _name: string;
     private _observation: string;
     private _equipaments: Equipament[];
     private _date: Date;
 
     constructor(
-        uid: string,
+        id: string,
         name: string,
         observation: string,
         equipaments: Equipament[],
-        date: Date
+        date: Date  
     ) {
-        this._uid = uid;
+        this._id = id;
         this._name = name;
         this._observation = observation;
         this._equipaments = equipaments;
         this._date = date;
     }
 
-    get uid() {
-        return this._uid;
+    get id() {
+        return this._id;
     }
 
     get name() {
