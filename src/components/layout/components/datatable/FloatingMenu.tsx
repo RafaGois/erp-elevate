@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { Equipament } from "@/lib/models/Equipament";
 
 interface WithId {
-  uid: string;
+  id: string;
   equipaments?: Equipament[];
 }
 
@@ -41,9 +41,9 @@ export default function FloatingMenu<T extends WithId>(
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => {
-            navigator.clipboard.writeText(props.selectedObject.uid + "");
+            navigator.clipboard.writeText(props.selectedObject.id + "");
             toast.success(
-              `ID ${props.selectedObject.uid} copiado com sucesso.`
+              `ID ${props.selectedObject.id} copiado com sucesso.`
             );
           }}
         >

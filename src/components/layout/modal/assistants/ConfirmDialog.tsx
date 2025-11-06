@@ -11,11 +11,11 @@ import {
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { toast } from "sonner";
 
-interface WithUid {
-  uid: string;
+interface WithId {
+  id: string;
 }
 
-type ConfirmDialogProps<T extends WithUid> = BaseModalProps<T> & {
+type ConfirmDialogProps<T extends WithId> = BaseModalProps<T> & {
   title?: string;
   message?: string;
 
@@ -23,12 +23,12 @@ type ConfirmDialogProps<T extends WithUid> = BaseModalProps<T> & {
   refetch: () => void;
 };
 
-export default function ConfirmDialog<T extends WithUid>(
+export default function ConfirmDialog<T extends WithId>(
   props: ConfirmDialogProps<T>
 ) {
   async function handleClick() {
     try {
-      await props.remove(props?.selectedObject?.uid ?? "");
+      await props.remove(props?.selectedObject?.id ?? "");
       if (props.setAction) props.setAction(null);
       props.refetch();
       toast.success("Registro removido com sucesso.");

@@ -105,7 +105,7 @@ export default function Inventory() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`/api/equipaments/${uid}`);
+    await axios.delete(`http://localhost:8080/equipaments/${uid}`);
   }
 
   return (

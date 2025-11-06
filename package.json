@@ -1,6 +1,6 @@
 {
   "name": "erp-elevate",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -31,8 +31,6 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "firebase": "^11.10.0",
-    "firebase-admin": "^13.4.0",
     "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
     "gsap-trial": "^3.13.0",

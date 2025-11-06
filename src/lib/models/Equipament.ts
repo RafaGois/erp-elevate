@@ -1,23 +1,26 @@
 export class Equipament {
-    private _uid: string;
+    private _id: string;
     private _name: string;
     private _price: number;
     private _purchaseDate: Date;
+    private _categoryId: string;
 
     constructor(
-        uid: string,
+        id: string,
         name: string,
         price: number,
         purchaseDate: Date,
+        categoryId: string,
     ) {
-        this._uid = uid;
+        this._id = id;
         this._name = name;
         this._price = price;
         this._purchaseDate = purchaseDate;
+        this._categoryId = categoryId;
     }
 
-    get uid() {
-        return this._uid;
+    get id() {
+        return this._id;
     }
 
     get name() {
@@ -34,5 +37,13 @@ export class Equipament {
 
     set purchaseDate(date: Date) {
         this._purchaseDate = date;
+    }
+
+    get categoryId() {
+        return this._categoryId;
+    }
+
+    set categoryId(categoryId: string) {
+        this._categoryId = categoryId;
     }
 }

@@ -7,6 +7,7 @@ import { queryClient } from "@/services/QueryClient";
 import { AppProvider } from "@/data/contexts/AppContext";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/data/contexts/AuthContext";
+import { Toaster } from "sonner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({
             </AppProvider>
           </AuthProvider>
         </ThemeProvider>
+        <Toaster theme="system"/>
       </body>
     </html>
   );

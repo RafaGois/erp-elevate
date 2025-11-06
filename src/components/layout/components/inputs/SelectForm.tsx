@@ -21,7 +21,7 @@ interface SelectFormProps {
   name: string;
   label: string;
 
-  options: { id: number; name: string }[];
+  options: { id: string; name: string }[];
 
   required?: boolean;
   className?: string;
@@ -38,7 +38,7 @@ export default function SelectForm(props: SelectFormProps) {
   function listOptions() {
     return props?.options
       ?.sort((a, b) => a.name.localeCompare(b.name))
-      ?.map((o: { id: number; name: string }) => {
+      ?.map((o: { id: string; name: string }) => {
         return (
           <SelectItem key={o.id + "-" + o.name} value={o.id + ""}>
             {o.name}
@@ -56,7 +56,7 @@ export default function SelectForm(props: SelectFormProps) {
         required: props?.required ? "Campo obrigatório" : false,
       }}
       render={({ field }) => (
-        <FormItem key={props.key} className="flex-1">
+        <FormItem key={props.key} className="flex-1 ">
           <FormLabel>{props.label}</FormLabel>
           <Select
             key={props?.key}
@@ -65,9 +65,9 @@ export default function SelectForm(props: SelectFormProps) {
               field.onChange(e);
               props?.setValue?.(e);
             }}
-            defaultValue={field.value}
+            defaultValue={props.defaultValue}
           >
-            <FormControl>
+            <FormControl className="w-full">
               <SelectTrigger>
                 <SelectValue
                   placeholder={

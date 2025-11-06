@@ -6,6 +6,9 @@ import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import axios from "axios";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { EquipamentCategory } from "@/lib/models/EquipamentCategory";
+import SelectForm from "../components/inputs/SelectForm";
 
 type EquipamentModalProps = BaseModalProps<Equipament>;
 
@@ -18,9 +21,13 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     },
   });
 
+  console.log(props.selectedObject);
+
   async function handleSubmit(data: Partial<Equipament>) {
     try {
-      if (props.selectedObject?.uid) {
+      data.purchaseDate = new Date(data.purchaseDate);
+
+      if (props.selectedObject?.id) {
         await update(data);
         toast.success("Equipamento atualizado com sucesso.");
       } else {
@@ -31,19 +38,23 @@ export default function EquipamentModal(props: EquipamentModalProps) {
       handleClose();
     } catch (error) {
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Erro ao criar ou atualizar equipamento."
+        error.response.data[0] ??
+          error.message ??
+          "Erro ao criar ou atualizar equipamento."
       );
     }
   }
 
   async function create(data: Partial<Equipament>) {
-    await axios.post("/api/equipaments", data);
+    console.log(data);
+    await axios.post("http://localhost:8080/equipaments", data);
   }
 
   async function update(data: Partial<Equipament>) {
-    await axios.put(`/api/equipaments/${props.selectedObject?.uid}`, data);
+    await axios.put(
+      `http://localhost:8080/equipaments/${props.selectedObject?.id}`,
+      data
+    );
   }
 
   async function handleClose() {
@@ -52,6 +63,27 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     form.reset();
     if (props?.refetch) props.refetch();
   }
+
+  const {
+    data: categories,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery<EquipamentCategory[]>({
+    queryKey: ["data_equipamentCategories"],
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/equipament-categories`
+        );
+        return res.data;
+      } catch (err) {
+        console.log(err);
+        return [];
+      }
+    },
+  });
 
   return (
     <Modal<Equipament>
@@ -88,6 +120,16 @@ export default function EquipamentModal(props: EquipamentModalProps) {
             type="date"
             required
             form={form}
+          />
+          <SelectForm
+            name="categoryId"
+            label="Categoria"
+            options={categories ?? []}
+            defaultValue={props.selectedObject?.categoryId}
+            required
+            form={form}
+            isLoading={isLoading}
+            disabled={isFetching}
           />
         </form>
       </Form>

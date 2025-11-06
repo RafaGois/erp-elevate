@@ -29,6 +29,7 @@ import { useTheme } from "next-themes";
 
 export default function Footer() {
   const { user, logout } = useAuth();
+
   const { isMobile } = useSidebar();
 
   const { theme, setTheme } = useTheme();
@@ -41,7 +42,7 @@ export default function Footer() {
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarFallback className="rounded-lg">
@@ -50,9 +51,9 @@ export default function Footer() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {user?.name}Nome do cidadão{" "}
+                    {user?.name}
                   </span>
-                  <span className="truncate text-xs">colocar algo aq</span>
+                  <span className="truncate text-xs">{user?.username}</span>
                 </div>
                 <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
