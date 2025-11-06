@@ -21,8 +21,6 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     },
   });
 
-  console.log(props.selectedObject);
-
   async function handleSubmit(data: Partial<Equipament>) {
     try {
       data.purchaseDate = new Date(data.purchaseDate);
@@ -46,7 +44,6 @@ export default function EquipamentModal(props: EquipamentModalProps) {
   }
 
   async function create(data: Partial<Equipament>) {
-    console.log(data);
     await axios.post("http://localhost:8080/equipaments", data);
   }
 
