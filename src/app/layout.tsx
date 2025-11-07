@@ -1,32 +1,33 @@
-"use client";
-
 import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/services/QueryClient";
-import { AppProvider } from "@/data/contexts/AppContext";
-import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "@/data/contexts/AuthContext";
-import { Toaster } from "sonner";
+import type { Metadata } from "next";
+import { Providers } from "./providers";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-/* export const metadata = {
-  title: "Elevate Pro Media",
-  description: "A melhor escolha de empresa de social media para você!",
+export const metadata: Metadata = {
+  title: "ElevatePro Media",
+  description: "Somos uma agência de publicidade apta para desenvolver qualquer projeto visual, seja ele um desenvolvimento de site, fotografias, vídeos, campanhas, tráfego pago desde o início até a execução do projeto.",
   keywords: [
     "social media",
     "marketing digital",
-    "elevate pro media",
-    "elevatepromeida",
+    "elevatepro media",
+    "elevatepromedia",
     "fotografia",
     "sites",
+    "fotografia",
+    "fotografia de eventos",
+    "fotografia de casamento",
+    "fotografia de empresa",
+    "fotografia de produto",
+    "fotografia de serviço",
+    "fotografia de produto",
     "programação",
   ],
-}; */
+};
 
 export default function RootLayout({
   children,
@@ -35,21 +36,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <head>
-        <title>Elevate Pro Media</title>
-        {/* <link rel="icon" href="/logommm.ico" /> */}
-      </head>
       <body className={`antialiased ${spaceGrotesk.className}`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider>
-            <AppProvider>
-              <QueryClientProvider client={queryClient}>
-                {children}
-              </QueryClientProvider>
-            </AppProvider>
-          </AuthProvider>
-        </ThemeProvider>
-        <Toaster theme="system"/>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
