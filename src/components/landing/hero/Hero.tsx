@@ -67,7 +67,7 @@ export default function Hero() {
         </small>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative tracking-tight mix-blend-exclusion text-white">
           <span className="h-full bg-white absolute barra"></span>
-          <span className="texto opacity-0">ELEVATE PRO</span>
+          <span className="texto opacity-0">ELEVATEPRO</span>
         </h1>
         <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo tracking-tight mix-blend-exclusion text-white relative">
           <span className="h-full bg-white absolute barra"></span>
