@@ -65,7 +65,7 @@ export default function Hero() {
         <small className="text-[#7D6B58] tracking-widest texto-titulo">
           Transformando sua presença digital em autoridade
         </small>
-        <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold titulo relative tracking-tight mix-blend-exclusion text-white">
+        <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold titulo relative tracking-tight mix-blend-exclusion text-white">
           <span className="h-full bg-white absolute barra"></span>
           <span className="texto opacity-0">ELEVATEPRO</span>
         </h1>
