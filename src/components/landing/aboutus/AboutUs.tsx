@@ -80,42 +80,8 @@ export default function AboutUs() {
         <p className="max-w-md"></p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 flex-1 pb-4">
-        <div className="p-8 card-1 md:col-span-2 md:row-span-2 group relative flex flex-col justify-center overflow-hidden rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64">
-          {/* Céu noturno com estrelas */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Gradiente de céu noturno */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-indigo-900/10 to-black/30"></div>
-            
-            {/* Estrelas pequenas fixas */}
-            <div className="absolute top-8 left-12 w-1 h-1 bg-white rounded-full animate-pulse"></div>
-            <div className="absolute top-16 right-20 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-            <div className="absolute top-24 left-1/3 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-            <div className="absolute top-32 right-1/4 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
-            <div className="absolute top-40 left-16 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
-            <div className="absolute top-48 right-12 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.8s'}}></div>
-            <div className="absolute top-56 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
-            <div className="absolute top-64 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.8s'}}></div>
-            <div className="absolute top-72 left-20 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
-            <div className="absolute top-80 right-16 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.7s'}}></div>
-            
-            {/* Estrelas cadentes */}
-            <div className="absolute top-12 left-1/4 w-20 h-px bg-gradient-to-r from-white via-blue-200 to-transparent transform -rotate-12 animate-ping" style={{animationDelay: '3s', animationDuration: '2s'}}></div>
-            <div className="absolute top-28 right-1/3 w-16 h-px bg-gradient-to-r from-white via-purple-200 to-transparent transform rotate-12 animate-ping" style={{animationDelay: '6s', animationDuration: '1.5s'}}></div>
-            <div className="absolute top-44 left-1/2 w-24 h-px bg-gradient-to-r from-white via-cyan-200 to-transparent transform -rotate-6 animate-ping" style={{animationDelay: '9s', animationDuration: '2.5s'}}></div>
-            <div className="absolute top-60 right-1/4 w-18 h-px bg-gradient-to-r from-white via-pink-200 to-transparent transform rotate-8 animate-ping" style={{animationDelay: '12s', animationDuration: '1.8s'}}></div>
-            
-            {/* Estrelas maiores e mais brilhantes */}
-            <div className="absolute top-20 right-8 w-2 h-2 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '2.5s'}}></div>
-            <div className="absolute top-36 left-8 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '4s'}}></div>
-            <div className="absolute top-52 right-1/2 w-2 h-2 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '5.5s'}}></div>
-            
-            {/* Nebulosa sutil */}
-            <div className="absolute top-1/3 right-1/4 w-32 h-32 rounded-full bg-gradient-to-r from-purple-500/5 to-blue-500/5 blur-xl animate-pulse" style={{animationDelay: '7s'}}></div>
-            <div className="absolute bottom-1/3 left-1/3 w-24 h-24 rounded-full bg-gradient-to-r from-pink-500/5 to-indigo-500/5 blur-xl animate-pulse" style={{animationDelay: '10s'}}></div>
-          </div>
-          
-          {/* Conteúdo principal */}
-          <div className="relative z-10 max-w-2xl">
+        <div className="p-8 card-1 md:col-span-2 md:row-span-2 group flex flex-col justify-center rounded-xl transform-gpu bg-gradient-to-br from-zinc-950 via-black to-zinc-900 [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64">
+          <div className="max-w-2xl">
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               A elevate
             </h1>
@@ -140,59 +106,28 @@ export default function AboutUs() {
             </p>
           </div>
         </div>
-        <div className="card-2 md:col-start-3 md:row-start-1 overflow-hidden rounded-xl p-6 flex flex-col transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 items-center justify-center relative">
-          {/* Céu noturno com estrelas */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Gradiente de céu noturno */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-indigo-900/10 to-black/30"></div>
-            
-            {/* Estrelas pequenas fixas */}
-            <div className="absolute top-6 left-8 w-1 h-1 bg-white rounded-full animate-pulse"></div>
-            <div className="absolute top-12 right-12 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.7s'}}></div>
-            <div className="absolute top-18 left-1/2 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '1.3s'}}></div>
-            <div className="absolute top-24 right-1/3 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.9s'}}></div>
-            <div className="absolute top-30 left-12 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '1.8s'}}></div>
-            <div className="absolute top-36 right-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.1s'}}></div>
-            <div className="absolute top-42 left-1/3 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
-            <div className="absolute top-48 right-1/4 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1.6s'}}></div>
-            
-            {/* Estrelas cadentes */}
-            <div className="absolute top-8 left-1/3 w-16 h-px bg-gradient-to-r from-white via-blue-200 to-transparent transform -rotate-8 animate-ping" style={{animationDelay: '4s', animationDuration: '1.8s'}}></div>
-            <div className="absolute top-20 right-1/4 w-12 h-px bg-gradient-to-r from-white via-purple-200 to-transparent transform rotate-10 animate-ping" style={{animationDelay: '8s', animationDuration: '1.2s'}}></div>
-            <div className="absolute top-32 left-1/4 w-14 h-px bg-gradient-to-r from-white via-cyan-200 to-transparent transform -rotate-5 animate-ping" style={{animationDelay: '12s', animationDuration: '2s'}}></div>
-            
-            {/* Estrelas maiores e mais brilhantes */}
-            <div className="absolute top-14 right-6 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '3s'}}></div>
-            <div className="absolute top-26 left-6 w-2 h-2 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '5.5s'}}></div>
-            <div className="absolute top-38 right-1/2 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-lg shadow-white/50" style={{animationDelay: '7.2s'}}></div>
-            
-            {/* Nebulosa sutil */}
-            <div className="absolute top-1/4 right-1/3 w-20 h-20 rounded-full bg-gradient-to-r from-purple-500/5 to-blue-500/5 blur-xl animate-pulse" style={{animationDelay: '9s'}}></div>
-            <div className="absolute bottom-1/4 left-1/4 w-16 h-16 rounded-full bg-gradient-to-r from-pink-500/5 to-indigo-500/5 blur-xl animate-pulse" style={{animationDelay: '11s'}}></div>
-          </div>
-          
-          {/* Conteúdo principal */}
-          <div className="relative z-10 w-full">
+        <div className="card-2 md:col-start-3 md:row-start-1 rounded-xl p-6 flex flex-col transform-gpu bg-gradient-to-br from-zinc-950 via-black to-zinc-900 [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] min-h-64 items-center justify-center">
+          <div className="w-full">
             <h1 className="pb-6 text-start w-full text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Nossos valores</h1>
             <div className="flex flex-col flex-1 w-full leading-8 space-y-3">
               <span className="flex items-center gap-3 text-gray-200">
-                <Sparkle fill="#fff" size={18} className="text-blue-300" /> 
+                <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                 <span>Criatividade em Primeiro Lugar</span>
               </span>
               <span className="flex items-center gap-3 text-gray-200">
-                <Sparkle fill="#fff" size={18} className="text-purple-300" /> 
+                <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                 <span>Entrega Além do Combinado</span>
               </span>
               <span className="flex items-center gap-3 text-gray-200">
-                <Sparkle fill="#fff" size={18} className="text-cyan-300" /> 
+                <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                 <span>Comunicação Clara e Transparente</span>
               </span>
               <span className="flex items-center gap-3 text-gray-200">
-                <Sparkle fill="#fff" size={18} className="text-pink-300" /> 
+                <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                 <span>Dedicação Minuciosa</span>
               </span>
               <span className="flex items-center gap-3 text-gray-200">
-                <Sparkle fill="#fff" size={18} className="text-orange-300" /> 
+                <span className="h-2 w-2 rounded-full bg-gray-500"></span>
                 <span>Trabalho com Carinho</span>
               </span>
             </div>
