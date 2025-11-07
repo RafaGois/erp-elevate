@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { Home } from "lucide-react";
 import Link from "next/link";
 import InputForm from "@/components/layout/components/inputs/InputForm";
+import { toast } from "sonner";
 
 export default function Auth() {
   const { login } = useAuth();
@@ -26,7 +27,7 @@ export default function Auth() {
     try {
       await login?.(data as User);
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response?.data?.[0] ?? error?.message ?? "Erro ao fazer login.");
       //toast.error(error instanceof Error ? error.message : "Erro ao fazer login.");
     }
   }
