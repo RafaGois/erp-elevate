@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     "fotografia de produto",
     "programação",
   ],
+  verification: {
+    google: "L0vKyFcP-yWpurHV-P9cL44L302S08l9fZwt8bPBu64",
+  },
   openGraph: {
     title: "ElevatePro Media",
     description: "Somos uma agência de publicidade apta para desenvolver qualquer projeto visual, seja ele um desenvolvimento de site, fotografias, vídeos, campanhas, tráfego pago desde o início até a execução do projeto.",
