@@ -80,7 +80,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body className={`antialiased ${spaceGrotesk.className}`}>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );
