@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Mail } from "lucide-react";
+import { Instagram, Facebook, Mail, Linkedin } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -46,21 +46,24 @@ export default function Footer() {
           {/* Redes Sociais */}
           <div className="flex gap-3">
             <Link 
-              href="#" 
+            target="_blank"
+              href="https://www.instagram.com/eduardomarketingcraze?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
               className="h-8 w-8 flex items-center justify-center bg-white/10 hover:bg-white hover:rotate-12 hover:scale-105 hover:text-black rounded-full transition-colors"
               aria-label="Instagram"
             >
               <Instagram size={16} />
             </Link>
             <Link 
+              target="_blank"
               href="#" 
               className="h-8 w-8 flex items-center justify-center bg-white/10 hover:bg-white hover:rotate-12 hover:scale-105 hover:text-black rounded-full transition-colors"
-              aria-label="Facebook"
+              aria-label="Linkedin"
             >
-              <Facebook size={16} />
+              <Linkedin size={16} />
             </Link>
             <Link 
-              href="#" 
+              target="_blank"
+              href="mailto:contato@elevatepromedia.com" 
               className="h-8 w-8 flex items-center justify-center bg-white/10 hover:bg-white hover:rotate-12 hover:scale-105 hover:text-black rounded-full transition-colors"
               aria-label="Email"
             >
