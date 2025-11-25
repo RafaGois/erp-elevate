@@ -144,7 +144,7 @@ export default function AboutUs() {
       </div>
       <div className="px-8 pt-8 rounded-xl transform-gpu bg-black [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
         <div>
-          <h2 className="text-2xl font-bold text-nowrap">
+          <h2 className="text-2xl font-bold text-wrap">
             Nossas conquistas e números
           </h2>
           <p className="max-w-xl text-[#ababab] opacity-70">
