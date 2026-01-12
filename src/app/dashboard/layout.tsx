@@ -7,10 +7,8 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function PrivateLayout({
   children,
-  breadcrumb,
 }: {
   children: React.ReactNode;
-  breadcrumb: string;
 }) {
   return (
     <SidebarProvider>
@@ -19,7 +17,7 @@ export default function PrivateLayout({
         <main
           className={`flex-col overflow-auto bg-background rounded-lg`}
         >
-          <Header breadcrumb={breadcrumb} />
+          <Header />
           <Content>{children}</Content>
         </main>
       </SidebarInset>
