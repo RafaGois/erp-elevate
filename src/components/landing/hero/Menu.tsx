@@ -184,7 +184,7 @@ export default function Menu() {
         width={50}
         className="logo-img"
       />
-      <div className="flex-row gap-[2rem] hidden sm:flex">
+      <div className="flex-row gap-8 hidden sm:flex">
         {renderOptions()}
       </div>
       <Link href="/auth" className="underline hidden sm:flex">ENTRAR</Link>
@@ -197,7 +197,7 @@ export default function Menu() {
         </p>
       </div>
       <div
-        className={`hidden menu-overlay fixed w-full h-screen overflow-hidden top-0 left-0 /bg-[#bdfa3c] bg-black z-[99999] flex-col items-center justify-center p-4`}
+        className={`hidden menu-overlay fixed w-full h-svh overflow-hidden top-0 left-0 /bg-[#bdfa3c] bg-black z-[99999] flex-col items-center justify-center p-4`}
       >
         <div className="flex w-full justify-between">
           <p className="menu-logo">ELEVATE PRO MEDIA</p>
