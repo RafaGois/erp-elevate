@@ -10,6 +10,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(UNAUTH_ROUTE, request.url));
   }
 
+  //teste
+
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
     await axios.post("https://elevatepromedia.com/api/users/validate", { token: token?.value });
