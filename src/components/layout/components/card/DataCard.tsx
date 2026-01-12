@@ -23,7 +23,7 @@ export default function DataCard({ title, value }: DataCardProps) {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>{value}</p>
+        <p>{value ?? 0}</p>
       </CardContent>
       {/*       <CardFooter>
         <p>Card Footer</p>

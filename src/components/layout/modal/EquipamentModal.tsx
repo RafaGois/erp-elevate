@@ -18,6 +18,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
       name: props.selectedObject?.name,
       price: props.selectedObject?.price,
       purchaseDate: props.selectedObject?.purchaseDate,
+      categoryId: props.selectedObject?.categoryId,
     },
   });
 
@@ -44,12 +45,12 @@ export default function EquipamentModal(props: EquipamentModalProps) {
   }
 
   async function create(data: Partial<Equipament>) {
-    await axios.post("http://localhost:8080/equipaments", data);
+    await axios.post("https://elevatepromedia.com/api/equipaments", data);
   }
 
   async function update(data: Partial<Equipament>) {
     await axios.put(
-      `http://localhost:8080/equipaments/${props.selectedObject?.id}`,
+      `https://elevatepromedia.com/api/equipaments/${props.selectedObject?.id}`,
       data
     );
   }
@@ -72,7 +73,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     queryFn: async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8080/equipament-categories`
+          `https://elevatepromedia.com/api/equipament-categories`
         );
         return res.data;
       } catch (err) {
@@ -116,7 +117,6 @@ export default function EquipamentModal(props: EquipamentModalProps) {
             placeholder="Data de compra"
             type="date"
             required
-            defaultValue={(props.selectedObject?.purchaseDate + "").split("T")[0]}
             form={form}
           />
           <SelectForm

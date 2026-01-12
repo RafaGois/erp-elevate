@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { User } from "@/lib/models/User";
 import axios from "axios";
 
 const UNAUTH_ROUTE = "/auth";
@@ -13,14 +12,12 @@ export async function middleware(request: NextRequest) {
 
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
-    await axios.post<User>("http://localhost:8080/users/validate", { token: token?.value });
-    //await login?.(res.data);
+    await axios.post("https://elevatepromedia.com/api/users/validate", { token: token?.value });
+    //await login(response.data);
     return NextResponse.next();
   } catch (err) {
-    console.log(err);
     return NextResponse.redirect(new URL(UNAUTH_ROUTE, request.url));
   }
-  
   
  /*  if (!res.data) {
     return NextResponse.redirect(new URL(UNAUTH_ROUTE, request.url));

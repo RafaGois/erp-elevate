@@ -1,5 +1,5 @@
 import { Sidebar } from "../../ui/sidebar";
-import { Calendar, DollarSign, Warehouse } from "lucide-react";
+import { Calendar, DollarSign, Tag, Warehouse } from "lucide-react";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -49,15 +49,26 @@ export default function AppSidebar() {
         {
           title: "Inventário",
           icon: Warehouse,
-          url: "/equipaments",
+          url: "/dashboard",
           items: [
             {
               title: "Registros",
-              url: "/",
+              url: "/equipaments",
             },
             {
               title: "Saídas",
               url: "/exits",
+            },
+          ],
+        },
+        {
+          title: "Categoria",
+          icon: Tag,
+          url: "/dashboard",
+          items: [
+            {
+              title: "Categorias",
+              url: "/categories",
             },
           ],
         },

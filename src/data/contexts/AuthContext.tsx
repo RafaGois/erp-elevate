@@ -55,12 +55,13 @@ export function AuthProvider(props: AuthProviderProps) {
       }
 
       const response = await axios.post<User>(
-        "http://localhost:8080/users/login",
+        "https://elevatepromedia.com/api//users/login",
         recivedUser
       );
 
       confingSection(response.data);
       //todo validar entrar na ultima tela salva localmente, senao na current line 1
+      
       router.push("/dashboard/equipaments");
       return response.data.id;
     } finally {
@@ -80,7 +81,7 @@ export function AuthProvider(props: AuthProviderProps) {
   async function register(recivedUser: User) {
     setLoading(true);
     await axios.post<User>(
-      "http://localhost:8080/users",
+      "https://elevatepromedia.com/api/users",
       recivedUser
     );
     return recivedUser.id;

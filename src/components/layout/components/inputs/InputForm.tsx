@@ -43,11 +43,20 @@ export default function InputForm(props: InputFormProps) {
               className="[&:-webkit-autofill]:text-black [&:-webkit-autofill]:bg-foreground"
               placeholder={props.placeholder}
               required={props?.required}
-              defaultValue={props?.defaultValue}
               type={props.type}
-              {...props.form.register(field.name, {
-                valueAsNumber: props.type == "number",
-              })}
+              value={
+                props.type === "date" && field.value
+                  ? new Date(field.value).toISOString().split("T")[0]
+                  : field.value ?? ""
+              }
+              onChange={(e) => {
+                if (props.type === "number") {
+                  field.onChange(e.target.value ? Number(e.target.value) : "");
+                } else {
+                  field.onChange(e.target.value);
+                }
+              }}
+              onBlur={field.onBlur}
             />
           </FormControl>
           <FormDescription>{props.description}</FormDescription>
