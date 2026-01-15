@@ -13,15 +13,15 @@ export default function AppSidebar() {
         {
           title: "Financeiro",
           icon: DollarSign,
-          url: "/finances",
+          url: "/dashboard/",
           items: [
             {
               title: "Dashboard",
-              url: "/dashboard",
+              url: "/finances/",
             },
             {
               title: "Movimentações",
-              url: "/movimentations",
+              url: "/finances/movimentations",
             }
           ],
         },
