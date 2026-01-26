@@ -150,6 +150,8 @@ export default function Menu() {
     };
   }, []);
 
+  //faça com que o box do gráfico de pizza ocupe apenas 1/3 da tela, e o ao seu lado
+
   function toggleMenu() {
     setIsOpen(!isOpen);
   }

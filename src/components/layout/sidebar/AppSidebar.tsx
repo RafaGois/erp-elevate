@@ -13,15 +13,27 @@ export default function AppSidebar() {
         {
           title: "Financeiro",
           icon: DollarSign,
-          url: "/dashboard/",
+          url: "/dashboard/finances",
           items: [
             {
               title: "Dashboard",
-              url: "/finances/",
+              url: "//",
             },
             {
               title: "Movimentações",
-              url: "/finances/movimentations",
+              url: "/movimentations",
+            },
+            {
+              title: "Contas Bancárias",
+              url: "/bank-accounts",
+            },
+            {
+              title: "Categorias",
+              url: "/categories",
+            },
+            {
+              title: "Tipos",
+              url: "/types",
             }
           ],
         },
