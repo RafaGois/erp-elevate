@@ -26,7 +26,7 @@ export function DatePickerForm({
   label,
 }: {
   form: UseFormReturn;
-  label: string;
+  label?: string;
 }) {
   return (
     <FormField
@@ -34,7 +34,7 @@ export function DatePickerForm({
       name="ranges"
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>{label}</FormLabel>
+          {label && <FormLabel>{label}</FormLabel>}
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
@@ -50,11 +50,11 @@ export function DatePickerForm({
                   <>
                     {field?.value?.from
                       ? format(field?.value?.from, "dd/MM/yyyy")
-                      : "Informe Inicio"}{" "}
+                      : "Início"}{" "}
                     {" - "}
                     {field?.value?.to
                       ? format(field?.value?.to, "dd/MM/yyyy")
-                      : "Informe Fim"}
+                      : "Fim"}
                   </>
                 </Button>
               </FormControl>

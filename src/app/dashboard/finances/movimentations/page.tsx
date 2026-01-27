@@ -6,7 +6,7 @@ import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
 import Movimentation from "@/lib/models/movimentations/Motimentation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,15 +21,35 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
+import { useForm, useWatch } from "react-hook-form";
+import { endOfDay, startOfDay, subDays } from "date-fns";
+import { useMemo } from "react";
 
- export type SelectedType = "Entrada" | "Saída" | "Todos";
+type SelectedType = "Entrada" | "Saída" | "Todos";
+export interface Params {
+  type?: SelectedType;
+  ranges?: {
+    from?: Date;
+    to?: Date;
+  };
+}
 
 export default function Movimentations() {
+  const form = useForm<Params>({
+    defaultValues: {
+      type: "Todos",
+      ranges: {
+        from: subDays(new Date(), 30),
+        to: new Date(),
+      },
+    },
+  });
+  const params = useWatch({ control: form.control });
   const [selectedObject, setSelectedObject] = useState<Movimentation | null>(
     null,
   );
   const [action, setAction] = useState<ModalAction | null>(null);
-  const [selectedType, setSelectedType] = useState<SelectedType>("Todos");
+  
   const { setReloading } = useAppData();
 
   const columns: ColumnDef<Movimentation>[] = [
@@ -162,6 +182,31 @@ export default function Movimentations() {
     await axios.delete(`https://elevatepromedia.com/api/movimentations/${uid}`);
   }
 
+  const filteredData = useMemo(() => {
+    const selectedType = params?.type ?? "Todos";
+    const from = params?.ranges?.from
+      ? startOfDay(new Date(params.ranges.from))
+      : undefined;
+    const toBase = params?.ranges?.to ?? params?.ranges?.from;
+    const to = toBase ? endOfDay(new Date(toBase)) : undefined;
+
+    return (data ?? []).filter((item) => {
+      if (selectedType !== "Todos" && item?.Type?.name !== selectedType) {
+        return false;
+      }
+
+      if (!from && !to) return true;
+
+      const itemDate = item?.date ? new Date(item.date) : undefined;
+      if (!itemDate || Number.isNaN(itemDate.getTime())) return false;
+
+      if (from && itemDate < from) return false;
+      if (to && itemDate > to) return false;
+
+      return true;
+    });
+  }, [data, params?.type, params?.ranges?.from, params?.ranges?.to]);
+
   return (
     <>
       <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
@@ -194,7 +239,12 @@ export default function Movimentations() {
           icon={<ArrowDownRight />}
         />
       </div>
-      <DataTable columns={columns} data={data?.filter((item) => selectedType == "Todos" ? true : item.Type.name == selectedType) ?? []} setAction={setAction} selectedType={selectedType} setSelectedType={setSelectedType} />
+      <DataTable
+        columns={columns}
+        data={filteredData}
+        setAction={setAction}
+        form={form}
+      />
       <ToolkitModal
         action={action}
         setAction={setAction}

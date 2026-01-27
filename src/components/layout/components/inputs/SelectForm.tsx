@@ -19,7 +19,7 @@ interface SelectFormProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
   name: string;
-  label: string;
+  label?: string;
 
   options: { id: string; name: string }[];
 
@@ -56,7 +56,7 @@ export default function SelectForm(props: SelectFormProps) {
       }}
       render={({ field }) => (
         <FormItem key={props.key} className="flex-1 ">
-          <FormLabel>{props.label}</FormLabel>
+          {props.label && <FormLabel>{props.label}</FormLabel>}
           <Select
             key={props?.key}
             disabled={props.disabled || props.isLoading}

@@ -5,22 +5,23 @@ import type { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
-import Select from "@/components/layout/components/inputs/Select";
-import { SelectedType } from "@/app/dashboard/finances/movimentations/page";
+import { Params } from "@/app/dashboard/finances/movimentations/page";
+import { DatePickerForm } from "../inputs/DatePickerForm";
+import { UseFormReturn } from "react-hook-form";
+import { Form } from "@/components/ui/form";
+import SelectForm from "../inputs/SelectForm";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   setAction?: (newAction: ModalAction) => void;
 
-  selectedType?: SelectedType;
-  setSelectedType?: (newType: SelectedType) => void;
+  form?: UseFormReturn<Params>;
 }
 
 export function DataTableToolbar<TData>({
   table,
   setAction,
-  selectedType,
-  setSelectedType,
+  form,
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex items-center justify-between py-4">
@@ -32,17 +33,27 @@ export function DataTableToolbar<TData>({
           }}
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {selectedType && ( 
-        <Select
-          value={selectedType}
-          onChange={(value) => setSelectedType?.(value)}
-          options={[
-            { id: "Entrada", name: "Entradas" },
-            { id: "Saída", name: "Saídas" },
-            { id: "Todos", name: "Todos" },
-          ]}
-          placeholder="Selecione um tipo"
-        />
+        {form && (
+          <Form {...form}>
+            <form
+              className="flex items-center gap-2"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <DatePickerForm form={form} />
+              <SelectForm
+                form={form}
+                name="type"
+                options={[
+                  { id: "Entrada", name: "Entradas" },
+                  { id: "Saída", name: "Saídas" },
+                  { id: "Todos", name: "Todos" },
+                ]}
+              />
+              <Button type="button" variant="outline" onClick={() => form.reset()}>
+                Limpar
+              </Button>
+            </form>
+          </Form>
         )}
       </div>
       <div className="flex items-center gap-4">
