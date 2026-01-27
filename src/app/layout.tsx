@@ -1,12 +1,6 @@
 import "./globals.css";
-import { Space_Grotesk } from "next/font/google";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "ElevatePro Media",
@@ -82,7 +76,7 @@ export default function RootLayout({
 
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <body className={`antialiased ${spaceGrotesk.className}`}>
+      <body className="antialiased font-sans">
         <Providers>{children}</Providers>
       </body>
     </html>
