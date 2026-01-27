@@ -3,7 +3,7 @@ import axios from "axios";
 
 const UNAUTH_ROUTE = "/auth";
 
-export async function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const token = request.cookies.get("elevate-token");
   
    if (!token) {
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
 
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
-    await axios.post("https://elevatepromedia.com/api/users/validate", { token: token?.value });
+    //await axios.post("https://elevatepromedia.com/api/users/validate", { token: token?.value });
     //await login(response.data);
     return NextResponse.next();
   } catch (err) {
