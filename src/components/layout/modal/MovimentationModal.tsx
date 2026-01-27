@@ -20,16 +20,17 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     defaultValues: {
       description: props.selectedObject?.description,
       value: props.selectedObject?.value,
-      date: props.selectedObject?.date,
-      User: props.selectedObject?.User,
-      Type: props.selectedObject?.Type,
-      BankAccount: props.selectedObject?.BankAccount,
-      Category: props.selectedObject?.Category,
+      date: props.selectedObject?.date ?? new Date(),
+      userId: props.selectedObject?.userId,
+      typeId: props.selectedObject?.typeId,
+      bankAccountId: props.selectedObject?.bankAccountId,
+      categoryId: props.selectedObject?.categoryId,
     },
   });
 
   async function handleSubmit(data: Partial<Movimentation>) {
     try {
+      data.date = new Date(data.date + 'T00:00:00.000Z');
       if (props.selectedObject?.id) {
         await update(data);
         toast.success("Categoria de equipamento atualizada com sucesso.");
@@ -49,6 +50,8 @@ export default function MovimentationModal(props: MovimentationModalProps) {
   }
 
   async function create(data: Partial<Movimentation>) {
+    data.date = new Date(data.date?.toString() ?? '');
+    console.log(data.date);
     await axios.post("https://elevatepromedia.com/api/movimentations", data);
   }
 
@@ -142,14 +145,14 @@ export default function MovimentationModal(props: MovimentationModalProps) {
           />
           <div className="flex flex-row gap-2">
             <SelectForm
-              name="User"
-              label="Usuário"
+              name="userId"
+              label="Usuário Responsável"
               options={users}
               required
               form={form}
             />
             <SelectForm
-              name="BankAccount"
+              name="bankAccountId"
               label="Conta Bancária"
               options={bankAccounts}
               required
@@ -158,14 +161,14 @@ export default function MovimentationModal(props: MovimentationModalProps) {
           </div>
           <div className="flex flex-row gap-2">
             <SelectForm
-              name="Type"
+              name="typeId"
               label="Tipo"
               options={types}
               required
               form={form}
             />
             <SelectForm
-              name="Category"
+              name="categoryId"
               label="Categoria"
               options={categories}
               required

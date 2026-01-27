@@ -5,22 +5,22 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowDownRight, ArrowUpDown, ArrowUpRight, Circle, DivideCircleIcon } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Category from "@/lib/models/movimentations/Category";
+import Type from "@/lib/models/movimentations/Type";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
-import CategoryModal from "@/components/layout/modal/MovimentationCategoryModal";  
+import MovimentationTypeModal from "@/components/layout/modal/MovimentationTypeModal";  
 
 export default function Inventory() {
-  const [selectedObject, setSelectedObject] = useState<Category | null>(null);
+  const [selectedObject, setSelectedObject] = useState<Type | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Category>[] = [
+  const columns: ColumnDef<Type>[] = [
     {
       header: ({ column }) => {
         return (
@@ -36,21 +36,12 @@ export default function Inventory() {
       accessorKey: "name",
     },
     {
-      accessorKey: "Type",
-      accessorFn: (row) => row?.Type?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        if (!item?.Type?.name) return "-";
-        return <span className="flex flex-row items-center gap-2">{item?.Type?.name} {item?.Type?.name == "Entrada" ? <ArrowUpRight size={16}/> : <ArrowDownRight size={16} /> } </span>;
-      },
-    },
-    {
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Category>
+          <FloatingMenu<Type>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -60,15 +51,15 @@ export default function Inventory() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Category[]>(
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Type[]>(
     {
-      queryKey: ["data_bank_accounts"],
+      queryKey: ["data_movimentation_types"],
       //refetchInterval: 60000,
       //staleTime: Infinity,
       refetchOnMount: "always",
       queryFn: async () => {
         try {
-          const res = await axios.get(`https://elevatepromedia.com/api/movimentation-categories`);
+          const res = await axios.get(`https://elevatepromedia.com/api/movimentation-types`);
           return res.data;
         } catch (err) {
           return [];
@@ -79,7 +70,7 @@ export default function Inventory() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/movimentation-categories/${uid}`);
+    await axios.delete(`https://elevatepromedia.com/api/movimentation-types/${uid}`);
   }
 
   return (
@@ -91,7 +82,7 @@ export default function Inventory() {
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
         refetch={refetch}
-        ordidaryModal={<CategoryModal />}
+        ordidaryModal={<MovimentationTypeModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </>

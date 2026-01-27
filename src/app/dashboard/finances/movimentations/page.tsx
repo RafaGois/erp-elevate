@@ -64,6 +64,12 @@ export default function Movimentations() {
         );
       },
       accessorKey: "date",
+      cell: ({ row }) => {
+        const item = row.original;
+        const date = new Date(item.date);
+        // Formatar para DD/MM/YYYY
+        return <span>{date.toLocaleDateString('pt-BR')}</span>;
+      },
     },
     {
       header: ({ column }) => {
@@ -95,6 +101,26 @@ export default function Movimentations() {
           </Button>
         );
       },
+      accessorKey: "Type",
+      cell: ({ row }) => {
+        const item = row.original;
+        if (!item?.Type?.name) return "-";
+        return <span>{item?.Type?.name}</span>;
+      },
+    },
+
+    {
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Opções
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
@@ -121,7 +147,6 @@ export default function Movimentations() {
           const res = await axios.get(`https://elevatepromedia.com/api/movimentations`);
           return res.data;
         } catch (err) {
-          console.log(err);
           return [];
         }
       },
