@@ -77,6 +77,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  //teste
+
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body className={`antialiased ${spaceGrotesk.className}`}>
