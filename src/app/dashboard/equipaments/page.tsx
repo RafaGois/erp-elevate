@@ -5,7 +5,7 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, User } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
@@ -111,18 +111,21 @@ export default function Inventory() {
   return (
     <>
       <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
-        <DataCard title="Total" value={data?.length ?? 0} />
+        <DataCard title="Total" value={data?.length ?? 0} icon={<User/>}/>
         <DataCard
+        icon={<User/>}
           title="Valor total"
           value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0}
         />
         <DataCard
           title="Valor total"
           value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0}
+          icon={<User/>}
         />
         <DataCard
           title="Valor total"
           value={data?.reduce((acc, item) => acc + item.price, 0) ?? 0}
+          icon={<User/>}
         />
       </div>
       <DataTable columns={columns} data={data ?? []} setAction={setAction} />

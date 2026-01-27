@@ -123,7 +123,7 @@ export default function EquipamentModal(props: EquipamentModalProps) {
             name="categoryId"
             label="Categoria"
             options={categories ?? []}
-            defaultValue={props.selectedObject?.categoryId}
+          
             required
             form={form}
             isLoading={isLoading}
