@@ -9,16 +9,23 @@ import Movimentation from "@/lib/models/movimentations/Motimentation";
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import {
+  ArrowDownRight,
+  ArrowUpDown,
+  ArrowUpRight,
+  ChartArea,
+  DollarSign,
+} from "lucide-react";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 
-
 export default function Movimentations() {
-  const [selectedObject, setSelectedObject] = useState<Movimentation | null>(null);
+  const [selectedObject, setSelectedObject] = useState<Movimentation | null>(
+    null,
+  );
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
 
@@ -68,7 +75,7 @@ export default function Movimentations() {
         const item = row.original;
         const date = new Date(item.date);
         // Formatar para DD/MM/YYYY
-        return <span>{date.toLocaleDateString('pt-BR')}</span>;
+        return <span>{date.toLocaleDateString("pt-BR")}</span>;
       },
     },
     {
@@ -111,15 +118,7 @@ export default function Movimentations() {
 
     {
       header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Opções
-            <ArrowUpDown />
-          </Button>
-        );
+        return <p>Opções</p>;
       },
       accessorKey: "Opções",
       enableHiding: false,
@@ -136,22 +135,24 @@ export default function Movimentations() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Movimentation[]>(
-    {
-      queryKey: ["data_movimentations"],
-      //refetchInterval: 60000,
-      //staleTime: Infinity,
-      refetchOnMount: "always",
-      queryFn: async () => {
-        try {
-          const res = await axios.get(`https://elevatepromedia.com/api/movimentations`);
-          return res.data;
-        } catch (err) {
-          return [];
-        }
-      },
-    }
-  );
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<
+    Movimentation[]
+  >({
+    queryKey: ["data_movimentations"],
+    //refetchInterval: 60000,
+    //staleTime: Infinity,
+    refetchOnMount: "always",
+    queryFn: async () => {
+      try {
+        const res = await axios.get(
+          `https://elevatepromedia.com/api/movimentations`,
+        );
+        return res.data;
+      } catch (err) {
+        return [];
+      }
+    },
+  });
 
   async function remove(uid: string) {
     setReloading?.(true);
@@ -161,18 +162,33 @@ export default function Movimentations() {
   return (
     <>
       <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
-        <DataCard title="Total" value={data?.length ?? 0} />
         <DataCard
-          title="Valor total"//entradas - saidas
+          title="Total"
+          value={data?.length ?? 0}
+          icon={<DollarSign />}
+        />
+        <DataCard
+          title="Valor total" //entradas - saidas
           value={data?.reduce((acc, item) => acc + item.value, 0) ?? 0}
+          icon={<ChartArea />}
         />
         <DataCard
           title="Entradas"
-          value={data?.reduce((acc, item) => acc + item.value, 0) ?? 0}
+          value={
+            data
+              ?.filter((item) => item.Type.name == "Entrada")
+              .reduce((acc, item) => acc + item.value, 0) ?? 0
+          }
+          icon={<ArrowUpRight />}
         />
         <DataCard
           title="Saídas"
-          value={data?.reduce((acc, item) => acc + item.value, 0) ?? 0}
+          value={
+            data
+              ?.filter((item) => item.Type.name == "Saída")
+              .reduce((acc, item) => acc + item.value, 0) ?? 0
+          }
+          icon={<ArrowDownRight />}
         />
       </div>
       <DataTable columns={columns} data={data ?? []} setAction={setAction} />

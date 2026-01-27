@@ -12,6 +12,7 @@ import User from "@/lib/models/User";
 import MovimentationType from "@/lib/models/movimentations/Type";
 import BankAccount from "@/lib/models/movimentations/BankAccount";
 import MovimentationCategory from "@/lib/models/movimentations/Category";
+import { useEffect } from "react";
 
 type MovimentationModalProps = BaseModalProps<Movimentation>;
 
@@ -20,7 +21,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     defaultValues: {
       description: props.selectedObject?.description,
       value: props.selectedObject?.value,
-      date: props.selectedObject?.date ?? new Date(),
+      date: returnCorrctDate(props.selectedObject?.date),
       userId: props.selectedObject?.userId,
       typeId: props.selectedObject?.typeId,
       bankAccountId: props.selectedObject?.bankAccountId,
@@ -28,10 +29,19 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     },
   });
 
+  function returnCorrctDate(date: Date) {
+    if(!date) return new Date();
+
+    let dateLocal = new Date(date);
+    dateLocal.setDate(dateLocal.getDate() - 1);
+    return dateLocal;
+  }
+
   async function handleSubmit(data: Partial<Movimentation>) {
     try {
-      data.date = new Date(data.date + 'T00:00:00.000Z');
+      
       if (props.selectedObject?.id) {
+       
         await update(data);
         toast.success("Categoria de equipamento atualizada com sucesso.");
       } else {

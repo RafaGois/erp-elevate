@@ -48,6 +48,14 @@ interface ContentProps {
 export default function Content(props: ContentProps) {
   const { open, setOpen } = useSidebar();
 
+  function toDomId(value: string) {
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+  }
+
   return (
     <SidebarContent>
       {props.items.map((item) => (
@@ -55,7 +63,12 @@ export default function Content(props: ContentProps) {
           <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarGroupContent>
-              {item.items?.map((item) => (
+              {item.items?.map((item) => {
+                const collapsibleContentId = `sidebar-collapsible-${toDomId(
+                  `${item.url}-${item.title}`
+                )}`;
+
+                return (
                 <Collapsible
                   key={item.url + "-" + item.title}
                   asChild
@@ -64,14 +77,17 @@ export default function Content(props: ContentProps) {
                 >
                   <SidebarMenuItem onClick={() => !open && setOpen(true)}>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
+                      <SidebarMenuButton
+                        tooltip={item.title}
+                        aria-controls={collapsibleContentId}
+                      >
                         {item.icon && <item.icon />}
                         <span className="text-[12px]">{item.title}</span>
 
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    <CollapsibleContent>
+                    <CollapsibleContent id={collapsibleContentId}>
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem
@@ -91,7 +107,8 @@ export default function Content(props: ContentProps) {
                     </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
-              ))}
+                );
+              })}
             </SidebarGroupContent>
           </SidebarMenu>
         </SidebarGroup>

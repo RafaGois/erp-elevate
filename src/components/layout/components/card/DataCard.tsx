@@ -5,29 +5,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChartArea } from "lucide-react";
 
 interface DataCardProps {
   title: string;
   value: number;
+  icon: React.ReactNode;
 }
 
-export default function DataCard({ title, value }: DataCardProps) {
+export default function DataCard({ title, value, icon }: DataCardProps) {
+  if(value === null || value === undefined || isNaN(value)) value = 0;
   return (
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {/* <CardDescription>Card Description</CardDescription> */}
         <CardAction>
-          <ChartArea />
+          {icon}
         </CardAction>
       </CardHeader>
       <CardContent>
-        <p>{value ?? 0}</p>
+        <p>{value}</p>
       </CardContent>
-      {/*       <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter> */}
     </Card>
   );
 }

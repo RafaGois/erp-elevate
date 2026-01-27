@@ -25,7 +25,6 @@ interface SelectFormProps {
 
   required?: boolean;
   className?: string;
-  defaultValue?: string;
   setValue?: (v: string) => void;
   disabled?: boolean;
   allOptions?: boolean;
@@ -61,11 +60,15 @@ export default function SelectForm(props: SelectFormProps) {
           <Select
             key={props?.key}
             disabled={props.disabled || props.isLoading}
+            value={
+              field.value === null || field.value === undefined || field.value === ""
+                ? undefined
+                : String(field.value)
+            }
             onValueChange={(e) => {
               field.onChange(e);
               props?.setValue?.(e);
             }}
-            defaultValue={props.defaultValue}
           >
             <FormControl className="w-full">
               <SelectTrigger>
