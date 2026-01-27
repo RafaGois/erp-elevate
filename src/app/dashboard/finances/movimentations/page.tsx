@@ -22,11 +22,14 @@ import axios from "axios";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 
+ export type SelectedType = "Entrada" | "Saída" | "Todos";
+
 export default function Movimentations() {
   const [selectedObject, setSelectedObject] = useState<Movimentation | null>(
     null,
   );
   const [action, setAction] = useState<ModalAction | null>(null);
+  const [selectedType, setSelectedType] = useState<SelectedType>("Todos");
   const { setReloading } = useAppData();
 
   const columns: ColumnDef<Movimentation>[] = [
@@ -191,7 +194,7 @@ export default function Movimentations() {
           icon={<ArrowDownRight />}
         />
       </div>
-      <DataTable columns={columns} data={data ?? []} setAction={setAction} />
+      <DataTable columns={columns} data={data?.filter((item) => selectedType == "Todos" ? true : item.Type.name == selectedType) ?? []} setAction={setAction} selectedType={selectedType} setSelectedType={setSelectedType} />
       <ToolkitModal
         action={action}
         setAction={setAction}

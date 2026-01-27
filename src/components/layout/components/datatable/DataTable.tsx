@@ -23,17 +23,22 @@ import {
 import { DataTableToolbar } from "./DataTableToolbar";
 import { DataTablePagination } from "./DataTablePagination";
 import ModalAction from "@/lib/enums/modalAction";
+import { SelectedType } from "@/app/dashboard/finances/movimentations/page";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   setAction?: (newAction: ModalAction) => void;
+  selectedType?: SelectedType;
+  setSelectedType?: (newType: SelectedType) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   setAction,
+  selectedType,
+  setSelectedType,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -49,7 +54,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <DataTableToolbar table={table} setAction={setAction} />
+      <DataTableToolbar table={table} setAction={setAction} selectedType={selectedType} setSelectedType={setSelectedType} />
       <div className="rounded border">
         <Table>
           <TableHeader className="bg-muted/50">
