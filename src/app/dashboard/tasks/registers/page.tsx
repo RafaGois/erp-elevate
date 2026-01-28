@@ -5,7 +5,7 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Circle } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
@@ -14,6 +14,7 @@ import Task from "@/lib/models/task/Task";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import TaskModal from "@/components/layout/modal/TaskModal";
+import Status from "@/lib/models/task/Status";
 
 export default function Tasks() {
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
@@ -68,7 +69,7 @@ export default function Tasks() {
       accessorFn: (row) => row?.Status?.name ?? "-",
       cell: ({ row }) => {
         const item = row.original;
-        return <span>{item?.Status?.name ?? "-"}</span>;
+        return returnStatusFormated(item?.Status);
       },
     },
     {
@@ -86,7 +87,13 @@ export default function Tasks() {
       accessorFn: (row) => row?.deadline ?? "-",
       cell: ({ row }) => {
         const item = row.original;
-        return <span>{item?.deadline ? new Date(item.deadline).toLocaleDateString() : "-"}</span>;
+        return (
+          <span>
+            {item?.deadline
+              ? new Date(item.deadline).toLocaleDateString()
+              : "-"}
+          </span>
+        );
       },
     },
     {
@@ -95,7 +102,13 @@ export default function Tasks() {
       accessorFn: (row) => row?.createdAt ?? "-",
       cell: ({ row }) => {
         const item = row.original;
-        return <span>{item?.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-"}</span>;
+        return (
+          <span>
+            {item?.createdAt
+              ? new Date(item.createdAt).toLocaleDateString()
+              : "-"}
+          </span>
+        );
       },
     },
     {
@@ -114,6 +127,30 @@ export default function Tasks() {
     },
   ];
 
+  function returnStatusFormated(status: Status) {
+    if (status.level == 1)
+      return (
+        <p className="flex items-center gap-1">
+          <Circle fill="#a31818" stroke="#a31818" className="w-3 h-3" />{" "}
+          {status.name}{" "}
+        </p>
+      );
+    if (status.level == 2)
+      return (
+        <p className="flex items-center gap-1">
+          <Circle fill="#a31818" stroke="#a31818" className="w-3 h-3" />
+          {status.name}{" "}
+        </p>
+      );
+    if (status.level == 3)
+      return (
+        <p className="flex items-center gap-1">
+          <Circle fill="#fcba03" stroke="#fcba03" className="w-3 h-3" />
+          {status.name}{" "}
+        </p>
+      );
+  }
+
   const { data, /* isLoading, isFetching, */ refetch } = useQuery<Task[]>({
     queryKey: ["data_tasks"],
     refetchInterval: 60000,
@@ -121,9 +158,7 @@ export default function Tasks() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/tasks`,
-        );
+        const res = await axios.get(`https://elevatepromedia.com/api/tasks`);
         return res.data;
       } catch (err) {
         return [];
@@ -133,9 +168,7 @@ export default function Tasks() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(
-      `https://elevatepromedia.com/api/tasks/${uid}`,
-    );
+    await axios.delete(`https://elevatepromedia.com/api/tasks/${uid}`);
   }
 
   return (
