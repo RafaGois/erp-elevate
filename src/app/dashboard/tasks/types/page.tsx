@@ -10,7 +10,7 @@ import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Type from "@/lib/models/task/type";
+import Type from "@/lib/models/task/Type";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import TaskTypeModal from "@/components/layout/modal/TaskTypeModal";

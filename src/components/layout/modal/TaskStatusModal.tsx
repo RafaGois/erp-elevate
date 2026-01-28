@@ -1,4 +1,4 @@
-import Type from "@/lib/models/task/Type";
+import Status from "@/lib/models/task/Status";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
@@ -6,24 +6,27 @@ import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import axios from "axios";
 import { toast } from "sonner";
+import SelectForm from "../components/inputs/SelectForm";
 
-type TaskTypeModalProps = BaseModalProps<Type>;
+type TaskStatusModalProps = BaseModalProps<Status>;
 
-export default function TaskTypeModal(props: TaskTypeModalProps) {
-  const form = useForm<Type>({
+export default function TaskStatusModal(props: TaskStatusModalProps) {
+  const form = useForm<Status>({
     defaultValues: {
       name: props.selectedObject?.name,
+      level: props.selectedObject?.level,
     },
   });
 
-  async function handleSubmit(data: Partial<Type>) {
+  async function handleSubmit(data: Partial<Status>) {
+    data.level = Number(data.level);
     try {
       if (props.selectedObject?.id) {
         await update(data);
-        toast.success("Tipo de tarefa atualizado com sucesso.");
+        toast.success("Status de tarefa atualizado com sucesso.");
       } else {
         await create(data);
-        toast.success("Tipo de tarefa criada com sucesso.");
+        toast.success("Status de tarefa criada com sucesso.");
       }
 
       handleClose();
@@ -31,18 +34,18 @@ export default function TaskTypeModal(props: TaskTypeModalProps) {
       toast.error(
         error.response.data[0] ??
           error.message ??
-          "Erro ao criar ou atualizar categoria de movimentação."
+          "Erro ao criar ou atualizar status de tarefa."
       );
     }
   }
 
-  async function create(data: Partial<Type>) {    
-    await axios.post("https://elevatepromedia.com/api/task-types", data);
+  async function create(data: Partial<Status>) {    
+    await axios.post("https://elevatepromedia.com/api/task-statuses", data);
   }
 
-  async function update(data: Partial<Type>) {
+  async function update(data: Partial<Status>) {
     await axios.put(
-      `https://elevatepromedia.com/api/task-types/${props.selectedObject?.id}`,
+      `https://elevatepromedia.com/api/task-statuses/${props.selectedObject?.id}`,
       data
     );
   }
@@ -55,9 +58,9 @@ export default function TaskTypeModal(props: TaskTypeModalProps) {
   }
 
   return (
-    <Modal<Type>
-      title="Tipo de tarefa"
-      description="Adicione um tipo de tarefa"
+    <Modal<Status>
+      title="Status de tarefa"
+      description="Adicione um status de tarefa"
       action={props.action}
       setAction={props.setAction}
       setSelectedObject={props.setSelectedObject}
@@ -71,6 +74,13 @@ export default function TaskTypeModal(props: TaskTypeModalProps) {
             label="Nome"
             placeholder="Nome"
             type="text"
+            required
+            form={form}
+          />
+          <SelectForm
+            name="level"
+            label="Nível"
+            options={[{ id: "1", name: "Baixa" }, { id: "2", name: "Média" }, { id: "3", name: "Alta" }]}
             required
             form={form}
           />
