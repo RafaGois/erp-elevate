@@ -10,17 +10,17 @@ import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Type from "@/lib/models/task/Type";
+import Project from "@/lib/models/Project";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
-import TaskTypeModal from "@/components/layout/modal/TaskTypeModal";
+import ProjectModal from "@/components/layout/modal/ProjectModal";
 
-export default function TaskTypes() {
-  const [selectedObject, setSelectedObject] = useState<Type | null>(null);
+export default function Projects() {
+  const [selectedObject, setSelectedObject] = useState<Project | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Type>[] = [
+  const columns: ColumnDef<Project>[] = [
     {
       header: ({ column }) => {
         return (
@@ -36,12 +36,20 @@ export default function TaskTypes() {
       accessorKey: "name",
     },
     {
+      accessorKey: "active",
+      accessorFn: (row) => row?.active ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.active ? "Ativo" : "Inativo"}</span>;
+      },
+    },
+    {
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Type>
+          <FloatingMenu<Project>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -51,15 +59,15 @@ export default function TaskTypes() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Type[]>({
-    queryKey: ["data_task_types"],
-    //refetchInterval: 60000,
-    //staleTime: Infinity,
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Project[]>({
+    queryKey: ["data_projects"],
+    refetchInterval: 60000,
+    staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
-          `https://elevatepromedia.com/api/task-types`,
+          `https://elevatepromedia.com/api/projects`,
         );
         return res.data;
       } catch (err) {
@@ -71,7 +79,7 @@ export default function TaskTypes() {
   async function remove(uid: string) {
     setReloading?.(true);
     await axios.delete(
-      `https://elevatepromedia.com/api/task-types/${uid}`,
+      `https://elevatepromedia.com/api/projects/${uid}`,
     );
   }
 
@@ -84,7 +92,7 @@ export default function TaskTypes() {
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
         refetch={refetch}
-        ordidaryModal={<TaskTypeModal />}
+        ordidaryModal={<ProjectModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </>

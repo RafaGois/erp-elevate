@@ -68,11 +68,11 @@ export default function AppSidebar() {
         {
           title: "Projetos",
           icon: Briefcase,
-          url: "/projects",
+          url: "/dashboard/projects",
           items: [
             {
               title: "Registros",
-              url: "/registers",
+              url: "/",
             },
           ],
         },
