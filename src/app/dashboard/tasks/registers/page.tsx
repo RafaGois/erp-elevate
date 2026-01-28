@@ -10,17 +10,17 @@ import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Type from "@/lib/models/task/Type";
+import Task from "@/lib/models/task/Task";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
-import TaskTypeModal from "@/components/layout/modal/TaskTypeModal";
+import TaskModal from "@/components/layout/modal/TaskModal";
 
-export default function TaskTypes() {
-  const [selectedObject, setSelectedObject] = useState<Type | null>(null);
+export default function Tasks() {
+  const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Type>[] = [
+  const columns: ColumnDef<Task>[] = [
     {
       header: ({ column }) => {
         return (
@@ -36,12 +36,75 @@ export default function TaskTypes() {
       accessorKey: "name",
     },
     {
+      accessorKey: "project",
+      header: "Projeto",
+      accessorFn: (row) => row?.Project?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Project?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "type",
+      header: "Tipo",
+      accessorFn: (row) => row?.Type?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Type?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "priority",
+      header: "Prioridade",
+      accessorFn: (row) => row?.Priority?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Priority?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      accessorFn: (row) => row?.Status?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Status?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "responsible",
+      header: "Responsável",
+      accessorFn: (row) => row?.Responsible?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Responsible?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "deadline",
+      header: "Prazo",
+      accessorFn: (row) => row?.deadline ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.deadline ? new Date(item.deadline).toLocaleDateString() : "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Criação",
+      accessorFn: (row) => row?.createdAt ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-"}</span>;
+      },
+    },
+    {
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Type>
+          <FloatingMenu<Task>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -51,15 +114,15 @@ export default function TaskTypes() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Type[]>({
-    queryKey: ["data_task_types"],
-    //refetchInterval: 60000,
-    //staleTime: Infinity,
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Task[]>({
+    queryKey: ["data_tasks"],
+    refetchInterval: 60000,
+    staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
-          `https://elevatepromedia.com/api/task-types`,
+          `https://elevatepromedia.com/api/tasks`,
         );
         return res.data;
       } catch (err) {
@@ -71,7 +134,7 @@ export default function TaskTypes() {
   async function remove(uid: string) {
     setReloading?.(true);
     await axios.delete(
-      `https://elevatepromedia.com/api/task-types/${uid}`,
+      `https://elevatepromedia.com/api/tasks/${uid}`,
     );
   }
 
@@ -84,7 +147,7 @@ export default function TaskTypes() {
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
         refetch={refetch}
-        ordidaryModal={<TaskTypeModal />}
+        ordidaryModal={<TaskModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </>

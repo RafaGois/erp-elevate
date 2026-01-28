@@ -102,6 +102,10 @@ export default class Task {
     get deadline() {
         return this._deadline;
     }
+
+    set deadline(deadline: Date) {
+        this._deadline = deadline;
+    }
     
     get Responsible() {
         return this._Responsible;
