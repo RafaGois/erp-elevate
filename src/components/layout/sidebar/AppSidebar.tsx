@@ -1,5 +1,5 @@
 import { Sidebar } from "../../ui/sidebar";
-import { Calendar, DollarSign, Tag, Warehouse } from "lucide-react";
+import { Briefcase, Calendar, DollarSign, ListChecks, Tag, Warehouse } from "lucide-react";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -40,11 +40,34 @@ export default function AppSidebar() {
       ],
     },
     {
-      title: "Projetos",
+      title: "Tarefas",
       items: [
         {
+          title: "Tarefas",
+          icon: ListChecks,
+          url: "/dashboard/tasks",
+          items: [
+            {
+              title: "Registros",
+              url: "/registers",
+            },
+            {
+              title: "Tipos",
+              url: "/types",
+            },
+            {
+              title: "Status",
+              url: "/statuses",
+            },
+            {
+              title: "Prioridades",
+              url: "/priorities",
+            },
+          ],
+        },
+        {
           title: "Projetos",
-          icon: Calendar,
+          icon: Briefcase,
           url: "/projects",
           items: [
             {
