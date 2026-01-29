@@ -1,4 +1,4 @@
-export default class Type {
+export default class TaskType {
     private _id: string;
     private _name: string;
 

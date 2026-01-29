@@ -1,7 +1,7 @@
 import User from "../User";
 import Status from "./Status";
 import Priority from "./Priority";
-import Type from "./Type";
+import Type from "./TaskType";
 import Project from "../Project";
 
 export default class Task {

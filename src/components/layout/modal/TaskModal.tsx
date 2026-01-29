@@ -11,7 +11,7 @@ import User from "@/lib/models/User";
 import { useQuery } from "@tanstack/react-query";
 import Status from "@/lib/models/task/Status";
 import Priority from "@/lib/models/task/Priority";
-import Type from "@/lib/models/task/Type";
+import Type from "@/lib/models/task/TaskType";
 import Project from "@/lib/models/Project";
 
 type TaskModalProps = BaseModalProps<Task>;

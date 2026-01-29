@@ -1,4 +1,4 @@
-import Type from "@/lib/models/task/Type";
+import Type from "@/lib/models/task/TaskType";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";

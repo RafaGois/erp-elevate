@@ -10,17 +10,17 @@ import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import Type from "@/lib/models/task/Type";
+import TaskType from "@/lib/models/task/TaskType";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import TaskTypeModal from "@/components/layout/modal/TaskTypeModal";
 
 export default function TaskTypes() {
-  const [selectedObject, setSelectedObject] = useState<Type | null>(null);
+  const [selectedObject, setSelectedObject] = useState<TaskType | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Type>[] = [
+  const columns: ColumnDef<TaskType>[] = [
     {
       header: ({ column }) => {
         return (
@@ -41,7 +41,7 @@ export default function TaskTypes() {
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Type>
+          <FloatingMenu<TaskType>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -51,10 +51,10 @@ export default function TaskTypes() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Type[]>({
+  const { data, /* isLoading, isFetching, */ refetch } = useQuery<TaskType[]>({
     queryKey: ["data_task_types"],
-    //refetchInterval: 60000,
-    //staleTime: Infinity,
+    refetchInterval: 60000,
+    staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
