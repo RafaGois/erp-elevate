@@ -32,14 +32,10 @@ export default function TaskModal(props: TaskModalProps) {
 
   async function handleSubmit(data: Partial<Task>) {
     try {
-
-      
-
       if (props.selectedObject?.id) {
         await update(data);
         toast.success("Tarefa atualizada com sucesso.");
       } else {
-
         data.deadline = new Date(data.deadline + "T00:00:00");
 
         await create(data);
@@ -51,19 +47,19 @@ export default function TaskModal(props: TaskModalProps) {
       toast.error(
         error.response.data[0] ??
           error.message ??
-          "Erro ao criar ou atualizar tarefa."
+          "Erro ao criar ou atualizar tarefa.",
       );
     }
   }
 
-  async function create(data: Partial<Task>) {    
+  async function create(data: Partial<Task>) {
     await axios.post("https://elevatepromedia.com/api/tasks", data);
   }
 
   async function update(data: Partial<Task>) {
     await axios.put(
       `https://elevatepromedia.com/api/tasks/${props.selectedObject?.id}`,
-      data
+      data,
     );
   }
 
@@ -78,9 +74,7 @@ export default function TaskModal(props: TaskModalProps) {
     queryKey: ["data_users"],
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/users`,
-        );
+        const res = await axios.get(`https://elevatepromedia.com/api/users`);
         return res.data;
       } catch (err) {
         return [];
@@ -134,9 +128,7 @@ export default function TaskModal(props: TaskModalProps) {
     queryKey: ["data_projects"],
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/projects`,
-        );
+        const res = await axios.get(`https://elevatepromedia.com/api/projects`);
         return res.data;
       } catch (err) {
         return [];
@@ -179,34 +171,38 @@ export default function TaskModal(props: TaskModalProps) {
             required
             form={form}
           />
-          <SelectForm
-            name="statusId"
-            label="Status"
-            options={statuses ?? []}
-            required
-            form={form}
-          />
-          <SelectForm
-            name="priorityId"
-            label="Prioridade"
-            options={priorities ?? []}
-            required
-            form={form}
-          />
-          <SelectForm
-            name="typeId"
-            label="Tipo"
-            options={types ?? []}
-            required
-            form={form}
-          />
-          <SelectForm
-            name="projectId"
-            label="Projeto"
-            options={projects ?? []}
-            required
-            form={form}
-          />
+          <div className="flex flex-row gap-2 mt-2">
+            <SelectForm
+              name="statusId"
+              label="Status"
+              options={statuses ?? []}
+              required
+              form={form}
+            />
+            <SelectForm
+              name="priorityId"
+              label="Prioridade"
+              options={priorities ?? []}
+              required
+              form={form}
+            />
+          </div>
+          <div className="flex flex-row gap-2 mt-2">
+            <SelectForm
+              name="typeId"
+              label="Tipo"
+              options={types ?? []}
+              required
+              form={form}
+            />
+            <SelectForm
+              name="projectId"
+              label="Projeto"
+              options={projects ?? []}
+              required
+              form={form}
+            />
+          </div>
           <InputForm
             name="deadline"
             label="Prazo"
@@ -214,6 +210,7 @@ export default function TaskModal(props: TaskModalProps) {
             type="date"
             required
             form={form}
+            className="mt-2"
           />
         </form>
       </Form>
