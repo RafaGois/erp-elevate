@@ -41,7 +41,7 @@ export function DatePickerForm({
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[240px] pl-3 text-left font-normal",
+                    "min-w-0 max-w-full pl-3 text-left font-normal sm:w-[240px]",
                     !field?.value?.start && "text-muted-foreground"
                   )}
                 >
