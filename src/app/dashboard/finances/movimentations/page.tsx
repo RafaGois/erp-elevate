@@ -24,20 +24,12 @@ import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { useMemo } from "react";
-
-type SelectedType = "Entrada" | "Saída" | "Todos";
-export interface Params {
-  type?: SelectedType;
-  ranges?: {
-    from?: Date;
-    to?: Date;
-  };
-}
+import MovimentationType from "@/lib/models/movimentations/Type";
 
 export default function Movimentations() {
-  const form = useForm<Params>({
+  const form = useForm({
     defaultValues: {
-      type: "Todos",
+      select: "all",
       ranges: {
         from: subDays(new Date(), 30),
         to: new Date(),
@@ -162,8 +154,8 @@ export default function Movimentations() {
     Movimentation[]
   >({
     queryKey: ["data_movimentations"],
-    //refetchInterval: 60000,
-    //staleTime: Infinity,
+    refetchInterval: 60000,
+    staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
@@ -182,8 +174,22 @@ export default function Movimentations() {
     await axios.delete(`https://elevatepromedia.com/api/movimentations/${uid}`);
   }
 
+  const { data: types } = useQuery<MovimentationType[]>({
+    queryKey: ["data_movimentation_types"],
+    queryFn: async () => {
+      try {
+        const res = await axios.get(
+          `https://elevatepromedia.com/api/movimentation-types`
+        );
+        return res.data;
+      } catch (err) {
+        return [];
+      }
+    },
+  });
+
   const filteredData = useMemo(() => {
-    const selectedType = params?.type ?? "Todos";
+    const selectedType = params?.select ?? "all";
     const from = params?.ranges?.from
       ? startOfDay(new Date(params.ranges.from))
       : undefined;
@@ -191,7 +197,7 @@ export default function Movimentations() {
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
     return (data ?? []).filter((item) => {
-      if (selectedType !== "Todos" && item?.Type?.name !== selectedType) {
+      if (selectedType !== "all" && item?.Type?.id !== selectedType) {
         return false;
       }
 
@@ -205,7 +211,10 @@ export default function Movimentations() {
 
       return true;
     });
-  }, [data, params?.type, params?.ranges?.from, params?.ranges?.to]);
+  }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
+
+  console.log(form.getValues());
+  console.log(types);
 
   return (
     <>
@@ -244,6 +253,13 @@ export default function Movimentations() {
         data={filteredData}
         setAction={setAction}
         form={form}
+        options={[
+          { id: "all", name: "Todos" },
+          ...(types ?? []).map((type) => ({
+            id: type.id,
+            name: type.name,
+          })),
+        ]}
       />
       <ToolkitModal
         action={action}

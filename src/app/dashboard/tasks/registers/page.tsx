@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Circle } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -15,11 +15,23 @@ import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import TaskModal from "@/components/layout/modal/TaskModal";
 import Status from "@/lib/models/task/Status";
+import { useForm, useWatch } from "react-hook-form";
+import { endOfDay, startOfDay, subDays, addDays } from "date-fns";
 
 export default function Tasks() {
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const { setReloading } = useAppData();
+
+  const form = useForm({
+    defaultValues: {
+      ranges: {
+        from: subDays(new Date(), 30),
+        to: addDays(new Date(), 90),
+      },
+      select: "all",
+    },
+  });
 
   const columns: ColumnDef<Task>[] = [
     {
@@ -166,6 +178,50 @@ export default function Tasks() {
     },
   });
 
+  const params = useWatch({ control: form.control });
+
+  const filteredData = useMemo(() => {
+    const selectedStatus = params?.select ?? "all";
+    const from = params?.ranges?.from
+      ? startOfDay(new Date(params.ranges.from))
+      : undefined;
+    const toBase = params?.ranges?.to ?? params?.ranges?.from;
+    const to = toBase ? endOfDay(new Date(toBase)) : undefined;
+
+    return (data ?? []).filter((item) => {
+      if (selectedStatus !== "all" && item?.Status?.id !== selectedStatus) {
+        return false;
+      }
+
+      if (!from && !to) return true;
+
+      const itemDate = item?.deadline ? new Date(item.deadline) : undefined;
+      if (!itemDate || Number.isNaN(itemDate.getTime())) return false;
+
+      if (from && itemDate < from) return false;
+      if (to && itemDate > to) return false;
+
+      return true;
+    });
+    
+  }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
+
+  
+
+  const { data: statuses } = useQuery<Status[]>({
+    queryKey: ["data_task_statuses"],
+    queryFn: async () => {
+      try {
+        const res = await axios.get(
+          `https://elevatepromedia.com/api/task-statuses`
+        );
+        return res.data;
+      } catch (err) {
+        return [];
+      }
+    },
+  });
+
   async function remove(uid: string) {
     setReloading?.(true);
     await axios.delete(`https://elevatepromedia.com/api/tasks/${uid}`);
@@ -173,7 +229,19 @@ export default function Tasks() {
 
   return (
     <>
-      <DataTable columns={columns} data={data ?? []} setAction={setAction} />
+      <DataTable
+        columns={columns}
+        data={filteredData ?? []}
+        setAction={setAction}
+        form={form}
+        options={[
+          { id: "all", name: "Todos" },
+          ...(statuses ?? []).map((status) => ({
+            id: status.id,
+            name: status.name,
+          })),
+        ]}
+      />
       <ToolkitModal
         action={action}
         setAction={setAction}

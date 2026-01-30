@@ -5,7 +5,6 @@ import type { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
-import { Params } from "@/app/dashboard/finances/movimentations/page";
 import { DatePickerForm } from "../inputs/DatePickerForm";
 import { UseFormReturn } from "react-hook-form";
 import { Form } from "@/components/ui/form";
@@ -15,13 +14,15 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   setAction?: (newAction: ModalAction) => void;
 
-  form?: UseFormReturn<Params>;
+  form?: UseFormReturn;
+  options?: { id: string; name: string }[]
 }
 
 export function DataTableToolbar<TData>({
   table,
   setAction,
   form,
+  options,
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex flex-col md:flex-row md:justify-evenly gap-3 py-4 w-full ">
@@ -40,15 +41,13 @@ export function DataTableToolbar<TData>({
               onSubmit={(e) => e.preventDefault()}
             >
               <DatePickerForm form={form} />
+              {options && (
               <SelectForm
                 form={form}
-                name="type"
-                options={[
-                  { id: "Entrada", name: "Entradas" },
-                  { id: "Saída", name: "Saídas" },
-                  { id: "Todos", name: "Todos" },
-                ]}
+                name="select"
+                options={options ?? []}
               />
+              )}
               <Button type="button" variant="outline" size="sm" className=" w-full md:w-auto" onClick={() => form.reset()}>
                 Limpar
               </Button>

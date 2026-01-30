@@ -23,14 +23,14 @@ import {
 import { DataTableToolbar } from "./DataTableToolbar";
 import { DataTablePagination } from "./DataTablePagination";
 import ModalAction from "@/lib/enums/modalAction";
-import { Params } from "@/app/dashboard/finances/movimentations/page";
 import { UseFormReturn } from "react-hook-form";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   setAction?: (newAction: ModalAction) => void;
-  form?: UseFormReturn<Params>;
+  form?: UseFormReturn<any>;
+  options?: { id: string; name: string }[]
 }
 
 export function DataTable<TData, TValue>({
@@ -38,6 +38,7 @@ export function DataTable<TData, TValue>({
   data,
   setAction,
   form,
+  options,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -53,7 +54,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <DataTableToolbar table={table} setAction={setAction} form={form} />
+      <DataTableToolbar table={table} setAction={setAction} form={form} options={options} />
       <div className="rounded border">
         <Table>
           <TableHeader className="bg-muted/50">
