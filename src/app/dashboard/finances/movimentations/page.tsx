@@ -6,7 +6,7 @@ import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
 import Movimentation from "@/lib/models/movimentations/Motimentation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -130,6 +130,24 @@ export default function Movimentations() {
         return <span>{item?.Type?.name}</span>;
       },
     },
+    {
+      accessorKey: "Category",
+      header: "Categoria",
+      accessorFn: (row) => row?.Category?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.Category?.name ?? "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "BankAccount",
+      header: "Conta",
+      accessorFn: (row) => row?.BankAccount?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.BankAccount?.name ?? "-"}</span>;
+      },
+    },
 
     {
       header: ({ column }) => {
@@ -212,9 +230,6 @@ export default function Movimentations() {
       return true;
     });
   }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
-
-  console.log(form.getValues());
-  console.log(types);
 
   return (
     <>
