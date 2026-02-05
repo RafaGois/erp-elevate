@@ -96,6 +96,14 @@ export default function EquipamentModal(props: EquipamentModalProps) {
       <Form {...form}>
         <form className="py-6">
           <InputForm
+            name="code"
+            label="Código"
+            placeholder="Código"
+            type="text"
+            required
+            form={form}
+          />
+          <InputForm
             name="name"
             label="Nome"
             placeholder="Nome"

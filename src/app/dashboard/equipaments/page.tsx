@@ -23,6 +23,10 @@ export default function Inventory() {
 
   const columns: ColumnDef<Equipament>[] = [
     {
+      header: "Código",
+      accessorKey: "code",
+    },
+    {
       header: ({ column }) => {
         return (
           <Button
@@ -88,15 +92,14 @@ export default function Inventory() {
   const { data, /* isLoading, isFetching, */ refetch } = useQuery<Equipament[]>(
     {
       queryKey: ["data_equipaments"],
-      //refetchInterval: 60000,
-      //staleTime: Infinity,
+      refetchInterval: 30000,
+      staleTime: Infinity,
       refetchOnMount: "always",
       queryFn: async () => {
         try {
           const res = await axios.get(`https://elevatepromedia.com/api/equipaments`);
           return res.data;
         } catch (err) {
-          console.log(err);
           return [];
         }
       },
