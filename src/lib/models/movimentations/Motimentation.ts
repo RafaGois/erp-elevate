@@ -37,6 +37,7 @@ export default class Movimentation {
         this._value = value;
         this._date = date;
         this._User = User;
+        this._userId = userId;
         this._Type = Type;
         this._typeId = typeId;
         this._BankAccount = BankAccount;

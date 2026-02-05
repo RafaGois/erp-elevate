@@ -12,7 +12,7 @@ import User from "@/lib/models/User";
 import MovimentationType from "@/lib/models/movimentations/Type";
 import BankAccount from "@/lib/models/movimentations/BankAccount";
 import MovimentationCategory from "@/lib/models/movimentations/Category";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type MovimentationModalProps = BaseModalProps<Movimentation>;
 
@@ -61,7 +61,6 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   async function create(data: Partial<Movimentation>) {
     data.date = new Date(data.date?.toString() ?? '');
-    console.log(data.date);
     await axios.post("https://elevatepromedia.com/api/movimentations", data);
   }
 
@@ -117,6 +116,18 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     if (props?.refetch) props.refetch();
   }
 
+  const selectedUserId = form.watch("userId");
+  const filteredBankAccounts = useMemo(() => {
+    if (!selectedUserId) return [];
+    return bankAccounts?.filter((bankAccount) => bankAccount.User.id === selectedUserId) ?? [];
+  }, [selectedUserId, bankAccounts]);
+
+  const selectedTypeId = form.watch("typeId");
+  const filteredCategories = useMemo(() => {
+    if (!selectedTypeId) return [];
+    return categories?.filter((category) => category.Type.id === selectedTypeId) ?? [];
+  }, [selectedTypeId, categories]);
+
   return (
     <Modal<Movimentation>
       title="Movimentação"
@@ -164,7 +175,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
             <SelectForm
               name="bankAccountId"
               label="Conta Bancária"
-              options={bankAccounts}
+              options={filteredBankAccounts}
               required
               form={form}
             />
@@ -180,7 +191,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
             <SelectForm
               name="categoryId"
               label="Categoria"
-              options={categories}
+              options={filteredCategories}
               required
               form={form}
             />

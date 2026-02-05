@@ -112,6 +112,15 @@ export default function Movimentations() {
       },
     },
     {
+      accessorKey: "BankAccount",
+      header: "Conta",
+      accessorFn: (row) => row?.BankAccount?.name ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.BankAccount?.name ?? "-"}</span>;
+      },
+    },
+    {
       header: ({ column }) => {
         return (
           <Button
@@ -140,16 +149,6 @@ export default function Movimentations() {
       },
     },
     {
-      accessorKey: "BankAccount",
-      header: "Conta",
-      accessorFn: (row) => row?.BankAccount?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <span>{item?.BankAccount?.name ?? "-"}</span>;
-      },
-    },
-
-    {
       header: ({ column }) => {
         return <p>Opções</p>;
       },
@@ -172,7 +171,7 @@ export default function Movimentations() {
     Movimentation[]
   >({
     queryKey: ["data_movimentations"],
-    refetchInterval: 60000,
+    refetchInterval: 30000,
     staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
