@@ -5,6 +5,7 @@ export default class BankAccount {
     private _name: string;
     private _number: string;
     private _agency: string;
+    private _pixKey: string;
     private _userId: string;
     private _User: User;
 
@@ -13,6 +14,7 @@ export default class BankAccount {
         name: string,
         number: string,
         agency: string,
+        pixKey: string,
         userId: string,
         User: User
     ) {
@@ -20,6 +22,7 @@ export default class BankAccount {
         this._name = name;
         this._number = number;
         this._agency = agency;
+        this._pixKey = pixKey;
         this._userId = userId;
         this._User = User;
     }
@@ -38,6 +41,10 @@ export default class BankAccount {
 
     get agency() {
         return this._agency;
+    }
+
+    get pixKey() {
+        return this._pixKey;
     }
 
     get userId() {

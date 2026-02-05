@@ -36,6 +36,7 @@ export default function Inventory() {
       accessorKey: "name",
     },
     {
+      header: "Usuário",
       accessorKey: "User",
       accessorFn: (row) => row?.User?.name ?? "-",
       cell: ({ row }) => {
@@ -44,6 +45,7 @@ export default function Inventory() {
       },
     },
     {
+      header: "Número",
       accessorKey: "number",
       accessorFn: (row) => row?.number ?? "-",
       cell: ({ row }) => {
@@ -52,12 +54,17 @@ export default function Inventory() {
       },
     },
     {
+      header: "Agência",
       accessorKey: "agency",
       accessorFn: (row) => row?.agency ?? "-",
       cell: ({ row }) => {
         const item = row.original;
         return <span>{item?.agency ?? "-"}</span>;
       },
+    },
+    {
+      header: "Chave PIX",
+      accessorKey: "pixKey",
     },
     {
       accessorKey: "Opções",
@@ -78,15 +85,14 @@ export default function Inventory() {
   const { data, /* isLoading, isFetching, */ refetch } = useQuery<BankAccount[]>(
     {
       queryKey: ["data_bank_accounts"],
-      //refetchInterval: 60000,
-      //staleTime: Infinity,
+      refetchInterval: 30000,
+      staleTime: Infinity,
       refetchOnMount: "always",
       queryFn: async () => {
         try {
           const res = await axios.get(`https://elevatepromedia.com/api/bank-accounts`);
           return res.data;
         } catch (err) {
-          console.log(err);
           return [];
         }
       },

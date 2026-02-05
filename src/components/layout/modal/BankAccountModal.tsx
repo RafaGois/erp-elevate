@@ -17,6 +17,9 @@ export default function BankAccountModal(props: BankAccountModalProps) {
     defaultValues: {
       name: props.selectedObject?.name,
       userId: props.selectedObject?.userId,
+      number: props.selectedObject?.number,
+      agency: props.selectedObject?.agency,
+      pixKey: props.selectedObject?.pixKey,
     },
   });
 
@@ -111,6 +114,14 @@ export default function BankAccountModal(props: BankAccountModalProps) {
               form={form}
             />
           </div>
+          <InputForm
+              name="pixKey"
+              label="Chave PIX"
+              placeholder="Chave PIX"
+              type="text"
+              required
+              form={form}
+            />
         </form>
       </Form>
     </Modal>
