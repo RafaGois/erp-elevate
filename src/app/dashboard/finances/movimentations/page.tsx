@@ -41,7 +41,7 @@ export default function Movimentations() {
     null,
   );
   const [action, setAction] = useState<ModalAction | null>(null);
-  
+
   const { setReloading } = useAppData();
 
   const columns: ColumnDef<Movimentation>[] = [
@@ -196,7 +196,7 @@ export default function Movimentations() {
     queryFn: async () => {
       try {
         const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentation-types`
+          `https://elevatepromedia.com/api/movimentation-types`,
         );
         return res.data;
       } catch (err) {
@@ -234,30 +234,34 @@ export default function Movimentations() {
     <>
       <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
         <DataCard
-          title="Total"
-          value={data?.length ?? 0}
-          icon={<DollarSign />}
+          title="Valor total"
+          value={filteredData.reduce((acc, item) => acc + item.value, 0)}
+          icon={<ChartArea />}
         />
         <DataCard
-          title="Valor total" //entradas - saidas
-          value={data?.reduce((acc, item) => acc + item.value, 0) ?? 0}
-          icon={<ChartArea />}
+          title="Valor Líquido"
+          value={filteredData
+            .filter((item) => item?.Type?.name === "Entrada")
+            .reduce((acc, item) => acc + item.value, 0) - filteredData
+            .filter((item) => item?.Type?.name === "Saída")
+            .reduce((acc, item) => acc + item.value, 0)}
+          icon={<DollarSign />}
         />
         <DataCard
           title="Entradas"
           value={
-            data
-              ?.filter((item) => item.Type.name == "Entrada")
-              .reduce((acc, item) => acc + item.value, 0) ?? 0
+            filteredData
+              .filter((item) => item?.Type?.name === "Entrada")
+              .reduce((acc, item) => acc + item.value, 0)
           }
           icon={<ArrowUpRight />}
         />
         <DataCard
           title="Saídas"
           value={
-            data
-              ?.filter((item) => item.Type.name == "Saída")
-              .reduce((acc, item) => acc + item.value, 0) ?? 0
+            filteredData
+              .filter((item) => item?.Type?.name === "Saída")
+              .reduce((acc, item) => acc + item.value, 0)
           }
           icon={<ArrowDownRight />}
         />
