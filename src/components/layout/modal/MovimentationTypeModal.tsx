@@ -56,14 +56,6 @@ export default function MovimentationTypeModal(props: TypeModalProps) {
     if (props?.refetch) props.refetch();
   }
 
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    queryFn: async () => {
-      const res = await axios.get("https://elevatepromedia.com/api/movimentation-types");
-      return res.data;
-    },
-  });
-
   return (
     <Modal<Type>
       title="Tipo de movimentação"

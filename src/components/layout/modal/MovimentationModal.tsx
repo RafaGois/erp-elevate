@@ -73,6 +73,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   const { data: users } = useQuery<User[]>({
     queryKey: ["data_users"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get("https://elevatepromedia.com/api/users");
       return res.data;
@@ -81,6 +82,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   const { data: types } = useQuery<MovimentationType[]>({
     queryKey: ["data_movimentation_types"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get(
         "https://elevatepromedia.com/api/movimentation-types"
@@ -91,6 +93,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   const { data: bankAccounts } = useQuery<BankAccount[]>({
     queryKey: ["data_bank_accounts"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get(
         "https://elevatepromedia.com/api/bank-accounts"
@@ -101,6 +104,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   const { data: categories } = useQuery<MovimentationCategory[]>({
     queryKey: ["data_movimentation_categories"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get(
         "https://elevatepromedia.com/api/movimentation-categories"

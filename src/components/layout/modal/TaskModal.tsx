@@ -72,6 +72,7 @@ export default function TaskModal(props: TaskModalProps) {
 
   const { data: users } = useQuery<User[]>({
     queryKey: ["data_users"],
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(`https://elevatepromedia.com/api/users`);
@@ -84,6 +85,7 @@ export default function TaskModal(props: TaskModalProps) {
 
   const { data: statuses } = useQuery<Status[]>({
     queryKey: ["data_task_statuses"],
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
@@ -98,6 +100,7 @@ export default function TaskModal(props: TaskModalProps) {
 
   const { data: priorities } = useQuery<Priority[]>({
     queryKey: ["data_task_priorities"],
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
@@ -112,6 +115,7 @@ export default function TaskModal(props: TaskModalProps) {
 
   const { data: types } = useQuery<Type[]>({
     queryKey: ["data_task_types"],
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
@@ -126,6 +130,7 @@ export default function TaskModal(props: TaskModalProps) {
 
   const { data: projects } = useQuery<Project[]>({
     queryKey: ["data_projects"],
+    refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(`https://elevatepromedia.com/api/projects`);

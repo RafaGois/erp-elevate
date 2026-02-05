@@ -63,6 +63,7 @@ export default function BankAccountModal(props: BankAccountModalProps) {
 
   const { data: users } = useQuery<User[]>({
     queryKey: ["data_users"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get("https://elevatepromedia.com/api/users");
       return res.data;

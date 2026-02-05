@@ -60,6 +60,7 @@ export default function CategoryModal(props: CategoryModalProps) {
 
   const { data: types } = useQuery<MovimentationType[]>({
     queryKey: ["data_movimentation_types"],
+    refetchOnMount: "always",
     queryFn: async () => {
       const res = await axios.get("https://elevatepromedia.com/api/movimentation-types");
       return res.data;
