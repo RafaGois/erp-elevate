@@ -25,8 +25,10 @@ import { useForm, useWatch } from "react-hook-form";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { useMemo } from "react";
 import MovimentationType from "@/lib/models/movimentations/Type";
+import useAuth from "@/data/hooks/useAuth";
 
 export default function Movimentations() {
+  const { user } = useAuth();
   const form = useForm({
     defaultValues: {
       select: "all",
@@ -204,6 +206,9 @@ export default function Movimentations() {
       }
     },
   });
+
+  console.log(user);
+  
 
   const filteredData = useMemo(() => {
     const selectedType = params?.select ?? "all";

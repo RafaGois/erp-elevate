@@ -130,7 +130,7 @@ export default function Home() {
 
   return (
     <div ref={container} className="overflow-x-hidden relative select-none">
-      <div className="hidden cursor fixed h-12 w-12 border-1 border-white rounded-full cursor-none z-50 sm:flex justify-center items-center mix-blend-difference"></div>
+      <div className="hidden cursor fixed h-12 w-12 border border-white rounded-full cursor-none z-50 sm:flex justify-center items-center mix-blend-difference"></div>
       <div className="hidden sm:flex cursor-point fixed bg-white h-2 w-2 rounded-full z-50 mix-blend-difference"></div>
       <Hero />
       <ScrollText />

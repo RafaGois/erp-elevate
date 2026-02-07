@@ -87,25 +87,34 @@ export function AuthProvider(props: AuthProviderProps) {
     return recivedUser.id;
   }
 
-/*   useEffect(() => {
-
+  useEffect(() => {
     const token = Cookies.get("elevate-token");
 
-    if (!token) confingSection(null);
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     axios
-      .post<User>(
-        "http://localhost:8080/users/validate",
-        { token: token }
-      )
-      .then((resp) => {
-        confingSection(resp.data);
+      .post<User>("https://elevatepromedia.com/api/users/validate", {
+        token,
       })
-      .catch((err) => {
-        confingSection(null);
+      .then((resp) => {
+        if (resp?.data) {
+          confingSection(resp.data as User);
+        } else {
+          setUser(null);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        setUser(null);
+        manageCookie(false, null);
+        setLoading(false);
       });
-    
-  }, []); */
+  }, []);
 
   return (
     <AuthContext.Provider
