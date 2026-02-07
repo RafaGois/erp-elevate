@@ -12,9 +12,13 @@ import { Home } from "lucide-react";
 import Link from "next/link";
 import InputForm from "@/components/layout/components/inputs/InputForm";
 import { toast } from "sonner";
+import useAppData from "@/data/hooks/useAppData";
+import { Toaster } from "@/components/ui/sonner";
+import { useEffect } from "react";
 
 export default function Auth() {
   const { login } = useAuth();
+  const { setLoading, loading} = useAppData();
   const form = useForm<User>({
     defaultValues: {
       username: "",
@@ -25,12 +29,23 @@ export default function Auth() {
   async function submit(data: User) {
     
     try {
+      setLoading(true);
       await login?.(data as User);
     } catch (error) {
       toast.error(error?.response?.data?.[0] ?? error?.message ?? "Erro ao fazer login.");
       //toast.error(error instanceof Error ? error.message : "Erro ao fazer login.");
     }
   }
+
+  useEffect(() => {
+    if (loading) {
+      toast("Carregando...", {
+        description: "Aguarde enquanto o sistema é carregado.",
+      });
+    } else {
+      toast.dismiss();
+    }
+  }, [loading]);
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
@@ -136,6 +151,7 @@ export default function Auth() {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

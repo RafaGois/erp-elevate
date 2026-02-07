@@ -69,6 +69,26 @@ export function AuthProvider(props: AuthProviderProps) {
     }
   }
 
+  async function loginWithGoogle(googleIdToken: string): Promise<string | false> {
+    setLoading(true);
+    try {
+      const response = await axios.post<User>(
+        "https://elevatepromedia.com/api/users/login-google",
+        { token: googleIdToken }
+      );
+      if (!response?.data?.token) {
+        setLoading(false);
+        return false;
+      }
+      confingSection(response.data);
+      router.push("/dashboard/equipaments");
+      return response.data.id;
+    } catch {
+      setLoading(false);
+      return false;
+    }
+  }
+
   async function logout() {
     try {
       setLoading(true);
@@ -121,6 +141,7 @@ export function AuthProvider(props: AuthProviderProps) {
       value={{
         user,
         login,
+        loginWithGoogle,
         register,
         logout,
         loading,
