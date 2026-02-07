@@ -2,7 +2,6 @@
 
 import useAppData from "../../data/hooks/useAppData";
 
-//import LoadingLayout from "@/components/screens/loading/LoadingLayout";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Toaster } from "../ui/sonner";
@@ -15,12 +14,8 @@ export default function Content(props: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (reloading || loadingAuth) {
-      toast("Atualizando dados", {
+      toast("Carregando...", {
         description: "Aguarde enquanto os dados são carregados.",
-/*         action: {
-          label: "Undo",
-          onClick: () => console.log("Undo"),
-        }, */
       });
     } else {
       toast.dismiss();

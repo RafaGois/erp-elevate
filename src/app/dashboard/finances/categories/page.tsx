@@ -36,6 +36,7 @@ export default function Inventory() {
       accessorKey: "name",
     },
     {
+      header: "Tipo",
       accessorKey: "Type",
       accessorFn: (row) => row?.Type?.name ?? "-",
       cell: ({ row }) => {
@@ -60,11 +61,11 @@ export default function Inventory() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Category[]>(
+  const { data, refetch } = useQuery<Category[]>(
     {
-      queryKey: ["data_bank_accounts"],
-      //refetchInterval: 60000,
-      //staleTime: Infinity,
+      queryKey: ["data_movimentation_categories"],
+      refetchInterval: 60000,
+      staleTime: Infinity,
       refetchOnMount: "always",
       queryFn: async () => {
         try {
