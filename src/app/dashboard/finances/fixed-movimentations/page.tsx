@@ -5,7 +5,7 @@ import { DataTable } from "@/components/layout/components/datatable/DataTable";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
-import Movimentation from "@/lib/models/movimentations/Motimentation";
+
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -24,10 +24,12 @@ import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { useMemo } from "react";
-import MovimentationType from "@/lib/models/movimentations/Type";
+import Fixed from "@/lib/models/movimentations/Fixed";
 import useAuth from "@/data/hooks/useAuth";
+import MovimentationType from "@/lib/models/movimentations/Type";
+import FixedMovimentationModal from "@/components/layout/modal/FixedMovimentationModal";
 
-export default function Movimentations() {
+export default function FixedMovimentations() {
   const { user } = useAuth();
   const form = useForm({
     defaultValues: {
@@ -39,14 +41,12 @@ export default function Movimentations() {
     },
   });
   const params = useWatch({ control: form.control });
-  const [selectedObject, setSelectedObject] = useState<Movimentation | null>(
-    null,
-  );
+  const [selectedObject, setSelectedObject] = useState<Fixed | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
 
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Movimentation>[] = [
+  const columns: ColumnDef<Fixed>[] = [
     {
       header: ({ column }) => {
         return (
@@ -82,58 +82,20 @@ export default function Movimentations() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Data
+            Prazo
             <ArrowUpDown />
           </Button>
         );
       },
-      accessorKey: "date",
+      accessorKey: "deadline",
       cell: ({ row }) => {
         const item = row.original;
-        const date = new Date(item.date);
-        // Formatar para DD/MM/YYYY
+        const date = new Date(item.deadline);
         return <span>{date.toLocaleDateString("pt-BR")}</span>;
       },
     },
     {
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Usuário
-            <ArrowUpDown />
-          </Button>
-        );
-      },
-      accessorKey: "User",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <span>{item.User.name}</span>;
-      },
-    },
-    {
-      accessorKey: "BankAccount",
-      header: "Conta",
-      accessorFn: (row) => row?.BankAccount?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <span>{item?.BankAccount?.name ?? "-"}</span>;
-      },
-    },
-    {
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tipo
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: "Tipo",
       accessorKey: "Type",
       cell: ({ row }) => {
         const item = row.original;
@@ -142,24 +104,20 @@ export default function Movimentations() {
       },
     },
     {
-      accessorKey: "Category",
       header: "Categoria",
-      accessorFn: (row) => row?.Category?.name ?? "-",
+      accessorKey: "Category",
       cell: ({ row }) => {
         const item = row.original;
-        return <span>{item?.Category?.name ?? "-"}</span>;
+        return <span>{item.Category.name}</span>;
       },
     },
     {
-      header: ({ column }) => {
-        return <p>Opções</p>;
-      },
-      accessorKey: "Opções",
+      header: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Movimentation>
+          <FloatingMenu<Fixed>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -169,17 +127,15 @@ export default function Movimentations() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<
-    Movimentation[]
-  >({
-    queryKey: ["data_movimentations"],
+  const { data, refetch } = useQuery<Fixed[]>({
+    queryKey: ["data_fixed_movimentations"],
     refetchInterval: 30000,
     staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
         const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentations`,
+          `https://elevatepromedia.com/api/fixed-movimentations`,
         );
         return res.data;
       } catch (err) {
@@ -187,11 +143,6 @@ export default function Movimentations() {
       }
     },
   });
-
-  async function remove(uid: string) {
-    setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/movimentations/${uid}`);
-  }
 
   const { data: types } = useQuery<MovimentationType[]>({
     queryKey: ["data_movimentation_types"],
@@ -206,6 +157,13 @@ export default function Movimentations() {
       }
     },
   });
+
+  async function remove(uid: string) {
+    setReloading?.(true);
+    await axios.delete(
+      `https://elevatepromedia.com/api/fixed-movimentations/${uid}`,
+    );
+  }
 
   const filteredData = useMemo(() => {
     const selectedType = params?.select ?? "all";
@@ -222,7 +180,7 @@ export default function Movimentations() {
 
       if (!from && !to) return true;
 
-      const itemDate = item?.date ? new Date(item.date) : undefined;
+      const itemDate = item?.deadline ? new Date(item.deadline) : undefined;
       if (!itemDate || Number.isNaN(itemDate.getTime())) return false;
 
       if (from && itemDate < from) return false;
@@ -242,29 +200,28 @@ export default function Movimentations() {
         />
         <DataCard
           title="Valor Líquido"
-          value={filteredData
-            .filter((item) => item?.Type?.name === "Entrada")
-            .reduce((acc, item) => acc + item.value, 0) - filteredData
-            .filter((item) => item?.Type?.name === "Saída")
-            .reduce((acc, item) => acc + item.value, 0)}
-          icon={<DollarSign />}
-        />
-        <DataCard
-          title="Entradas"
           value={
             filteredData
               .filter((item) => item?.Type?.name === "Entrada")
-              .reduce((acc, item) => acc + item.value, 0)
-          }
-          icon={<ArrowUpRight />}
-        />
-        <DataCard
-          title="Saídas"
-          value={
+              .reduce((acc, item) => acc + item.value, 0) -
             filteredData
               .filter((item) => item?.Type?.name === "Saída")
               .reduce((acc, item) => acc + item.value, 0)
           }
+          icon={<DollarSign />}
+        />
+        <DataCard
+          title="Entradas"
+          value={filteredData
+            .filter((item) => item?.Type?.name === "Entrada")
+            .reduce((acc, item) => acc + item.value, 0)}
+          icon={<ArrowUpRight />}
+        />
+        <DataCard
+          title="Saídas"
+          value={filteredData
+            .filter((item) => item?.Type?.name === "Saída")
+            .reduce((acc, item) => acc + item.value, 0)}
           icon={<ArrowDownRight />}
         />
       </div>
@@ -287,7 +244,7 @@ export default function Movimentations() {
         selectedObject={selectedObject}
         setSelectedObject={setSelectedObject}
         refetch={refetch}
-        ordidaryModal={<MovimentationModal />}
+        ordidaryModal={<FixedMovimentationModal />}
         confirmModal={<ConfirmDialog remove={remove} refetch={refetch} />}
       />
     </>

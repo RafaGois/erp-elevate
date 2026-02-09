@@ -17,11 +17,15 @@ export default function AppSidebar() {
           items: [
             {
               title: "Dashboard",
-              url: "//",
+              url: "/",
             },
             {
               title: "Movimentações",
               url: "/movimentations",
+            },
+            {
+              title: "Movimentações Fixas",
+              url: "/fixed-movimentations",
             },
             {
               title: "Contas Bancárias",
@@ -34,7 +38,8 @@ export default function AppSidebar() {
             {
               title: "Tipos",
               url: "/types",
-            }
+            },
+
           ],
         },
       ],

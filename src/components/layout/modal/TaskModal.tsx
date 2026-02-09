@@ -37,7 +37,7 @@ export default function TaskModal(props: TaskModalProps) {
         toast.success("Tarefa atualizada com sucesso.");
       } else {
         data.deadline = new Date(data.deadline + "T00:00:00");
-
+        data.statusId = "c78c04cb-6139-422b-a60f-83a86a92dec9";
         await create(data);
         toast.success("Tarefa criada com sucesso.");
       }
@@ -166,7 +166,6 @@ export default function TaskModal(props: TaskModalProps) {
             label="Descrição"
             placeholder="Descrição"
             type="text"
-            required
             form={form}
           />
           <SelectForm
@@ -177,13 +176,14 @@ export default function TaskModal(props: TaskModalProps) {
             form={form}
           />
           <div className="flex flex-row gap-2 mt-2">
+            {props.selectedObject?.id && (
             <SelectForm
               name="statusId"
               label="Status"
               options={statuses ?? []}
-              required
               form={form}
             />
+            )}
             <SelectForm
               name="priorityId"
               label="Prioridade"
@@ -204,7 +204,7 @@ export default function TaskModal(props: TaskModalProps) {
               name="projectId"
               label="Projeto"
               options={projects ?? []}
-              required
+              
               form={form}
             />
           </div>

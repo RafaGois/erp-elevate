@@ -5,7 +5,7 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Circle } from "lucide-react";
+import { ArrowUpDown, Circle, CircleCheckBig, CircleDashed, CircleGauge, LoaderCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import axios from "axios";
@@ -140,32 +140,39 @@ export default function Tasks() {
   ];
 
   function returnStatusFormated(status: Status) {
-    if (status.level == 1)
+    if (status.id == "c78c04cb-6139-422b-a60f-83a86a92dec9")//não iniciado
       return (
         <p className="flex items-center gap-1">
-          <Circle fill="#a31818" stroke="#a31818" className="w-3 h-3" />{" "}
+          <CircleDashed fill="#8d8e8f" stroke="#8d8e8f" className="w-3 h-3" />{" "}
           {status.name}{" "}
         </p>
       );
-    if (status.level == 2)
+    if (status.id == "cc6c1445-ff11-4b4a-879d-c76f9df5571d")
       return (
         <p className="flex items-center gap-1">
-          <Circle fill="#a31818" stroke="#a31818" className="w-3 h-3" />
+          <Circle  fill="#ebba34" stroke="#ebba34" className="w-3 h-3 animate-pulse" />
           {status.name}{" "}
         </p>
       );
-    if (status.level == 3)
+    if (status.id == "6259a933-6ca7-4b08-8f37-4dc51ff20993")
       return (
         <p className="flex items-center gap-1">
-          <Circle fill="#fcba03" stroke="#fcba03" className="w-3 h-3" />
+          <Circle fill="#008000" stroke="#008000" className="w-3 h-3" />
           {status.name}{" "}
         </p>
       );
+      if (status.id == "9e218c51-eb8e-43f4-8558-82e2bc64d11a")
+        return (
+          <p className="flex items-center gap-1">
+            <Circle fill="#eb3a34" stroke="#eb3a34" className="w-3 h-3" />
+            {status.name}{" "}
+          </p>
+        );
   }
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<Task[]>({
+  const { data, refetch } = useQuery<Task[]>({
     queryKey: ["data_tasks"],
-    refetchInterval: 60000,
+    refetchInterval: 10000,
     staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {

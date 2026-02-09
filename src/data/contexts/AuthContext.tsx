@@ -17,7 +17,7 @@ function manageCookie(logged: boolean, token: string | null) {
   } else {
     Cookies.remove("elevate-auth");
     Cookies.remove("elevate-token");
-    localStorage.setItem("selectedTab", "/Current/Line1");
+    localStorage.setItem("selectedTab", "/dashboard/finances/movimentations");
   }
 }
 
@@ -62,7 +62,7 @@ export function AuthProvider(props: AuthProviderProps) {
       confingSection(response.data);
       //todo validar entrar na ultima tela salva localmente, senao na current line 1
       
-      router.push("/dashboard/equipaments");
+      router.push("/dashboard/finances/movimentations");
       return response.data.id;
     } finally {
       setLoading(false);
@@ -81,7 +81,7 @@ export function AuthProvider(props: AuthProviderProps) {
         return false;
       }
       confingSection(response.data);
-      router.push("/dashboard/equipaments");
+      router.push("/dashboard/finances/movimentations");
       return response.data.id;
     } catch {
       setLoading(false);

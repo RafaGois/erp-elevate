@@ -79,6 +79,10 @@ export default class Task {
         return this._statusId;
     }
 
+    set statusId(statusId: string) {
+        this._statusId = statusId;
+    }
+
     get priorityId() {
         return this._priorityId;
     }
