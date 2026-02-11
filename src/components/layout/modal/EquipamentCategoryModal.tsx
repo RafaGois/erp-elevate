@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
@@ -39,12 +39,12 @@ export default function EquipamentCategoryModal(props: EquipamentCategoryModalPr
   }
 
   async function create(data: Partial<EquipamentCategory>) {
-    await axios.post("https://elevatepromedia.com/api/equipament-categories", data);
+    await api.post("/equipament-categories", data);
   }
 
   async function update(data: Partial<EquipamentCategory>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/equipament-categories/${props.selectedObject?.id}`,
+    await api.put(
+      `/equipament-categories/${props.selectedObject?.id}`,
       data
     );
   }

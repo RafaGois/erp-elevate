@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import TaskType from "@/lib/models/task/TaskType";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -58,8 +58,8 @@ export default function TaskTypes() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-types`,
+        const res = await api.get(
+          `/task-types`,
         );
         return res.data;
       } catch (err) {
@@ -70,8 +70,8 @@ export default function TaskTypes() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(
-      `https://elevatepromedia.com/api/task-types/${uid}`,
+    await api.delete(
+      `/task-types/${uid}`,
     );
   }
 

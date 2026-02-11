@@ -12,7 +12,7 @@ import ModalAction from "@/lib/enums/modalAction";
 import { EquipamentExit } from "@/lib/models/EquipamentExit";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import axios from "axios";
+import api from "@/lib/api";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -77,7 +77,7 @@ export default function Movimentations() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(`/api/equipamentExits`);
+        const res = await api.get(`/equipament-exits`);
         return res.data;
       } catch (err) {
         console.log(err);
@@ -89,7 +89,7 @@ export default function Movimentations() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`/api/equipamentExits/${uid}`);
+    await api.delete(`/equipament-exits/${uid}`);
   }
 
   return (

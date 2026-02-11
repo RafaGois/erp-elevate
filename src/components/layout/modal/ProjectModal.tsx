@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import SwitchForm from "../components/inputs/SwitchForm";
 
@@ -38,12 +38,12 @@ export default function ProjectModal(props: ProjectModalProps) {
   }
 
   async function create(data: Partial<Project>) {    
-    await axios.post("https://elevatepromedia.com/api/projects", data);
+    await api.post("/projects", data);
   }
 
   async function update(data: Partial<Project>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/projects/${props.selectedObject?.id}`,
+    await api.put(
+      `/projects/${props.selectedObject?.id}`,
       data
     );
   }

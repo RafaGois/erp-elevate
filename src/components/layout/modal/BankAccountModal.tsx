@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
@@ -44,12 +44,12 @@ export default function BankAccountModal(props: BankAccountModalProps) {
   }
 
   async function create(data: Partial<BankAccount>) {    
-    await axios.post("https://elevatepromedia.com/api/bank-accounts", data);
+    await api.post("/bank-accounts", data);
   }
 
   async function update(data: Partial<BankAccount>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/bank-accounts/${props.selectedObject?.id}`,
+    await api.put(
+      `/bank-accounts/${props.selectedObject?.id}`,
       data
     );
   }
@@ -65,7 +65,7 @@ export default function BankAccountModal(props: BankAccountModalProps) {
     queryKey: ["data_users"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get("https://elevatepromedia.com/api/users");
+      const res = await api.get("/users");
       return res.data;
     },
   });

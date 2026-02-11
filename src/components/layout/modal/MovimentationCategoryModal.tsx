@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
@@ -41,12 +41,12 @@ export default function CategoryModal(props: CategoryModalProps) {
   }
 
   async function create(data: Partial<Category>) {    
-    await axios.post("https://elevatepromedia.com/api/movimentation-categories", data);
+    await api.post("/movimentation-categories", data);
   }
 
   async function update(data: Partial<Category>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/movimentation-categories/${props.selectedObject?.id}`,
+    await api.put(
+      `/movimentation-categories/${props.selectedObject?.id}`,
       data
     );
   }
@@ -62,7 +62,7 @@ export default function CategoryModal(props: CategoryModalProps) {
     queryKey: ["data_movimentation_types"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get("https://elevatepromedia.com/api/movimentation-types");
+      const res = await api.get("/movimentation-types");
       return res.data;
     },
   });

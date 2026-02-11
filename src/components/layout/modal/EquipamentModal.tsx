@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { EquipamentCategory } from "@/lib/models/EquipamentCategory";
@@ -45,12 +45,12 @@ export default function EquipamentModal(props: EquipamentModalProps) {
   }
 
   async function create(data: Partial<Equipament>) {
-    await axios.post("https://elevatepromedia.com/api/equipaments", data);
+    await api.post("/equipaments", data);
   }
 
   async function update(data: Partial<Equipament>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/equipaments/${props.selectedObject?.id}`,
+    await api.put(
+      `/equipaments/${props.selectedObject?.id}`,
       data
     );
   }
@@ -72,8 +72,8 @@ export default function EquipamentModal(props: EquipamentModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/equipament-categories`
+        const res = await api.get(
+          `/equipament-categories`
         );
         return res.data;
       } catch (err) {

@@ -12,7 +12,15 @@ export async function proxy(request: NextRequest) {
   
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
-    let response = await axios.post("https://elevatepromedia.com/api/users/validate", { token: token?.value });
+    let response = await axios.post(
+      "https://elevatepromedia.com/api/users/validate", 
+      { token: token?.value },
+      {
+        headers: {
+          token: `Bearer ${token?.value}`
+        }
+      }
+    );
     
     if (response.status !== 200) {
       return NextResponse.redirect(new URL(UNAUTH_ROUTE, request.url));

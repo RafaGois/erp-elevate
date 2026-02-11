@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import MovimentationType from "@/lib/models/movimentations/Type";
@@ -39,12 +39,12 @@ export default function MovimentationTypeModal(props: TypeModalProps) {
   }
 
   async function create(data: Partial<Type>) {    
-    await axios.post("https://elevatepromedia.com/api/movimentation-types", data);
+    await api.post("/movimentation-types", data);
   }
 
   async function update(data: Partial<Type>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/movimentation-types/${props.selectedObject?.id}`,
+    await api.put(
+      `/movimentation-types/${props.selectedObject?.id}`,
       data
     );
   }

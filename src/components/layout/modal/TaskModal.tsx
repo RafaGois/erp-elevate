@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import SelectForm from "../components/inputs/SelectForm";
 import User from "@/lib/models/User";
@@ -53,12 +53,12 @@ export default function TaskModal(props: TaskModalProps) {
   }
 
   async function create(data: Partial<Task>) {
-    await axios.post("https://elevatepromedia.com/api/tasks", data);
+    await api.post("/tasks", data);
   }
 
   async function update(data: Partial<Task>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/tasks/${props.selectedObject?.id}`,
+    await api.put(
+      `/tasks/${props.selectedObject?.id}`,
       data,
     );
   }
@@ -75,7 +75,7 @@ export default function TaskModal(props: TaskModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(`https://elevatepromedia.com/api/users`);
+        const res = await api.get(`/users`);
         return res.data;
       } catch (err) {
         return [];
@@ -88,8 +88,8 @@ export default function TaskModal(props: TaskModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-statuses`,
+        const res = await api.get(
+          `/task-statuses`,
         );
         return res.data;
       } catch (err) {
@@ -103,8 +103,8 @@ export default function TaskModal(props: TaskModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-priorities`,
+        const res = await api.get(
+          `/task-priorities`,
         );
         return res.data;
       } catch (err) {
@@ -118,8 +118,8 @@ export default function TaskModal(props: TaskModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-types`,
+        const res = await api.get(
+          `/task-types`,
         );
         return res.data;
       } catch (err) {
@@ -133,7 +133,7 @@ export default function TaskModal(props: TaskModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(`https://elevatepromedia.com/api/projects`);
+        const res = await api.get(`/projects`);
         return res.data;
       } catch (err) {
         return [];

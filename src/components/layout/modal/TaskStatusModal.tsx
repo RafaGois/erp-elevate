@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import SelectForm from "../components/inputs/SelectForm";
 
@@ -40,12 +40,12 @@ export default function TaskStatusModal(props: TaskStatusModalProps) {
   }
 
   async function create(data: Partial<Status>) {    
-    await axios.post("https://elevatepromedia.com/api/task-statuses", data);
+    await api.post("/task-statuses", data);
   }
 
   async function update(data: Partial<Status>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/task-statuses/${props.selectedObject?.id}`,
+    await api.put(
+      `/task-statuses/${props.selectedObject?.id}`,
       data
     );
   }

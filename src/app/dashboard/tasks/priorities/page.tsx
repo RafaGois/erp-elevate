@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Priority from "@/lib/models/task/Priority";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -66,8 +66,8 @@ export default function TaskPriorities() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-priorities`,
+        const res = await api.get(
+          `/task-priorities`,
         );
         return res.data;
       } catch (err) {
@@ -78,8 +78,8 @@ export default function TaskPriorities() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(
-      `https://elevatepromedia.com/api/task-priorities/${uid}`,
+    await api.delete(
+      `/task-priorities/${uid}`,
     );
   }
 

@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, User } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Equipament } from "@/lib/models/Equipament";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -97,7 +97,7 @@ export default function Inventory() {
       refetchOnMount: "always",
       queryFn: async () => {
         try {
-          const res = await axios.get(`https://elevatepromedia.com/api/equipaments`);
+          const res = await api.get(`/equipaments`);
           return res.data;
         } catch (err) {
           return [];
@@ -108,7 +108,7 @@ export default function Inventory() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/equipaments/${uid}`);
+    await api.delete(`/equipaments/${uid}`);
   }
 
   return (

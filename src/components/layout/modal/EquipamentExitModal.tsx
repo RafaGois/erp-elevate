@@ -3,7 +3,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { Equipament } from "@/lib/models/Equipament";
 import { EquipamentExit } from "@/lib/models/EquipamentExit";
@@ -31,7 +31,7 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(`/api/equipaments`);
+        const res = await api.get(`/equipaments`);
         return res.data;
       } catch (err) {
         console.log(err);
@@ -72,11 +72,11 @@ export default function EquipamentExitModal(props: EquipamentExitModalProps) {
   }
 
   async function create(data: Partial<EquipamentExit>) {
-    await axios.post("/api/equipamentExits", data);
+    await api.post("/equipament-exits", data);
   }
 
   async function update(data: Partial<EquipamentExit>) {
-    await axios.put(`/api/equipamentExits/${props.selectedObject?.id}`, data);
+    await api.put(`/equipament-exits/${props.selectedObject?.id}`, data);
   }
 
   async function handleClose() {

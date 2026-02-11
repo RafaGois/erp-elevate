@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import api from "@/lib/api";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
@@ -178,8 +178,8 @@ export default function Movimentations() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentations`,
+        const res = await api.get(
+          `/movimentations`,
         );
         return res.data;
       } catch (err) {
@@ -190,15 +190,15 @@ export default function Movimentations() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/movimentations/${uid}`);
+    await api.delete(`/movimentations/${uid}`);
   }
 
   const { data: types } = useQuery<MovimentationType[]>({
     queryKey: ["data_movimentation_types"],
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentation-types`,
+        const res = await api.get(
+          `/movimentation-types`,
         );
         return res.data;
       } catch (err) {

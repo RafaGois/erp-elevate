@@ -4,7 +4,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 
 type TaskTypeModalProps = BaseModalProps<Type>;
@@ -37,12 +37,12 @@ export default function TaskTypeModal(props: TaskTypeModalProps) {
   }
 
   async function create(data: Partial<Type>) {    
-    await axios.post("https://elevatepromedia.com/api/task-types", data);
+    await api.post("/task-types", data);
   }
 
   async function update(data: Partial<Type>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/task-types/${props.selectedObject?.id}`,
+    await api.put(
+      `/task-types/${props.selectedObject?.id}`,
       data
     );
   }

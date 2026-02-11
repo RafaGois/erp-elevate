@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Category from "@/lib/models/movimentations/Category";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -83,8 +83,8 @@ export default function Inventory() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentation-categories`,
+        const res = await api.get(
+          `/movimentation-categories`,
         );
         return res.data;
       } catch (err) {
@@ -95,8 +95,8 @@ export default function Inventory() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(
-      `https://elevatepromedia.com/api/movimentation-categories/${uid}`,
+    await api.delete(
+      `/movimentation-categories/${uid}`,
     );
   }
 

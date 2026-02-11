@@ -6,17 +6,17 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import AuthContextProps from "@/lib/interfaces/AuthContextProps";
 import User from "@/lib/models/User";
-import axios from "axios";
+import api from "@/lib/api";
 
 const AuthContext = createContext<AuthContextProps>({});
 
 function manageCookie(logged: boolean, token: string | null) {
-  if (logged ) {
-    Cookies.set("elevate-auth", logged + "", { expires: 1 });
-    if (token) Cookies.set("elevate-token", token, { expires: 1 });
+  if (logged) {
+    Cookies.set("elevate-auth", logged + "", { expires: 1, path: "/" });
+    if (token) Cookies.set("elevate-token", token, { expires: 1, path: "/" });
   } else {
-    Cookies.remove("elevate-auth");
-    Cookies.remove("elevate-token");
+    Cookies.remove("elevate-auth", { path: "/" });
+    Cookies.remove("elevate-token", { path: "/" });
     localStorage.setItem("selectedTab", "/dashboard/finances/movimentations");
   }
 }
@@ -54,8 +54,8 @@ export function AuthProvider(props: AuthProviderProps) {
         throw new Error("Informe todos os valores.");
       }
 
-      const response = await axios.post<User>(
-        "https://elevatepromedia.com/api//users/login",
+      const response = await api.post<User>(
+        "/users/login",
         recivedUser
       );
 
@@ -66,26 +66,6 @@ export function AuthProvider(props: AuthProviderProps) {
       return response.data.id;
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function loginWithGoogle(googleIdToken: string): Promise<string | false> {
-    setLoading(true);
-    try {
-      const response = await axios.post<User>(
-        "https://elevatepromedia.com/api/users/login-google",
-        { token: googleIdToken }
-      );
-      if (!response?.data?.token) {
-        setLoading(false);
-        return false;
-      }
-      confingSection(response.data);
-      router.push("/dashboard/finances/movimentations");
-      return response.data.id;
-    } catch {
-      setLoading(false);
-      return false;
     }
   }
 
@@ -100,8 +80,8 @@ export function AuthProvider(props: AuthProviderProps) {
 
   async function register(recivedUser: User) {
     setLoading(true);
-    await axios.post<User>(
-      "https://elevatepromedia.com/api/users",
+    await api.post<User>(
+      "/users",
       recivedUser
     );
     return recivedUser.id;
@@ -117,8 +97,8 @@ export function AuthProvider(props: AuthProviderProps) {
     }
 
     setLoading(true);
-    axios
-      .post<User>("https://elevatepromedia.com/api/users/validate", {
+    api
+      .post<User>("/users/validate", {
         token,
       })
       .then((resp) => {
@@ -141,7 +121,6 @@ export function AuthProvider(props: AuthProviderProps) {
       value={{
         user,
         login,
-        loginWithGoogle,
         register,
         logout,
         loading,

@@ -3,7 +3,7 @@ import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
@@ -61,12 +61,12 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   async function create(data: Partial<Movimentation>) {
     data.date = new Date(data.date?.toString() ?? '');
-    await axios.post("https://elevatepromedia.com/api/movimentations", data);
+    await api.post("/movimentations", data);
   }
 
   async function update(data: Partial<Movimentation>) {
-    await axios.put(
-      `https://elevatepromedia.com/api/movimentations/${props.selectedObject?.id}`,
+    await api.put(
+      `/movimentations/${props.selectedObject?.id}`,
       data
     );
   }
@@ -75,7 +75,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     queryKey: ["data_users"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get("https://elevatepromedia.com/api/users");
+      const res = await api.get("/users");
       return res.data;
     },
   });
@@ -84,8 +84,8 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     queryKey: ["data_movimentation_types"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get(
-        "https://elevatepromedia.com/api/movimentation-types"
+      const res = await api.get(
+        "/movimentation-types"
       );
       return res.data;
     },
@@ -95,8 +95,8 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     queryKey: ["data_bank_accounts"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get(
-        "https://elevatepromedia.com/api/bank-accounts"
+      const res = await api.get(
+        "/bank-accounts"
       );
       return res.data;
     },
@@ -106,8 +106,8 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     queryKey: ["data_movimentation_categories"],
     refetchOnMount: "always",
     queryFn: async () => {
-      const res = await axios.get(
-        "https://elevatepromedia.com/api/movimentation-categories"
+      const res = await api.get(
+        "/movimentation-categories"
       );
       return res.data;
     },

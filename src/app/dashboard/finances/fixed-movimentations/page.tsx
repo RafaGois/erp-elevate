@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import api from "@/lib/api";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
@@ -134,8 +134,8 @@ export default function FixedMovimentations() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/fixed-movimentations`,
+        const res = await api.get(
+          `/fixed-movimentations`,
         );
         return res.data;
       } catch (err) {
@@ -148,8 +148,8 @@ export default function FixedMovimentations() {
     queryKey: ["data_movimentation_types"],
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/movimentation-types`,
+        const res = await api.get(
+          `/movimentation-types`,
         );
         return res.data;
       } catch (err) {
@@ -160,8 +160,8 @@ export default function FixedMovimentations() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(
-      `https://elevatepromedia.com/api/fixed-movimentations/${uid}`,
+    await api.delete(
+      `/fixed-movimentations/${uid}`,
     );
   }
 

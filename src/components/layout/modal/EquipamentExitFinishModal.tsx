@@ -2,7 +2,7 @@ import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 //import Checkbox from "../components/inputs/Checkbox";
-import axios from "axios";
+import api from "@/lib/api";
 import { toast } from "sonner";
 import { EquipamentExit } from "@/lib/models/EquipamentExit";
 
@@ -34,7 +34,7 @@ export default function EquipamentExitFinishModal(
   }
 
   async function update(data: Partial<EquipamentExit>) {
-    await axios.put(`/api/equipamentExits/${props.selectedObject?.id}`, data);
+    await api.put(`/equipament-exits/${props.selectedObject?.id}`, data);
   }
 
   async function handleClose() {

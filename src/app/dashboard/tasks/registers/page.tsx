@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Circle, CircleCheckBig, CircleDashed, CircleGauge, LoaderCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Task from "@/lib/models/task/Task";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -177,7 +177,7 @@ export default function Tasks() {
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await axios.get(`https://elevatepromedia.com/api/tasks`);
+        const res = await api.get(`/tasks`);
         return res.data;
       } catch (err) {
         return [];
@@ -219,8 +219,8 @@ export default function Tasks() {
     queryKey: ["data_task_statuses"],
     queryFn: async () => {
       try {
-        const res = await axios.get(
-          `https://elevatepromedia.com/api/task-statuses`
+        const res = await api.get(
+          `/task-statuses`
         );
         return res.data;
       } catch (err) {
@@ -231,7 +231,7 @@ export default function Tasks() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/tasks/${uid}`);
+    await api.delete(`/tasks/${uid}`);
   }
 
   return (

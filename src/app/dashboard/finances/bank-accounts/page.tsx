@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
-import axios from "axios";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import BankAccount from "@/lib/models/BankAccount";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
@@ -90,7 +90,7 @@ export default function Inventory() {
       refetchOnMount: "always",
       queryFn: async () => {
         try {
-          const res = await axios.get(`https://elevatepromedia.com/api/bank-accounts`);
+          const res = await api.get(`/bank-accounts`);
           return res.data;
         } catch (err) {
           return [];
@@ -101,7 +101,7 @@ export default function Inventory() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await axios.delete(`https://elevatepromedia.com/api/bank-accounts/${uid}`);
+    await api.delete(`/bank-accounts/${uid}`);
   }
 
   return (
