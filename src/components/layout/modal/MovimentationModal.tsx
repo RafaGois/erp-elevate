@@ -143,62 +143,64 @@ export default function MovimentationModal(props: MovimentationModalProps) {
       onSubmit={form.handleSubmit(handleSubmit)}
     >
       <Form {...form}>
-        <form className="py-6">
-          <InputForm
-            name="description"
-            label="Descrição"
-            placeholder="Descrição"
-            type="text"
-            required
-            form={form}
-          />
-          <InputForm
-            name="value"
-            label="Valor"
-            placeholder="Valor"
-            type="number"
-            required
-            form={form}
-          />
-          <InputForm
-            name="date"
-            label="Data"
-            placeholder="Data"
-            type="date"
-            required
-            form={form}
-          />
-          <div className="flex flex-row gap-2">
-            <SelectForm
-              name="userId"
-              label="Usuário Responsável"
-              options={users}
+        <form className="flex flex-col gap-4 py-2">
+          <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[min(60vh,28rem)] pr-1">
+            <InputForm
+              name="description"
+              label="Descrição"
+              placeholder="Descrição"
+              type="text"
               required
               form={form}
             />
-            <SelectForm
-              name="bankAccountId"
-              label="Conta Bancária"
-              options={filteredBankAccounts}
+            <InputForm
+              name="value"
+              label="Valor"
+              placeholder="Valor"
+              type="number"
               required
               form={form}
             />
-          </div>
-          <div className="flex flex-row gap-2">
-            <SelectForm
-              name="typeId"
-              label="Tipo"
-              options={types}
+            <InputForm
+              name="date"
+              label="Data"
+              placeholder="Data"
+              type="date"
               required
               form={form}
             />
-            <SelectForm
-              name="categoryId"
-              label="Categoria"
-              options={filteredCategories}
-              required
-              form={form}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
+              <SelectForm
+                name="userId"
+                label="Usuário Responsável"
+                options={users ?? []}
+                required
+                form={form}
+              />
+              <SelectForm
+                name="bankAccountId"
+                label="Conta Bancária"
+                options={filteredBankAccounts}
+                required
+                form={form}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
+              <SelectForm
+                name="typeId"
+                label="Tipo"
+                options={types ?? []}
+                required
+                form={form}
+              />
+              <SelectForm
+                name="categoryId"
+                label="Categoria"
+                options={filteredCategories}
+                required
+                form={form}
+              />
+            </div>
           </div>
         </form>
       </Form>

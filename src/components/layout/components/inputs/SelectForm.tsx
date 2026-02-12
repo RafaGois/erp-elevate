@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { UseFormReturn } from "react-hook-form";
 
 interface SelectFormProps {
@@ -55,7 +56,7 @@ export default function SelectForm(props: SelectFormProps) {
         required: props?.required ? "Campo obrigatório" : false,
       }}
       render={({ field }) => (
-        <FormItem key={props.key} className="flex-1 ">
+        <FormItem key={props.key} className={cn("flex-1 min-w-0", props.className)}>
           {props.label && <FormLabel>{props.label}</FormLabel>}
           <Select
             key={props?.key}
@@ -71,7 +72,7 @@ export default function SelectForm(props: SelectFormProps) {
             }}
           >
             <FormControl className="w-full">
-              <SelectTrigger>
+              <SelectTrigger className="w-full min-w-0">
                 <SelectValue
                   placeholder={
                     props.isLoading ? "Carregando..." : "Informe uma opção"
