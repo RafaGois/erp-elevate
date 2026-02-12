@@ -5,7 +5,8 @@ import Footer from "@/components/landing/footer/Footer";
 import Hero from "@/components/landing/hero/Hero";
 import ScrollText from "@/components/landing/scrolltext/ScrollText";
 import Services from "@/components/landing/services/Services";
-import Testimonials from "@/components/landing/testimonials/Testimonials";
+// import Testimonials from "@/components/landing/testimonials/Testimonials";
+import Problems from "@/components/landing/problems/Problems";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -137,8 +138,9 @@ export default function Home() {
       <AboutUs />
       <Services />
       <InstitutionalVideo />
-      <Testimonials />
-      <Clients />
+      {/* <Testimonials /> */}
+      <Problems />
+      {/* <Clients /> */}
       <CallToAction />
       <Footer />
     </div>
