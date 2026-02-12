@@ -9,9 +9,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
           {/* Logo e Descrição */}
           <div className="max-w-md">
-            <h2 className="text-xl font-bold mb-3">ElevatePro Media</h2>
+            <h2 className="text-xl font-bold mb-3">Sistemas Elevate</h2>
             <p className="text-white/40 text-sm">
-              Transformando ideias em soluções <br /> digitais inovadoras.
+              Desenvolvendo soluções para planejamento, controle de produção, automação de processos e gestão industrial customizadas e flexiveis para resolver o seu problema de forma real.
             </p>
           </div>
 
@@ -78,7 +78,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="text-center">
           <p className="text-white/30 text-sm">
-            © 2025 ElevatePro Media. Todos os direitos reservados.
+            © 2026 Sistemas Elevate. Todos os direitos reservados.
           </p>
         </div>
       </div>

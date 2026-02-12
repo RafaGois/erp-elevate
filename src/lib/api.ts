@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 // Instância configurada do axios
 const api = axios.create({
-  baseURL: "https://elevatepromedia.com/api",
+  baseURL: "https://sistemaselevate.com/api",
 });
 
 // Interceptor para adicionar o header token em todas as requisições

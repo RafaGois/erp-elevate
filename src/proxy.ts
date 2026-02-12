@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
   //? futuramente vai pegar o jwt e validar se ele é valido
   try {
     let response = await axios.post(
-      "https://elevatepromedia.com/api/users/validate", 
+      "https://sistemaselevate.com/api/users/validate", 
       { token: token?.value },
       {
         headers: {

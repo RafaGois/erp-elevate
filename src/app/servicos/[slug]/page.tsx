@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   const service = getServiceBySlug(slug);
   if (!service) return { title: "Serviço não encontrado" };
   return {
-    title: `${service.name} | ElevatePro Media`,
+    title: `${service.name} | Sistemas Elevate`,
     description: service.shortDescription,
   };
 }
