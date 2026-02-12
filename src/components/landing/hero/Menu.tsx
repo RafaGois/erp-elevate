@@ -174,7 +174,7 @@ export default function Menu() {
       <div className="flex-row gap-8 hidden sm:flex">
         {renderOptions()}
       </div>
-      <Link href="/auth" className="underline hidden sm:flex">ENTRAR</Link>
+      <Link href="/auth" className="underline  hidden sm:flex">ENTRAR</Link>
       <div className="flex md:hidden w-full justify-end items-center">
         <p
           className="menu-start-button text-sm text-white underline cursor-pointer"
@@ -184,13 +184,13 @@ export default function Menu() {
         </p>
       </div>
       <div
-        className={`hidden menu-overlay fixed w-full h-svh overflow-hidden top-0 left-0 /bg-[#bdfa3c] bg-black z-[99999] flex-col items-center justify-center p-4`}
+        className={`hidden menu-overlay fixed w-full h-svh overflow-hidden top-0 left-0 bg-[#bdfa3c] text-gray-800 z-[99999] flex-col items-center justify-center p-4`}
       >
         <div className="flex w-full justify-between">
-          <p className="menu-logo">ELEVATE PRO MEDIA</p>
+          <p className="menu-logo">ELEVATE SISTEMAS</p>
           <div>
             <p
-              className="menu-close text-white text-sm uppercase cursor-pointer underline"
+              className="menu-close text-sm uppercase cursor-pointer underline"
               onClick={toggleMenu}
             >
               FECHAR
@@ -222,7 +222,7 @@ export default function Menu() {
         </div>
         <div className="enter-menu-button flex w-full justify-end">
           <Link href="/auth">
-            <p className="text-white text-sm uppercase cursor-pointer underline">
+            <p className="text-sm uppercase cursor-pointer underline">
               Entrar
             </p>
           </Link>
