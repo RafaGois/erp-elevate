@@ -1,192 +1,125 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import React, { useRef } from "react";
-import { SplitText } from "gsap/SplitText";
+import { useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImageTrail } from "@/components/ui/image-trail";
-import { ArrowUpRight } from "lucide-react";
+import { servicesData } from "@/lib/data/services";
+import {
+  ArrowUpRight,
+  Code2,
+  Cpu,
+  Database,
+  GitBranch,
+  Terminal,
+  Braces,
+  Binary,
+  Workflow,
+  LayoutDashboard,
+} from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
-const services = [
-  {
-    id: 1,
-    name: "INSTITUCIONAL",
-    description: "Descrição do serviço 1",
-    route: "institucional",
-  },
-  {
-    id: 2,
-    name: "ESPORTE",
-    route: "esporte",
-  },
-  {
-    id: 3,
-    name: "GASTRONOMIA",
-    route: "gastronomia",
-  },
-  {
-    id: 4,
-    name: "CASAMENTOS",
-    route: "casamentos",
-  },
-  {
-    id: 5,
-    name: "EVENTOS",
-    route: "eventos",
-  },
-  {
-    id: 7,
-    name: "Corporativos",
-    route: "corporativos",
-  },
-/*   {
-    id: 8,
-    name: "Programação",
-    route: "programming",
-  }, */
+const cardStyle =
+  "rounded-xl border border-white/10 bg-black/60 backdrop-blur-sm [box-shadow:0_-20px_80px_-20px_#ffffff08_inset] hover:border-white/20 hover:bg-black/80 transition-colors duration-300";
+
+const trailIconClass =
+  "flex h-24 w-24 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white/70 backdrop-blur-sm";
+
+const trailIcons = [
+  Code2,
+  Cpu,
+  Database,
+  GitBranch,
+  Terminal,
+  Braces,
+  Binary,
+  Workflow,
+  LayoutDashboard,
 ];
 
 export default function Services() {
   const container = useRef<HTMLDivElement | null>(null);
-
-  const images = [
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1757009566/img-10_p3zhi5.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1756825720/img-9_etwlpt.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1755977544/DIVINA-4_xj4avw.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823356/img-11_tcjhvo.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1756825661/img-7_kfucmt.jpg",
-    "https://res.cloudinary.com/dn454izoh/image/upload/v1756823350/img-6_pvqbqz.jpg"
-  ].map((url) => `${url}?auto=format&fit=crop&w=300&q=80`);
+  const cardsRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
-      if (!container.current) return;
+      if (!container.current || !cardsRef.current) return;
 
-      gsap.registerPlugin(SplitText);
+      gsap.registerPlugin(ScrollTrigger);
 
-      const servicesElements = container.current?.querySelectorAll("#service");
+      const cards = cardsRef.current.querySelectorAll("[data-service-card]");
+      gsap.set(cards, { opacity: 0, y: 32 });
 
-      servicesElements?.forEach((serviceElement) => {
-        const title = serviceElement.querySelector("#title");
-        const barra = serviceElement.querySelector(".barra");
-        const arrow = serviceElement.querySelector(".arrow");
-
-        gsap.set(title, { opacity: 0 });
-        //gsap.set(title, { opacity: 0.5 });
-
-        gsap.to(title, {
-          opacity: 0.5,
-          scrollTrigger: {
-            trigger: title,
-            start: "top 85%",
-            toggleActions: "play pause pause pause",
-          },
-        });
-
-        function hoverAnim() {
-          return gsap
-            .timeline({ paused: true })
-            .to(title, {
-              opacity: 1,
-              fontWeight: 900,
-              letterSpacing: 5,
-              duration: 0.3,
-            })
-            .to(barra, {
-              width: "100%",
-              ease: "power4.out",
-            })
-            .to(
-              arrow,
-              {
-                opacity: 1,
-              },
-              "0.4"
-            );
-        }
-
-        serviceElement.addEventListener("mouseenter", () => hoverAnim().play());
-
-        function hoverExit() {
-          return gsap
-            .timeline({ paused: true })
-            .to(title, {
-              opacity: 0.5,
-              fontWeight: 300,
-              letterSpacing: 1,
-              duration: 0.4,
-            })
-            .to(barra, {
-              width: "0%",
-            })
-            .to(arrow, {
-              opacity: 0,
-            });
-        }
-
-        serviceElement.addEventListener("mouseleave", () => hoverExit().play());
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
       });
     },
     { scope: container }
   );
 
-  function renderServices() {
-    return services.map((service, i) => (
-      <Link
-        href={"/galery/" + service.route}
-        id="service"
-        key={service.id + "-" + i}
-        className="flex items-end "
-      >
-        <div>
-          <h2
-            id="title"
-            className={`text-center text-4xl  text-[#dadada] cursor-pointer select-none uppercase `}
-          >
-            {service.name}
-          </h2>
-          <div className="barra h-[1px] w-min bg-white"></div>
-        </div>
-        <ArrowUpRight size={30} className="text-white arrow opacity-0" />
-      </Link>
-    ));
-  }
-
   return (
     <div
       id="services"
       ref={container}
-      className="flex flex-col items-center justify-center p-4 min-h-svh bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.12)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))] relative overflow-hidden"
+      className="relative flex min-h-svh flex-col overflow-hidden bg-[radial-gradient(80%_60%_at_50%_50%,rgba(255,255,255,0.08)_0%,rgba(0,0,0,0)_60%),linear-gradient(to_bottom,rgba(0,0,0,1),rgba(0,0,0,1))] px-4 py-24 md:px-6 md:py-28"
     >
-      <div className="absolute top-0 left-0 z-0"></div>
-      <div className="absolute inset-0 z-10">
+      <div className="absolute inset-0 z-0">
         <ImageTrail containerRef={container}>
-          {images.map((url, index) => (
-            <div
-              key={index}
-              className="flex relative overflow-hidden w-24 h-24 rounded-lg"
-            >
-              <Image
-                src={url}
-                alt={`Trail image ${index + 1}`}
-                className="object-cover absolute inset-0 hover:scale-110 transition-transform"
-                width={200}
-                height={100}
-              />
+          {trailIcons.map((Icon, index) => (
+            <div key={index} className={trailIconClass}>
+              <Icon className="h-10 w-10 md:h-12 md:w-12" strokeWidth={1.5} />
             </div>
           ))}
         </ImageTrail>
       </div>
-      <div className="w-full z-20 relative text-white">
-        <h2 className="text-4xl font-bold text-left">Serviços</h2>
-        <p className="text-left"></p>
-      </div>
-      <div className="flex flex-1 flex-col gap-4 justify-center min-h-svh z-20 relative">
-        {renderServices()}
+
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
+        <header className="mb-12 md:mb-16">
+          <h2 className="text-4xl font-bold text-white md:text-5xl">
+            Serviços
+          </h2>
+          <p className="mt-2 max-w-xl text-gray-400">
+            Desenvolvimento de software, controle de produção, integração e
+            automação para a indústria.
+          </p>
+        </header>
+
+        <div
+          ref={cardsRef}
+          className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2"
+        >
+          {servicesData.map((service) => (
+            <Link
+              key={service.slug}
+              href={`/servicos/${service.slug}`}
+              data-service-card
+              className={`flex flex-col p-6 md:p-8 text-left ${cardStyle}`}
+            >
+              <div className="flex flex-col gap-3">
+                <h3 className="text-xl font-semibold text-white md:text-2xl">
+                  {service.name}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-300 md:text-base">
+                  {service.listingDescription}
+                </p>
+              </div>
+              <span className="mt-auto flex items-center gap-2 text-sm font-medium text-[#bdfa3c]">
+                Saiba mais
+                <ArrowUpRight className="h-4 w-4" />
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

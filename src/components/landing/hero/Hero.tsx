@@ -63,7 +63,7 @@ export default function Hero() {
       <LavaLamp />
       <div className="flex flex-col items-start justify-end h-full w-full p-8">
         <small className="text-[#7D6B58] tracking-widest texto-titulo">
-          Transformando sua presença digital em autoridade
+          Desenvolvimento de software com mentalidade industrial.
         </small>
         <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold titulo relative tracking-tight mix-blend-exclusion text-white">
           <span className="h-full bg-white absolute barra"></span>

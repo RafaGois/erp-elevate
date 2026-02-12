@@ -8,7 +8,7 @@ import useAuth from "@/data/hooks/useAuth";
 import User from "@/lib/models/User";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Home } from "lucide-react";
+import { ArrowLeftIcon, Home } from "lucide-react";
 import Link from "next/link";
 import InputForm from "@/components/layout/components/inputs/InputForm";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ import { useEffect } from "react";
 
 export default function Auth() {
   const { login } = useAuth();
-  const { setLoading, loading} = useAppData();
+  const { setLoading, loading } = useAppData();
   const form = useForm<User>({
     defaultValues: {
       username: "",
@@ -27,12 +27,13 @@ export default function Auth() {
   });
   //todo usar o react-hook-form
   async function submit(data: User) {
-    
     try {
       setLoading(true);
       await login?.(data as User);
     } catch (error) {
-      toast.error(error?.response?.data?.[0] ?? error?.message ?? "Erro ao fazer login.");
+      toast.error(
+        error?.response?.data?.[0] ?? error?.message ?? "Erro ao fazer login.",
+      );
       //toast.error(error instanceof Error ? error.message : "Erro ao fazer login.");
     }
   }
@@ -49,6 +50,14 @@ export default function Auth() {
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+      <div className="absolute top-5 left-5 z-50">
+        <Link href="/">
+          <span className="flex items-center gap-2 text-sm font-medium">
+            <ArrowLeftIcon size={16} />
+            Voltar
+          </span>
+        </Link>
+      </div>
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className="flex flex-col gap-6">
           <Card className="overflow-hidden p-0">
