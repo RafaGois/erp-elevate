@@ -58,7 +58,7 @@ export function AuthProvider(props: AuthProviderProps) {
         "/users/login",
         recivedUser
       );
-
+ 
       confingSection(response.data);
       //todo validar entrar na ultima tela salva localmente, senao na current line 1
       
@@ -89,6 +89,7 @@ export function AuthProvider(props: AuthProviderProps) {
 
   useEffect(() => {
     const token = Cookies.get("elevate-token");
+console.log(token);
 
     if (!token) {
       setUser(null);
