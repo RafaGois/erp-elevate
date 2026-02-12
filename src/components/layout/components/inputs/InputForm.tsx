@@ -35,7 +35,7 @@ export default function InputForm(props: InputFormProps) {
         required: props?.required ? "Campo obrigatório" : false,
       }}
       render={({ field }) => (
-        <FormItem className={cn("space-y-0 flex-1", props.className)}>
+        <FormItem className={cn("space-y-0 flex-1 min-w-0", props.className)}>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
             <Input

@@ -97,7 +97,7 @@ export default function BankAccountModal(props: BankAccountModalProps) {
             required
             form={form}
           />
-          <div className="flex flex-row gap-2 mt-4"> 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
             <InputForm
               name="number"
               label="Número"

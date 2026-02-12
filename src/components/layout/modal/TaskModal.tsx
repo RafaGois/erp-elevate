@@ -152,71 +152,71 @@ export default function TaskModal(props: TaskModalProps) {
       onSubmit={form.handleSubmit(handleSubmit)}
     >
       <Form {...form}>
-        <form className="py-6">
-          <InputForm
-            name="name"
-            label="Nome"
-            placeholder="Nome"
-            type="text"
-            required
-            form={form}
-          />
-          <InputForm
-            name="description"
-            label="Descrição"
-            placeholder="Descrição"
-            type="text"
-            form={form}
-          />
-          <SelectForm
-            name="responsibleId"
-            label="Responsável"
-            options={users ?? []}
-            required
-            form={form}
-          />
-          <div className="flex flex-row gap-2 mt-2">
-            {props.selectedObject?.id && (
-            <SelectForm
-              name="statusId"
-              label="Status"
-              options={statuses ?? []}
+        <form className="flex flex-col gap-4 py-2">
+          <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[min(60vh,28rem)] pr-1">
+            <InputForm
+              name="name"
+              label="Nome"
+              placeholder="Nome"
+              type="text"
+              required
               form={form}
             />
-            )}
+            <InputForm
+              name="description"
+              label="Descrição"
+              placeholder="Descrição"
+              type="text"
+              form={form}
+            />
             <SelectForm
-              name="priorityId"
-              label="Prioridade"
-              options={priorities ?? []}
+              name="responsibleId"
+              label="Responsável"
+              options={users ?? []}
+              required
+              form={form}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
+              {props.selectedObject?.id && (
+                <SelectForm
+                  name="statusId"
+                  label="Status"
+                  options={statuses ?? []}
+                  form={form}
+                />
+              )}
+              <SelectForm
+                name="priorityId"
+                label="Prioridade"
+                options={priorities ?? []}
+                required
+                form={form}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
+              <SelectForm
+                name="typeId"
+                label="Tipo"
+                options={types ?? []}
+                required
+                form={form}
+              />
+              <SelectForm
+                name="projectId"
+                label="Projeto"
+                options={projects ?? []}
+                form={form}
+              />
+            </div>
+            <InputForm
+              name="deadline"
+              label="Prazo"
+              placeholder="Prazo"
+              type="date"
               required
               form={form}
             />
           </div>
-          <div className="flex flex-row gap-2 mt-2">
-            <SelectForm
-              name="typeId"
-              label="Tipo"
-              options={types ?? []}
-              required
-              form={form}
-            />
-            <SelectForm
-              name="projectId"
-              label="Projeto"
-              options={projects ?? []}
-              
-              form={form}
-            />
-          </div>
-          <InputForm
-            name="deadline"
-            label="Prazo"
-            placeholder="Prazo"
-            type="date"
-            required
-            form={form}
-            className="mt-2"
-          />
         </form>
       </Form>
     </Modal>

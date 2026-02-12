@@ -154,11 +154,11 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
             required
             form={form}
           />
-          <div className="flex flex-row gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
             <SelectForm
               name="typeId"
               label="Tipo"
-              options={types}
+              options={types ?? []}
               required
               form={form}
             />
