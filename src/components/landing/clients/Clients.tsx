@@ -27,7 +27,7 @@ export default function Clients() {
   );
 
   return (
-    <div ref={container} className=" w-full bg-black text-white flex flex-col justify-center items-center">
+    <div id="clients" ref={container} className="w-full bg-black text-white flex flex-col justify-center items-center">
       <div className="flex justify-center items-center gap-8 flex-wrap p-4">
         <div className="relative w-24 h-16 flex items-center justify-center opacity-70">
           <Image

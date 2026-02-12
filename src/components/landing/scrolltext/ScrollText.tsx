@@ -164,7 +164,7 @@ export default function ScrollText() {
       className="w-full h-svh md:h-[50svw] bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden"
     >
       <div className="z-50">
-        <h1 className="text-center max-w-6xl text-4xl md:text-7xl font-bold text-white ">
+        <h1 className="text-wrap text-center max-w-6xl text-4xl md:text-7xl font-bold text-white ">
           Desenvolvimento de software com mentalidade industrial
         </h1>
         <div className="w-full flex justify-center">

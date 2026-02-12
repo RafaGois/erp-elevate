@@ -7,26 +7,11 @@ import MenuItem from "./MenuItem";
 import Image from "next/image";
 
 const menuLinks = [
-  {
-    key: "about-us",
-    label: "Sobre nós",
-    href: "#about-us",
-  },
-  {
-    key: "services",
-    label: "Serviços",
-    href: "#services",
-  },
-  {
-    key: "clients",
-    label: "Clientes",
-    href: "#clients",
-  },
-  {
-    key: "contact",
-    label: "Contato",
-    href: "#contact",
-  },
+  { key: "about-us", label: "Sobre nós", href: "#about-us" },
+  { key: "services", label: "Serviços", href: "#services" },
+  { key: "problemas", label: "Problemas", href: "#problemas" },
+  { key: "clients", label: "Clientes", href: "#clients" },
+  { key: "contact", label: "Contato", href: "#contact" },
 ];
 
 export default function Menu() {
