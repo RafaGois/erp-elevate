@@ -45,7 +45,7 @@ export default function AppSidebar() {
       ],
     },
     {
-      title: "Tarefas",
+      title: "Operacional",
       items: [
         {
           title: "Tarefas",
@@ -78,6 +78,10 @@ export default function AppSidebar() {
             {
               title: "Registros",
               url: "/",
+            },
+            {
+              title: "Orçamentos",
+              url: "/budgets",
             },
           ],
         },

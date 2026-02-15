@@ -37,18 +37,21 @@ export default function Modal<T>(props: ModalProps<T>) {
 
   return (
     <Dialog
+     
       open={!!props?.action}
       onOpenChange={(isOpen) => {
         if (!isOpen) handleClose();
         setReloading?.(false);
       }}
     >
-      <DialogContent>
+      <DialogContent >
         <DialogHeader>
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>{props.description}</DialogDescription>
         </DialogHeader>
-        {props.children}
+        <div className="max-h-[min(90vh,28rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:[display:none]">
+          {props.children}
+        </div>
         <DialogFooter>
           <Button
             disabled={reloading}

@@ -1,0 +1,220 @@
+---
+description: Next.js project structure, App Router conventions, and best practices
+globs: src/**/*
+alwaysApply: true
+---
+# Next.js Project Structure & App Router
+
+Guidelines for organizing and building the ERP Elevate Next.js app to maximize App Router benefits.
+
+---
+
+## Directory Structure
+
+```
+src/
+├── app/                    # App Router (routes, layouts, loading, error)
+│   ├── layout.tsx          # Root layout (Server Component)
+│   ├── page.tsx            # Home route
+│   ├── globals.css
+│   ├── providers.tsx       # Client providers (QueryClient, Theme, Auth)
+│   ├── auth/               # /auth
+│   ├── dashboard/          # /dashboard/* (authenticated area)
+│   │   ├── layout.tsx      # Dashboard layout with sidebar
+│   │   ├── finances/       # /dashboard/finances/*
+│   │   ├── tasks/          # /dashboard/tasks/*
+│   │   ├── equipaments/    # /dashboard/equipaments/*
+│   │   └── ...
+│   ├── servicos/[slug]/    # Dynamic route /servicos/:slug
+│   └── galery/[category]/  # Dynamic route /galery/:category
+├── components/
+│   ├── ui/                 # Primitives (button, input, dialog)
+│   ├── layout/             # Layout pieces (Header, Sidebar, modals)
+│   ├── landing/            # Landing page sections
+│   └── blocks/             # Reusable composed blocks
+├── data/
+│   ├── contexts/           # React contexts (Auth, App)
+│   └── hooks/              # Data hooks (useAuth, useAppData)
+├── lib/
+│   ├── api.ts              # Axios instance, interceptors
+│   ├── utils.ts            # cn(), helpers
+│   ├── models/             # TypeScript models/interfaces
+│   ├── interfaces/         # Shared types
+│   └── data/               # Static/curated data (services, etc.)
+├── services/               # API/client setup (QueryClient)
+└── hooks/                  # Generic hooks
+```
+
+---
+
+## App Router Conventions
+
+### Routes
+
+| Pattern | Use Case | Example |
+|---------|----------|---------|
+| `page.tsx` | Route page | `app/page.tsx` → `/` |
+| `[slug]/page.tsx` | Dynamic segment | `app/servicos/[slug]/page.tsx` → `/servicos/foo` |
+| `layout.tsx` | Shared UI for subtree | `app/dashboard/layout.tsx` |
+| `loading.tsx` | Loading UI | Optional, uses Suspense |
+| `error.tsx` | Error boundary | Optional |
+| `not-found.tsx` | 404 | Optional at route level |
+
+### File Naming
+
+- `page.tsx` — route entry
+- `layout.tsx` — layout wrapper
+- `loading.tsx` — loading state
+- `error.tsx` — error boundary
+- `not-found.tsx` — custom 404
+- `template.tsx` — re-mounting layout (use sparingly)
+
+### Route Organization
+
+- Group related routes under a folder (e.g. `dashboard/finances/`, `dashboard/tasks/`)
+- Use `(group)` for organization without affecting URL (e.g. `(marketing)`, `(dashboard)`) if needed
+- Keep `page.tsx` thin; move logic to server actions, lib, or components
+
+---
+
+## Server vs Client Components
+
+**Default: Server Components.** Use `"use client"` only when required.
+
+### Use Server Components for:
+
+- Data fetching (async/await in component)
+- Accessing backend resources (DB, APIs, env)
+- Keeping sensitive data and logic on server
+- Large dependencies that don’t need to run in the browser
+
+```typescript
+// app/servicos/[slug]/page.tsx - Server Component
+export default async function ServicePage({ params }: Props) {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  if (!service) notFound();
+  return <ServiceContent service={service} />;
+}
+```
+
+### Use Client Components for:
+
+- `useState`, `useEffect`, event handlers
+- Browser APIs
+- Third-party libs that need `window` (e.g. GSAP, Lenis)
+- Context consumers
+
+```typescript
+// components/landing/hero/Menu.tsx
+"use client";
+export default function Menu() {
+  const [open, setOpen] = useState(false);
+  // ...
+}
+```
+
+### Colocation
+
+- Keep `"use client"` as deep as possible
+- Prefer: Server parent → Client child
+- Avoid: unnecessary Client wrappers around whole pages
+
+---
+
+## Layouts
+
+- **Root layout** (`app/layout.tsx`): html, body, providers, metadata
+- **Nested layouts** (e.g. `dashboard/layout.tsx`): sidebar, header, content slot
+- Layouts wrap all pages in their segment and persist across navigations
+
+```typescript
+// app/dashboard/layout.tsx
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div>
+      <AppSidebar />
+      <main>{children}</main>
+    </div>
+  );
+}
+```
+
+---
+
+## Dynamic Routes
+
+### Params (Promise in Next 15+)
+
+```typescript
+type Props = { params: Promise<{ slug: string }> };
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  // ...
+}
+```
+
+### Static Generation
+
+```typescript
+export async function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug }));
+}
+```
+
+### Metadata
+
+```typescript
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const item = getItem(slug);
+  if (!item) return { title: "Not Found" };
+  return { title: `${item.name} | App`, description: item.description };
+}
+```
+
+---
+
+## Data Fetching
+
+- **Server Components:** `async` with direct `fetch` or lib calls
+- **Client Components:** TanStack Query (`useQuery`, `useMutation`) via `api` from `@/lib/api`
+
+```typescript
+// Server
+const data = await fetch(...) or getData();
+
+// Client
+const { data } = useQuery({ queryKey: ["key"], queryFn: () => api.get("/path") });
+```
+
+---
+
+## Metadata & SEO
+
+- Set `metadata` (and `generateMetadata` where needed) in layouts/pages
+- Root layout: `metadata`, `openGraph`, `verification`
+- Per-page: `title`, `description` via `generateMetadata` for dynamic routes
+
+---
+
+## Path Aliases
+
+Use `@/` for `src/`:
+
+```typescript
+import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/data/contexts/AuthContext";
+import api from "@/lib/api";
+```
+
+---
+
+## Checklist for New Features
+
+1. Route under `app/` with appropriate folder structure
+2. Prefer Server Component unless hooks/events required
+3. Use `layout.tsx` for shared UI in a route segment
+4. Use `generateStaticParams` and `generateMetadata` for dynamic routes
+5. Put reusable UI in `components/`; logic in `lib/` or `data/`
+6. Keep providers in `app/providers.tsx` (client) and wrap from root layout
