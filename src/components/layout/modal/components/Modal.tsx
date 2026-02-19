@@ -50,7 +50,7 @@ export default function Modal<T>(props: ModalProps<T>) {
           <DialogDescription>{props.description}</DialogDescription>
         </DialogHeader>
         
-        <div className="h-[calc(100vh-20rem)] max-h-[calc(100vh-20rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className=" max-h-[calc(100vh-20rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {props.children}
         </div>
         <DialogFooter>
