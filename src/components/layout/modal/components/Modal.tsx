@@ -44,12 +44,13 @@ export default function Modal<T>(props: ModalProps<T>) {
         setReloading?.(false);
       }}
     >
-      <DialogContent >
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{props.title}</DialogTitle>
           <DialogDescription>{props.description}</DialogDescription>
         </DialogHeader>
-        <div className="max-h-[min(90vh,28rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:[display:none]">
+        
+        <div className="h-[calc(100vh-20rem)] max-h-[calc(100vh-20rem)] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {props.children}
         </div>
         <DialogFooter>

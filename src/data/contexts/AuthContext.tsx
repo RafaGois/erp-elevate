@@ -55,7 +55,7 @@ export function AuthProvider(props: AuthProviderProps) {
       }
 
       const response = await api.post<User>(
-        "/login",
+        "/users/login",
         recivedUser
       );
  
@@ -89,7 +89,6 @@ export function AuthProvider(props: AuthProviderProps) {
 
   useEffect(() => {
     const token = Cookies.get("elevate-token");
-console.log(token);
 
     if (!token) {
       setUser(null);
