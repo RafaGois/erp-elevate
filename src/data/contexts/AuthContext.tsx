@@ -55,7 +55,7 @@ export function AuthProvider(props: AuthProviderProps) {
       }
 
       const response = await api.post<User>(
-        "/users/login",
+        "/login",
         recivedUser
       );
  

@@ -31,7 +31,7 @@ api.interceptors.response.use(
       const url = error.config?.url ?? "";
       // Não desloga em 401 em rotas públicas (login, register, validate)
       const isPublicRoute =
-        url.includes("/users/login") ||
+        url.includes("/login") ||
         url.includes("/users/register") ||
         url.includes("/users/validate");
       if (!isPublicRoute) {

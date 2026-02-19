@@ -153,8 +153,35 @@ function LavaLampShader() {
 }
 
 export const LavaLamp = () => {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = React.useState(true);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <div style={{ width: '100%', height: '100%', background: '#000', position: "absolute" }}>
+    <div 
+      ref={containerRef}
+      style={{ width: '100%', height: '100%', background: '#000', position: "absolute" }}
+    >
       <Canvas
         camera={{
           left: -0.5,
@@ -168,6 +195,7 @@ export const LavaLamp = () => {
         orthographic
         gl={{ antialias: true, alpha: false, clearColor: [0, 0, 0, 1] }}
         style={{ background: '#000' }}
+        frameloop={isVisible ? "always" : "never"}
       >
         <LavaLampShader />
       </Canvas>
