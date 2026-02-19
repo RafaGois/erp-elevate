@@ -11,9 +11,8 @@ import FileInputForm from "../components/inputs/FileInputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { FileText, X } from "lucide-react";
-import { useState } from "react";
+import { FilePreviewPanel } from "./components/FilePreviewPanel";
+import { useEffect, useState } from "react";
 
 type BudgetModalProps = BaseModalProps<Budget>;
 
@@ -26,6 +25,7 @@ interface BudgetFile {
 export default function BudgetModal(props: BudgetModalProps) {
   const budgetId = props.selectedObject?.id;
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const [previewIndex, setPreviewIndex] = useState(0);
 
   const form = useForm<Budget>({
     defaultValues: {
@@ -94,11 +94,13 @@ export default function BudgetModal(props: BudgetModalProps) {
     },
   });
 
-  function formatFileSize(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  }
+  useEffect(() => {
+    if (files && files.length > 0) {
+      setPreviewIndex((prev) => Math.min(prev, files.length - 1));
+    } else {
+      setPreviewIndex(0);
+    }
+  }, [files]);
 
   async function removeFile(file: BudgetFile) {
     try {
@@ -183,50 +185,17 @@ export default function BudgetModal(props: BudgetModalProps) {
             />
           )}
           <label htmlFor="files" className="block text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Anexos</label>
-          {/* Editando: envia já com o id do orçamento e atualiza a listagem */}
+          {/* Editando: painel de visualização com navegação entre arquivos */}
           {budgetId && (
             <>
               {files && files.length > 0 && (
-                <ul className="space-y-2">
-                  {files.map((file) => (
-                    <li
-                      key={file.id}
-                      role="button"
-                      tabIndex={0}
-                      className="flex items-center gap-3 rounded-lg border bg-card px-3 py-2.5 text-sm shadow-xs cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => handleDownload(file)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          handleDownload(file);
-                        }
-                      }}
-                    >
-                      <FileText className="size-5 shrink-0 text-muted-foreground" />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium text-foreground" title={file.originalName}>
-                          {file.originalName}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {file.size != null ? formatFileSize(file.size) : "—"}
-                        </p>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeFile(file);
-                        }}
-                        aria-label="Remover arquivo"
-                      >
-                        <X className="size-4" />
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
+                <FilePreviewPanel
+                  files={files}
+                  currentIndex={Math.min(previewIndex, files.length - 1)}
+                  onIndexChange={(i) => setPreviewIndex(i)}
+                  onRemove={removeFile}
+                  onDownload={handleDownload}
+                />
               )}
               <FileInputForm
                 uploadUrl="/files"
