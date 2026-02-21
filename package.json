@@ -58,12 +58,15 @@
     "uuid": "^11.1.0",
     "zod": "^3.25.75"
   },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "^1.30.2"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/axios": "^0.14.4",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
