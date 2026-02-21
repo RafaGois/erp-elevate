@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --webpack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -57,9 +57,6 @@
     "tailwind-merge": "^3.3.1",
     "uuid": "^11.1.0",
     "zod": "^3.25.75"
-  },
-  "optionalDependencies": {
-    "lightningcss-linux-x64-gnu": "^1.30.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
