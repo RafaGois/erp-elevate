@@ -9,10 +9,15 @@ import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
 import Movimentation from "@/lib/models/movimentations/Motimentation";
 import User from "@/lib/models/User";
-import MovimentationType from "@/lib/models/movimentations/Type";
 import BankAccount from "@/lib/models/movimentations/BankAccount";
 import MovimentationCategory from "@/lib/models/movimentations/Category";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import MovimentationType from "@/lib/enums/MovimentationType";
+
+const MOVIMENTATION_TYPE_OPTIONS = [
+  { id: MovimentationType.ENTRADA, name: "Entrada" },
+  { id: MovimentationType.SAIDA, name: "Saída" },
+] as const;
 
 type MovimentationModalProps = BaseModalProps<Movimentation>;
 
@@ -23,7 +28,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
       value: props.selectedObject?.value,
       date: returnCorrctDate(props.selectedObject?.date),
       userId: props.selectedObject?.userId,
-      typeId: props.selectedObject?.typeId,
+      Type: (props.selectedObject?.Type as MovimentationType) ?? MovimentationType.ENTRADA,
       bankAccountId: props.selectedObject?.bankAccountId,
       categoryId: props.selectedObject?.categoryId,
     },
@@ -39,6 +44,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   async function handleSubmit(data: Partial<Movimentation>) {
     try {
+
       
       if (props.selectedObject?.id) {
        
@@ -80,17 +86,6 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     },
   });
 
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      const res = await api.get(
-        "/movimentation-types"
-      );
-      return res.data;
-    },
-  });
-
   const { data: bankAccounts } = useQuery<BankAccount[]>({
     queryKey: ["data_bank_accounts"],
     refetchOnMount: "always",
@@ -126,11 +121,11 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     return bankAccounts?.filter((bankAccount) => bankAccount.User.id === selectedUserId) ?? [];
   }, [selectedUserId, bankAccounts]);
 
-  const selectedTypeId = form.watch("typeId");
+  const selectedType = form.watch("Type");
   const filteredCategories = useMemo(() => {
-    if (!selectedTypeId) return [];
-    return categories?.filter((category) => category.Type.id === selectedTypeId) ?? [];
-  }, [selectedTypeId, categories]);
+    if (!selectedType) return [];
+    return categories?.filter((category) => category.Type === selectedType) ?? [];
+  }, [selectedType, categories]);
 
   return (
     <Modal<Movimentation>
@@ -187,9 +182,9 @@ export default function MovimentationModal(props: MovimentationModalProps) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
               <SelectForm
-                name="typeId"
+                name="Type"
                 label="Tipo"
-                options={types ?? []}
+                options={[...MOVIMENTATION_TYPE_OPTIONS]}
                 required
                 form={form}
               />

@@ -20,13 +20,18 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/api";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
-import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
-import { endOfDay, startOfDay, subDays } from "date-fns";
+import { addDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { useMemo } from "react";
-import Fixed from "@/lib/models/movimentations/Fixed";
+import FixedMovimentation from "@/lib/models/movimentations/FixedMovimentation";
 import useAuth from "@/data/hooks/useAuth";
-import MovimentationType from "@/lib/models/movimentations/Type";
+import MovimentationType from "@/lib/enums/MovimentationType";
+
+const MOVIMENTATION_TYPE_OPTIONS = [
+  { id: "all", name: "Todos" },
+  { id: MovimentationType.ENTRADA, name: "Entrada" },
+  { id: MovimentationType.SAIDA, name: "Saída" },
+];
 import FixedMovimentationModal from "@/components/layout/modal/FixedMovimentationModal";
 
 export default function FixedMovimentations() {
@@ -36,17 +41,17 @@ export default function FixedMovimentations() {
       select: "all",
       ranges: {
         from: subDays(new Date(), 30),
-        to: new Date(),
+        to: addDays(new Date(), 365),
       },
     },
   });
   const params = useWatch({ control: form.control });
-  const [selectedObject, setSelectedObject] = useState<Fixed | null>(null);
+  const [selectedObject, setSelectedObject] = useState<FixedMovimentation | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
 
   const { setReloading } = useAppData();
 
-  const columns: ColumnDef<Fixed>[] = [
+  const columns: ColumnDef<FixedMovimentation>[] = [
     {
       header: ({ column }) => {
         return (
@@ -99,8 +104,13 @@ export default function FixedMovimentations() {
       accessorKey: "Type",
       cell: ({ row }) => {
         const item = row.original;
-        if (!item?.Type?.name) return "-";
-        return <span>{item?.Type?.name}</span>;
+        const type = item?.Type;
+        if (!type) return "-";
+        return (
+          <span>
+            {type === MovimentationType.ENTRADA ? "Entrada" : "Saída"}
+          </span>
+        );
       },
     },
     {
@@ -117,7 +127,7 @@ export default function FixedMovimentations() {
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <FloatingMenu<Fixed>
+          <FloatingMenu<FixedMovimentation>
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
@@ -127,30 +137,14 @@ export default function FixedMovimentations() {
     },
   ];
 
-  const { data, refetch } = useQuery<Fixed[]>({
+  const { data, refetch } = useQuery<FixedMovimentation[]>({
     queryKey: ["data_fixed_movimentations"],
     refetchInterval: 30000,
     staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await api.get(
-          `/fixed-movimentations`,
-        );
-        return res.data;
-      } catch (err) {
-        return [];
-      }
-    },
-  });
-
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    queryFn: async () => {
-      try {
-        const res = await api.get(
-          `/movimentation-types`,
-        );
+        const res = await api.get(`/fixed-movimentations`);
         return res.data;
       } catch (err) {
         return [];
@@ -160,9 +154,7 @@ export default function FixedMovimentations() {
 
   async function remove(uid: string) {
     setReloading?.(true);
-    await api.delete(
-      `/fixed-movimentations/${uid}`,
-    );
+    await api.delete(`/fixed-movimentations/${uid}`);
   }
 
   const filteredData = useMemo(() => {
@@ -174,7 +166,7 @@ export default function FixedMovimentations() {
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
     return (data ?? []).filter((item) => {
-      if (selectedType !== "all" && item?.Type?.id !== selectedType) {
+      if (selectedType !== "all" && item?.Type !== selectedType) {
         return false;
       }
 
@@ -202,10 +194,10 @@ export default function FixedMovimentations() {
           title="Valor Líquido"
           value={
             filteredData
-              .filter((item) => item?.Type?.name === "Entrada")
+              .filter((item) => item?.Type === MovimentationType.ENTRADA)
               .reduce((acc, item) => acc + item.value, 0) -
             filteredData
-              .filter((item) => item?.Type?.name === "Saída")
+              .filter((item) => item?.Type === MovimentationType.SAIDA)
               .reduce((acc, item) => acc + item.value, 0)
           }
           icon={<DollarSign />}
@@ -213,14 +205,14 @@ export default function FixedMovimentations() {
         <DataCard
           title="Entradas"
           value={filteredData
-            .filter((item) => item?.Type?.name === "Entrada")
+            .filter((item) => item?.Type === MovimentationType.ENTRADA)
             .reduce((acc, item) => acc + item.value, 0)}
           icon={<ArrowUpRight />}
         />
         <DataCard
           title="Saídas"
           value={filteredData
-            .filter((item) => item?.Type?.name === "Saída")
+            .filter((item) => item?.Type === MovimentationType.SAIDA)
             .reduce((acc, item) => acc + item.value, 0)}
           icon={<ArrowDownRight />}
         />
@@ -230,13 +222,7 @@ export default function FixedMovimentations() {
         data={filteredData}
         setAction={setAction}
         form={form}
-        options={[
-          { id: "all", name: "Todos" },
-          ...(types ?? []).map((type) => ({
-            id: type.id,
-            name: type.name,
-          })),
-        ]}
+        options={MOVIMENTATION_TYPE_OPTIONS}
       />
       <ToolkitModal
         action={action}

@@ -35,11 +35,6 @@ export default function AppSidebar() {
               title: "Categorias",
               url: "/categories",
             },
-            {
-              title: "Tipos",
-              url: "/types",
-            },
-
           ],
         },
       ],

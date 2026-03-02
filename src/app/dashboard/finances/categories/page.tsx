@@ -9,14 +9,13 @@ import {
   ArrowDownRight,
   ArrowUpDown,
   ArrowUpRight,
-  Circle,
-  DivideCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Category from "@/lib/models/movimentations/Category";
+import MovimentationType from "@/lib/enums/MovimentationType";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import CategoryModal from "@/components/layout/modal/MovimentationCategoryModal";
@@ -44,18 +43,20 @@ export default function Inventory() {
     {
       header: "Tipo",
       accessorKey: "Type",
-      accessorFn: (row) => row?.Type?.name ?? "-",
       cell: ({ row }) => {
         const item = row.original;
-        if (!item?.Type?.name) return "-";
+        const type = item?.Type;
+        if (!type) return "-";
+        const label =
+          type === MovimentationType.ENTRADA ? "Entrada" : "Saída";
         return (
           <span className="flex flex-row items-center gap-2">
-            {item?.Type?.name}{" "}
-            {item?.Type?.name == "Entrada" ? (
+            {label}{" "}
+            {type === MovimentationType.ENTRADA ? (
               <ArrowUpRight size={16} />
             ) : (
               <ArrowDownRight size={16} />
-            )}{" "}
+            )}
           </span>
         );
       },
@@ -88,10 +89,13 @@ export default function Inventory() {
         );
         return res.data;
       } catch (err) {
+        console.log(err);
         return [];
       }
     },
   });
+
+  console.log(data);
 
   async function remove(uid: string) {
     setReloading?.(true);

@@ -6,22 +6,39 @@ import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
-import MovimentationType from "@/lib/models/movimentations/Type";
+import MovimentationType from "@/lib/enums/MovimentationType";
+import { useEffect } from "react";
 
+const MOVIMENTATION_TYPE_OPTIONS = [
+  { id: MovimentationType.ENTRADA, name: "Entrada" },
+  { id: MovimentationType.SAIDA, name: "Saída" },
+] as const;
+
+type CategoryFormData = Partial<Pick<Category, "name" | "Type">>;
 type CategoryModalProps = BaseModalProps<Category>;
 
 export default function CategoryModal(props: CategoryModalProps) {
-  const form = useForm<Category>({
+  const form = useForm<CategoryFormData>({
     defaultValues: {
-      name: props.selectedObject?.name,
-      typeId: props.selectedObject?.typeId,
+      name: "",
+      Type: MovimentationType.ENTRADA,
     },
   });
 
-  async function handleSubmit(data: Partial<Category>) {
-    try {
+  useEffect(() => {
+    if (props.action && props.selectedObject) {
+      form.reset({
+        name: props.selectedObject.name ?? "",
+        Type: (props.selectedObject.Type as MovimentationType) ?? MovimentationType.ENTRADA,
+      });
+    } else if (props.action && !props.selectedObject) {
+      form.reset({ name: "", Type: MovimentationType.ENTRADA });
+    }
+  }, [props.action, props.selectedObject, form]);
+
+  async function handleSubmit(data: CategoryFormData) {
+       try {
       if (props.selectedObject?.id) {
         await update(data);
         toast.success("Categoria de movimentação atualizada com sucesso.");
@@ -40,11 +57,11 @@ export default function CategoryModal(props: CategoryModalProps) {
     }
   }
 
-  async function create(data: Partial<Category>) {    
+  async function create(data: CategoryFormData) {
     await api.post("/movimentation-categories", data);
   }
 
-  async function update(data: Partial<Category>) {
+  async function update(data: CategoryFormData) {
     await api.put(
       `/movimentation-categories/${props.selectedObject?.id}`,
       data
@@ -57,15 +74,6 @@ export default function CategoryModal(props: CategoryModalProps) {
     form.reset();
     if (props?.refetch) props.refetch();
   }
-
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      const res = await api.get("/movimentation-types");
-      return res.data;
-    },
-  });
 
   return (
     <Modal<Category>
@@ -88,9 +96,9 @@ export default function CategoryModal(props: CategoryModalProps) {
             form={form}
           />
           <SelectForm
-            name="typeId"
+            name="Type"
             label="Tipo"
-            options={types}
+            options={[...MOVIMENTATION_TYPE_OPTIONS]}
             required
             form={form}
           />

@@ -7,34 +7,31 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
-import Fixed from "@/lib/models/movimentations/Fixed";
-import MovimentationType from "@/lib/models/movimentations/Type";
+import FixedMovimentation from "@/lib/models/movimentations/FixedMovimentation";
 import MovimentationCategory from "@/lib/models/movimentations/Category";
+import MovimentationType from "@/lib/enums/MovimentationType";
+
+const MOVIMENTATION_TYPE_OPTIONS = [
+  { id: MovimentationType.ENTRADA, name: "Entrada" },
+  { id: MovimentationType.SAIDA, name: "Saída" },
+] as const;
 import { useMemo } from "react";
 
-type FixedMovimentationModalProps = BaseModalProps<Fixed>;
+type FixedMovimentationModalProps = BaseModalProps<FixedMovimentation>;
 
 export default function FixedMovimentationModal(
   props: FixedMovimentationModalProps,
 ) {
-  const form = useForm<Fixed>({
+  const form = useForm<Partial<FixedMovimentation>>({
     defaultValues: {
       description: props.selectedObject?.description,
       value: props.selectedObject?.value,
       deadline: returnCorrctDeadline(props.selectedObject?.deadline),
-      typeId: props.selectedObject?.typeId,
+      Type: (props.selectedObject?.Type as MovimentationType) ?? MovimentationType.ENTRADA,
       categoryId: props.selectedObject?.categoryId,
     },
   });
 
-  /* 
-  
-Invalid `repository.create()` invocation in /var/www/elevate_api/src/service/fixedMovimentation.service.ts:24:50 21 } 22 23 
-async function create(fixedMovimentation: FixedMovimentation): 
-Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await repository.create({ data: { description: "teste", value: 4500, deadline: "2026-02-09T13:58:35.000Z", typeId: "593119bb-2002-4953-974d-f916f4557843", categoryId: "b2f321a5-74ea-4d63-86ad-29b9c30e667d" }, include: { Type: true, BankAccount: true, ~~~~~~~~~~~ Category: true } }) Unknown field `BankAccount` for include statement on model `FixedMovimentation`. Available options are marked with ?.
-
-  
-  */
 
   function returnCorrctDeadline(deadline: Date) {
     if (!deadline) return new Date();
@@ -43,7 +40,7 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
     return deadlineLocal;
   }
 
-  async function handleSubmit(data: Partial<Fixed>) {
+  async function handleSubmit(data: Partial<FixedMovimentation>) {
     try {
       if (props.selectedObject?.id) {
         await update(data);
@@ -63,7 +60,7 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
     }
   }
 
-  async function create(data: Partial<Fixed>) {
+  async function create(data: Partial<FixedMovimentation>) {
     data.deadline = new Date(data.deadline?.toString() ?? "");
     console.log(data);
     
@@ -73,23 +70,12 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
     );
   }
 
-  async function update(data: Partial<Fixed>) {
+  async function update(data: Partial<FixedMovimentation>) {
     await api.put(
       `/fixed-movimentations/${props.selectedObject?.id}`,
       data,
     );
   }
-
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      const res = await api.get(
-        "/movimentation-types",
-      );
-      return res.data;
-    },
-  });
 
   const { data: categories } = useQuery<MovimentationCategory[]>({
     queryKey: ["data_movimentation_categories"],
@@ -109,17 +95,16 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
     if (props?.refetch) props.refetch();
   }
 
-  const selectedTypeId = form.watch("typeId");
+  const selectedType = form.watch("Type");
   const filteredCategories = useMemo(() => {
-    if (!selectedTypeId) return [];
+    if (!selectedType) return [];
     return (
-      categories?.filter((category) => category.Type.id === selectedTypeId) ??
-      []
+      categories?.filter((category) => category.Type === selectedType) ?? []
     );
-  }, [selectedTypeId, categories]);
+  }, [selectedType, categories]);
 
   return (
-    <Modal<Fixed>
+    <Modal<FixedMovimentation>
       title="Movimentação Fixa"
       description="Adicione uma movimentação fixa"
       action={props.action}
@@ -156,9 +141,9 @@ Promise<FixedMovimentation> { → 24 const newFixedMovimentation = await reposit
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
             <SelectForm
-              name="typeId"
+              name="Type"
               label="Tipo"
-              options={types ?? []}
+              options={[...MOVIMENTATION_TYPE_OPTIONS]}
               required
               form={form}
             />

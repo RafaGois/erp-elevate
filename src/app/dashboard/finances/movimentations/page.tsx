@@ -24,11 +24,15 @@ import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
 import { endOfDay, startOfDay, subDays } from "date-fns";
 import { useMemo } from "react";
-import MovimentationType from "@/lib/models/movimentations/Type";
-import useAuth from "@/data/hooks/useAuth";
+import MovimentationType from "@/lib/enums/MovimentationType";
+
+const MOVIMENTATION_TYPE_OPTIONS = [
+  { id: "all", name: "Todos" },
+  { id: MovimentationType.ENTRADA, name: "Entrada" },
+  { id: MovimentationType.SAIDA, name: "Saída" },
+];
 
 export default function Movimentations() {
-  const { user } = useAuth();
   const form = useForm({
     defaultValues: {
       select: "all",
@@ -134,11 +138,16 @@ export default function Movimentations() {
           </Button>
         );
       },
-      accessorKey: "Type",
+      accessorKey: "type",
       cell: ({ row }) => {
         const item = row.original;
-        if (!item?.Type?.name) return "-";
-        return <span>{item?.Type?.name}</span>;
+        const type = item?.Type;
+        if (!type) return "-";
+        return (
+          <span>
+            {type === MovimentationType.ENTRADA ? "Entrada" : "Saída"}
+          </span>
+        );
       },
     },
     {
@@ -169,18 +178,14 @@ export default function Movimentations() {
     },
   ];
 
-  const { data, /* isLoading, isFetching, */ refetch } = useQuery<
-    Movimentation[]
-  >({
+  const { data, refetch } = useQuery<Movimentation[]>({
     queryKey: ["data_movimentations"],
     refetchInterval: 30000,
     staleTime: Infinity,
     refetchOnMount: "always",
     queryFn: async () => {
       try {
-        const res = await api.get(
-          `/movimentations`,
-        );
+        const res = await api.get(`/movimentations`);
         return res.data;
       } catch (err) {
         return [];
@@ -193,20 +198,6 @@ export default function Movimentations() {
     await api.delete(`/movimentations/${uid}`);
   }
 
-  const { data: types } = useQuery<MovimentationType[]>({
-    queryKey: ["data_movimentation_types"],
-    queryFn: async () => {
-      try {
-        const res = await api.get(
-          `/movimentation-types`,
-        );
-        return res.data;
-      } catch (err) {
-        return [];
-      }
-    },
-  });
-
   const filteredData = useMemo(() => {
     const selectedType = params?.select ?? "all";
     const from = params?.ranges?.from
@@ -216,7 +207,7 @@ export default function Movimentations() {
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
     return (data ?? []).filter((item) => {
-      if (selectedType !== "all" && item?.Type?.id !== selectedType) {
+      if (selectedType !== "all" && item?.Type !== selectedType) {
         return false;
       }
 
@@ -242,29 +233,28 @@ export default function Movimentations() {
         />
         <DataCard
           title="Valor Líquido"
-          value={filteredData
-            .filter((item) => item?.Type?.name === "Entrada")
-            .reduce((acc, item) => acc + item.value, 0) - filteredData
-            .filter((item) => item?.Type?.name === "Saída")
-            .reduce((acc, item) => acc + item.value, 0)}
+          value={
+            filteredData
+              .filter((item) => item?.Type === MovimentationType.ENTRADA)
+              .reduce((acc, item) => acc + item.value, 0) -
+            filteredData
+              .filter((item) => item?.Type === MovimentationType.SAIDA)
+              .reduce((acc, item) => acc + item.value, 0)
+          }
           icon={<DollarSign />}
         />
         <DataCard
           title="Entradas"
-          value={
-            filteredData
-              .filter((item) => item?.Type?.name === "Entrada")
-              .reduce((acc, item) => acc + item.value, 0)
-          }
+          value={filteredData
+            .filter((item) => item?.Type === MovimentationType.ENTRADA)
+            .reduce((acc, item) => acc + item.value, 0)}
           icon={<ArrowUpRight />}
         />
         <DataCard
           title="Saídas"
-          value={
-            filteredData
-              .filter((item) => item?.Type?.name === "Saída")
-              .reduce((acc, item) => acc + item.value, 0)
-          }
+          value={filteredData
+            .filter((item) => item?.Type === MovimentationType.SAIDA)
+            .reduce((acc, item) => acc + item.value, 0)}
           icon={<ArrowDownRight />}
         />
       </div>
@@ -273,13 +263,7 @@ export default function Movimentations() {
         data={filteredData}
         setAction={setAction}
         form={form}
-        options={[
-          { id: "all", name: "Todos" },
-          ...(types ?? []).map((type) => ({
-            id: type.id,
-            name: type.name,
-          })),
-        ]}
+        options={MOVIMENTATION_TYPE_OPTIONS}
       />
       <ToolkitModal
         action={action}
