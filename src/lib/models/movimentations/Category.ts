@@ -1,20 +1,18 @@
-import MovimentationType from "./Type";
+import Type from "../../enums/MovimentationType";
 
 export default class MovimentationCategory {
     private _id: string;
     private _name: string;
-    private _typeId: string;
-    private _Type: MovimentationType;
+    private _Type: Type;
 
     constructor(
         id: string,
         name: string,
         typeId: string,
-        Type: MovimentationType
+        Type: Type
     ) {
         this._id = id;
         this._name = name;
-        this._typeId = typeId;
         this._Type = Type;
     }
 
@@ -24,10 +22,6 @@ export default class MovimentationCategory {
 
     get name() {
         return this._name;
-    }
-
-    get typeId() {
-        return this._typeId;
     }
 
     get Type() {

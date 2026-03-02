@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useAppData from "@/data/hooks/useAppData";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { toast } from "sonner";
 
@@ -26,6 +27,8 @@ type ConfirmDialogProps<T extends WithId> = BaseModalProps<T> & {
 export default function ConfirmDialog<T extends WithId>(
   props: ConfirmDialogProps<T>
 ) {
+  const { setReloading } = useAppData();
+
   async function handleClick() {
     try {
       await props.remove(props?.selectedObject?.id ?? "");
@@ -34,6 +37,8 @@ export default function ConfirmDialog<T extends WithId>(
       toast.success("Registro removido com sucesso.");
     } catch (err) {
       toast.error(err as string);
+    } finally {
+      setReloading?.(false);
     }
   }
 
@@ -44,6 +49,7 @@ export default function ConfirmDialog<T extends WithId>(
         if (!isOpen) {
           if (props.setAction) props.setAction(null);
           if (props.setSelectedObject) props.setSelectedObject(null);
+          setReloading?.(false);
         }
       }}
     >

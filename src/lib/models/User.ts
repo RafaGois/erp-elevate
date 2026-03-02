@@ -1,22 +1,27 @@
+import { UserLevel } from "../enums/UserLevel";
+
 export default class User {
     private _id: string;
     private _name: string;
     private _username: string;
     private _password: string;
     private _token?: string;
-    
+    private _level: UserLevel;
+
     constructor(
         id: string,
         name: string,
         username: string,
         password: string,
         token?: string,
+        level?: UserLevel,
     ) {
         this._id = id;
         this._name = name;
         this._username = username;
         this._password = password;
         this._token = token;
+        this._level = level ?? UserLevel.USER;
     }
 
     get id() {
@@ -37,5 +42,9 @@ export default class User {
 
     get token() {
         return this._token;
+    }
+
+    get level() {
+        return this._level;
     }
 }

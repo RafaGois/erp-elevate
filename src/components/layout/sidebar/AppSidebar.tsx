@@ -1,5 +1,5 @@
 import { Sidebar } from "../../ui/sidebar";
-import { Briefcase, Calendar, DollarSign, ListChecks, Tag, Warehouse } from "lucide-react";
+import { Briefcase, Calendar, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-react";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -113,6 +113,22 @@ export default function AppSidebar() {
             {
               title: "Categorias",
               url: "/categories",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: "Admin",
+      items: [
+        {
+          title: "Usuários",
+          icon: User,
+          url: "/dashboard/users",
+          items: [
+            {
+              title: "Usuários",
+              url: "/",
             },
           ],
         },

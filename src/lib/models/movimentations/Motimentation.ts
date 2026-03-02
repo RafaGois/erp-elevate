@@ -1,7 +1,7 @@
 import User from "../User";
 import BankAccount  from "./BankAccount";
 import MovimentationCategory  from "./Category";
-import MovimentationType  from "./Type";
+import Type  from "../../enums/MovimentationType";
 
 export default class Movimentation {
 
@@ -11,8 +11,7 @@ export default class Movimentation {
     private _date: Date;
     private _User: User;
     private _userId: string;
-    private _Type: MovimentationType;
-    private _typeId: string;
+    private _Type: Type;
     private _BankAccount: BankAccount;
     private _bankAccountId: string;
     private _Category: MovimentationCategory;
@@ -25,7 +24,7 @@ export default class Movimentation {
         date: Date,
         User: User,
         userId: string,
-        Type: MovimentationType,
+        Type: Type,
         typeId: string,
         BankAccount: BankAccount,
         bankAccountId: string,
@@ -39,7 +38,6 @@ export default class Movimentation {
         this._User = User;
         this._userId = userId;
         this._Type = Type;
-        this._typeId = typeId;
         this._BankAccount = BankAccount;
         this._bankAccountId = bankAccountId;
         this._Category = Category;
@@ -72,10 +70,6 @@ export default class Movimentation {
 
     get User() {
         return this._User;
-    }
-
-    get typeId() {
-        return this._typeId;
     }
 
     get Type() {

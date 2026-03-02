@@ -31,6 +31,7 @@ export default function Modal<T>(props: ModalProps<T>) {
 
   function handleClose() {
     props.form?.reset();
+    setReloading?.(false);
     if (props.setAction) props.setAction(null);
     if (props.setSelectedObject) props.setSelectedObject(null);
   }
@@ -41,7 +42,7 @@ export default function Modal<T>(props: ModalProps<T>) {
       open={!!props?.action}
       onOpenChange={(isOpen) => {
         if (!isOpen) handleClose();
-        setReloading?.(false);
+        if (!isOpen) setReloading?.(false);
       }}
     >
       <DialogContent>
