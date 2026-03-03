@@ -153,7 +153,7 @@ export default function TaskModal(props: TaskModalProps) {
     >
       <Form {...form}>
         <form className="flex flex-col gap-4 py-2">
-          <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[min(60vh,28rem)] pr-1">
+          <div className="grid grid-cols-1 gap-4 overflow-y-auto max-h-[min(60vh,28rem)] scrollbar-hide py-2">
             <InputForm
               name="name"
               label="Nome"
