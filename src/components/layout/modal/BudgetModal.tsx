@@ -7,25 +7,19 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import TextAreaForm from "../components/inputs/TextareaForm";
-import FileInputForm from "../components/inputs/FileInputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
-import { FilePreviewPanel } from "./components/FilePreviewPanel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {
+  FileAttachmentsPanel,
+  FILE_ATTACHMENTS_CONFIG,
+} from "./components/FileAttachmentsPanel";
 
 type BudgetModalProps = BaseModalProps<Budget>;
-
-interface BudgetFile {
-  id: string;
-  originalName: string;
-  size?: number;
-}
 
 export default function BudgetModal(props: BudgetModalProps) {
   const budgetId = props.selectedObject?.id;
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
-  const [previewIndex, setPreviewIndex] = useState(0);
 
   const form = useForm<Budget>({
     defaultValues: {
@@ -58,11 +52,14 @@ export default function BudgetModal(props: BudgetModalProps) {
   async function create(data: Partial<Budget>) {
     const res = await api.post<Budget>("/budgets", data);
     const newId = res.data.id;
+    const config = FILE_ATTACHMENTS_CONFIG.budget;
     if (pendingFiles.length > 0) {
       for (const file of pendingFiles) {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("budgetId", newId);
+        Object.entries(config.getUploadExtraFields(newId)).forEach(
+          ([k, v]) => formData.append(k, v)
+        );
         await api.post("/files", formData);
       }
     }
@@ -78,63 +75,6 @@ export default function BudgetModal(props: BudgetModalProps) {
     form.reset();
     setPendingFiles([]);
     if (props?.refetch) props.refetch();
-  }
-
-  const { data: files, refetch: refetchFiles } = useQuery<BudgetFile[]>({
-    queryKey: ["data_files_budgets", budgetId],
-    enabled: !!budgetId,
-    refetchOnMount: "always",
-    queryFn: async () => {
-      try {
-        const res = await api.get(`/files/budget/${budgetId}`);
-        return res.data;
-      } catch {
-        return [];
-      }
-    },
-  });
-
-  useEffect(() => {
-    if (files && files.length > 0) {
-      setPreviewIndex((prev) => Math.min(prev, files.length - 1));
-    } else {
-      setPreviewIndex(0);
-    }
-  }, [files]);
-
-  async function removeFile(file: BudgetFile) {
-    try {
-      await api.delete(`/files/${file.id}`);
-      await refetchFiles();
-      toast.success("Arquivo removido.");
-    } catch {
-      toast.error("Erro ao remover arquivo.");
-    }
-  }
-
-  async function handleDownload(file: BudgetFile) {
-    try {
-      const res = await api.get(`/files/file/${file.id}`, {
-        responseType: "blob",
-      });
-      const url = URL.createObjectURL(res.data as Blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = file.originalName || "download";
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      toast.error("Erro ao baixar arquivo.");
-    }
-  }
-
-  function handleUploadError(error: unknown) {
-    const err = error as { response?: { data?: string | string[] }; message?: string };
-    toast.error(
-      (Array.isArray(err.response?.data) ? err.response?.data[0] : err.response?.data) ??
-        err.message ??
-        "Erro ao enviar arquivo."
-    );
   }
 
   return (
@@ -173,41 +113,15 @@ export default function BudgetModal(props: BudgetModalProps) {
             form={form}
           />
 
-          {/* Criando: anexos em estado; ao salvar, orçamento é criado e depois os arquivos são enviados com o novo id */}
-          {!budgetId && (
-            <FileInputForm
-              deferUpload
-              pendingFiles={pendingFiles}
-              onPendingFilesChange={setPendingFiles}
-              description="Os arquivos serão enviados após salvar o orçamento (opcional)"
-              accept=".pdf,image/*,.doc,.docx,.txt,.csv,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp"
-              multiple
-            />
-          )}
-          <label htmlFor="files" className="block text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Anexos</label>
-          {/* Editando: painel de visualização com navegação entre arquivos */}
-          {budgetId && (
-            <>
-              {files && files.length > 0 && (
-                <FilePreviewPanel
-                  files={files}
-                  currentIndex={Math.min(previewIndex, files.length - 1)}
-                  onIndexChange={(i) => setPreviewIndex(i)}
-                  onRemove={removeFile}
-                  onDownload={handleDownload}
-                />
-              )}
-              <FileInputForm
-                uploadUrl="/files"
-                extraFields={{ budgetId }}
-                onSuccess={refetchFiles}
-                onError={handleUploadError}
-                description="Documentos, imagens ou PDFs do orçamento (opcional)"
-                accept=".pdf,image/*,.doc,.docx,.txt,.csv,.xls,.xlsx,.ppt,.pptx,.odt,.ods,.odp"
-                multiple
-              />
-            </>
-          )}
+          <FileAttachmentsPanel
+            ownerId={budgetId}
+            ownerType="budget"
+            pendingFiles={pendingFiles}
+            onPendingFilesChange={setPendingFiles}
+            label="Anexos"
+            createDescription="Os arquivos serão enviados após salvar o orçamento (opcional)"
+            editDescription="Documentos, imagens ou PDFs do orçamento (opcional)"
+          />
         </form>
       </Form>
     </Modal>

@@ -1,12 +1,37 @@
+"use client";
+
+import { useMemo } from "react";
 import { Sidebar } from "../../ui/sidebar";
-import { Briefcase, Calendar, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-react";
+import { Briefcase, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-react";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
+import useAuth from "@/data/hooks/useAuth";
+import { UserLevel } from "@/lib/enums/UserLevel";
 
 export default function AppSidebar() {
-  const data = [
+  const { user } = useAuth();
+
+  const adminSection = {
+    title: "Admin",
+    items: [
+      {
+        title: "Usuários",
+        icon: User,
+        url: "/dashboard/users",
+        items: [
+          {
+            title: "Usuários",
+            url: "/",
+          },
+        ],
+      },
+    ],
+  };
+
+  const data = useMemo(() => {
+    const baseData = [
     {
       title: "Financeiro",
       items: [
@@ -50,10 +75,6 @@ export default function AppSidebar() {
             {
               title: "Registros",
               url: "/registers",
-            },
-            {
-              title: "Tipos",
-              url: "/types",
             },
             {
               title: "Status",
@@ -113,23 +134,14 @@ export default function AppSidebar() {
         },
       ],
     },
-    {
-      title: "Admin",
-      items: [
-        {
-          title: "Usuários",
-          icon: User,
-          url: "/dashboard/users",
-          items: [
-            {
-              title: "Usuários",
-              url: "/",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+    ];
+
+    if (user?.level === UserLevel.ADMIN) {
+      baseData.push(adminSection);
+    }
+
+    return baseData;
+  }, [user?.level]);
 
   return (
     <Sidebar variant="inset" collapsible="offcanvas">

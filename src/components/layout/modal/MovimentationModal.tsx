@@ -11,17 +11,25 @@ import Movimentation from "@/lib/models/movimentations/Motimentation";
 import User from "@/lib/models/User";
 import BankAccount from "@/lib/models/movimentations/BankAccount";
 import MovimentationCategory from "@/lib/models/movimentations/Category";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import MovimentationType from "@/lib/enums/MovimentationType";
+import {
+  FileAttachmentsPanel,
+  FILE_ATTACHMENTS_CONFIG,
+} from "./components/FileAttachmentsPanel";
 
 const MOVIMENTATION_TYPE_OPTIONS = [
   { id: MovimentationType.ENTRADA, name: "Entrada" },
   { id: MovimentationType.SAIDA, name: "Saída" },
 ] as const;
 
+
 type MovimentationModalProps = BaseModalProps<Movimentation>;
 
 export default function MovimentationModal(props: MovimentationModalProps) {
+  const movimentationId = props.selectedObject?.id;
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+
   const form = useForm<Movimentation>({
     defaultValues: {
       description: props.selectedObject?.description,
@@ -42,10 +50,9 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     return dateLocal;
   }
 
-  async function handleSubmit(data: Partial<Movimentation>) {
+  async function handleSubmit(data: Movimentation) {
     try {
 
-      
       if (props.selectedObject?.id) {
        
         await update(data);
@@ -65,12 +72,24 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     }
   }
 
-  async function create(data: Partial<Movimentation>) {
-    data.date = new Date(data.date?.toString() ?? '');
-    await api.post("/movimentations", data);
+  async function create(data: Movimentation) {
+    data.date = new Date(data.date?.toString() ?? "");
+    const res = await api.post<Movimentation>("/movimentations", data);
+    const newId = res.data.id;
+    const config = FILE_ATTACHMENTS_CONFIG.movimentation;
+    if (pendingFiles.length > 0) {
+      for (const file of pendingFiles) {
+        const formData = new FormData();
+        formData.append("file", file);
+        Object.entries(config.getUploadExtraFields(newId)).forEach(
+          ([k, v]) => formData.append(k, v)
+        );
+        await api.post("/files", formData);
+      }
+    }
   }
 
-  async function update(data: Partial<Movimentation>) {
+  async function update(data: Movimentation) {
     await api.put(
       `/movimentations/${props.selectedObject?.id}`,
       data
@@ -112,6 +131,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     if (props?.setAction) props.setAction(null);
     if (props?.setSelectedObject) props.setSelectedObject(null);
     form.reset();
+    setPendingFiles([]);
     if (props?.refetch) props.refetch();
   }
 
@@ -196,6 +216,16 @@ export default function MovimentationModal(props: MovimentationModalProps) {
                 form={form}
               />
             </div>
+
+            <FileAttachmentsPanel
+              ownerId={movimentationId}
+              ownerType="movimentation"
+              pendingFiles={pendingFiles}
+              onPendingFilesChange={setPendingFiles}
+              label="Anexos"
+              createDescription="Os arquivos serão enviados após salvar a movimentação (opcional)"
+              editDescription="Documentos, imagens ou PDFs da movimentação (opcional)"
+            />
           </div>
         </form>
       </Form>

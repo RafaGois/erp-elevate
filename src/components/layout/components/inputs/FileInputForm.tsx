@@ -31,6 +31,8 @@ interface FileInputFormProps {
   multiple?: boolean;
   className?: string;
   disabled?: boolean;
+  /** Oculta a listagem de arquivos pendentes (usado quando outro componente exibe os previews) */
+  hidePendingList?: boolean;
 }
 
 function formatFileSize(bytes: number): string {
@@ -155,7 +157,7 @@ export default function FileInputForm(props: FileInputFormProps) {
         </div>
       </div>
 
-      {isDefer && pending.length > 0 && (
+      {isDefer && pending.length > 0 && !props.hidePendingList && (
         <ul className="space-y-2">
           {pending.map((file, i) => (
             <li

@@ -35,7 +35,7 @@ const MOVIMENTATION_TYPE_OPTIONS = [
 import FixedMovimentationModal from "@/components/layout/modal/FixedMovimentationModal";
 
 export default function FixedMovimentations() {
-  const { user } = useAuth();
+
   const form = useForm({
     defaultValues: {
       select: "all",
