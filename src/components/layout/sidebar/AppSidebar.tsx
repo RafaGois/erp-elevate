@@ -76,14 +76,6 @@ export default function AppSidebar() {
               title: "Registros",
               url: "/registers",
             },
-            {
-              title: "Status",
-              url: "/statuses",
-            },
-            {
-              title: "Prioridades",
-              url: "/priorities",
-            },
           ],
         },
         {

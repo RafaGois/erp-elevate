@@ -58,6 +58,8 @@ export default function MovimentationModal(props: MovimentationModalProps) {
         await update(data);
         toast.success("Categoria de equipamento atualizada com sucesso.");
       } else {
+        console.log(data);
+        
         await create(data);
         toast.success("Categoria de equipamento criada com sucesso.");
       }
@@ -74,6 +76,7 @@ export default function MovimentationModal(props: MovimentationModalProps) {
 
   async function create(data: Movimentation) {
     data.date = new Date(data.date?.toString() ?? "");
+    
     const res = await api.post<Movimentation>("/movimentations", data);
     const newId = res.data.id;
     const config = FILE_ATTACHMENTS_CONFIG.movimentation;

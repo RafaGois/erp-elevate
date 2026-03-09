@@ -49,6 +49,15 @@ export default function Tasks() {
       accessorKey: "name",
     },
     {
+      accessorKey: "description",
+      header: "Descrição",
+      accessorFn: (row) => row?.description ?? "-",
+      cell: ({ row }) => {
+        const item = row.original;
+        return <span>{item?.description ?? "-"}</span>;
+      },
+    },
+    {
       accessorKey: "project",
       header: "Projeto",
       accessorFn: (row) => row?.Project?.name ?? "-",
@@ -58,32 +67,14 @@ export default function Tasks() {
       },
     },
     {
-      accessorKey: "type",
-      header: "Tipo",
-      accessorFn: (row) => row?.Type?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <span>{item?.Type?.name ?? "-"}</span>;
-      },
-    },
-    {
       accessorKey: "priority",
       header: "Prioridade",
-      accessorFn: (row) => row?.Priority?.name ?? "-",
+      accessorFn: (row) => row?.Priority ?? "-",
       cell: ({ row }) => {
         const item = row.original;
-        return <span>{item?.Priority?.name ?? "-"}</span>;
+        return <span>{item?.Priority ?? "-"}</span>;
       },
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      accessorFn: (row) => row?.Status?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        return returnStatusFormated(item?.Status);
-      },
-    },
+    },    
     {
       accessorKey: "responsible",
       header: "Responsável",
@@ -139,37 +130,6 @@ export default function Tasks() {
     },
   ];
 
-  function returnStatusFormated(status: Status) {
-    if (status.id == "c78c04cb-6139-422b-a60f-83a86a92dec9")//não iniciado
-      return (
-        <p className="flex items-center gap-1">
-          <CircleDashed fill="#8d8e8f" stroke="#8d8e8f" className="w-3 h-3" />{" "}
-          {status.name}{" "}
-        </p>
-      );
-    if (status.id == "cc6c1445-ff11-4b4a-879d-c76f9df5571d")
-      return (
-        <p className="flex items-center gap-1">
-          <Circle  fill="#ebba34" stroke="#ebba34" className="w-3 h-3 animate-pulse" />
-          {status.name}{" "}
-        </p>
-      );
-    if (status.id == "6259a933-6ca7-4b08-8f37-4dc51ff20993")
-      return (
-        <p className="flex items-center gap-1">
-          <Circle fill="#008000" stroke="#008000" className="w-3 h-3" />
-          {status.name}{" "}
-        </p>
-      );
-      if (status.id == "9e218c51-eb8e-43f4-8558-82e2bc64d11a")
-        return (
-          <p className="flex items-center gap-1">
-            <Circle fill="#eb3a34" stroke="#eb3a34" className="w-3 h-3" />
-            {status.name}{" "}
-          </p>
-        );
-  }
-
   const { data, refetch } = useQuery<Task[]>({
     queryKey: ["data_tasks"],
     refetchInterval: 10000,
@@ -183,7 +143,7 @@ export default function Tasks() {
         return [];
       }
     },
-  });
+  });  
 
   const params = useWatch({ control: form.control });
 
@@ -196,14 +156,14 @@ export default function Tasks() {
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
     return (data ?? []).filter((item) => {
-      if (selectedStatus !== "all" && item?.Status?.id !== selectedStatus) {
+      if (selectedStatus !== "all" && item?.Status !== selectedStatus) {
         return false;
       }
 
       if (!from && !to) return true;
 
       const itemDate = item?.deadline ? new Date(item.deadline) : undefined;
-      if (!itemDate || Number.isNaN(itemDate.getTime())) return false;
+      if (!itemDate || Number.isNaN(itemDate.getTime())) return true;
 
       if (from && itemDate < from) return false;
       if (to && itemDate > to) return false;

@@ -9,10 +9,14 @@ import { toast } from "sonner";
 import SelectForm from "../components/inputs/SelectForm";
 import User from "@/lib/models/User";
 import { useQuery } from "@tanstack/react-query";
-import Status from "@/lib/models/task/Status";
-import Priority from "@/lib/models/task/Priority";
-import Type from "@/lib/models/task/TaskType";
+
 import Project from "@/lib/models/Project";
+import {
+  TASK_PRIORITIES_OPTIONS,
+  TaskPriorities,
+} from "@/lib/enums/TaskPriorities";
+
+import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
 
 type TaskModalProps = BaseModalProps<Task>;
 
@@ -22,22 +26,28 @@ export default function TaskModal(props: TaskModalProps) {
       name: props.selectedObject?.name,
       description: props.selectedObject?.description,
       responsibleId: props.selectedObject?.responsibleId,
-      statusId: props.selectedObject?.statusId,
-      priorityId: props.selectedObject?.priorityId,
-      typeId: props.selectedObject?.typeId,
+      Priority:
+        (props.selectedObject?.Priority as TaskPriorities) ??
+        TaskPriorities.BAIXA,
+      Status:
+        (props.selectedObject?.Status as TaskStatus) ?? TaskStatus.PENDENTE,
       projectId: props.selectedObject?.projectId,
       deadline: props.selectedObject?.deadline,
     },
   });
 
   async function handleSubmit(data: Partial<Task>) {
+    
     try {
       if (props.selectedObject?.id) {
         await update(data);
         toast.success("Tarefa atualizada com sucesso.");
       } else {
-        data.deadline = new Date(data.deadline + "T00:00:00");
-        data.statusId = "c78c04cb-6139-422b-a60f-83a86a92dec9";
+        if(data.deadline) {
+          data.deadline = new Date(data.deadline + "T00:00:00");
+        }
+        data.Status = TaskStatus.PENDENTE;
+
         await create(data);
         toast.success("Tarefa criada com sucesso.");
       }
@@ -57,10 +67,7 @@ export default function TaskModal(props: TaskModalProps) {
   }
 
   async function update(data: Partial<Task>) {
-    await api.put(
-      `/tasks/${props.selectedObject?.id}`,
-      data,
-    );
+    await api.put(`/tasks/${props.selectedObject?.id}`, data);
   }
 
   async function handleClose() {
@@ -83,51 +90,6 @@ export default function TaskModal(props: TaskModalProps) {
     },
   });
 
-  const { data: statuses } = useQuery<Status[]>({
-    queryKey: ["data_task_statuses"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      try {
-        const res = await api.get(
-          `/task-statuses`,
-        );
-        return res.data;
-      } catch (err) {
-        return [];
-      }
-    },
-  });
-
-  const { data: priorities } = useQuery<Priority[]>({
-    queryKey: ["data_task_priorities"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      try {
-        const res = await api.get(
-          `/task-priorities`,
-        );
-        return res.data;
-      } catch (err) {
-        return [];
-      }
-    },
-  });
-
-  const { data: types } = useQuery<Type[]>({
-    queryKey: ["data_task_types"],
-    refetchOnMount: "always",
-    queryFn: async () => {
-      try {
-        const res = await api.get(
-          `/task-types`,
-        );
-        return res.data;
-      } catch (err) {
-        return [];
-      }
-    },
-  });
-
   const { data: projects } = useQuery<Project[]>({
     queryKey: ["data_projects"],
     refetchOnMount: "always",
@@ -135,7 +97,7 @@ export default function TaskModal(props: TaskModalProps) {
       try {
         const res = await api.get(`/projects`);
         return res.data;
-      } catch (err) {
+      } catch (err) {        
         return [];
       }
     },
@@ -179,41 +141,30 @@ export default function TaskModal(props: TaskModalProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
               {props.selectedObject?.id && (
                 <SelectForm
-                  name="statusId"
+                  name="Status"
                   label="Status"
-                  options={statuses ?? []}
+                  options={[...TASK_STATUS_OPTIONS]}
                   form={form}
                 />
               )}
               <SelectForm
-                name="priorityId"
+                name="Priority"
                 label="Prioridade"
-                options={priorities ?? []}
-                required
+                options={[...TASK_PRIORITIES_OPTIONS]}
                 form={form}
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
-              <SelectForm
-                name="typeId"
-                label="Tipo"
-                options={types ?? []}
-                required
-                form={form}
-              />
-              <SelectForm
-                name="projectId"
-                label="Projeto"
-                options={projects ?? []}
-                form={form}
-              />
-            </div>
+            <SelectForm
+              name="projectId"
+              label="Projeto"
+              options={projects ?? []}
+              form={form}
+            />
             <InputForm
               name="deadline"
               label="Prazo"
               placeholder="Prazo"
               type="date"
-              required
               form={form}
             />
           </div>
