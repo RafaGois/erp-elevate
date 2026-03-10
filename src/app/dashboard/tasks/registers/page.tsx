@@ -112,17 +112,32 @@ export default function Tasks() {
       },
     },
     {
-      accessorKey: "project",
-      header: "Projeto",
-      accessorFn: (row) => row?.Project?.name ?? "-",
-      cell: ({ row }) => {
-        const item = row.original;
-        return <span>{item?.Project?.name ?? "-"}</span>;
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Projeto
+            <ArrowUpDown />
+          </Button>
+        );
       },
+      accessorKey: "Project.name",
     },
     {
       accessorKey: "priority",
-      header: "Prioridade",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Prioridade
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorFn: (row) => row?.Priority ?? "-",
       cell: ({ row }) => {
         const item = row.original;
@@ -148,7 +163,17 @@ export default function Tasks() {
     },    
     {
       accessorKey: "responsible",
-      header: "Responsável",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Responsável
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorFn: (row) => row?.Responsible?.name ?? "-",
       cell: ({ row }) => {
         const item = row.original;
@@ -157,7 +182,17 @@ export default function Tasks() {
     },
     {
       accessorKey: "deadline",
-      header: "Prazo",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Prazo
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorFn: (row) => row?.deadline ?? "-",
       cell: ({ row }) => {
         const item = row.original;
@@ -172,7 +207,17 @@ export default function Tasks() {
     },
     {
       accessorKey: "createdAt",
-      header: "Criação",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Criado em
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorFn: (row) => row?.createdAt ?? "-",
       cell: ({ row }) => {
         const item = row.original;
@@ -187,7 +232,17 @@ export default function Tasks() {
     },
     {
       accessorKey: "Status",
-      header: "Status",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+            <ArrowUpDown />
+          </Button>
+        );
+      },
       accessorFn: (row) => row?.Status ?? "-",
       cell: ({ row }) => {
         const item = row.original;
