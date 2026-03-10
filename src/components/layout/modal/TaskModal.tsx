@@ -17,6 +17,7 @@ import {
 } from "@/lib/enums/TaskPriorities";
 
 import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
+import TextAreaForm from "../components/inputs/TextareaForm";
 
 type TaskModalProps = BaseModalProps<Task>;
 
@@ -67,7 +68,27 @@ export default function TaskModal(props: TaskModalProps) {
   }
 
   async function update(data: Partial<Task>) {
-    await api.put(`/tasks/${props.selectedObject?.id}`, data);
+    const payload: Record<string, unknown> = {};
+    if (data.name != null && String(data.name).trim() !== "")
+      payload.name = data.name;
+    if (data.description != null && String(data.description).trim() !== "")
+      payload.description = data.description;
+    if (data.Status != null && String(data.Status).trim() !== "")
+      payload.Status = data.Status;
+    if (data.Priority != null && String(data.Priority).trim() !== "")
+      payload.Priority = data.Priority;
+    if (data.responsibleId != null && String(data.responsibleId).trim() !== "")
+      payload.responsibleId = data.responsibleId;
+    if (data.projectId != null && String(data.projectId).trim() !== "")
+      payload.projectId = data.projectId;
+    const rawDeadline = data.deadline;
+    if (rawDeadline != null && String(rawDeadline).trim() !== "") {
+      payload.deadline =
+        rawDeadline instanceof Date
+          ? rawDeadline.toISOString()
+          : new Date(rawDeadline).toISOString();
+    }
+    await api.put(`/tasks/${props.selectedObject?.id}`, payload);
   }
 
   async function handleClose() {
@@ -124,7 +145,7 @@ export default function TaskModal(props: TaskModalProps) {
               required
               form={form}
             />
-            <InputForm
+            <TextAreaForm
               name="description"
               label="Descrição"
               placeholder="Descrição"
