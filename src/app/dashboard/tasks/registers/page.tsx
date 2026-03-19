@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Circle, CircleDashed } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import api from "@/lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -25,6 +25,7 @@ import ViewModeSwitch, {
 import TaskKanbanBoard from "@/components/layout/components/datatable/TaskKanbanBoard";
 
 export default function Tasks() {
+  const viewModeStorageKey = "tasks-registers-view-mode";
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("table");
@@ -67,6 +68,17 @@ export default function Tasks() {
       }
     },
   });
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem(viewModeStorageKey);
+    if (raw === "table" || raw === "kanban") {
+      setViewMode(raw);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(viewModeStorageKey, viewMode);
+  }, [viewMode]);
 
   const statusOptions = [
     { id: TaskStatus.PENDENTE, icon: <CircleDashed fill="#8d8e8f" stroke="#8d8e8f" className="w-3 h-3" />, name: "Pendente" },
@@ -369,6 +381,7 @@ export default function Tasks() {
         <TaskKanbanBoard
           tasks={filteredData ?? []}
           onEditTask={openTaskInModal}
+          onCreateTask={() => setAction(ModalAction.Create)}
           onUpdateTaskStatus={async (taskId, status) => {
             await handleUpdateStatus(taskId, status);
           }}
