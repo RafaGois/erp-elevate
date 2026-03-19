@@ -19,10 +19,15 @@ import { endOfDay, startOfDay, subDays, addDays } from "date-fns";
 import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
 import { TaskPriorities } from "@/lib/enums/TaskPriorities";
 import { InlineTaskSelectCell } from "@/components/layout/components/datatable/InlineTaskSelectCell";
+import ViewModeSwitch, {
+  ViewMode,
+} from "@/components/layout/components/datatable/ViewModeSwitch";
+import TaskKanbanBoard from "@/components/layout/components/datatable/TaskKanbanBoard";
 
 export default function Tasks() {
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [editingStatusTaskId, setEditingStatusTaskId] = useState<string | null>(
     null
   );
@@ -292,22 +297,41 @@ export default function Tasks() {
     const toBase = params?.ranges?.to ?? params?.ranges?.from;
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
-    return (data ?? []).filter((item) => {
-      if (selectedStatus !== "all" && item?.Status !== selectedStatus) {
-        return false;
-      }
+    const priorityWeight: Record<TaskPriorities, number> = {
+      [TaskPriorities.ALTA]: 3,
+      [TaskPriorities.MEDIA]: 2,
+      [TaskPriorities.BAIXA]: 1,
+    };
 
-      if (!from && !to) return true;
+    return (data ?? [])
+      .filter((item) => {
+        if (selectedStatus !== "all" && item?.Status !== selectedStatus) {
+          return false;
+        }
 
-      const itemDate = item?.deadline ? new Date(item.deadline) : undefined;
-      if (!itemDate || Number.isNaN(itemDate.getTime())) return true;
+        if (!from && !to) return true;
 
-      if (from && itemDate < from) return false;
-      if (to && itemDate > to) return false;
+        const itemDate = item?.deadline ? new Date(item.deadline) : undefined;
+        if (!itemDate || Number.isNaN(itemDate.getTime())) return true;
 
-      return true;
-    });
-    
+        if (from && itemDate < from) return false;
+        if (to && itemDate > to) return false;
+
+        return true;
+      })
+      .sort((a, b) => {
+        const aPriority =
+          priorityWeight[(a?.Priority as TaskPriorities) ?? TaskPriorities.BAIXA] ?? 1;
+        const bPriority =
+          priorityWeight[(b?.Priority as TaskPriorities) ?? TaskPriorities.BAIXA] ?? 1;
+
+        if (aPriority !== bPriority) return bPriority - aPriority;
+
+        const aDeadline = a?.deadline ? new Date(a.deadline).getTime() : Number.POSITIVE_INFINITY;
+        const bDeadline = b?.deadline ? new Date(b.deadline).getTime() : Number.POSITIVE_INFINITY;
+
+        return aDeadline - bDeadline;
+      });
   }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
 
 
@@ -317,21 +341,39 @@ export default function Tasks() {
     await api.delete(`/tasks/${uid}`);
   }
 
+  function openTaskInModal(task: Task) {
+    setSelectedObject(task);
+    setAction(ModalAction.Update);
+  }
+
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filteredData ?? []}
-        setAction={setAction}
-        form={form}
-        options={[
-          { id: "all", name: "Todos" },
-          ...(TASK_STATUS_OPTIONS ?? []).map((status) => ({
-            id: status.id,
-            name: status.name,
-          })),
-        ]}
-      />
+      <div className="mb-2">
+        <ViewModeSwitch value={viewMode} onChange={setViewMode} />
+      </div>
+      {viewMode === "table" ? (
+        <DataTable
+          columns={columns}
+          data={filteredData ?? []}
+          setAction={setAction}
+          form={form}
+          options={[
+            { id: "all", name: "Todos" },
+            ...(TASK_STATUS_OPTIONS ?? []).map((status) => ({
+              id: status.id,
+              name: status.name,
+            })),
+          ]}
+        />
+      ) : (
+        <TaskKanbanBoard
+          tasks={filteredData ?? []}
+          onEditTask={openTaskInModal}
+          onUpdateTaskStatus={async (taskId, status) => {
+            await handleUpdateStatus(taskId, status);
+          }}
+        />
+      )}
       <ToolkitModal
         action={action}
         setAction={setAction}
