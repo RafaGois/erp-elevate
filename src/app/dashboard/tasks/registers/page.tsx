@@ -27,10 +27,16 @@ import TaskKanbanBoard from "@/components/layout/components/datatable/TaskKanban
 export default function Tasks() {
   const viewModeStorageKey = "tasks-registers-view-mode";
   const hiddenStatusFilterStorageKey = "tasks-registers-hidden-status-filter";
+  const hiddenResponsibleFilterStorageKey =
+    "tasks-registers-hidden-responsible-filter";
+  const unassignedResponsibleId = "__unassigned__";
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [hiddenStatusFilterIds, setHiddenStatusFilterIds] = useState<TaskStatus[]>([]);
+  const [hiddenResponsibleFilterIds, setHiddenResponsibleFilterIds] = useState<
+    string[]
+  >([]);
   const [editingStatusTaskId, setEditingStatusTaskId] = useState<string | null>(
     null
   );
@@ -103,6 +109,36 @@ export default function Tasks() {
     );
   }, [hiddenStatusFilterIds]);
 
+  useEffect(() => {
+    const raw = window.localStorage.getItem(hiddenResponsibleFilterStorageKey);
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw) as string[];
+      setHiddenResponsibleFilterIds(parsed);
+    } catch {
+      window.localStorage.removeItem(hiddenResponsibleFilterStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      hiddenResponsibleFilterStorageKey,
+      JSON.stringify(hiddenResponsibleFilterIds)
+    );
+  }, [hiddenResponsibleFilterIds]);
+
+  const responsibleFilterOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const task of data ?? []) {
+      const id = task?.Responsible?.id ?? unassignedResponsibleId;
+      const name = task?.Responsible?.name ?? "Sem responsável";
+      if (!map.has(id)) map.set(id, name);
+    }
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [data]);
+
   const statusOptions = [
     { id: TaskStatus.PENDENTE, icon: <CircleDashed fill="#8d8e8f" stroke="#8d8e8f" className="w-3 h-3" />, name: "Pendente" },
     { id: TaskStatus.EM_ANDAMENTO, icon: <Circle fill="#ebba34" stroke="#ebba34" className="w-3 h-3 animate-pulse" />, name: "Em andamento" },
@@ -132,6 +168,14 @@ export default function Tasks() {
       prev.includes(statusId)
         ? prev.filter((id) => id !== statusId)
         : [...prev, statusId]
+    );
+  }
+
+  function toggleResponsibleFilter(responsibleId: string) {
+    setHiddenResponsibleFilterIds((prev) =>
+      prev.includes(responsibleId)
+        ? prev.filter((id) => id !== responsibleId)
+        : [...prev, responsibleId]
     );
   }
 
@@ -332,11 +376,14 @@ export default function Tasks() {
 
   const params = useWatch({ control: form.control });
 
-  const filteredData = useMemo(() => {
+  const tableFilteredData = useMemo(() => {
     const selectedStatus = params?.select ?? "all";
     const visibleStatusIds = TASK_STATUS_OPTIONS
       .map((status) => status.id)
       .filter((statusId) => !hiddenStatusFilterIds.includes(statusId));
+    const visibleResponsibleIds = responsibleFilterOptions
+      .map((r) => r.id)
+      .filter((id) => !hiddenResponsibleFilterIds.includes(id));
     const from = params?.ranges?.from
       ? startOfDay(new Date(params.ranges.from))
       : undefined;
@@ -358,6 +405,14 @@ export default function Tasks() {
           visibleStatusIds.length > 0 &&
           !visibleStatusIds.includes(
             ((item?.Status as TaskStatus) ?? TaskStatus.PENDENTE)
+          )
+        ) {
+          return false;
+        }
+        if (
+          visibleResponsibleIds.length > 0 &&
+          !visibleResponsibleIds.includes(
+            item?.Responsible?.id ?? unassignedResponsibleId
           )
         ) {
           return false;
@@ -389,9 +444,11 @@ export default function Tasks() {
   }, [
     data,
     hiddenStatusFilterIds,
+    hiddenResponsibleFilterIds,
     params?.select,
     params?.ranges?.from,
     params?.ranges?.to,
+    responsibleFilterOptions,
   ]);
 
 
@@ -414,16 +471,19 @@ export default function Tasks() {
       {viewMode === "table" ? (
         <DataTable
           columns={columns}
-          data={filteredData ?? []}
+          data={tableFilteredData ?? []}
           setAction={setAction}
           form={form}
           statusFilterOptions={[...TASK_STATUS_OPTIONS]}
           hiddenStatusIds={hiddenStatusFilterIds}
           onToggleStatusFilter={toggleStatusFilter}
+          responsibleFilterOptions={responsibleFilterOptions}
+          hiddenResponsibleIds={hiddenResponsibleFilterIds}
+          onToggleResponsibleFilter={toggleResponsibleFilter}
         />
       ) : (
         <TaskKanbanBoard
-          tasks={filteredData ?? []}
+          tasks={data ?? []}
           onEditTask={openTaskInModal}
           onCreateTask={() => setAction(ModalAction.Create)}
           onUpdateTaskStatus={async (taskId, status) => {

@@ -34,6 +34,9 @@ interface DataTableProps<TData, TValue> {
   statusFilterOptions?: { id: string; name: string }[];
   hiddenStatusIds?: string[];
   onToggleStatusFilter?: (statusId: string) => void;
+  responsibleFilterOptions?: { id: string; name: string }[];
+  hiddenResponsibleIds?: string[];
+  onToggleResponsibleFilter?: (responsibleId: string) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -45,6 +48,9 @@ export function DataTable<TData, TValue>({
   statusFilterOptions,
   hiddenStatusIds,
   onToggleStatusFilter,
+  responsibleFilterOptions,
+  hiddenResponsibleIds,
+  onToggleResponsibleFilter,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -68,6 +74,9 @@ export function DataTable<TData, TValue>({
         statusFilterOptions={statusFilterOptions}
         hiddenStatusIds={hiddenStatusIds}
         onToggleStatusFilter={onToggleStatusFilter}
+        responsibleFilterOptions={responsibleFilterOptions}
+        hiddenResponsibleIds={hiddenResponsibleIds}
+        onToggleResponsibleFilter={onToggleResponsibleFilter}
       />
       <div className="rounded border">
         <Table>
