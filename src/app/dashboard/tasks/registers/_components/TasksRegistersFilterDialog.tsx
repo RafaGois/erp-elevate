@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -204,42 +204,11 @@ export function TasksRegistersFilterDialog({
 
             <Separator />
 
-            <FormField
-              control={form.control}
-              name="statusQuickFilter"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Filtro rápido por status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Todos" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      {TASK_STATUS_OPTIONS.map((s) => (
-                        <SelectItem key={s.id} value={s.id}>
-                          {s.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            <Separator />
-
             <div className="space-y-2">
               <div>
                 <p className="text-sm font-medium">Visibilidade por status</p>
                 <p className="text-muted-foreground text-xs">
-                  Desmarque para ocultar tarefas com esse status (além do filtro
-                  rápido acima).
+                  Desmarque para ocultar tarefas com esse status.
                 </p>
               </div>
               <div className="border-border rounded-md border">
@@ -247,7 +216,7 @@ export function TasksRegistersFilterDialog({
                   <ToggleRow
                     key={s.id}
                     id={`task-filter-show-status-${s.id}`}
-                    label={`Exibir: ${s.name}`}
+                    label={s.name}
                     checked={!hiddenStatusIds.includes(s.id as TaskStatus)}
                     onCheckedChange={(show) => {
                       const isHidden = hiddenStatusIds.includes(s.id as TaskStatus);

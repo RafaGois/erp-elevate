@@ -4,6 +4,10 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Sistemas Elevate",
+  icons: {
+    icon: "/logo.ico",
+    shortcut: "/logo.ico",
+  },
   description: "Somos uma empresa especializada no desenvolvimento de sistemas sob medida para a indústria metal mecânica. Nosso trabalho nasce da união entre conhecimento técnico em desenvolvimento de software e experiência prática em planejamento, controle de processos e engenharia de automação industrial.",
   keywords: [
     "sistemas de controle de produção",

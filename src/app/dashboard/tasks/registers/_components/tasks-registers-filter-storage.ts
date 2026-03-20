@@ -25,7 +25,6 @@ const VALID_PRIORITIES = new Set<string>(
 
 type StoredShape = {
   ranges?: { from?: string | null; to?: string | null };
-  statusQuickFilter?: string;
   hiddenStatusIds?: string[];
   hiddenResponsibleIds?: string[];
   priorityIds?: string[];
@@ -84,13 +83,6 @@ export function parseTasksRegistersFiltersFromStorage(
   if (raw == null || raw === "") return null;
   try {
     const data = JSON.parse(raw) as StoredShape;
-    const statusQuickFilterRaw = data.statusQuickFilter ?? "all";
-    const statusQuickFilter: TasksRegistersFilterValues["statusQuickFilter"] =
-      statusQuickFilterRaw === "all" || VALID_STATUSES.has(statusQuickFilterRaw)
-        ? (statusQuickFilterRaw === "all"
-            ? "all"
-            : (statusQuickFilterRaw as TaskStatus))
-        : "all";
 
     const hiddenStatusIds = (data.hiddenStatusIds ?? []).filter(
       (id): id is TaskStatus => VALID_STATUSES.has(id),
@@ -108,7 +100,6 @@ export function parseTasksRegistersFiltersFromStorage(
         from: parseIsoDate(data.ranges?.from ?? undefined),
         to: parseIsoDate(data.ranges?.to ?? undefined),
       },
-      statusQuickFilter,
       hiddenStatusIds,
       hiddenResponsibleIds,
       priorityIds,
@@ -127,7 +118,6 @@ export function serializeTasksRegistersFilters(
       from: v.ranges?.from?.toISOString?.() ?? null,
       to: v.ranges?.to?.toISOString?.() ?? null,
     },
-    statusQuickFilter: v.statusQuickFilter,
     hiddenStatusIds: v.hiddenStatusIds,
     hiddenResponsibleIds: v.hiddenResponsibleIds,
     priorityIds: v.priorityIds,

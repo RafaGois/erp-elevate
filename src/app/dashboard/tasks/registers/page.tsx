@@ -44,7 +44,6 @@ function countActiveTasksFilterDimensions(
   if (!v) return 0;
   let n = 0;
   if (v.ranges?.from || v.ranges?.to) n++;
-  if (v.statusQuickFilter && v.statusQuickFilter !== "all") n++;
   if (v.hiddenStatusIds?.length) n++;
   if (v.hiddenResponsibleIds?.length) n++;
   if (v.priorityIds?.length) n++;
@@ -133,7 +132,6 @@ export default function Tasks() {
     [
       filterParams?.ranges?.from,
       filterParams?.ranges?.to,
-      filterParams?.statusQuickFilter,
       filterParams?.hiddenStatusIds,
       filterParams?.hiddenResponsibleIds,
       filterParams?.priorityIds,
@@ -385,7 +383,6 @@ export default function Tasks() {
   ];
 
   const tableFilteredData = useMemo(() => {
-    const selectedStatus = filterParams?.statusQuickFilter ?? "all";
     const hiddenStatusFilterIds = filterParams?.hiddenStatusIds ?? [];
     const hiddenResponsibleFilterIds =
       filterParams?.hiddenResponsibleIds ?? [];
@@ -415,13 +412,6 @@ export default function Tasks() {
 
     return (data ?? [])
       .filter((item) => {
-        if (
-          selectedStatus !== "all" &&
-          item?.Status !== selectedStatus
-        ) {
-          return false;
-        }
-
         if (
           visibleStatusIds.length > 0 &&
           !visibleStatusIds.includes(
