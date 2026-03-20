@@ -15,7 +15,7 @@ import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import TaskModal from "@/components/layout/modal/TaskModal";
 import { useForm, useWatch } from "react-hook-form";
-import { endOfDay, startOfDay, subDays, addDays } from "date-fns";
+import { endOfDay, startOfDay } from "date-fns";
 import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
 import { TaskPriorities } from "@/lib/enums/TaskPriorities";
 import { InlineTaskSelectCell } from "@/components/layout/components/datatable/InlineTaskSelectCell";
@@ -26,9 +26,11 @@ import TaskKanbanBoard from "@/components/layout/components/datatable/TaskKanban
 
 export default function Tasks() {
   const viewModeStorageKey = "tasks-registers-view-mode";
+  const hiddenStatusFilterStorageKey = "tasks-registers-hidden-status-filter";
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [hiddenStatusFilterIds, setHiddenStatusFilterIds] = useState<TaskStatus[]>([]);
   const [editingStatusTaskId, setEditingStatusTaskId] = useState<string | null>(
     null
   );
@@ -46,8 +48,8 @@ export default function Tasks() {
   const form = useForm({
     defaultValues: {
       ranges: {
-        from: subDays(new Date(), 30),
-        to: addDays(new Date(), 90),
+        from: undefined,
+        to: undefined,
       },
       select: "all",
     },
@@ -80,6 +82,27 @@ export default function Tasks() {
     window.localStorage.setItem(viewModeStorageKey, viewMode);
   }, [viewMode]);
 
+  useEffect(() => {
+    const raw = window.localStorage.getItem(hiddenStatusFilterStorageKey);
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw) as TaskStatus[];
+      const allowed = parsed.filter((statusId) =>
+        TASK_STATUS_OPTIONS.some((status) => status.id === statusId)
+      );
+      setHiddenStatusFilterIds(allowed);
+    } catch {
+      window.localStorage.removeItem(hiddenStatusFilterStorageKey);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      hiddenStatusFilterStorageKey,
+      JSON.stringify(hiddenStatusFilterIds)
+    );
+  }, [hiddenStatusFilterIds]);
+
   const statusOptions = [
     { id: TaskStatus.PENDENTE, icon: <CircleDashed fill="#8d8e8f" stroke="#8d8e8f" className="w-3 h-3" />, name: "Pendente" },
     { id: TaskStatus.EM_ANDAMENTO, icon: <Circle fill="#ebba34" stroke="#ebba34" className="w-3 h-3 animate-pulse" />, name: "Em andamento" },
@@ -102,6 +125,14 @@ export default function Tasks() {
   async function handleUpdatePriority(taskId: string, value: string) {
     await api.put(`/tasks/${taskId}`, { Priority: value as TaskPriorities });
     await queryClient.invalidateQueries({ queryKey: ["data_tasks"] });
+  }
+
+  function toggleStatusFilter(statusId: TaskStatus) {
+    setHiddenStatusFilterIds((prev) =>
+      prev.includes(statusId)
+        ? prev.filter((id) => id !== statusId)
+        : [...prev, statusId]
+    );
   }
 
   const columns: ColumnDef<Task>[] = [
@@ -303,6 +334,9 @@ export default function Tasks() {
 
   const filteredData = useMemo(() => {
     const selectedStatus = params?.select ?? "all";
+    const visibleStatusIds = TASK_STATUS_OPTIONS
+      .map((status) => status.id)
+      .filter((statusId) => !hiddenStatusFilterIds.includes(statusId));
     const from = params?.ranges?.from
       ? startOfDay(new Date(params.ranges.from))
       : undefined;
@@ -318,6 +352,14 @@ export default function Tasks() {
     return (data ?? [])
       .filter((item) => {
         if (selectedStatus !== "all" && item?.Status !== selectedStatus) {
+          return false;
+        }
+        if (
+          visibleStatusIds.length > 0 &&
+          !visibleStatusIds.includes(
+            ((item?.Status as TaskStatus) ?? TaskStatus.PENDENTE)
+          )
+        ) {
           return false;
         }
 
@@ -344,7 +386,13 @@ export default function Tasks() {
 
         return aDeadline - bDeadline;
       });
-  }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
+  }, [
+    data,
+    hiddenStatusFilterIds,
+    params?.select,
+    params?.ranges?.from,
+    params?.ranges?.to,
+  ]);
 
 
 
@@ -369,13 +417,9 @@ export default function Tasks() {
           data={filteredData ?? []}
           setAction={setAction}
           form={form}
-          options={[
-            { id: "all", name: "Todos" },
-            ...(TASK_STATUS_OPTIONS ?? []).map((status) => ({
-              id: status.id,
-              name: status.name,
-            })),
-          ]}
+          statusFilterOptions={[...TASK_STATUS_OPTIONS]}
+          hiddenStatusIds={hiddenStatusFilterIds}
+          onToggleStatusFilter={toggleStatusFilter}
         />
       ) : (
         <TaskKanbanBoard

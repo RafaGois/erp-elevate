@@ -30,7 +30,10 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   setAction?: (newAction: ModalAction) => void;
   form?: UseFormReturn<any>;
-  options?: { id: string; name: string }[]
+  options?: { id: string; name: string }[];
+  statusFilterOptions?: { id: string; name: string }[];
+  hiddenStatusIds?: string[];
+  onToggleStatusFilter?: (statusId: string) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,6 +42,9 @@ export function DataTable<TData, TValue>({
   setAction,
   form,
   options,
+  statusFilterOptions,
+  hiddenStatusIds,
+  onToggleStatusFilter,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -54,7 +60,15 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <DataTableToolbar table={table} setAction={setAction} form={form} options={options} />
+      <DataTableToolbar
+        table={table}
+        setAction={setAction}
+        form={form}
+        options={options}
+        statusFilterOptions={statusFilterOptions}
+        hiddenStatusIds={hiddenStatusIds}
+        onToggleStatusFilter={onToggleStatusFilter}
+      />
       <div className="rounded border">
         <Table>
           <TableHeader className="bg-muted/50">
