@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import type { Table } from "@tanstack/react-table";
 
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,8 @@ import {
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   setAction?: (newAction: ModalAction) => void;
+  /** Renderizado antes do campo de busca (filtros específicos por página). */
+  toolbarStart?: ReactNode;
 
   form?: UseFormReturn;
   options?: { id: string; name: string }[];
@@ -33,6 +36,7 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
   setAction,
+  toolbarStart,
   form,
   options,
   statusFilterOptions,
@@ -45,6 +49,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex flex-col md:flex-row md:justify-evenly gap-3 py-4 w-full ">
       <div className="flex flex-1 flex-wrap items-center gap-2 w-full md:w-auto">
+        {toolbarStart}
         <Input
           placeholder="Filtro..."
           onChange={(event) => {

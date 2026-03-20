@@ -6,15 +6,17 @@ import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
 import Movimentation from "@/lib/models/movimentations/Motimentation";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   ArrowDownRight,
   ArrowUpDown,
   ArrowUpRight,
-  ChartArea,
   DollarSign,
+  Hash,
+  ListFilter,
 } from "lucide-react";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import { useQuery } from "@tanstack/react-query";
@@ -23,32 +25,94 @@ import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import MovimentationModal from "@/components/layout/modal/MovimentationModal";
 import { useForm, useWatch } from "react-hook-form";
 import { endOfDay, startOfDay, subDays } from "date-fns";
-import { useMemo } from "react";
 import MovimentationType from "@/lib/enums/MovimentationType";
+import User from "@/lib/models/User";
+import BankAccount from "@/lib/models/movimentations/BankAccount";
+import MovimentationCategory from "@/lib/models/movimentations/Category";
+import { MovimentationsFilterDialog } from "./_components/MovimentationsFilterDialog";
+import type { MovimentationsFilterValues } from "./_components/movimentations-filter-types";
+import {
+  MOVIMENTATIONS_FILTERS_STORAGE_KEY,
+  parseMovimentationsFiltersFromStorage,
+  serializeMovimentationsFilters,
+} from "./_components/movimentations-filter-storage";
 
-const MOVIMENTATION_TYPE_OPTIONS = [
-  { id: "all", name: "Todos" },
-  { id: MovimentationType.ENTRADA, name: "Entrada" },
-  { id: MovimentationType.SAIDA, name: "Saída" },
-];
+function getDefaultMovimentationFilters(): MovimentationsFilterValues {
+  return {
+    ranges: { from: subDays(new Date(), 30), to: new Date() },
+    types: [],
+    categoryIds: [],
+    bankAccountIds: [],
+    userIds: [],
+  };
+}
+
+function countActiveFilterDimensions(
+  v: Partial<MovimentationsFilterValues> | undefined,
+): number {
+  if (!v) return 0;
+  let n = 0;
+  if (v.types?.length) n++;
+  if (v.categoryIds?.length) n++;
+  if (v.bankAccountIds?.length) n++;
+  if (v.userIds?.length) n++;
+  return n;
+}
 
 export default function Movimentations() {
-  const form = useForm({
-    defaultValues: {
-      select: "all",
-      ranges: {
-        from: subDays(new Date(), 30),
-        to: new Date(),
-      },
-    },
+  const filterForm = useForm<MovimentationsFilterValues>({
+    defaultValues: getDefaultMovimentationFilters(),
   });
-  const params = useWatch({ control: form.control });
+  const filterParams = useWatch({ control: filterForm.control });
+  const filtersRestoredRef = useRef(false);
+
+  /** Restaura do localStorage antes do paint para evitar sobrescrever com o default. */
+  useLayoutEffect(() => {
+    try {
+      const raw = localStorage.getItem(MOVIMENTATIONS_FILTERS_STORAGE_KEY);
+      const parsed = parseMovimentationsFiltersFromStorage(raw);
+      if (parsed) {
+        filterForm.reset(parsed);
+      }
+    } catch {
+      localStorage.removeItem(MOVIMENTATIONS_FILTERS_STORAGE_KEY);
+    } finally {
+      filtersRestoredRef.current = true;
+    }
+    // Montagem única; `filterForm` do useForm é estável neste ciclo de vida.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!filtersRestoredRef.current) return;
+    try {
+      const values = filterForm.getValues();
+      localStorage.setItem(
+        MOVIMENTATIONS_FILTERS_STORAGE_KEY,
+        serializeMovimentationsFilters(values),
+      );
+    } catch {
+      /* quota / modo privado */
+    }
+  }, [filterParams, filterForm]);
+
+  const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [selectedObject, setSelectedObject] = useState<Movimentation | null>(
     null,
   );
   const [action, setAction] = useState<ModalAction | null>(null);
 
   const { setReloading } = useAppData();
+
+  const activeFilterDimensions = useMemo(
+    () => countActiveFilterDimensions(filterParams),
+    [
+      filterParams?.types,
+      filterParams?.categoryIds,
+      filterParams?.bankAccountIds,
+      filterParams?.userIds,
+    ],
+  );
 
   const columns: ColumnDef<Movimentation>[] = [
     {
@@ -95,7 +159,6 @@ export default function Movimentations() {
       cell: ({ row }) => {
         const item = row.original;
         const date = new Date(item.date);
-        // Formatar para DD/MM/YYYY
         return <span>{date.toLocaleDateString("pt-BR")}</span>;
       },
     },
@@ -160,9 +223,7 @@ export default function Movimentations() {
       },
     },
     {
-      header: ({ column }) => {
-        return <p>Opções</p>;
-      },
+      header: () => <p>Opções</p>,
       accessorKey: "Opções",
       enableHiding: false,
       cell: ({ row }) => {
@@ -187,9 +248,36 @@ export default function Movimentations() {
       try {
         const res = await api.get(`/movimentations`);
         return res.data;
-      } catch (err) {
+      } catch {
         return [];
       }
+    },
+  });
+
+  const { data: users = [] } = useQuery<User[]>({
+    queryKey: ["data_users"],
+    refetchOnMount: "always",
+    queryFn: async () => {
+      const res = await api.get("/users");
+      return res.data;
+    },
+  });
+
+  const { data: bankAccounts = [] } = useQuery<BankAccount[]>({
+    queryKey: ["data_bank_accounts"],
+    refetchOnMount: "always",
+    queryFn: async () => {
+      const res = await api.get("/bank-accounts");
+      return res.data;
+    },
+  });
+
+  const { data: categories = [] } = useQuery<MovimentationCategory[]>({
+    queryKey: ["data_movimentation_categories"],
+    refetchOnMount: "always",
+    queryFn: async () => {
+      const res = await api.get("/movimentation-categories");
+      return res.data;
     },
   });
 
@@ -199,16 +287,40 @@ export default function Movimentations() {
   }
 
   const filteredData = useMemo(() => {
-    const selectedType = params?.select ?? "all";
-    const from = params?.ranges?.from
-      ? startOfDay(new Date(params.ranges.from))
+    const from = filterParams?.ranges?.from
+      ? startOfDay(new Date(filterParams.ranges.from))
       : undefined;
-    const toBase = params?.ranges?.to ?? params?.ranges?.from;
+    const toBase =
+      filterParams?.ranges?.to ?? filterParams?.ranges?.from;
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
+    const typesSel = filterParams?.types ?? [];
+    const categoryIds = filterParams?.categoryIds ?? [];
+    const bankAccountIds = filterParams?.bankAccountIds ?? [];
+    const userIds = filterParams?.userIds ?? [];
+
     return (data ?? []).filter((item) => {
-      if (selectedType !== "all" && item?.Type !== selectedType) {
+      if (
+        typesSel.length > 0 &&
+        !typesSel.includes(item?.Type as MovimentationType)
+      ) {
         return false;
+      }
+
+      if (categoryIds.length > 0) {
+        const cid = item?.Category?.id ?? item?.categoryId;
+        if (!cid || !categoryIds.includes(String(cid))) return false;
+      }
+
+      if (bankAccountIds.length > 0) {
+        const bid =
+          item?.BankAccount?.id ?? (item as { bankAccountId?: string })?.bankAccountId;
+        if (!bid || !bankAccountIds.includes(String(bid))) return false;
+      }
+
+      if (userIds.length > 0) {
+        const uid = item?.User?.id ?? (item as { userId?: string })?.userId;
+        if (!uid || !userIds.includes(String(uid))) return false;
       }
 
       if (!from && !to) return true;
@@ -221,15 +333,19 @@ export default function Movimentations() {
 
       return true;
     });
-  }, [data, params?.select, params?.ranges?.from, params?.ranges?.to]);
+  }, [data, filterParams]);
 
   return (
     <>
       <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card">
         <DataCard
-          title="Valor total"
-          value={filteredData.reduce((acc, item) => acc + item.value, 0)}
-          icon={<ChartArea />}
+          title="Quantidade de Entradas"
+          value={
+            filteredData.filter(
+              (item) => item?.Type === MovimentationType.ENTRADA,
+            ).length
+          }
+          icon={<Hash />}
         />
         <DataCard
           title="Valor Líquido"
@@ -262,8 +378,32 @@ export default function Movimentations() {
         columns={columns}
         data={filteredData}
         setAction={setAction}
-        form={form}
-        options={MOVIMENTATION_TYPE_OPTIONS}
+        toolbarStart={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="gap-2 shrink-0"
+            onClick={() => setFilterDialogOpen(true)}
+          >
+            <ListFilter className="h-4 w-4" />
+            Filtros
+            {activeFilterDimensions > 0 ? (
+              <Badge variant="secondary" className="h-5 min-w-5 px-1.5">
+                {activeFilterDimensions}
+              </Badge>
+            ) : null}
+          </Button>
+        }
+      />
+      <MovimentationsFilterDialog
+        open={filterDialogOpen}
+        onOpenChange={setFilterDialogOpen}
+        form={filterForm}
+        categories={categories}
+        bankAccounts={bankAccounts}
+        users={users}
+        getDefaultValues={getDefaultMovimentationFilters}
       />
       <ToolkitModal
         action={action}

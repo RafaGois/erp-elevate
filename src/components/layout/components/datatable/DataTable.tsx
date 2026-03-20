@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -29,6 +30,8 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   setAction?: (newAction: ModalAction) => void;
+  /** Conteúdo opcional antes do campo de busca (ex.: filtros específicos da rota). */
+  toolbarStart?: ReactNode;
   form?: UseFormReturn<any>;
   options?: { id: string; name: string }[];
   statusFilterOptions?: { id: string; name: string }[];
@@ -43,6 +46,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   setAction,
+  toolbarStart,
   form,
   options,
   statusFilterOptions,
@@ -69,6 +73,7 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar
         table={table}
         setAction={setAction}
+        toolbarStart={toolbarStart}
         form={form}
         options={options}
         statusFilterOptions={statusFilterOptions}

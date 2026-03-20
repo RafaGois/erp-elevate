@@ -3,10 +3,11 @@
 import { DataTable } from "@/components/layout/components/datatable/DataTable";
 import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Circle, CircleDashed } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { ArrowUpDown, Circle, CircleDashed, ListFilter } from "lucide-react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import api from "@/lib/api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -23,22 +24,41 @@ import ViewModeSwitch, {
   ViewMode,
 } from "@/components/layout/components/datatable/ViewModeSwitch";
 import TaskKanbanBoard from "@/components/layout/components/datatable/TaskKanbanBoard";
+import { TasksRegistersFilterDialog } from "./_components/TasksRegistersFilterDialog";
+import {
+  getDefaultTasksRegistersFilters,
+  type TasksRegistersFilterValues,
+} from "./_components/tasks-registers-filter-types";
+import {
+  TASKS_REGISTERS_FILTERS_STORAGE_KEY,
+  loadTasksRegistersFiltersInitial,
+  serializeTasksRegistersFilters,
+} from "./_components/tasks-registers-filter-storage";
+
+const viewModeStorageKey = "tasks-registers-view-mode";
+const unassignedResponsibleId = "__unassigned__";
+
+function countActiveTasksFilterDimensions(
+  v: Partial<TasksRegistersFilterValues> | undefined,
+): number {
+  if (!v) return 0;
+  let n = 0;
+  if (v.ranges?.from || v.ranges?.to) n++;
+  if (v.statusQuickFilter && v.statusQuickFilter !== "all") n++;
+  if (v.hiddenStatusIds?.length) n++;
+  if (v.hiddenResponsibleIds?.length) n++;
+  if (v.priorityIds?.length) n++;
+  if (v.projectIds?.length) n++;
+  return n;
+}
 
 export default function Tasks() {
-  const viewModeStorageKey = "tasks-registers-view-mode";
-  const hiddenStatusFilterStorageKey = "tasks-registers-hidden-status-filter";
-  const hiddenResponsibleFilterStorageKey =
-    "tasks-registers-hidden-responsible-filter";
-  const unassignedResponsibleId = "__unassigned__";
   const [selectedObject, setSelectedObject] = useState<Task | null>(null);
   const [action, setAction] = useState<ModalAction | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("table");
-  const [hiddenStatusFilterIds, setHiddenStatusFilterIds] = useState<TaskStatus[]>([]);
-  const [hiddenResponsibleFilterIds, setHiddenResponsibleFilterIds] = useState<
-    string[]
-  >([]);
+  const [tasksFilterDialogOpen, setTasksFilterDialogOpen] = useState(false);
   const [editingStatusTaskId, setEditingStatusTaskId] = useState<string | null>(
-    null
+    null,
   );
   const [updatingStatusTaskId, setUpdatingStatusTaskId] = useState<
     string | null
@@ -51,15 +71,35 @@ export default function Tasks() {
   >(null);
   const { setReloading } = useAppData();
 
-  const form = useForm({
-    defaultValues: {
-      ranges: {
-        from: undefined,
-        to: undefined,
-      },
-      select: "all",
-    },
+  const filterForm = useForm<TasksRegistersFilterValues>({
+    defaultValues: getDefaultTasksRegistersFilters(),
   });
+  const filterParams = useWatch({ control: filterForm.control });
+  const filtersRestoredRef = useRef(false);
+
+  useLayoutEffect(() => {
+    try {
+      const initial = loadTasksRegistersFiltersInitial();
+      filterForm.reset(initial);
+    } catch {
+      localStorage.removeItem(TASKS_REGISTERS_FILTERS_STORAGE_KEY);
+    } finally {
+      filtersRestoredRef.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!filtersRestoredRef.current) return;
+    try {
+      localStorage.setItem(
+        TASKS_REGISTERS_FILTERS_STORAGE_KEY,
+        serializeTasksRegistersFilters(filterForm.getValues()),
+      );
+    } catch {
+      /* quota / modo privado */
+    }
+  }, [filterParams, filterForm]);
 
   const queryClient = useQueryClient();
   const { data, refetch } = useQuery<Task[]>({
@@ -88,44 +128,18 @@ export default function Tasks() {
     window.localStorage.setItem(viewModeStorageKey, viewMode);
   }, [viewMode]);
 
-  useEffect(() => {
-    const raw = window.localStorage.getItem(hiddenStatusFilterStorageKey);
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw) as TaskStatus[];
-      const allowed = parsed.filter((statusId) =>
-        TASK_STATUS_OPTIONS.some((status) => status.id === statusId)
-      );
-      setHiddenStatusFilterIds(allowed);
-    } catch {
-      window.localStorage.removeItem(hiddenStatusFilterStorageKey);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      hiddenStatusFilterStorageKey,
-      JSON.stringify(hiddenStatusFilterIds)
-    );
-  }, [hiddenStatusFilterIds]);
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem(hiddenResponsibleFilterStorageKey);
-    if (!raw) return;
-    try {
-      const parsed = JSON.parse(raw) as string[];
-      setHiddenResponsibleFilterIds(parsed);
-    } catch {
-      window.localStorage.removeItem(hiddenResponsibleFilterStorageKey);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      hiddenResponsibleFilterStorageKey,
-      JSON.stringify(hiddenResponsibleFilterIds)
-    );
-  }, [hiddenResponsibleFilterIds]);
+  const activeFilterDimensions = useMemo(
+    () => countActiveTasksFilterDimensions(filterParams),
+    [
+      filterParams?.ranges?.from,
+      filterParams?.ranges?.to,
+      filterParams?.statusQuickFilter,
+      filterParams?.hiddenStatusIds,
+      filterParams?.hiddenResponsibleIds,
+      filterParams?.priorityIds,
+      filterParams?.projectIds,
+    ],
+  );
 
   const responsibleFilterOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -133,6 +147,18 @@ export default function Tasks() {
       const id = task?.Responsible?.id ?? unassignedResponsibleId;
       const name = task?.Responsible?.name ?? "Sem responsável";
       if (!map.has(id)) map.set(id, name);
+    }
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [data]);
+
+  const projectFilterOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const task of data ?? []) {
+      const id = task?.Project?.id;
+      const name = task?.Project?.name;
+      if (id && name && !map.has(id)) map.set(id, name);
     }
     return Array.from(map.entries())
       .map(([id, name]) => ({ id, name }))
@@ -161,22 +187,6 @@ export default function Tasks() {
   async function handleUpdatePriority(taskId: string, value: string) {
     await api.put(`/tasks/${taskId}`, { Priority: value as TaskPriorities });
     await queryClient.invalidateQueries({ queryKey: ["data_tasks"] });
-  }
-
-  function toggleStatusFilter(statusId: TaskStatus) {
-    setHiddenStatusFilterIds((prev) =>
-      prev.includes(statusId)
-        ? prev.filter((id) => id !== statusId)
-        : [...prev, statusId]
-    );
-  }
-
-  function toggleResponsibleFilter(responsibleId: string) {
-    setHiddenResponsibleFilterIds((prev) =>
-      prev.includes(responsibleId)
-        ? prev.filter((id) => id !== responsibleId)
-        : [...prev, responsibleId]
-    );
   }
 
   const columns: ColumnDef<Task>[] = [
@@ -252,7 +262,7 @@ export default function Tasks() {
           />
         );
       },
-    },    
+    },
     {
       accessorKey: "responsible",
       header: ({ column }) => {
@@ -349,7 +359,7 @@ export default function Tasks() {
             onEdit={() => item?.id && setEditingStatusTaskId(item.id)}
             onEditClose={() => setEditingStatusTaskId(null)}
             onUpdateStart={() => item?.id && setUpdatingStatusTaskId(item.id)}
-            onUpdateEnd={() => setEditingStatusTaskId(null)}
+            onUpdateEnd={() => setUpdatingStatusTaskId(null)}
             onUpdate={handleUpdateStatus}
             successMessage="Status atualizado."
             errorMessage="Erro ao atualizar status."
@@ -374,20 +384,27 @@ export default function Tasks() {
     },
   ];
 
-  const params = useWatch({ control: form.control });
-
   const tableFilteredData = useMemo(() => {
-    const selectedStatus = params?.select ?? "all";
-    const visibleStatusIds = TASK_STATUS_OPTIONS
-      .map((status) => status.id)
-      .filter((statusId) => !hiddenStatusFilterIds.includes(statusId));
+    const selectedStatus = filterParams?.statusQuickFilter ?? "all";
+    const hiddenStatusFilterIds = filterParams?.hiddenStatusIds ?? [];
+    const hiddenResponsibleFilterIds =
+      filterParams?.hiddenResponsibleIds ?? [];
+    const priorityIds = filterParams?.priorityIds ?? [];
+    const projectIds = filterParams?.projectIds ?? [];
+
+    const visibleStatusIds = TASK_STATUS_OPTIONS.map((status) => status.id).filter(
+      (statusId) =>
+        !hiddenStatusFilterIds.includes(statusId as TaskStatus),
+    );
     const visibleResponsibleIds = responsibleFilterOptions
       .map((r) => r.id)
       .filter((id) => !hiddenResponsibleFilterIds.includes(id));
-    const from = params?.ranges?.from
-      ? startOfDay(new Date(params.ranges.from))
+
+    const from = filterParams?.ranges?.from
+      ? startOfDay(new Date(filterParams.ranges.from))
       : undefined;
-    const toBase = params?.ranges?.to ?? params?.ranges?.from;
+    const toBase =
+      filterParams?.ranges?.to ?? filterParams?.ranges?.from;
     const to = toBase ? endOfDay(new Date(toBase)) : undefined;
 
     const priorityWeight: Record<TaskPriorities, number> = {
@@ -398,24 +415,47 @@ export default function Tasks() {
 
     return (data ?? [])
       .filter((item) => {
-        if (selectedStatus !== "all" && item?.Status !== selectedStatus) {
+        if (
+          selectedStatus !== "all" &&
+          item?.Status !== selectedStatus
+        ) {
           return false;
         }
+
         if (
           visibleStatusIds.length > 0 &&
           !visibleStatusIds.includes(
-            ((item?.Status as TaskStatus) ?? TaskStatus.PENDENTE)
+            (item?.Status as TaskStatus) ?? TaskStatus.PENDENTE,
           )
         ) {
           return false;
         }
+
         if (
           visibleResponsibleIds.length > 0 &&
           !visibleResponsibleIds.includes(
-            item?.Responsible?.id ?? unassignedResponsibleId
+            item?.Responsible?.id ?? unassignedResponsibleId,
           )
         ) {
           return false;
+        }
+
+        if (
+          priorityIds.length > 0 &&
+          !priorityIds.includes(
+            (item?.Priority as TaskPriorities) ?? TaskPriorities.BAIXA,
+          )
+        ) {
+          return false;
+        }
+
+        if (projectIds.length > 0) {
+          const pid =
+            item?.Project?.id ??
+            (item as { projectId?: string }).projectId;
+          if (!pid || !projectIds.includes(String(pid))) {
+            return false;
+          }
         }
 
         if (!from && !to) return true;
@@ -443,15 +483,9 @@ export default function Tasks() {
       });
   }, [
     data,
-    hiddenStatusFilterIds,
-    hiddenResponsibleFilterIds,
-    params?.select,
-    params?.ranges?.from,
-    params?.ranges?.to,
+    filterParams,
     responsibleFilterOptions,
   ]);
-
-
 
   async function remove(uid: string) {
     setReloading?.(true);
@@ -469,18 +503,38 @@ export default function Tasks() {
         <ViewModeSwitch value={viewMode} onChange={setViewMode} />
       </div>
       {viewMode === "table" ? (
-        <DataTable
-          columns={columns}
-          data={tableFilteredData ?? []}
-          setAction={setAction}
-          form={form}
-          statusFilterOptions={[...TASK_STATUS_OPTIONS]}
-          hiddenStatusIds={hiddenStatusFilterIds}
-          onToggleStatusFilter={toggleStatusFilter}
-          responsibleFilterOptions={responsibleFilterOptions}
-          hiddenResponsibleIds={hiddenResponsibleFilterIds}
-          onToggleResponsibleFilter={toggleResponsibleFilter}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={tableFilteredData ?? []}
+            setAction={setAction}
+            toolbarStart={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="gap-2 shrink-0"
+                onClick={() => setTasksFilterDialogOpen(true)}
+              >
+                <ListFilter className="h-4 w-4" />
+                Filtros
+                {activeFilterDimensions > 0 ? (
+                  <Badge variant="secondary" className="h-5 min-w-5 px-1.5">
+                    {activeFilterDimensions}
+                  </Badge>
+                ) : null}
+              </Button>
+            }
+          />
+          <TasksRegistersFilterDialog
+            open={tasksFilterDialogOpen}
+            onOpenChange={setTasksFilterDialogOpen}
+            form={filterForm}
+            responsibleOptions={responsibleFilterOptions}
+            projectOptions={projectFilterOptions}
+            getDefaultValues={getDefaultTasksRegistersFilters}
+          />
+        </>
       ) : (
         <TaskKanbanBoard
           tasks={data ?? []}
