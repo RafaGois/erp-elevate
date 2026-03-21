@@ -23,6 +23,9 @@ interface Props {
  */
 const TRACK_VH = 260;
 
+/** Verde do overlay do menu mobile — `Menu.tsx` (`bg-[#bdfa3c]`) */
+const DOOR_GREEN = "#bdfa3c";
+
 export default function HeroBlock({ data, isAdmin = false, onChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -204,72 +207,65 @@ export default function HeroBlock({ data, isAdmin = false, onChange }: Props) {
           </div>
         </div>
 
-        {/* Porta por cima do hero */}
+        {/* Porta por cima do hero — referência minimalista (fundo sólido + tipografia central) */}
         <div className="pointer-events-none absolute inset-0 z-10">
           <motion.div
-            style={{ x: leftX }}
-            className="absolute inset-y-0 left-0 w-1/2 bg-[#0A0A0A] shadow-[4px_0_24px_rgba(0,0,0,0.35)] will-change-transform"
+            style={{ x: leftX, backgroundColor: DOOR_GREEN }}
+            className="absolute inset-y-0 left-0 w-1/2 shadow-[4px_0_32px_rgba(0,0,0,0.12)] will-change-transform"
           >
             <div
               aria-hidden
-              className="absolute inset-0 opacity-[0.04]"
+              className="absolute inset-0 opacity-[0.07]"
               style={{
-                backgroundImage: "radial-gradient(circle, #FDFBF7 1px, transparent 1px)",
-                backgroundSize: "30px 30px",
+                backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+                backgroundSize: "28px 28px",
               }}
             />
           </motion.div>
 
           <motion.div
-            style={{ x: rightX }}
-            className="absolute inset-y-0 right-0 w-1/2 bg-[#0A0A0A] shadow-[-4px_0_24px_rgba(0,0,0,0.35)] will-change-transform"
+            style={{ x: rightX, backgroundColor: DOOR_GREEN }}
+            className="absolute inset-y-0 right-0 w-1/2 shadow-[-4px_0_32px_rgba(0,0,0,0.12)] will-change-transform"
           >
             <div
               aria-hidden
-              className="absolute inset-0 opacity-[0.04]"
+              className="absolute inset-0 opacity-[0.07]"
               style={{
-                backgroundImage: "radial-gradient(circle, #FDFBF7 1px, transparent 1px)",
-                backgroundSize: "30px 30px",
+                backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
+                backgroundSize: "28px 28px",
               }}
             />
           </motion.div>
 
+          {/* Título grande branco (sans) + cliente fino em preto abaixo — como o print */}
           <motion.div
             style={{ opacity: titleOpacity, y: titleY }}
-            className="absolute inset-0 flex flex-col items-center justify-center px-[clamp(1.5rem,6vw,8rem)] select-none"
+            className="absolute inset-0 flex flex-col items-center justify-center px-[clamp(1.25rem,5vw,4rem)] select-none"
           >
-            <div className="mb-[clamp(1.5rem,3vw,2.5rem)] flex items-center gap-[0.75rem]">
-              <span className="h-[0.35rem] w-[0.35rem] rounded-full bg-[#D9381E]" />
-              <span className="font-mono text-[0.55rem] uppercase tracking-[0.25em] text-white/50">
-                {badge}
-              </span>
-            </div>
-
             <h1
-              className="max-w-[min(100%,52rem)] text-center font-serif font-normal uppercase leading-[0.92] tracking-tight text-[#FDFBF7]"
+              className="max-w-[min(100%,56rem)] text-center font-sans font-bold uppercase leading-[0.95] tracking-[-0.02em] text-white"
               style={{
-                fontSize: "clamp(1.75rem,5.5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: "clamp(2.25rem,10vw,6.5rem)",
               }}
             >
-              {title}
+              {title.trim().endsWith(".") ? title.trim() : `${title.trim()}.`}
             </h1>
 
-            <p className="mt-[clamp(1rem,2vw,1.75rem)] font-sans text-[clamp(0.7rem,0.95vw,0.85rem)] uppercase tracking-[0.12em] text-white/40">
-              Para{" "}
-              <span className="font-medium tracking-normal text-white/75 normal-case">
-                {cliente}
-              </span>
+            <p
+              className="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[min(100%,28rem)] text-center font-sans font-light text-[#0A0A0A]"
+              style={{ fontSize: "clamp(0.8rem,1.8vw,1.05rem)" }}
+            >
+              {cliente}
             </p>
 
             <div className="absolute bottom-[clamp(2rem,4vw,3.5rem)] flex flex-col items-center gap-[1rem]">
-              <span className="font-mono text-[0.5rem] uppercase tracking-[0.25em] text-white/30">
+              <span className="font-sans text-[0.65rem] font-light uppercase tracking-[0.2em] text-[#0A0A0A]/45">
                 Role para abrir
               </span>
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                className="h-[2.5rem] w-[1px] bg-gradient-to-b from-white/40 to-transparent"
+                className="h-[2.5rem] w-[1px] bg-gradient-to-b from-[#0A0A0A]/35 to-transparent"
               />
             </div>
           </motion.div>
