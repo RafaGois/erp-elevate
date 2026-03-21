@@ -1,6 +1,7 @@
-/* ─── Aura Editorial Theme ─────────────────────────────────────────────────── */
+/* ─── Proposta — tema claro inspirado na landing ───────────────────────────── */
+@reference "../globals.css";
 
-/* Marquee animation */
+/* Marquee */
 @keyframes proposal-marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -10,45 +11,34 @@
   width: max-content;
   animation: proposal-marquee 50s linear infinite;
 }
-.proposal-marquee-track:hover {
-  animation-play-state: paused;
+.proposal-marquee-track:hover { animation-play-state: paused; }
+
+/* Door floating cards */
+@keyframes door-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.door-float-card { animation: door-float 6s ease-in-out infinite; }
+
+/* Proposal cards — estilo landing (light) */
+.proposal-card {
+  @apply rounded-xl border border-black/10 bg-white;
+  box-shadow: 0 -20px 80px -20px rgba(0,0,0,0.04) inset;
+}
+.proposal-card:hover {
+  @apply border-black/15;
+  box-shadow: 0 -20px 80px -20px rgba(0,0,0,0.06) inset;
 }
 
-/* Outline text (Aura "text-outline") */
-.proposal-text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px #0A0A0A;
+/* Proposal section container */
+.proposal-section {
+  @apply px-4 py-16 md:px-6 md:py-24;
 }
-
-/* Hover line expand X */
-.proposal-line-x {
-  position: absolute; bottom: 0; left: 0;
-  height: 1px; width: 0;
-  background: #0A0A0A;
-  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0.15;
-}
-.proposal-line-y {
-  position: absolute; top: 0; right: 0;
-  width: 1px; height: 0;
-  background: #0A0A0A;
-  transition: height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0.15;
-}
-.group:hover .proposal-line-x { width: 100%; }
-.group:hover .proposal-line-y { height: 100%; }
-
-/* Horizontal accordion */
-@media (min-width: 768px) {
-  .h-acc-item {
-    flex: 1;
-    min-width: 0;
-    transition: flex 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .h-acc-container:hover .h-acc-item { flex: 0.5; }
-  .h-acc-container .h-acc-item:hover { flex: 3; }
+.proposal-container {
+  @apply mx-auto w-full max-w-6xl;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .proposal-marquee-track { animation: none; }
+  .proposal-marquee-track,
+  .door-float-card { animation: none; }
 }

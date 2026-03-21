@@ -57,7 +57,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
     <div className="relative">
       {/* Admin ribbon */}
       {isAdmin && (
-        <div className="relative z-50 bg-[#0A0A0A] text-[#FDFBF7]">
+        <div className="relative z-50 bg-black text-white">
           <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 bg-[#D9381E] rounded-full animate-pulse" />
@@ -94,7 +94,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             className="fixed bottom-[clamp(1.5rem,3vw,2.5rem)] left-1/2 -translate-x-1/2 z-[100]"
           >
-            <div className="flex items-center gap-4 bg-[#0A0A0A] text-[#FDFBF7] px-6 py-4 shadow-2xl border border-white/10">
+            <div className="flex items-center gap-4 bg-black text-white px-6 py-4 shadow-2xl border border-white/10">
               <button
                 onClick={handleReset}
                 className="flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-white/50 hover:text-white/90 transition-colors"
@@ -106,7 +106,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
               <button
                 onClick={handleSave}
                 disabled={isPending}
-                className="flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#FDFBF7] hover:text-white transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-white hover:text-white/90 transition-colors disabled:opacity-50"
               >
                 {isPending ? (
                   <Loader2 size={12} className="animate-spin" />

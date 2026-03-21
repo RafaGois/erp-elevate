@@ -1,5 +1,9 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Crown, Plus, Trash2 } from "lucide-react";
 import type { PacoteItem, PrecoBlockData } from "@/lib/types/budget-content";
@@ -11,321 +15,197 @@ interface Props {
   onChange?: (d: PrecoBlockData) => void;
 }
 
-const EMPTY_PACOTE: PacoteItem = {
-  nome: "Novo Pacote",
-  descricao: "Descrição do pacote.",
-  valor: 0,
-  parcelas: "",
-  inclui: ["Item incluído"],
-  destaque: false,
-};
-
 export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
   const pacotes: PacoteItem[] = data.pacotes ?? [];
 
-  function update(next: PacoteItem[]) {
-    onChange?.({ ...data, pacotes: next });
-  }
-
   function setPacote(i: number, partial: Partial<PacoteItem>) {
-    update(pacotes.map((p, idx) => (idx === i ? { ...p, ...partial } : p)));
+    onChange?.({ ...data, pacotes: pacotes.map((p, idx) => (idx === i ? { ...p, ...partial } : p)) });
   }
-
   function setDestaque(i: number) {
-    update(pacotes.map((p, idx) => ({ ...p, destaque: idx === i })));
+    onChange?.({ ...data, pacotes: pacotes.map((p, idx) => ({ ...p, destaque: idx === i })) });
   }
-
   function addPacote() {
-    update([...pacotes, { ...EMPTY_PACOTE }]);
+    onChange?.({
+      ...data,
+      pacotes: [...pacotes, { nome: "Novo", descricao: "...", valor: 0, inclui: ["Item"], destaque: false }],
+    });
   }
-
   function removePacote(i: number) {
     const next = pacotes.filter((_, idx) => idx !== i);
-    const hasDestaque = next.some((p) => p.destaque);
-    if (!hasDestaque && next.length > 0) next[0].destaque = true;
-    update(next);
+    if (next.length && !next.some((p) => p.destaque)) next[0].destaque = true;
+    onChange?.({ ...data, pacotes: next });
   }
-
-  function setIncluiItem(pi: number, ii: number, value: string) {
-    const p = pacotes[pi];
-    const inclui = p.inclui.map((it, idx) => (idx === ii ? value : it));
-    setPacote(pi, { inclui });
+  function setInclui(pi: number, ii: number, v: string) {
+    setPacote(pi, { inclui: pacotes[pi].inclui.map((it, i) => (i === ii ? v : it)) });
   }
-
-  function addIncluiItem(pi: number) {
+  function addInclui(pi: number) {
     setPacote(pi, { inclui: [...(pacotes[pi].inclui ?? []), "Novo item"] });
   }
-
-  function removeIncluiItem(pi: number, ii: number) {
-    setPacote(pi, { inclui: pacotes[pi].inclui.filter((_, idx) => idx !== ii) });
+  function removeInclui(pi: number, ii: number) {
+    setPacote(pi, { inclui: pacotes[pi].inclui.filter((_, i) => i !== ii) });
   }
-
   function set<K extends keyof PrecoBlockData>(key: K, value: PrecoBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
-  const colClass =
-    pacotes.length === 1
-      ? "grid-cols-1 max-w-[32rem] mx-auto"
-      : pacotes.length === 2
-        ? "grid-cols-1 md:grid-cols-2"
-        : "grid-cols-1 md:grid-cols-3";
+  useGSAP(
+    () => {
+      if (!container.current || !cardsRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const cards = cardsRef.current.querySelectorAll("[data-preco-card]");
+      gsap.set(cards, { opacity: 0, y: 32 });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: container }
+  );
+
+  const colClass = pacotes.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-3";
 
   return (
-    <section className="py-[clamp(6rem,12vw,12rem)] border-b border-[#DCD8D0] bg-[#FDFBF7] relative">
-      <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)]">
-        {/* Header */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-[clamp(2rem,4vw,4rem)] mb-[clamp(5rem,8vw,8rem)]">
-          <div className="md:col-span-2 pt-[0.5rem]">
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]/60">
-              Investimento
-            </span>
-          </div>
-          <div className="md:col-span-7 border-t border-[#DCD8D0] pt-[2rem]">
-            <h2
-              className="font-serif font-normal text-[#0A0A0A] leading-[0.95] tracking-tighter"
-              style={{
-                fontSize: "clamp(2.5rem,5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              <EditableField
-                value={data.titulo ?? "Escolha seu plano"}
-                onChange={(v) => set("titulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                className="block"
-              />
-            </h2>
-          </div>
-          <div className="md:col-span-3">
+    <section id="preco" ref={container} className="proposal-section bg-white">
+      <div className="proposal-container">
+        <header className="mb-12 md:mb-16">
+          <h2 className="text-4xl font-bold text-black md:text-5xl">
+            <EditableField
+              value={data.titulo ?? "Escolha seu plano"}
+              onChange={(v) => set("titulo", v)}
+              isAdmin={isAdmin}
+              className="block"
+            />
+          </h2>
+          <p className="mt-2 max-w-xl text-[#7D6B58]">
             <EditableField
               value={data.subtitulo ?? "Opções flexíveis para cada momento do seu negócio."}
               onChange={(v) => set("subtitulo", v)}
               isAdmin={isAdmin}
-              multiline
-              tag="p"
-              className="font-sans text-[0.875rem] text-[#555555] leading-[1.7] md:pt-[3rem]"
+              tag="span"
+              className="inline"
             />
-          </div>
-        </div>
+          </p>
+        </header>
 
-        {/* Pricing cards */}
-        <div className={`grid ${colClass} gap-[0] border-t border-l border-[#DCD8D0]`}>
+        <div ref={cardsRef} className={`grid grid-cols-1 gap-6 md:gap-8 ${colClass}`}>
           <AnimatePresence>
             {pacotes.map((pacote, pi) => {
-              const isDestaque = !!pacote.destaque;
+              const destaque = !!pacote.destaque;
               return (
                 <motion.div
                   key={pi}
                   layout
-                  initial={{ opacity: 0, y: 20 }}
+                  data-preco-card
+                  initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className={`relative flex flex-col border-b border-r border-[#DCD8D0] overflow-hidden group/card ${
-                    isDestaque ? "bg-[#0A0A0A]" : "bg-[#FDFBF7]"
+                  className={`group relative flex flex-col rounded-xl border p-6 md:p-8 ${
+                    destaque
+                      ? "border-[#bdfa3c] bg-[#bdfa3c]/5 [box-shadow:0_-20px_80px_-20px_rgba(189,250,60,0.08)_inset]"
+                      : "border-black/10 bg-white [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]"
                   }`}
                 >
-                  {/* Destaque accent top border */}
-                  {isDestaque && (
-                    <div className="absolute top-0 inset-x-0 h-[2px] bg-[#D9381E]" />
+                  {destaque && (
+                    <div className="absolute -top-3 left-6 flex items-center gap-1 rounded-full bg-[#bdfa3c] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-black">
+                      <Crown size={10} /> Recomendado
+                    </div>
                   )}
-
-                  <div className="p-[clamp(2rem,3.5vw,3.5rem)] flex flex-col flex-1 gap-[2rem]">
-                    {/* Card header */}
-                    <div className="flex items-start justify-between gap-[1rem]">
-                      <div className="flex flex-col gap-[0.5rem]">
-                        {/* Package label */}
-                        {isDestaque && (
-                          <div className="flex items-center gap-[0.5rem]">
-                            <Crown size={10} className="text-[#D9381E]" />
-                            <span className="font-mono text-[0.55rem] uppercase tracking-[0.2em] text-[#D9381E]">
-                              Recomendado
-                            </span>
-                          </div>
-                        )}
-                        <EditableField
-                          value={pacote.nome}
-                          onChange={(v) => setPacote(pi, { nome: v })}
-                          isAdmin={isAdmin}
-                          className={`font-serif font-normal leading-[1.1] tracking-tight text-[clamp(1.5rem,2vw,2rem)] ${
-                            isDestaque ? "text-[#FDFBF7]" : "text-[#0A0A0A]"
-                          }`}
-                          tag="h3"
-                          placeholder="Nome do pacote"
-                        />
-                      </div>
-
-                      {/* Admin controls */}
-                      {isAdmin && (
-                        <div className="flex items-center gap-[0.5rem] opacity-0 group-hover/card:opacity-100 transition-opacity flex-shrink-0 mt-[0.25rem]">
-                          <button
-                            onClick={() => setDestaque(pi)}
-                            title={isDestaque ? "Já é destaque" : "Tornar destaque"}
-                            className={`p-1 transition-colors ${
-                              isDestaque
-                                ? "text-[#D9381E]"
-                                : "text-[#555555]/40 hover:text-[#D9381E]"
-                            }`}
-                          >
-                            <Crown size={12} />
-                          </button>
-                          <button
-                            onClick={() => removePacote(pi)}
-                            title="Remover pacote"
-                            className="p-1 text-[#555555]/40 hover:text-[#D9381E] transition-colors"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Description */}
-                    <EditableField
-                      value={pacote.descricao ?? ""}
-                      onChange={(v) => setPacote(pi, { descricao: v })}
-                      isAdmin={isAdmin}
-                      multiline
-                      tag="p"
-                      className={`font-sans text-[0.8rem] leading-[1.7] ${
-                        isDestaque ? "text-[#FDFBF7]/60" : "text-[#555555]"
-                      }`}
-                      placeholder="Descrição do pacote"
-                    />
-
-                    {/* Price */}
-                    <div className="flex flex-col gap-[0.25rem]">
-                      <div className="flex items-baseline gap-[0.5rem]">
-                        <span
-                          className={`font-sans text-[0.75rem] font-light ${
-                            isDestaque ? "text-[#FDFBF7]/50" : "text-[#555555]/60"
-                          }`}
-                        >
-                          {pacote.moeda ?? "R$"}
-                        </span>
-                        <EditableField
-                          value={String(pacote.valor)}
-                          onChange={(v) => setPacote(pi, { valor: parseFloat(v) || 0 })}
-                          isAdmin={isAdmin}
-                          className={`font-serif font-normal leading-none tracking-tighter text-[clamp(2.5rem,4vw,3.5rem)] ${
-                            isDestaque ? "text-[#FDFBF7]" : "text-[#0A0A0A]"
-                          }`}
-                          placeholder="0"
-                          tag="span"
-                        />
-                      </div>
-                      {pacote.parcelas && (
-                        <EditableField
-                          value={pacote.parcelas}
-                          onChange={(v) => setPacote(pi, { parcelas: v })}
-                          isAdmin={isAdmin}
-                          className={`font-mono text-[0.6rem] ${
-                            isDestaque ? "text-[#FDFBF7]/40" : "text-[#555555]/50"
-                          }`}
-                          placeholder="Parcelas"
-                        />
-                      )}
-                    </div>
-
-                    {/* Divider */}
-                    <div className={`h-[1px] ${isDestaque ? "bg-white/10" : "bg-[#DCD8D0]"}`} />
-
-                    {/* Includes list */}
-                    <div className="flex flex-col gap-[0.75rem] flex-1">
-                      {(pacote.inclui ?? []).map((item, ii) => (
-                        <div key={ii} className="flex items-start gap-[0.75rem] group/item">
-                          <Check
-                            size={12}
-                            className={`flex-shrink-0 mt-[0.25rem] ${
-                              isDestaque ? "text-[#D9381E]" : "text-[#D9381E]"
-                            }`}
-                          />
-                          <EditableField
-                            value={item}
-                            onChange={(v) => setIncluiItem(pi, ii, v)}
-                            isAdmin={isAdmin}
-                            className={`font-sans text-[0.8rem] leading-[1.6] flex-1 ${
-                              isDestaque ? "text-[#FDFBF7]/80" : "text-[#555555]"
-                            }`}
-                            placeholder="Item incluso"
-                          />
-                          {isAdmin && (
-                            <button
-                              onClick={() => removeIncluiItem(pi, ii)}
-                              className="opacity-0 group-hover/item:opacity-100 transition-opacity flex-shrink-0 text-[#555555]/30 hover:text-[#D9381E]"
-                            >
-                              <Trash2 size={10} />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                      {isAdmin && (
-                        <button
-                          onClick={() => addIncluiItem(pi)}
-                          className={`flex items-center gap-[0.5rem] font-mono text-[0.55rem] uppercase tracking-[0.15em] transition-colors mt-[0.5rem] ${
-                            isDestaque
-                              ? "text-[#FDFBF7]/20 hover:text-[#FDFBF7]/50"
-                              : "text-[#555555]/30 hover:text-[#555555]/70"
-                          }`}
-                        >
-                          <Plus size={10} />
-                          Adicionar item
+                  <div className="flex items-start justify-between">
+                    <h3 className="text-xl font-bold text-black md:text-2xl">
+                      <EditableField
+                        value={pacote.nome}
+                        onChange={(v) => setPacote(pi, { nome: v })}
+                        isAdmin={isAdmin}
+                        className="inline"
+                      />
+                    </h3>
+                    {isAdmin && (
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+                        <button onClick={() => setDestaque(pi)} className="p-1 text-black/40 hover:text-[#bdfa3c]">
+                          <Crown size={12} />
                         </button>
-                      )}
-                    </div>
-
-                    {/* CTA */}
-                    <div
-                      className={`mt-auto pt-[1.5rem] border-t ${
-                        isDestaque ? "border-white/10" : "border-[#DCD8D0]"
-                      }`}
-                    >
-                      <div
-                        className={`w-full py-[1rem] flex items-center justify-center font-mono text-[0.6rem] uppercase tracking-[0.2em] transition-colors ${
-                          isDestaque
-                            ? "bg-[#FDFBF7] text-[#0A0A0A] hover:bg-[#F4F1EA]"
-                            : "bg-[#0A0A0A] text-[#FDFBF7] hover:bg-[#1a1a1a]"
-                        }`}
-                      >
-                        Escolher plano
+                        <button onClick={() => removePacote(pi)} className="p-1 text-black/40 hover:text-black/70">
+                          <Trash2 size={12} />
+                        </button>
                       </div>
-                    </div>
+                    )}
+                  </div>
+                  <p className="mt-2 text-sm text-black/60">{pacote.descricao}</p>
+                  <div className="mt-6 flex items-baseline gap-1">
+                    <span className="text-sm text-black/50">R$</span>
+                    <EditableField
+                      value={String(pacote.valor)}
+                      onChange={(v) => setPacote(pi, { valor: parseFloat(v) || 0 })}
+                      isAdmin={isAdmin}
+                      className="text-3xl font-bold text-black md:text-4xl"
+                    />
+                  </div>
+                  {pacote.parcelas && (
+                    <p className="mt-1 font-mono text-xs text-black/50">{pacote.parcelas}</p>
+                  )}
+                  <div className="mt-6 flex-1 space-y-2">
+                    {(pacote.inclui ?? []).map((item, ii) => (
+                      <div key={ii} className="flex items-start gap-2 group/item">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#bdfa3c]" />
+                        <EditableField
+                          value={item}
+                          onChange={(v) => setInclui(pi, ii, v)}
+                          isAdmin={isAdmin}
+                          className="text-sm text-black/80"
+                        />
+                        {isAdmin && (
+                          <button
+                            onClick={() => removeInclui(pi, ii)}
+                            className="opacity-0 group-hover/item:opacity-100 p-0.5 text-black/30 hover:text-black/60"
+                          >
+                            <Trash2 size={10} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {isAdmin && (
+                      <button
+                        onClick={() => addInclui(pi)}
+                        className="flex items-center gap-1 text-xs text-black/40 hover:text-black/60"
+                      >
+                        <Plus size={10} /> Adicionar item
+                      </button>
+                    )}
+                  </div>
+                  <div
+                    className={`mt-6 flex items-center justify-center rounded-xl py-3 font-mono text-xs font-bold uppercase tracking-wider ${
+                      destaque ? "bg-black text-white" : "bg-black/5 text-black"
+                    }`}
+                  >
+                    Escolher plano
                   </div>
                 </motion.div>
               );
             })}
           </AnimatePresence>
-
-          {/* Add package tile */}
-          {isAdmin && (
-            <button
-              onClick={addPacote}
-              className="border-b border-r border-[#DCD8D0] border-dashed min-h-[20rem] flex flex-col items-center justify-center gap-[1rem] text-[#555555]/30 hover:text-[#555555]/70 hover:bg-[#F4F1EA] transition-all group/add"
-            >
-              <Plus
-                size={20}
-                className="group-hover/add:text-[#D9381E] transition-colors"
-              />
-              <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em]">
-                Novo pacote
-              </span>
-            </button>
-          )}
         </div>
 
-        {/* Observation note */}
+        {isAdmin && (
+          <button
+            onClick={addPacote}
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/[0.02] py-8 text-sm text-black/50 hover:border-black/30 hover:bg-black/[0.04] hover:text-black/70"
+          >
+            <Plus size={16} /> Novo pacote
+          </button>
+        )}
+
         {data.observacao && (
-          <div className="mt-[3rem] flex items-start gap-[1.5rem]">
-            <span className="w-[1.5rem] h-[1px] bg-[#DCD8D0] flex-shrink-0 mt-[0.65rem]" />
-            <EditableField
-              value={data.observacao}
-              onChange={(v) => set("observacao", v)}
-              isAdmin={isAdmin}
-              tag="p"
-              className="font-mono text-[0.6rem] text-[#555555]/60 leading-[1.7]"
-            />
-          </div>
+          <p className="mt-8 text-center font-mono text-xs text-black/50">{data.observacao}</p>
         )}
       </div>
     </section>

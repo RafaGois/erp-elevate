@@ -1,5 +1,9 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import type { ProjetoBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 
@@ -10,83 +14,88 @@ interface Props {
 }
 
 export default function ProjetoBlock({ data, isAdmin = false, onChange }: Props) {
+  const container = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   function set<K extends keyof ProjetoBlockData>(key: K, value: ProjetoBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
-  const desafios = data.desafios ?? [];
+  useGSAP(
+    () => {
+      if (!container.current || !contentRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.set(contentRef.current.querySelectorAll("[data-projeto-item]"), {
+        opacity: 0,
+        y: 24,
+      });
+      gsap.to(contentRef.current.querySelectorAll("[data-projeto-item]"), {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: container }
+  );
+
   const objetivos = data.objetivos ?? [];
 
   return (
-    <section className="py-[clamp(6rem,12vw,12rem)] border-b border-[#DCD8D0] bg-[#F4F1EA] relative">
-      <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)]">
-        {/* Header */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-[clamp(2rem,4vw,4rem)] mb-[clamp(5rem,10vw,10rem)]">
-          <div className="md:col-span-2 pt-[0.5rem]">
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]/60">
-              O projeto
-            </span>
-          </div>
-          <div className="md:col-span-8 border-t border-[#DCD8D0] pt-[2rem]">
-            <h2
-              className="font-serif font-normal text-[#0A0A0A] leading-[1] tracking-tighter"
-              style={{
-                fontSize: "clamp(2.5rem,5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
+    <section
+      id="projeto"
+      ref={container}
+      className="proposal-section bg-white flex flex-col items-center justify-center min-h-[60vh]"
+    >
+      <div className="proposal-container w-full">
+        <div ref={contentRef} className="max-w-4xl mx-auto text-center">
+          <h2
+            data-projeto-item
+            className="text-3xl font-bold text-black md:text-4xl lg:text-5xl"
+          >
+            <EditableField
+              value={data.titulo ?? "O projeto"}
+              onChange={(v) => set("titulo", v)}
+              isAdmin={isAdmin}
+              multiline
+              className="block"
+            />
+          </h2>
+          <p data-projeto-item className="mt-4 text-lg text-[#7D6B58]">
+            <EditableField
+              value={data.descricao}
+              onChange={(v) => set("descricao", v)}
+              isAdmin={isAdmin}
+              multiline
+              tag="span"
+              className="inline"
+            />
+          </p>
+
+          {objetivos.length > 0 && (
+            <div
+              data-projeto-item
+              className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 text-left"
             >
-              <EditableField
-                value={data.titulo ?? "O contexto que nos trouxe até aqui"}
-                onChange={(v) => set("titulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                className="block"
-              />
-            </h2>
-          </div>
-        </div>
-
-        {/* Two columns: desafios + objetivos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[clamp(2rem,4vw,5rem)]">
-          {/* Desafios */}
-          <div>
-            <span className="block font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#D9381E] mb-[2rem]">
-              Desafios identificados
-            </span>
-            <div className="flex flex-col gap-0">
-              {desafios.map((item, i) => (
+              {objetivos.map((obj, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-[1.5rem] py-[1.5rem] border-t border-[#DCD8D0]"
+                  className="flex gap-4 rounded-xl border border-black/10 bg-black/[0.02] p-5 transition-colors hover:border-black/15 md:p-6"
                 >
-                  <span className="font-mono text-[0.55rem] text-[#555555]/50 mt-[0.3rem] flex-shrink-0">
-                    {String(i + 1).padStart(2, "0")}
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-black/10 bg-[#bdfa3c]/20 text-sm font-bold text-black">
+                    {i + 1}
                   </span>
-                  <p className="font-sans text-[0.875rem] text-[#555555] leading-[1.7]">{item}</p>
+                  <p className="text-black/80">{obj}</p>
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Objetivos */}
-          <div>
-            <span className="block font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]/60 mb-[2rem]">
-              Objetivos do projeto
-            </span>
-            <div className="flex flex-col gap-0">
-              {objetivos.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-[1.5rem] py-[1.5rem] border-t border-[#DCD8D0]"
-                >
-                  <span className="w-[0.4rem] h-[0.4rem] rounded-full bg-[#D9381E] flex-shrink-0 mt-[0.5rem]" />
-                  <p className="font-sans text-[0.875rem] text-[#0A0A0A] leading-[1.7] font-medium">
-                    {item}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

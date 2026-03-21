@@ -14,15 +14,15 @@ export default function OrcamentoDemoPage() {
   return (
     <main>
       {/* Demo warning banner */}
-      <div className="bg-[#F4F1EA] border-b border-[#DCD8D0]">
+      <div className="bg-[#FAFAF9] border-b border-black/10">
         <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-[#D9381E]" />
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]">
+            <span className="w-2 h-2 rounded-full bg-[#bdfa3c]" />
+            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#7D6B58]">
               Modo demonstração · dados locais fictícios
             </span>
           </div>
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#555555]/50 hidden sm:block">
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-black/40 hidden sm:block">
             Nenhuma alteração será salva
           </span>
         </div>
@@ -31,12 +31,12 @@ export default function OrcamentoDemoPage() {
       <BudgetViewClient budget={budget} isDemoMode />
 
       {/* Footer */}
-      <footer className="bg-[#0A0A0A] border-t border-white/5">
+      <footer className="bg-white border-t border-black/10">
         <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-sans text-[0.75rem] text-white/25">
+          <p className="font-sans text-[0.75rem] text-[#7D6B58]">
             Demo · Proposta para Casa França
           </p>
-          <p className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-white/15">
+          <p className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-black/40">
             Dados fictícios · Apenas para demonstração
           </p>
         </div>

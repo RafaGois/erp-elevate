@@ -15,8 +15,13 @@
         "data": {
           "badge": "Proposta Comercial",
           "cliente": "Casa França",
+          "projeto": "Site Institucional",
+          "data": "20/03/2026",
           "titulo": "Site Institucional Casa França",
-          "subtitulo": "Uma presença digital que reflete a excelência da sua marca"
+          "subtitulo": "Uma presença digital que reflete a excelência da sua marca",
+          "investimento": "R$ 18.500",
+          "prazo": "7 semanas",
+          "entregas": "6 entregas"
         }
       },
       {

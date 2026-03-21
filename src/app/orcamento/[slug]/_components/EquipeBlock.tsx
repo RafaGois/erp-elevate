@@ -1,9 +1,16 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus, Trash2 } from "lucide-react";
 import type { EquipeBlockData, EquipeItem } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
+
+const cardStyle =
+  "rounded-xl border border-black/10 bg-white p-6 transition-colors hover:border-black/15 [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]";
 
 interface Props {
   data: EquipeBlockData;
@@ -11,124 +18,110 @@ interface Props {
   onChange?: (d: EquipeBlockData) => void;
 }
 
-const EMPTY_MEMBRO: EquipeItem = {
-  nome: "Novo Colaborador",
-  cargo: "Cargo",
-  bio: "Breve descrição sobre este profissional.",
-};
-
 export default function EquipeBlock({ data, isAdmin = false, onChange }: Props) {
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
   const membros: EquipeItem[] = data.membros ?? [];
 
   function setMembro(i: number, partial: Partial<EquipeItem>) {
-    const next = membros.map((m, idx) => (idx === i ? { ...m, ...partial } : m));
-    onChange?.({ ...data, membros: next });
+    onChange?.({ ...data, membros: membros.map((m, idx) => (idx === i ? { ...m, ...partial } : m)) });
   }
-
   function addMembro() {
-    onChange?.({ ...data, membros: [...membros, { ...EMPTY_MEMBRO }] });
+    onChange?.({ ...data, membros: [...membros, { nome: "Novo", cargo: "Cargo", bio: "Bio." }] });
   }
-
   function removeMembro(i: number) {
     onChange?.({ ...data, membros: membros.filter((_, idx) => idx !== i) });
   }
-
   function set<K extends keyof EquipeBlockData>(key: K, value: EquipeBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
+  useGSAP(
+    () => {
+      if (!container.current || !cardsRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const cards = cardsRef.current.querySelectorAll("[data-equipe-card]");
+      gsap.set(cards, { opacity: 0, y: 24 });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: container }
+  );
+
   return (
-    <section className="py-[clamp(6rem,12vw,12rem)] border-b border-[#DCD8D0] bg-[#0A0A0A] text-[#FDFBF7] relative overflow-hidden">
-      {/* Dots pattern */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: "radial-gradient(circle, #FDFBF7 1px, transparent 1px)",
-          backgroundSize: "35px 35px",
-        }}
-      />
+    <section id="equipe" ref={container} className="proposal-section bg-white">
+      <div className="proposal-container">
+        <header className="mb-12 md:mb-16">
+          <h2 className="text-4xl font-bold text-black md:text-5xl">
+            <EditableField
+              value={data.titulo ?? "Quem vai trabalhar no seu projeto"}
+              onChange={(v) => set("titulo", v)}
+              isAdmin={isAdmin}
+              className="block"
+            />
+          </h2>
+          <p className="mt-2 max-w-xl text-[#7D6B58]">
+            Conheça o time que vai entregar o seu projeto.
+          </p>
+        </header>
 
-      <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] relative z-10">
-        {/* Header */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-[clamp(2rem,4vw,4rem)] mb-[clamp(5rem,8vw,8rem)]">
-          <div className="md:col-span-2 pt-[0.5rem]">
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#FDFBF7]/40">
-              Equipe
-            </span>
-          </div>
-          <div className="md:col-span-8 border-t border-white/10 pt-[2rem]">
-            <h2
-              className="font-serif font-normal text-[#FDFBF7] leading-[0.95] tracking-tighter"
-              style={{
-                fontSize: "clamp(2.5rem,5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              <EditableField
-                value={data.titulo ?? "Quem vai trabalhar no seu projeto"}
-                onChange={(v) => set("titulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                className="block text-[#FDFBF7]"
-              />
-            </h2>
-          </div>
-        </div>
-
-        {/* Team grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-white/10">
+        <div ref={cardsRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <AnimatePresence>
             {membros.map((membro, i) => (
               <motion.div
                 key={i}
                 layout
-                initial={{ opacity: 0, y: 20 }}
+                data-equipe-card
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="relative border-b border-r border-white/10 p-[clamp(2rem,3vw,3rem)] flex flex-col gap-[1.5rem] group/card overflow-hidden"
+                className={`group relative ${cardStyle}`}
               >
-                {/* Avatar placeholder */}
-                <div className="w-[4rem] h-[4rem] bg-white/[0.06] border border-white/10 flex items-center justify-center">
-                  <span className="font-serif text-[1.5rem] text-white/30" style={{ fontFamily: "'Playfair Display', serif" }}>
-                    {membro.nome.charAt(0)}
-                  </span>
+                <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-black/10 bg-[#bdfa3c]/20 font-serif text-2xl font-bold text-black/70 mb-4">
+                  {membro.nome.charAt(0)}
                 </div>
-
-                <div className="flex flex-col gap-[0.5rem]">
+                <h3 className="text-xl font-semibold text-black">
                   <EditableField
                     value={membro.nome}
                     onChange={(v) => setMembro(i, { nome: v })}
                     isAdmin={isAdmin}
-                    className="font-serif font-normal text-[#FDFBF7] leading-[1.1] tracking-tight text-[clamp(1.25rem,1.5vw,1.5rem)]"
-                    tag="h3"
-                    placeholder="Nome"
+                    className="inline"
                   />
+                </h3>
+                <p className="mt-1 font-mono text-sm text-[#bdfa3c]">
                   <EditableField
                     value={membro.cargo ?? ""}
                     onChange={(v) => setMembro(i, { cargo: v })}
                     isAdmin={isAdmin}
-                    className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#D9381E]"
+                    className="inline"
                     placeholder="Cargo"
                   />
-                </div>
-
-                <EditableField
-                  value={membro.bio ?? ""}
-                  onChange={(v) => setMembro(i, { bio: v })}
-                  isAdmin={isAdmin}
-                  multiline
-                  tag="p"
-                  className="font-sans text-[0.8rem] text-[#FDFBF7]/50 leading-[1.7]"
-                  placeholder="Breve bio..."
-                />
-
-                {/* Admin remove */}
+                </p>
+                <p className="mt-3 text-sm text-black/60 leading-relaxed">
+                  <EditableField
+                    value={membro.bio ?? ""}
+                    onChange={(v) => setMembro(i, { bio: v })}
+                    isAdmin={isAdmin}
+                    multiline
+                    tag="span"
+                    className="inline"
+                    placeholder="Bio"
+                  />
+                </p>
                 {isAdmin && (
                   <button
                     onClick={() => removeMembro(i)}
-                    className="absolute top-[1rem] right-[1rem] opacity-0 group-hover/card:opacity-100 transition-opacity text-white/20 hover:text-[#D9381E] p-1"
-                    title="Remover membro"
+                    className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-black/30 hover:text-black/60"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -136,20 +129,17 @@ export default function EquipeBlock({ data, isAdmin = false, onChange }: Props) 
               </motion.div>
             ))}
           </AnimatePresence>
-
-          {/* Add member */}
-          {isAdmin && (
-            <button
-              onClick={addMembro}
-              className="border-b border-r border-white/10 border-dashed min-h-[16rem] flex flex-col items-center justify-center gap-[1rem] text-white/20 hover:text-white/50 hover:bg-white/[0.03] transition-all group/add"
-            >
-              <Plus size={18} className="group-hover/add:text-[#D9381E] transition-colors" />
-              <span className="font-mono text-[0.55rem] uppercase tracking-[0.15em]">
-                Adicionar membro
-              </span>
-            </button>
-          )}
         </div>
+
+        {isAdmin && (
+          <button
+            onClick={addMembro}
+            className="mt-6 flex items-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/[0.02] px-6 py-4 text-sm text-black/50 hover:border-black/30 hover:bg-black/[0.04] hover:text-black/70 transition-colors"
+          >
+            <Plus size={16} />
+            Adicionar membro
+          </button>
+        )}
       </div>
     </section>
   );

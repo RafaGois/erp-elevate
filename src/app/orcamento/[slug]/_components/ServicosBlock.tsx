@@ -1,7 +1,15 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import { ArrowUpRight } from "lucide-react";
 import type { ServicosBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
+
+const cardStyle =
+  "rounded-xl border border-black/10 bg-white transition-colors duration-300 hover:border-black/15 [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset] hover:[box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.05)_inset]";
 
 interface Props {
   data: ServicosBlockData;
@@ -10,85 +18,82 @@ interface Props {
 }
 
 export default function ServicosBlock({ data, isAdmin = false, onChange }: Props) {
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
   function set<K extends keyof ServicosBlockData>(key: K, value: ServicosBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
-  // Support both `itens` and legacy `servicos`
+  useGSAP(
+    () => {
+      if (!container.current || !cardsRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const cards = cardsRef.current.querySelectorAll("[data-service-card]");
+      gsap.set(cards, { opacity: 0, y: 32 });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: container }
+  );
+
   const servicos = data.itens ?? data.servicos ?? [];
 
   return (
-    <section className="py-[clamp(6rem,12vw,12rem)] border-b border-[#DCD8D0] bg-[#FDFBF7] relative">
-      <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)]">
-        {/* Header row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-[clamp(2rem,4vw,4rem)] mb-[clamp(5rem,8vw,8rem)]">
-          <div className="md:col-span-2 flex items-start pt-[0.5rem]">
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]/60">
-              Escopo de trabalho
-            </span>
-          </div>
-          <div className="md:col-span-7 border-t border-[#DCD8D0] pt-[2rem]">
-            <h2
-              className="font-serif font-normal text-[#0A0A0A] leading-[1] tracking-tighter"
-              style={{
-                fontSize: "clamp(2.5rem,5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              <EditableField
-                value={data.titulo ?? "O que entregamos"}
-                onChange={(v) => set("titulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                className="block"
-              />
-            </h2>
-          </div>
-          <div className="md:col-span-3">
+    <section id="servicos" ref={container} className="proposal-section bg-white">
+      <div className="proposal-container">
+        <header className="mb-12 md:mb-16">
+          <h2 className="text-4xl font-bold text-black md:text-5xl">
             <EditableField
-              value={data.subtitulo ?? "Cada entrega pensada para gerar impacto real no seu negócio."}
+              value={data.titulo ?? "O que está incluso"}
+              onChange={(v) => set("titulo", v)}
+              isAdmin={isAdmin}
+              className="block"
+            />
+          </h2>
+          <p className="mt-2 max-w-xl text-[#7D6B58]">
+            <EditableField
+              value={data.subtitulo ?? "Tudo que sua empresa precisa para uma presença digital sólida."}
               onChange={(v) => set("subtitulo", v)}
               isAdmin={isAdmin}
-              multiline
-              tag="p"
-              className="font-sans text-[0.875rem] text-[#555555] leading-[1.7] md:pt-[3rem]"
+              tag="span"
+              className="inline"
             />
-          </div>
-        </div>
+          </p>
+        </header>
 
-        {/* Services grid — tiles with line hover */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-[#DCD8D0]">
-          {servicos.map((servico, i) => (
+        <div
+          ref={cardsRef}
+          className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2"
+        >
+          {servicos.map((item, i) => (
             <div
               key={i}
-              className="group relative border-b border-r border-[#DCD8D0] p-[clamp(2rem,3vw,3rem)] overflow-hidden"
+              data-service-card
+              className={`flex flex-col p-6 md:p-8 text-left ${cardStyle}`}
             >
-              <div className="proposal-line-x" />
-              <div className="proposal-line-y" />
-
-              {/* Number */}
-              <span className="block font-mono text-[2.5rem] text-[#0A0A0A]/[0.06] leading-none mb-[1.5rem] select-none">
-                {String(i + 1).padStart(2, "0")}
+              <div className="flex flex-col gap-3">
+                <h3 className="text-xl font-semibold text-black md:text-2xl">
+                  {item.titulo ?? item.nome}
+                </h3>
+                <p className="text-sm leading-relaxed text-black/60 md:text-base">
+                  {item.descricao}
+                </p>
+              </div>
+              <span className="mt-auto flex items-center gap-2 text-sm font-medium text-[#bdfa3c] pt-4">
+                Incluso
+                <ArrowUpRight className="h-4 w-4" />
               </span>
-
-              {/* Title */}
-              <h3
-                className="font-serif font-normal text-[#0A0A0A] leading-[1.1] tracking-tight mb-[1rem]"
-                style={{
-                  fontSize: "clamp(1.25rem,1.75vw,1.75rem)",
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                }}
-              >
-                {servico.titulo ?? servico.nome}
-              </h3>
-
-              {/* Description */}
-              <p className="font-sans text-[0.8rem] text-[#555555] leading-[1.7]">
-                {servico.descricao}
-              </p>
-
-              {/* Hover accent line */}
-              <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-[#D9381E] group-hover:w-full transition-all duration-700" />
             </div>
           ))}
         </div>

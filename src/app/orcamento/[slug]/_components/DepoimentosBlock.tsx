@@ -1,7 +1,14 @@
 "use client";
 
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
 import type { DepoimentosBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
+
+const cardStyle =
+  "rounded-xl border border-black/10 bg-gradient-to-br from-white to-zinc-50/50 p-6 md:p-8 [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]";
 
 interface Props {
   data: DepoimentosBlockData;
@@ -10,75 +17,69 @@ interface Props {
 }
 
 export default function DepoimentosBlock({ data, isAdmin = false, onChange }: Props) {
+  const container = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
   function set<K extends keyof DepoimentosBlockData>(key: K, value: DepoimentosBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
+  useGSAP(
+    () => {
+      if (!container.current || !cardsRef.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const cards = cardsRef.current.querySelectorAll("[data-depoimento-card]");
+      gsap.set(cards, { opacity: 0, y: 32 });
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.55,
+        stagger: 0.12,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 82%",
+          toggleActions: "play none none none",
+        },
+      });
+    },
+    { scope: container }
+  );
+
   const itens = data.itens ?? [];
 
   return (
-    <section className="py-[clamp(6rem,12vw,12rem)] border-b border-[#DCD8D0] bg-[#F4F1EA] relative">
-      <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)]">
-        {/* Header */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-[clamp(2rem,4vw,4rem)] mb-[clamp(5rem,8vw,8rem)]">
-          <div className="md:col-span-2 pt-[0.5rem]">
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]/60">
-              Depoimentos
-            </span>
-          </div>
-          <div className="md:col-span-8 border-t border-[#DCD8D0] pt-[2rem]">
-            <h2
-              className="font-serif font-normal text-[#0A0A0A] leading-[1] tracking-tighter"
-              style={{
-                fontSize: "clamp(2.5rem,5vw,5.5rem)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              <EditableField
-                value={data.titulo ?? "O que nossos clientes dizem"}
-                onChange={(v) => set("titulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                className="block"
-              />
-            </h2>
-          </div>
-        </div>
+    <section id="depoimentos" ref={container} className="proposal-section bg-white">
+      <div className="proposal-container">
+        <header className="mb-12 md:mb-16">
+          <h2 className="text-4xl font-bold text-black md:text-5xl">
+            <EditableField
+              value={data.titulo ?? "O que nossos clientes dizem"}
+              onChange={(v) => set("titulo", v)}
+              isAdmin={isAdmin}
+              className="block"
+            />
+          </h2>
+          <p className="mt-2 max-w-xl text-[#7D6B58]">
+            Depoimentos de quem já confiou no nosso trabalho.
+          </p>
+        </header>
 
-        {/* Testimonials grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-l border-[#DCD8D0]">
+        <div ref={cardsRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {itens.map((item, i) => (
-            <div
-              key={i}
-              className="border-b border-r border-[#DCD8D0] p-[clamp(2rem,3vw,3rem)] flex flex-col gap-[2rem] group relative overflow-hidden"
-            >
-              <div className="proposal-line-x" />
-
-              {/* Large quote mark */}
-              <span
-                className="font-serif text-[5rem] leading-none text-[#D9381E]/15 select-none"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-                aria-hidden
-              >
+            <div key={i} data-depoimento-card className={cardStyle}>
+              <span className="text-5xl font-serif leading-none text-[#bdfa3c]/30 select-none">
                 "
               </span>
-
-              {/* Quote */}
-              <p className="font-serif font-normal text-[#0A0A0A] leading-[1.5] tracking-tight text-[clamp(1rem,1.25vw,1.25rem)]"
-                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-                "{item.texto}"
-              </p>
-
-              {/* Author */}
-              <div className="mt-auto flex items-center gap-[1rem] pt-[1.5rem] border-t border-[#DCD8D0]">
-                <div className="flex flex-col gap-[0.25rem]">
-                  <span className="font-sans text-[0.8rem] font-medium text-[#0A0A0A]">
-                    {item.autor}
-                  </span>
+              <p className="mt-2 text-black/80 leading-relaxed">{item.texto}</p>
+              <div className="mt-6 flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-black/5 flex items-center justify-center font-bold text-black/60 text-sm">
+                  {item.autor.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-semibold text-black">{item.autor}</p>
                   {item.cargo && (
-                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-[#555555]/60">
-                      {item.cargo}
-                    </span>
+                    <p className="text-sm text-[#7D6B58]">{item.cargo}</p>
                   )}
                 </div>
               </div>

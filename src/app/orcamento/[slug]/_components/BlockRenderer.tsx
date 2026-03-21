@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { BudgetBlock } from "@/lib/types/budget-content";
 import HeroBlock from "./HeroBlock";
 import SobreEmpresaBlock from "./SobreEmpresaBlock";
@@ -13,6 +14,19 @@ import EquipeBlock from "./EquipeBlock";
 import CtaBlock from "./CtaBlock";
 import TextoBlock from "./TextoBlock";
 import MarqueeStrip from "./MarqueeStrip";
+import ProposalNav from "./ProposalNav";
+
+const BLOCK_IDS: Partial<Record<BudgetBlock["type"], string>> = {
+  sobre_empresa: "sobre",
+  projeto: "projeto",
+  servicos: "servicos",
+  timeline: "cronograma",
+  depoimentos: "depoimentos",
+  equipe: "equipe",
+  preco: "preco",
+  galeria: "galeria",
+  cta: "contato",
+};
 
 interface BlockRendererProps {
   blocks: BudgetBlock[];
@@ -29,26 +43,28 @@ export default function BlockRenderer({
     return (newData: BudgetBlock["data"]) => onBlockChange?.(i, newData);
   }
 
-  /* Insert a marquee strip between certain block transitions */
-  function shouldInsertMarquee(prev: BudgetBlock | undefined, curr: BudgetBlock): boolean {
-    if (!prev) return false;
-    const darkBlocks = new Set(["timeline", "equipe", "cta"]);
-    const wasLight = !darkBlocks.has(prev.type);
-    const isDark = darkBlocks.has(curr.type);
-    return wasLight && isDark;
+  /* Marquee após hero — storytelling light */
+  function insertMarqueeAfterHero(i: number): boolean {
+    return i > 0 && blocks[i - 1].type === "hero";
   }
 
   return (
     <>
       {blocks.map((block, i) => {
-        const prev = blocks[i - 1];
-        const marquee = shouldInsertMarquee(prev, block);
+        const marquee = insertMarqueeAfterHero(i);
+        const sectionId = BLOCK_IDS[block.type];
 
         const rendered = (() => {
           switch (block.type) {
             case "hero":
               return (
-                <HeroBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
+                <HeroBlock
+                  key={i}
+                  data={block.data}
+                  blocks={blocks}
+                  isAdmin={isAdmin}
+                  onChange={change(i)}
+                />
               );
             case "sobre_empresa":
               return (
@@ -105,11 +121,19 @@ export default function BlockRenderer({
           }
         })();
 
-        return (
-          <>
-            {marquee && <MarqueeStrip key={`marquee-${i}`} dark />}
+        const wrapped = sectionId ? (
+          <div key={i} id={sectionId}>
             {rendered}
-          </>
+          </div>
+        ) : (
+          rendered
+        );
+
+        return (
+          <Fragment key={i}>
+            {marquee && <MarqueeStrip dark={false} />}
+            {wrapped}
+          </Fragment>
         );
       })}
     </>

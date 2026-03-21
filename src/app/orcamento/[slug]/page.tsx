@@ -43,13 +43,13 @@ export default async function OrcamentoPage({ params }: Props) {
       <BudgetViewClient budget={budget} />
 
       {/* Footer */}
-      <footer className="bg-[#0A0A0A] border-t border-white/5">
+      <footer className="bg-white border-t border-black/10">
         <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-sans text-[0.75rem] text-white/25">
+          <p className="font-sans text-[0.75rem] text-[#7D6B58]">
             {budget.name}
             {budget.client && <span> · Para {budget.client}</span>}
           </p>
-          <p className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-white/15">
+          <p className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-black/40">
             Proposta confidencial · Não compartilhe sem autorização
           </p>
         </div>
