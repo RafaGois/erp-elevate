@@ -5,7 +5,7 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import api from "@/lib/api";
@@ -16,6 +16,8 @@ import useAppData from "@/data/hooks/useAppData";
 import BudgetModal from "@/components/layout/modal/BudgetModal";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export default function BudgetsPage() {
   const [selectedObject, setSelectedObject] = useState<Budget | null>(null);
@@ -24,49 +26,69 @@ export default function BudgetsPage() {
 
   const columns: ColumnDef<Budget>[] = [
     {
-      header: ({ column }) => {
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nome
+          <ArrowUpDown />
+        </Button>
+      ),
+      accessorKey: "name",
+      cell: ({ row }) => {
+        const { name, slug } = row.original;
         return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nome
-            <ArrowUpDown />
-          </Button>
+          <div className="flex flex-col gap-0.5">
+            <span className="font-medium">{name}</span>
+            {slug && (
+              <span className="text-xs text-muted-foreground font-mono">/{slug}</span>
+            )}
+          </div>
         );
       },
-      accessorKey: "name",
+    },
+    {
+      header: "Cliente",
+      accessorKey: "client",
+      cell: ({ row }) => {
+        const { client, project } = row.original;
+        if (!client && !project) return <span className="text-muted-foreground">-</span>;
+        return (
+          <div className="flex flex-col gap-0.5">
+            {client && <span className="text-sm">{client}</span>}
+            {project && <span className="text-xs text-muted-foreground">{project}</span>}
+          </div>
+        );
+      },
     },
     {
       header: "Descrição",
       accessorKey: "description",
-      accessorFn: (row) => row?.description ?? "-",
       cell: ({ row }) => {
         const desc = row.original?.description;
         return (
-          <span className="max-w-[200px] truncate block" title={desc ?? undefined}>
-            {desc ?? "-"}
+          <span className="max-w-[200px] truncate block text-sm" title={desc ?? undefined}>
+            {desc ?? <span className="text-muted-foreground">-</span>}
           </span>
         );
       },
     },
     {
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Valor
-            <ArrowUpDown />
-          </Button>
-        );
-      },
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Valor
+          <ArrowUpDown />
+        </Button>
+      ),
       accessorKey: "value",
       cell: ({ row }) => {
         const value = row.original?.value;
         return (
-          <span>
+          <span className="font-mono font-medium">
             {typeof value === "number"
               ? new Intl.NumberFormat("pt-BR", {
                   style: "currency",
@@ -78,13 +100,37 @@ export default function BudgetsPage() {
       },
     },
     {
+      header: "Proposta",
+      accessorKey: "slug",
+      cell: ({ row }) => {
+        const { slug } = row.original;
+        if (!slug) {
+          return <Badge variant="outline" className="text-muted-foreground text-xs">Sem slug</Badge>;
+        }
+        return (
+          <Link
+            href={`/orcamento/${slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-medium"
+          >
+            Ver proposta
+            <ExternalLink className="h-3 w-3" />
+          </Link>
+        );
+      },
+    },
+    {
       header: "Criado em",
       accessorKey: "createdAt",
       cell: ({ row }) => {
         const date = row.original?.createdAt;
         if (!date) return "-";
         try {
-          return format(new Date(date), "dd/MM/yyyy HH:mm", { locale: ptBR });
+          return (
+            <span className="text-sm text-muted-foreground">
+              {format(new Date(date), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+            </span>
+          );
         } catch {
           return "-";
         }
@@ -100,6 +146,7 @@ export default function BudgetsPage() {
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
+            viewUrl={item.slug ? `/orcamento/${item.slug}` : undefined}
           />
         );
       },

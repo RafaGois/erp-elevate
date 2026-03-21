@@ -1,0 +1,234 @@
+{
+  "id": "demo-001",
+  "name": "Proposta para Casa França",
+  "slug": "demo",
+  "client": "Casa França",
+  "project": "Site Institucional",
+  "description": "Proposta de desenvolvimento de site institucional moderno para Casa França.",
+  "value": 18500,
+  "createdAt": "2026-03-20T10:00:00.000Z",
+  "updatedAt": "2026-03-20T10:00:00.000Z",
+  "content": {
+    "blocks": [
+      {
+        "type": "hero",
+        "data": {
+          "badge": "Proposta Comercial",
+          "cliente": "Casa França",
+          "titulo": "Site Institucional Casa França",
+          "subtitulo": "Uma presença digital que reflete a excelência da sua marca"
+        }
+      },
+      {
+        "type": "sobre_empresa",
+        "data": {
+          "titulo": "Quem somos",
+          "descricao": "Somos a Elevate, uma agência especializada em desenvolvimento de produtos digitais de alta performance. Unimos design estratégico, tecnologia de ponta e experiência do usuário para transformar marcas em experiências memoráveis. Nosso time é formado por designers, desenvolvedores e estrategistas apaixonados por resultados.",
+          "destaques": [
+            "Mais de 5 anos de mercado",
+            "80+ projetos entregues",
+            "Equipe multidisciplinar certificada",
+            "Suporte dedicado pós-lançamento"
+          ]
+        }
+      },
+      {
+        "type": "projeto",
+        "data": {
+          "titulo": "O projeto",
+          "descricao": "O site institucional da Casa França será a principal vitrine digital da marca, comunicando seus valores, história e produtos de forma envolvente. O projeto contempla design exclusivo, experiência de navegação fluida e otimização para mecanismos de busca — garantindo que os clientes certos encontrem você online.",
+          "objetivos": [
+            "Fortalecer a presença e credibilidade digital da marca",
+            "Apresentar produtos e serviços de forma clara e atraente",
+            "Gerar novos contatos e oportunidades de negócio",
+            "Garantir performance e carregamento rápido em todos os dispositivos"
+          ]
+        }
+      },
+      {
+        "type": "servicos",
+        "data": {
+          "titulo": "O que está incluso",
+          "subtitulo": "Tudo o que sua empresa precisa para ter uma presença digital sólida e profissional",
+          "itens": [
+            {
+              "titulo": "Design UI/UX exclusivo",
+              "descricao": "Interface personalizada criada do zero, alinhada com a identidade visual da marca.",
+              "icone": "design"
+            },
+            {
+              "titulo": "Desenvolvimento front-end",
+              "descricao": "Código limpo e performático em Next.js com animações suaves e responsividade total.",
+              "icone": "code"
+            },
+            {
+              "titulo": "Versão mobile",
+              "descricao": "Experiência otimizada para smartphones e tablets, garantindo acesso perfeito em qualquer tela.",
+              "icone": "mobile"
+            },
+            {
+              "titulo": "SEO técnico",
+              "descricao": "Configuração completa de metadados, sitemap, schema markup e práticas de otimização para Google.",
+              "icone": "seo"
+            },
+            {
+              "titulo": "Analytics e rastreamento",
+              "descricao": "Integração com Google Analytics 4 e Meta Pixel para mensurar resultados em tempo real.",
+              "icone": "analytics"
+            },
+            {
+              "titulo": "Suporte pós-lançamento",
+              "descricao": "30 dias de suporte técnico após o go-live para ajustes, correções e orientações.",
+              "icone": "support"
+            }
+          ]
+        }
+      },
+      {
+        "type": "timeline",
+        "data": {
+          "titulo": "Como vai funcionar",
+          "etapas": [
+            {
+              "fase": "Kickoff e alinhamento",
+              "descricao": "Reunião de início para entender a fundo a marca, objetivos e referências visuais. Definimos o escopo final e as entregas esperadas.",
+              "duracao": "Semana 1"
+            },
+            {
+              "fase": "Design e prototipação",
+              "descricao": "Criação dos wireframes e design de alta fidelidade no Figma. Você aprova tudo antes de começarmos a desenvolver.",
+              "duracao": "Semanas 2–3"
+            },
+            {
+              "fase": "Desenvolvimento",
+              "descricao": "Implementação do site com Next.js, integrando todos os componentes aprovados no design. Ambiente de staging para revisão.",
+              "duracao": "Semanas 4–5"
+            },
+            {
+              "fase": "Testes e revisões",
+              "descricao": "Rodada de testes em diferentes dispositivos e navegadores. Ajustes finais com base no seu feedback.",
+              "duracao": "Semana 6"
+            },
+            {
+              "fase": "Lançamento",
+              "descricao": "Deploy em produção, configuração de domínio, HTTPS e monitoramento inicial. Entrega das credenciais e documentação.",
+              "duracao": "Semana 7"
+            }
+          ]
+        }
+      },
+      {
+        "type": "depoimentos",
+        "data": {
+          "titulo": "O que nossos clientes dizem",
+          "itens": [
+            {
+              "texto": "A Elevate entregou muito além do que esperávamos. O site ficou visualmente impressionante e os resultados de tráfego orgânico cresceram 40% no primeiro mês.",
+              "autor": "Marcos Andrade",
+              "cargo": "CEO, Andrade Soluções"
+            },
+            {
+              "texto": "Processo super organizado, comunicação excelente e entrega dentro do prazo. Recomendo sem hesitar para qualquer empresa que precise de um digital sólido.",
+              "autor": "Fernanda Lima",
+              "cargo": "Diretora de Marketing, Grupo Líder"
+            },
+            {
+              "texto": "Trabalhamos juntos em três projetos e a qualidade só aumenta. A atenção aos detalhes e o comprometimento com o resultado são diferenciais reais.",
+              "autor": "Ricardo Souza",
+              "cargo": "Fundador, RS Tech"
+            }
+          ]
+        }
+      },
+      {
+        "type": "equipe",
+        "data": {
+          "titulo": "Quem vai trabalhar no seu projeto",
+          "membros": [
+            {
+              "nome": "Rafael Costa",
+              "cargo": "Tech Lead & Desenvolvedor",
+              "bio": "Especialista em Next.js e arquitetura de sistemas web de alta performance."
+            },
+            {
+              "nome": "Ana Beatriz",
+              "cargo": "UI/UX Designer",
+              "bio": "Designers de interfaces com foco em experiência do usuário e identidade de marca."
+            },
+            {
+              "nome": "Lucas Mendes",
+              "cargo": "SEO & Estratégia",
+              "bio": "Especialista em otimização orgânica e estratégia de crescimento digital."
+            }
+          ]
+        }
+      },
+      {
+        "type": "preco",
+        "data": {
+          "titulo": "Escolha seu plano",
+          "subtitulo": "Opções flexíveis para cada momento do seu negócio",
+          "pacotes": [
+            {
+              "nome": "Essencial",
+              "descricao": "Ideal para quem precisa de uma presença digital rápida e objetiva.",
+              "valor": 8500,
+              "parcelas": "ou 2x de R$ 4.250,00",
+              "inclui": [
+                "Design UI/UX (até 4 páginas)",
+                "Desenvolvimento em Next.js",
+                "Responsividade mobile",
+                "SEO básico",
+                "15 dias de suporte"
+              ],
+              "destaque": false
+            },
+            {
+              "nome": "Profissional",
+              "descricao": "Nossa recomendação. Tudo que você precisa para dominar sua presença digital.",
+              "valor": 18500,
+              "parcelas": "ou 3x de R$ 6.166,67",
+              "inclui": [
+                "Design UI/UX exclusivo (até 8 páginas)",
+                "Desenvolvimento em Next.js",
+                "Responsividade total",
+                "SEO técnico completo",
+                "Google Analytics 4 + Meta Pixel",
+                "30 dias de suporte",
+                "Código-fonte entregue"
+              ],
+              "destaque": true
+            },
+            {
+              "nome": "Premium",
+              "descricao": "Solução completa com estratégia, performance e acompanhamento contínuo.",
+              "valor": 32000,
+              "parcelas": "ou 6x de R$ 5.333,33",
+              "inclui": [
+                "Tudo do plano Profissional",
+                "Páginas ilimitadas",
+                "Animações e microinterações",
+                "Blog com CMS integrado",
+                "Painel administrativo",
+                "90 dias de suporte",
+                "Reuniões mensais de estratégia"
+              ],
+              "destaque": false
+            }
+          ],
+          "observacao": "Proposta válida por 15 dias. Valores sujeitos a alteração após este período."
+        }
+      },
+      {
+        "type": "cta",
+        "data": {
+          "titulo": "Vamos começar?",
+          "subtitulo": "Estamos prontos para transformar a presença digital da Casa França. Entre em contato agora e tire suas dúvidas.",
+          "botaoTexto": "Aceitar proposta",
+          "whatsapp": "5511999999999",
+          "email": "contato@elevatepromedia.com"
+        }
+      }
+    ]
+  }
+}

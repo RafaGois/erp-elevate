@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import { CheckCheck, Copy, Edit2, MoreHorizontal, Trash2 } from "lucide-react";
+import { CheckCheck, Copy, Edit2, ExternalLink, MoreHorizontal, Trash2 } from "lucide-react";
 import ModalAction from "@/lib/enums/modalAction";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,8 @@ interface FloatingMenuProps<T> {
   selectedObject: T;
   setSelectedObject: (newSelectedObject: T) => void;
   setAction: (newAction: ModalAction) => void;
+  /** When provided, shows a "Ver" item that opens the URL in a new tab */
+  viewUrl?: string;
 }
 
 export default function FloatingMenu<T extends WithId>(
@@ -50,6 +52,17 @@ export default function FloatingMenu<T extends WithId>(
           <Copy />
           Copiar ID
         </DropdownMenuItem>
+        {props.viewUrl && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <a href={props.viewUrl} target="_blank" rel="noopener noreferrer">
+                <ExternalLink />
+                <DropdownMenuLabel>Ver proposta</DropdownMenuLabel>
+              </a>
+            </DropdownMenuItem>
+          </>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className={cn(hasEquipaments < 1 && "hidden")}

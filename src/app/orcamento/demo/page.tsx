@@ -1,0 +1,46 @@
+import type { Metadata } from "next";
+import demoBudgetJson from "@/lib/data/budget-demo.json";
+import type Budget from "@/lib/models/Budget";
+import BudgetViewClient from "../[slug]/_components/BudgetViewClient";
+
+export const metadata: Metadata = {
+  title: "Demo · Proposta Comercial",
+  description: "Visualização de demonstração de uma proposta comercial.",
+};
+
+export default function OrcamentoDemoPage() {
+  const budget = demoBudgetJson as unknown as Budget;
+
+  return (
+    <main>
+      {/* Demo warning banner */}
+      <div className="bg-[#F4F1EA] border-b border-[#DCD8D0]">
+        <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-[#D9381E]" />
+            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#555555]">
+              Modo demonstração · dados locais fictícios
+            </span>
+          </div>
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#555555]/50 hidden sm:block">
+            Nenhuma alteração será salva
+          </span>
+        </div>
+      </div>
+
+      <BudgetViewClient budget={budget} isDemoMode />
+
+      {/* Footer */}
+      <footer className="bg-[#0A0A0A] border-t border-white/5">
+        <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="font-sans text-[0.75rem] text-white/25">
+            Demo · Proposta para Casa França
+          </p>
+          <p className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-white/15">
+            Dados fictícios · Apenas para demonstração
+          </p>
+        </div>
+      </footer>
+    </main>
+  );
+}

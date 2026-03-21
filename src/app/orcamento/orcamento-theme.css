@@ -1,0 +1,54 @@
+/* ─── Aura Editorial Theme ─────────────────────────────────────────────────── */
+
+/* Marquee animation */
+@keyframes proposal-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.proposal-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: proposal-marquee 50s linear infinite;
+}
+.proposal-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Outline text (Aura "text-outline") */
+.proposal-text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #0A0A0A;
+}
+
+/* Hover line expand X */
+.proposal-line-x {
+  position: absolute; bottom: 0; left: 0;
+  height: 1px; width: 0;
+  background: #0A0A0A;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.15;
+}
+.proposal-line-y {
+  position: absolute; top: 0; right: 0;
+  width: 1px; height: 0;
+  background: #0A0A0A;
+  transition: height 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.15;
+}
+.group:hover .proposal-line-x { width: 100%; }
+.group:hover .proposal-line-y { height: 100%; }
+
+/* Horizontal accordion */
+@media (min-width: 768px) {
+  .h-acc-item {
+    flex: 1;
+    min-width: 0;
+    transition: flex 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .h-acc-container:hover .h-acc-item { flex: 0.5; }
+  .h-acc-container .h-acc-item:hover { flex: 3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proposal-marquee-track { animation: none; }
+}

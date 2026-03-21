@@ -24,8 +24,11 @@ export default function BudgetModal(props: BudgetModalProps) {
   const form = useForm<Budget>({
     defaultValues: {
       name: props.selectedObject?.name ?? "",
+      slug: props.selectedObject?.slug ?? "",
       description: props.selectedObject?.description ?? "",
       value: props.selectedObject?.value ?? 0,
+      client: props.selectedObject?.client ?? "",
+      project: props.selectedObject?.project ?? "",
     },
   });
 
@@ -92,11 +95,34 @@ export default function BudgetModal(props: BudgetModalProps) {
           <InputForm
             name="name"
             label="Nome"
-            placeholder="Nome"
+            placeholder="Nome do orçamento"
             type="text"
             required
             form={form}
           />
+          <InputForm
+            name="slug"
+            label="Slug (URL pública)"
+            placeholder="ex: proposta-casa-franca"
+            type="text"
+            form={form}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <InputForm
+              name="client"
+              label="Cliente"
+              placeholder="Nome do cliente"
+              type="text"
+              form={form}
+            />
+            <InputForm
+              name="project"
+              label="Projeto"
+              placeholder="Nome do projeto"
+              type="text"
+              form={form}
+            />
+          </div>
           <TextAreaForm
             name="description"
             label="Descrição"
