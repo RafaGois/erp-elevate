@@ -57,7 +57,7 @@ export default function ProposalNav({ blocks }: Props) {
           key={id}
           type="button"
           onClick={() => scrollToSection(id)}
-          className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#7D6B58]/80 hover:text-black transition-colors whitespace-nowrap"
+          className="cursor-pointer font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#7D6B58]/80 hover:text-black transition-colors whitespace-nowrap"
         >
           {label}
         </button>

@@ -45,7 +45,7 @@ export default async function OrcamentoPage({ params }: Props) {
       {/* Footer */}
       <footer className="bg-white border-t border-black/10">
         <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-sans text-[0.75rem] text-[#7D6B58]">
+          <p className="text-[0.75rem] text-[#7D6B58]">
             {budget.name}
             {budget.client && <span> · Para {budget.client}</span>}
           </p>

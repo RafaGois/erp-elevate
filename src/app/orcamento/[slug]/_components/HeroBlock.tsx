@@ -1,10 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import type { BudgetBlock, HeroBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
-import ProposalNav from "./ProposalNav";
+import ProposalIntro from "./ProposalIntro";
 
 interface Props {
   data: HeroBlockData;
@@ -23,45 +30,100 @@ interface Props {
  * 2) Platô: hero editorial 100% visível (scroll só avança o progresso, visual estável)
  * 3) Camada fixa some → próxima seção aparece por baixo
  */
-const TRACK_VH = 260;
+const TRACK_VH = 80;
 
-/** Tema claro — fundo branco inspirado na landing */
-const DOOR_BG = "#FAFAF9";
+const PARALLAX_INTENSITY = 2.5;
+const SCROLL_PARALLAX_MAX = 6;
 
-export default function HeroBlock({ data, blocks, isAdmin = false, onChange }: Props) {
+function EmojiParallax({
+  emoji,
+  pos,
+  delay,
+  depth,
+  index,
+  mouseX,
+  mouseY,
+  scrollProgress,
+}: {
+  emoji: string;
+  pos: React.CSSProperties;
+  delay: number;
+  depth: number;
+  index: number;
+  mouseX: ReturnType<typeof useMotionValue>;
+  mouseY: ReturnType<typeof useMotionValue>;
+  scrollProgress: ReturnType<typeof useScroll>["scrollYProgress"];
+}) {
+  const x = useTransform(mouseX, (v) => v * PARALLAX_INTENSITY * depth);
+  const y = useTransform(
+    [mouseY, scrollProgress],
+    ([my, s]) => (my ?? 0) * PARALLAX_INTENSITY * depth - ((s ?? 0) * SCROLL_PARALLAX_MAX * depth)
+  );
+  return (
+    <motion.span
+      className="absolute text-2xl md:text-3xl select-none pointer-events-none opacity-70 inline-block"
+      style={{ ...pos, x, y }}
+    >
+      <motion.span
+        className="block"
+        animate={{ y: [0, -12, 0], rotate: [0, 5, -5, 0] }}
+        transition={{
+          repeat: Infinity,
+          duration: 6 + index * 0.8,
+          ease: "easeInOut",
+          delay,
+        }}
+      >
+        {emoji}
+      </motion.span>
+    </motion.span>
+  );
+}
+
+export default function HeroBlock({
+  data,
+  blocks,
+  isAdmin = false,
+  onChange,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [introDone, setIntroDone] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [mouseX, mouseY]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  /* Fase 1 — portas */
-  const leftX = useTransform(scrollYProgress, [0, 0.28], ["0%", "-100%"]);
-  const rightX = useTransform(scrollYProgress, [0, 0.28], ["0%", "100%"]);
-
-  /* Título central da porta */
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.12], [0, -28]);
-
-  /* Fase 3 — retira toda a camada fixa (hero + restos) para não bloquear o restante */
-  const stageOpacity = useTransform(scrollYProgress, [0.82, 0.98], [1, 0]);
+  /* Fade da camada fixa — começa cedo para revelar as seções com pouco scroll */
+  const stageOpacity = useTransform(scrollYProgress, [0.35, 0.7], [1, 0]);
 
   const [stagePassthrough, setStagePassthrough] = useState(false);
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setStagePassthrough(v >= 0.97);
+    setStagePassthrough(v >= 0.68);
   });
 
   function set<K extends keyof HeroBlockData>(key: K, value: HeroBlockData[K]) {
     onChange?.({ ...data, [key]: value });
   }
 
-  const title = data.titulo ?? "Site Institucional Casa França";
-  const cliente = data.cliente ?? "Nome do Cliente";
-  const badge = data.badge ?? "Proposta Comercial";
-
   return (
     <>
+      {/* Intro full-screen — aparece ao carregar, some após animação */}
+      {!introDone && <ProposalIntro onComplete={() => setIntroDone(true)} />}
+
       {/*
         Único elemento no fluxo: gera TODO o scroll desta experiência.
         A próxima seção só entra depois que o usuário percorre esta altura.
@@ -75,75 +137,118 @@ export default function HeroBlock({ data, blocks, isAdmin = false, onChange }: P
       {/* Palco fixo: ocupa só a viewport; não rola com o documento */}
       <motion.div
         style={{ opacity: stageOpacity }}
-        className={`fixed inset-0 z-[45] flex h-[100dvh] w-full flex-col border-b border-black/5 bg-white ${
+        className={`fixed inset-0 z-45 h-dvh w-full overflow-hidden border-b border-black/5 bg-white ${
           stagePassthrough ? "pointer-events-none" : "pointer-events-auto"
         }`}
       >
-        {/* Hero editorial — sempre preenche o palco; sem translateY por scroll */}
-        <div className="relative z-0 flex min-h-0 flex-1 flex-col overflow-hidden">
-          <div className="relative z-10 mx-auto flex h-full min-h-0 w-full max-w-[clamp(100rem,98vw,160rem)] flex-col justify-between px-[clamp(1.5rem,4vw,6rem)] py-[clamp(3rem,8vh,6rem)]">
-            {/* Navegação — links para seções da proposta */}
-            <ProposalNav blocks={blocks} />
+        {/* SVG — curvas calmas e definidas, borda-a-borda, estilo topográfico */}
+        <svg
+          className="absolute inset-0 z-[5] h-full w-full pointer-events-none"
+          viewBox="0 0 1440 900"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          <defs>
+            <style>{`
+              @keyframes streakFlow { 0% { stroke-dashoffset: 600; } 100% { stroke-dashoffset: -600; } }
+              .streak { stroke-linecap: round; }
+            `}</style>
+          </defs>
 
-            {/* 1. Abertura — contexto em uma linha */}
-            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-              <EditableField
-                value={badge}
-                onChange={(v) => set("badge", v)}
-                isAdmin={isAdmin}
-                className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#7D6B58]"
-              />
-              <span className="text-black/20" aria-hidden>
-                ·
-              </span>
-              <span className="font-sans text-[0.875rem] text-[#7D6B58]">
-                Proposta para{" "}
-                <EditableField
-                  value={cliente}
-                  onChange={(v) => set("cliente", v)}
-                  isAdmin={isAdmin}
-                  className="font-medium text-[#0A0A0A]"
+          {/* Linhas animadas apenas no superior direito e inferior esquerdo */}
+          {/* ── Canto superior direito ── */}
+          <path d="M200,0 Q1320,80 1440,180" stroke="#22c55e" strokeWidth="6" fill="none" opacity="0.38" strokeDasharray="100 200" style={{ animation: "streakFlow 28s linear infinite 14s" }} className="streak" />
+          <path d="M160,0 Q1300,100 1440,220" stroke="#22c55e" strokeWidth="5.5" fill="none" opacity="0.35" strokeDasharray="90 210" style={{ animation: "streakFlow 32s linear infinite 17s" }} className="streak" />
+
+          {/* ── Canto inferior esquerdo ── */}
+          <path d="M240,900 Q120,780 0,620" stroke="#bdfa3c" strokeWidth="6" fill="none" opacity="0.38" strokeDasharray="100 200" style={{ animation: "streakFlow 28s linear infinite 15s" }} className="streak" />
+          <path d="M200,900 Q100,820 0,720" stroke="#bdfa3c" strokeWidth="5.5" fill="none" opacity="0.35" strokeDasharray="90 210" style={{ animation: "streakFlow 32s linear infinite 18s" }} className="streak" />
+        </svg>
+
+        {/* Efeitos visuais decorativos — gradiente e blur */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* Base: gradiente suave do centro para as bordas */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 100%), radial-gradient(ellipse 120% 80% at 20% 20%, rgba(189,250,60,0.08) 0%, transparent 50%), radial-gradient(ellipse 100% 60% at 80% 80%, rgba(34,197,94,0.06) 0%, transparent 50%)",
+            }}
+          />
+
+          {/* Orbs com blur — verde elevate */}
+          <div
+            className="absolute left-0 top-1/3 h-[min(60vw,500px)] w-[min(60vw,500px)] -translate-y-1/2 rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(189,250,60,0.4) 0%, rgba(189,250,60,0.1) 40%, transparent 70%)",
+              filter: "blur(60px)",
+            }}
+          />
+          <div
+            className="absolute right-0 bottom-1/4 h-[min(50vw,400px)] w-[min(50vw,400px)] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(34,197,94,0.08) 40%, transparent 70%)",
+              filter: "blur(70px)",
+            }}
+          />
+
+          {/* Orb verde escuro/esmeralda */}
+          <div
+            className="absolute right-1/4 top-1/4 h-[min(40vw,320px)] w-[min(40vw,320px)] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(22,163,74,0.3) 0%, rgba(34,197,94,0.08) 45%, transparent 70%)",
+              filter: "blur(65px)",
+            }}
+          />
+          <div
+            className="absolute left-1/3 bottom-0 h-[min(45vw,360px)] w-[min(45vw,360px)] -translate-x-1/2 rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(5,150,105,0.25) 0%, transparent 60%)",
+              filter: "blur(55px)",
+            }}
+          />
+
+          {/* Vignette sutil nas bordas */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.03) 100%)",
+            }}
+          />
+        </div>
+
+        {/* Título — exatamente no meio da viewport */}
+        <div
+          className="absolute left-1/2 top-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-[clamp(1.5rem,4vw,6rem)]"
+        >
+          <div className="relative flex flex-col items-center text-center">
+              {/* Emojis verdes flutuantes — parallax sutil com mouse e scroll */}
+              {[
+                { emoji: "🟢", top: "-10%", left: "-8%", delay: 0, depth: 0.8 },
+                { emoji: "✅", top: "5%", right: "-12%", delay: 0.3, depth: 1.2 },
+                { emoji: "🌿", top: "-5%", right: "-5%", delay: 0.5, depth: 1 },
+                { emoji: "💚", bottom: "10%", left: "-15%", delay: 0.2, depth: 1.1 },
+                { emoji: "🟢", bottom: "-8%", right: "-10%", delay: 0.4, depth: 0.9 },
+                { emoji: "🌱", bottom: "5%", right: "-18%", delay: 0.6, depth: 1.3 },
+              ].map(({ emoji, delay, depth, ...pos }, i) => (
+                <EmojiParallax
+                  key={i}
+                  emoji={emoji}
+                  pos={pos as React.CSSProperties}
+                  delay={delay}
+                  depth={depth}
+                  index={i}
+                  mouseX={mouseX}
+                  mouseY={mouseY}
+                  scrollProgress={scrollYProgress}
                 />
+              ))}
+              <span className="relative z-10 mb-3 font-mono text-[0.55rem] uppercase tracking-[0.3em] text-black/40">
+                elevate sistemas
               </span>
-              {(data.projeto ?? data.data ?? isAdmin) && (
-                <>
-                  <span className="text-black/20" aria-hidden>
-                    ·
-                  </span>
-                  <span className="font-sans text-[0.75rem] text-[#7D6B58]/80">
-                    <EditableField
-                      value={data.projeto ?? ""}
-                      onChange={(v) => set("projeto", v)}
-                      isAdmin={isAdmin}
-                      className="inline"
-                      placeholder="Projeto"
-                    />
-                    <span className="mx-1 text-black/20" aria-hidden>
-                      ·
-                    </span>
-                    <EditableField
-                      value={data.data ?? new Date().toLocaleDateString("pt-BR")}
-                      onChange={(v) => set("data", v)}
-                      isAdmin={isAdmin}
-                      className="inline"
-                      placeholder="Data"
-                    />
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* 2. Título — o que estamos propondo */}
-            <div className="flex flex-col gap-[clamp(1.5rem,3vw,2.5rem)]">
-              <h1
-                className="max-w-[58rem] font-serif font-normal leading-[0.92] tracking-tight text-[#0A0A0A]"
-                style={{
-                  fontSize: "clamp(2.5rem,6vw,6rem)",
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                }}
-              >
+              <h1 className="relative z-10 text-[clamp(2rem,10vw,5rem)] font-bold leading-[0.9] tracking-tight text-[#0A0A0A]">
                 <EditableField
-                  value={title}
+                  value={data.titulo}
                   onChange={(v) => set("titulo", v)}
                   isAdmin={isAdmin}
                   multiline
@@ -151,181 +256,35 @@ export default function HeroBlock({ data, blocks, isAdmin = false, onChange }: P
                   placeholder="O que estamos propondo"
                 />
               </h1>
-
-              <EditableField
-                value={
-                  data.subtitulo ??
-                  "Uma presença digital que reflete a excelência da sua marca."
-                }
-                onChange={(v) => set("subtitulo", v)}
-                isAdmin={isAdmin}
-                multiline
-                tag="p"
-                className="max-w-[52rem] font-sans text-[clamp(1rem,1.25vw,1.25rem)] font-light leading-[1.6] text-[#7D6B58]"
-                placeholder="Benefício principal em uma frase"
-              />
             </div>
+        </div>
 
-            {/* 3. Números — o que o cliente precisa saber para decidir */}
-            <div className="flex flex-col gap-[clamp(1.5rem,3vw,2rem)]">
-              <div className="h-px w-12 bg-[#D9381E]" />
-              <div className="flex flex-wrap gap-x-8 gap-y-4 md:gap-x-12">
-                {(
-                  [
-                    {
-                      label: "Investimento",
-                      key: "investimento",
-                      fallback: "Sob consulta",
-                      emphasis: true,
-                    },
-                    { label: "Prazo", key: "prazo", fallback: "A definir", emphasis: false },
-                    {
-                      label: "Entregas",
-                      key: "entregas",
-                      fallback: "Ver proposta",
-                      emphasis: false,
-                    },
-                  ] as const
-                ).map(({ label, key, fallback, emphasis }) => (
-                  <div key={label} className="flex flex-col gap-0.5">
-                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.15em] text-[#7D6B58]/70">
-                      {label}
-                    </span>
-                    <EditableField
-                      value={data[key] ?? fallback}
-                      onChange={(v) => set(key, v)}
-                      isAdmin={isAdmin}
-                      className={`font-sans font-medium text-[#0A0A0A] ${
-                        emphasis ? "text-[clamp(1.25rem,2vw,1.75rem)]" : "text-[1rem]"
-                      }`}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 4. CTA visual */}
-            <div className="flex items-center gap-3 text-[#7D6B58]/60">
-              <div className="h-px w-8 bg-current" />
+        {/* CTA — fixo na parte inferior */}
+        <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center">
+            <motion.div
+              className="flex flex-col items-center gap-2 text-[#7D6B58]/60"
+              animate={{ y: [0, 6, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 2,
+                ease: "easeInOut",
+              }}
+            >
               <span className="font-mono text-[0.55rem] uppercase tracking-[0.2em]">
                 Role para ver o escopo completo
               </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Porta — tema claro inspirado na landing (Hero, ScrollText) */}
-        <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
-          <motion.div
-            style={{ x: leftX, backgroundColor: DOOR_BG }}
-            className="absolute inset-y-0 left-0 w-1/2 will-change-transform [box-shadow:4px_0_40px_-8px_rgba(0,0,0,0.08)]"
-          >
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            />
-            {/* Card flutuante — estilo ScrollText invertido */}
-            <div
-              className="door-float-card absolute top-[12%] left-[8%] w-20 h-20 md:w-28 md:h-28 rounded-xl border border-black/10 bg-black/[0.02] flex items-center justify-center"
-              aria-hidden
-            >
-              <svg
-                viewBox="0 0 64 64"
-                className="w-10 h-10 md:w-14 md:h-14 text-black/20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              >
-                <path d="M20 16v32M44 16v32M20 24h28M20 40h28" />
-              </svg>
-            </div>
-            <div
-              className="door-float-card absolute bottom-[18%] left-[10%] w-16 h-16 md:w-24 md:h-24 rounded-xl border border-black/10 bg-black/[0.02] flex items-center justify-center font-mono text-[8px] md:text-[10px] text-black/25"
-              style={{ animationDelay: "1.5s" }}
-              aria-hidden
-            >
-              &lt;/&gt;
-            </div>
-          </motion.div>
-
-          <motion.div
-            style={{ x: rightX, backgroundColor: DOOR_BG }}
-            className="absolute inset-y-0 right-0 w-1/2 will-change-transform [box-shadow:-4px_0_40px_-8px_rgba(0,0,0,0.08)]"
-          >
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.04]"
-              style={{
-                backgroundImage: "radial-gradient(circle, #0a0a0a 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            />
-            <div
-              className="door-float-card absolute top-[20%] right-[10%] w-20 h-16 md:w-28 md:h-20 rounded-xl border border-black/10 bg-black/[0.02] p-2 font-mono text-[9px] md:text-[10px] text-black/30"
-              style={{ animationDelay: "2s" }}
-              aria-hidden
-            >
-              <span className="text-black/20">&gt;</span> proposta
-            </div>
-            <div
-              className="door-float-card absolute bottom-[12%] right-[8%] w-24 h-24 md:w-32 md:h-32 rounded-xl border border-black/10 bg-black/[0.02] flex items-center justify-center"
-              style={{ animationDelay: "0.5s" }}
-              aria-hidden
-            >
-              <svg
-                viewBox="0 0 64 64"
-                className="w-12 h-12 md:w-16 md:h-16 text-black/15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              >
-                <circle cx="32" cy="32" r="20" opacity="0.4" />
-                <circle cx="32" cy="32" r="12" opacity="0.6" />
-              </svg>
-            </div>
-          </motion.div>
-
-          {/* Tipografia central — Hero.tsx: small tracking-widest + bold title */}
-          <motion.div
-            style={{ opacity: titleOpacity, y: titleY }}
-            className="absolute inset-0 flex flex-col items-center justify-center px-[clamp(1.25rem,5vw,4rem)] select-none"
-          >
-            <small className="text-[#7D6B58] tracking-[0.2em] text-[clamp(0.65rem,1.2vw,0.8rem)] uppercase font-medium mb-[clamp(0.75rem,2vw,1.25rem)]">
-              Proposta Comercial
-            </small>
-
-            <h1
-              className="max-w-[min(100%,56rem)] text-center font-sans font-bold uppercase leading-[0.92] tracking-tight text-[#0A0A0A]"
-              style={{
-                fontSize: "clamp(2.25rem,9vw,6rem)",
-              }}
-            >
-              {title.trim().endsWith(".") ? title.trim() : `${title.trim()}.`}
-            </h1>
-
-            <p
-              className="mt-[clamp(0.75rem,2vw,1.25rem)] max-w-[min(100%,28rem)] text-center font-sans font-light text-[#7D6B58] tracking-wide"
-              style={{ fontSize: "clamp(0.8rem,1.6vw,1rem)" }}
-            >
-              Para {cliente}
-            </p>
-
-            <div className="absolute bottom-[clamp(2rem,4vw,3.5rem)] flex flex-col items-center gap-[1rem]">
-              <span className="font-mono text-[0.55rem] uppercase tracking-[0.2em] text-[#7D6B58]/70">
-                Role para abrir
-              </span>
               <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-                className="h-[2.5rem] w-[1px] bg-gradient-to-b from-black/25 to-transparent"
-              />
-            </div>
-          </motion.div>
+                animate={{ opacity: [0.5, 1, 0.5], y: [0, 4, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 1.5,
+                  ease: "easeInOut",
+                  delay: 0.2,
+                }}
+              >
+                <ChevronDown className="h-5 w-5" strokeWidth={2} />
+              </motion.div>
+            </motion.div>
         </div>
       </motion.div>
     </>

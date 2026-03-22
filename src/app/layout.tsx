@@ -44,6 +44,8 @@ export default function RootLayout({
 
   //teste
 
+  
+
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body className="antialiased font-sans">

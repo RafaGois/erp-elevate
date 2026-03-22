@@ -9,10 +9,10 @@ import useAuth from "@/data/hooks/useAuth";
 import { UserLevel } from "@/lib/enums/UserLevel";
 import api from "@/lib/api";
 import BlockRenderer from "./BlockRenderer";
-import OrcamentoEmpty from "./OrcamentoEmpty";
+import OrcamentoEmpty from "../_components/OrcamentoEmpty";
 
 interface Props {
-  budget: Budget;
+  budget: Budget; 
   isDemoMode?: boolean;
 }
 
@@ -61,12 +61,12 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
           <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 bg-[#D9381E] rounded-full animate-pulse" />
-              <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/60">
+              <span className=" text-[0.6rem] uppercase tracking-[0.2em] text-white/60">
                 Modo edição ativo
                 {isDemoMode && " · dados locais"}
               </span>
             </div>
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.15em] text-white/30">
+            <span className="text-[0.6rem] uppercase tracking-[0.15em] text-white/30">
               Clique em qualquer texto para editar
             </span>
           </div>
