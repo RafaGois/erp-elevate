@@ -30,25 +30,41 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
     onChange?.({ ...data, [key]: value });
   }
 
+  const arcsRef = useRef<SVGGElement>(null);
+
   useGSAP(
     () => {
       if (!container.current || !leftRef.current || !rightRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
       gsap.set([leftRef.current, rightRef.current], { opacity: 0, y: 32 });
 
+      const arcs = arcsRef.current?.querySelectorAll("[data-sobre-arc]");
+      if (arcs?.length) {
+        gsap.set(arcs, { opacity: 0 });
+      }
+
       const tl = gsap.timeline({
         paused: true,
         scrollTrigger: {
           trigger: container.current,
-          start: "top 80%",
+          start: "bottom bottom",
           toggleActions: "play none none none",
         },
       });
-      tl.to(leftRef.current, { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" }).to(
-        rightRef.current,
-        { opacity: 1, y: 0, duration: 0.65, ease: "power2.out" },
-        "-=0.4"
-      );
+      tl.to(leftRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
+        .to(rightRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3");
+      if (arcs?.length) {
+        tl.to(
+          arcs,
+          {
+            opacity: 1,
+            duration: 0.4,
+            stagger: 0.04,
+            ease: "power2.out",
+          },
+          "-=0.2"
+        );
+      }
     },
     { scope: container }
   );
@@ -136,8 +152,8 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
             />
           </mask>
         </defs>
-        {/* Arcos base: da direita para a esquerda */}
-        <g strokeLinecap="round" fill="none">
+        {/* Arcos base: da direita para a esquerda — aparecem do menor ao maior */}
+        <g ref={arcsRef} strokeLinecap="round" fill="none">
           {[...Array(24)].map((_, i) => {
             const r = 360 + i * 42;
             const useLime = i % 2 === 0;
@@ -146,6 +162,7 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
             return (
               <path
                 key={i}
+                data-sobre-arc
                 d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx} ${cy - r}`}
                 stroke={useLime ? `rgba(189,250,60,${alpha})` : `rgba(34,197,94,${alpha})`}
                 strokeWidth={strokeW}
