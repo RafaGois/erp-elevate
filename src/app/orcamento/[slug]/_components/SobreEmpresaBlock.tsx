@@ -4,12 +4,13 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { SobreEmpresaBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 
-const MOUSE_PULL_RADIUS = 200;
-const MOUSE_PULL_MAX = 6;
+const GLOW_RADIUS = 140;
+const GLOW_DELAY_MS = 90;
+const GLOW_FADE_MS = 320;
 
 const DEFAULT_FOTO =
   "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png?q=80&w=1200&auto=format&fit=crop";
@@ -58,34 +59,37 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
   const linha1 = partes[0] ?? titulo;
   const linha2 = partes[1] ?? "";
 
-  const [mouse, setMouse] = useState<{ x: number; y: number } | null>(null);
-  const onMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLElement>) => {
-      const rect = container.current?.getBoundingClientRect();
-      if (!rect) return;
-      const x = ((e.clientX - rect.left) / rect.width) * 1440;
-      const y = ((e.clientY - rect.top) / rect.height) * 900;
-      setMouse({ x, y });
-    },
-    []
-  );
-  const onMouseLeave = useCallback(() => setMouse(null), []);
-
   const cx = 1720;
   const cy = 1000;
-  const getArcPull = (arcIndex: number) => {
-    if (!mouse) return { dx: 0, dy: 0 };
-    const r = 360 + arcIndex * 42;
-    const midAngle = (180 + 90) / 2 * (Math.PI / 180);
-    const midX = cx - r * Math.cos(midAngle);
-    const midY = cy - r * Math.sin(midAngle);
-    const dist = Math.hypot(mouse.x - midX, mouse.y - midY);
-    if (dist > MOUSE_PULL_RADIUS) return { dx: 0, dy: 0 };
-    const strength = (1 - dist / MOUSE_PULL_RADIUS) * MOUSE_PULL_MAX;
-    const nx = (mouse.x - midX) / dist || 0;
-    const ny = (mouse.y - midY) / dist || 0;
-    return { dx: nx * strength, dy: ny * strength };
-  };
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [mouse, setMouse] = useState<{ x: number; y: number } | null>(null);
+  const [glowPos, setGlowPos] = useState<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const svg = svgRef.current;
+      const section = container.current;
+      if (!svg || !section) return;
+      const sectionRect = section.getBoundingClientRect();
+      const inSection =
+        e.clientX >= sectionRect.left &&
+        e.clientX <= sectionRect.right &&
+        e.clientY >= sectionRect.top &&
+        e.clientY <= sectionRect.bottom;
+      if (!inSection) {
+        setMouse(null);
+        return;
+      }
+      const svgRect = svg.getBoundingClientRect();
+      const x = ((e.clientX - svgRect.left) / svgRect.width) * 1440;
+      const y = ((e.clientY - svgRect.top) / svgRect.height) * 900;
+      const pos = { x, y };
+      setMouse(pos);
+      setGlowPos(pos);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
 
   return (
     <section
@@ -102,17 +106,40 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
         }}
       />
       <svg
+        ref={svgRef}
         className="absolute inset-0 z-0 w-full h-full pointer-events-none"
         viewBox="0 0 1440 900"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid slice"
       >
-        {/* Arcos: da direita para a esquerda */}
+        <defs>
+          <radialGradient
+            id="arcGlowGrad"
+            gradientUnits="userSpaceOnUse"
+            cx={glowPos?.x ?? -1000}
+            cy={glowPos?.y ?? -1000}
+            r={GLOW_RADIUS}
+            fx={glowPos?.x ?? -1000}
+            fy={glowPos?.y ?? -1000}
+          >
+            <stop offset="0%" stopColor="white" stopOpacity="1" />
+            <stop offset="60%" stopColor="white" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+          <mask id="arcGlowMask">
+            <rect width="100%" height="100%" fill="black" />
+            <circle
+              cx={glowPos?.x ?? -1000}
+              cy={glowPos?.y ?? -1000}
+              r={GLOW_RADIUS}
+              fill="url(#arcGlowGrad)"
+            />
+          </mask>
+        </defs>
+        {/* Arcos base: da direita para a esquerda */}
         <g strokeLinecap="round" fill="none">
           {[...Array(24)].map((_, i) => {
             const r = 360 + i * 42;
-            const cx = 1720;
-            const cy = 1000;
             const useLime = i % 2 === 0;
             const alpha = Math.max(0.06, 0.2 - i * 0.006);
             const strokeW = Math.max(0.75, 1.1 - i * 0.012);
@@ -121,6 +148,31 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
                 key={i}
                 d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx} ${cy - r}`}
                 stroke={useLime ? `rgba(189,250,60,${alpha})` : `rgba(34,197,94,${alpha})`}
+                strokeWidth={strokeW}
+              />
+            );
+          })}
+        </g>
+        {/* Arcos "acesos" — camada brilhante visível apenas perto do cursor, com delay ao apagar */}
+        <g
+          strokeLinecap="round"
+          fill="none"
+          mask="url(#arcGlowMask)"
+          style={{
+            opacity: mouse ? 1 : 0,
+            transition: `opacity ${GLOW_FADE_MS}ms ease-out ${GLOW_DELAY_MS}ms`,
+          }}
+        >
+          {[...Array(24)].map((_, i) => {
+            const r = 360 + i * 42;
+            const useLime = i % 2 === 0;
+            const alpha = Math.max(0.5, 0.7 - i * 0.01);
+            const strokeW = Math.max(1, 1.8 - i * 0.02);
+            return (
+              <path
+                key={i}
+                d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx} ${cy - r}`}
+                stroke={useLime ? `rgba(220,255,120,${alpha})` : `rgba(74,222,128,${alpha})`}
                 strokeWidth={strokeW}
               />
             );
