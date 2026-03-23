@@ -41,6 +41,7 @@ export default function TaskKanbanBoard({
   onUpdateTaskStatus,
   onCreateTask,
 }: TaskKanbanBoardProps) {
+  const mobileCardsLimit = 4;
   const statusStorageKey = "tasks-kanban-hidden-status-columns";
   const responsibleStorageKey = "tasks-kanban-hidden-responsibles";
   const unassignedResponsibleId = "__unassigned__";
@@ -51,9 +52,19 @@ export default function TaskKanbanBoard({
   const [searchTerm, setSearchTerm] = useState("");
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [dropTargetStatus, setDropTargetStatus] = useState<TaskStatus | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [expandedStatuses, setExpandedStatuses] = useState<Record<string, boolean>>({});
   const [statusOverrides, setStatusOverrides] = useState<Record<string, TaskStatus>>(
     {}
   );
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(statusStorageKey);
@@ -174,6 +185,10 @@ export default function TaskKanbanBoard({
         ? prev.filter((id) => id !== responsibleId)
         : [...prev, responsibleId]
     );
+  }
+
+  function toggleExpandedStatus(status: TaskStatus) {
+    setExpandedStatuses((prev) => ({ ...prev, [status]: !prev[status] }));
   }
 
   async function handleDropOnColumn(status: TaskStatus) {
@@ -301,7 +316,7 @@ export default function TaskKanbanBoard({
               event.preventDefault();
               void handleDropOnColumn(column.id as TaskStatus);
             }}
-            className={`bg-muted/30 rounded-lg border p-3 min-h-72 transition-colors ${
+            className={`bg-muted/30 flex min-h-72 flex-col rounded-lg border p-3 transition-colors ${
               dropTargetStatus === column.id
                 ? "ring-2 ring-primary/40 bg-primary/5"
                 : ""
@@ -314,13 +329,19 @@ export default function TaskKanbanBoard({
               </span>
             </header>
 
-            <div className={`grid grid-cols-1 gap-3 ${cardsGridClass}`}>
+            <div
+              data-status-scroll
+              className={`grid max-h-[55vh] flex-1 grid-cols-1 gap-3 overflow-y-auto pr-1 [touch-action:pan-y] md:max-h-[62vh] ${cardsGridClass}`}
+            >
               {column.tasks.length === 0 ? (
                 <div className="text-muted-foreground col-span-full rounded-md border border-dashed p-3 text-xs">
                   Sem tarefas neste status.
                 </div>
               ) : (
-                column.tasks.map((task) => {
+                (isMobile && !expandedStatuses[column.id]
+                  ? column.tasks.slice(0, mobileCardsLimit)
+                  : column.tasks
+                ).map((task) => {
                   const priority =
                     (task?.Priority as TaskPriorities) ?? TaskPriorities.BAIXA;
                   const priorityClass =
@@ -332,6 +353,13 @@ export default function TaskKanbanBoard({
                     <article
                       key={task.id}
                       draggable={!!onUpdateTaskStatus}
+                      onWheel={(event) => {
+                        const scroller = (
+                          event.currentTarget.closest("[data-status-scroll]") as HTMLElement | null
+                        );
+                        if (!scroller) return;
+                        scroller.scrollTop += event.deltaY;
+                      }}
                       onDragStart={(event) => {
                         setDraggedTaskId(task.id);
                         event.dataTransfer.effectAllowed = "move";
@@ -392,6 +420,19 @@ export default function TaskKanbanBoard({
                 })
               )}
             </div>
+            {isMobile && column.tasks.length > mobileCardsLimit ? (
+              <div className="mt-3">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-full text-xs"
+                  onClick={() => toggleExpandedStatus(column.id)}
+                >
+                  {expandedStatuses[column.id] ? "Ver menos" : "Ver mais"}
+                </Button>
+              </div>
+            ) : null}
           </section>
         ))}
       </div>
