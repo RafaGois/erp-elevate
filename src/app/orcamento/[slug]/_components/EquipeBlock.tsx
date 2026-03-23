@@ -3,14 +3,119 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Plus, Trash2 } from "lucide-react";
 import type { EquipeBlockData, EquipeItem } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 
-const cardStyle =
-  "rounded-xl border border-black/10 bg-white p-6 transition-colors hover:border-black/15 [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]";
+const GREEN_VARIANTS = [
+  { bar: "#bdfa3c", border: "#22c55e", shadow: "#166534" },
+  { bar: "#86efac", border: "#16a34a", shadow: "#15803d" },
+  { bar: "#4ade80", border: "#22c55e", shadow: "#166534" },
+  { bar: "#bdfa3c", border: "#16a34a", shadow: "#15803d" },
+  { bar: "#86efac", border: "#22c55e", shadow: "#166534" },
+  { bar: "#4ade80", border: "#16a34a", shadow: "#15803d" },
+];
+
+function toSysSlug(text: string, i: number): string {
+  const slug = (text ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]/g, "") || `MEMBER_${i + 1}`;
+  return `SYS://${slug}`;
+}
+
+function EquipeRetroCard({
+  membro,
+  index,
+  isAdmin,
+  onEdit,
+  onRemove,
+}: {
+  membro: EquipeItem;
+  index: number;
+  isAdmin: boolean;
+  onEdit: (p: Partial<EquipeItem>) => void;
+  onRemove: () => void;
+}) {
+  const v = GREEN_VARIANTS[index % GREEN_VARIANTS.length];
+  const sysLabel = toSysSlug(membro.nome ?? "", index);
+  const imgSrc = membro.foto || `https://picsum.photos/seed/equipe${index}/400/300`;
+
+  return (
+    <div
+      className="relative flex flex-col overflow-hidden rounded-sm border-2 bg-white text-left"
+      style={{
+        borderColor: v.border,
+        boxShadow: `6px 6px 0 ${v.shadow}`,
+      }}
+    >
+      <div
+        className="flex shrink-0 items-center justify-between px-2 py-1.5 text-black/90"
+        style={{ backgroundColor: v.bar }}
+      >
+        <span className="font-mono text-[10px] font-bold tracking-wide">
+          {sysLabel}
+        </span>
+        <div className="flex gap-0.5">
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-red-400" />
+        </div>
+      </div>
+      <div className="relative aspect-[4/3] min-h-[180px] w-full shrink-0 overflow-hidden border-b-2 border-neutral-300 bg-neutral-100">
+        <Image
+          src={imgSrc}
+          alt={membro.nome}
+          fill
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      </div>
+      <div className="flex flex-1 flex-col border-t border-neutral-200 bg-white p-4">
+        <h3 className="font-mono text-sm font-bold text-black">
+          <EditableField
+            value={membro.nome}
+            onChange={(v) => onEdit({ nome: v })}
+            isAdmin={isAdmin}
+            className="inline"
+          />
+        </h3>
+        <p className="mt-0.5 font-mono text-xs text-[#bdfa3c]">
+          <EditableField
+            value={membro.cargo ?? ""}
+            onChange={(v) => onEdit({ cargo: v })}
+            isAdmin={isAdmin}
+            className="inline"
+            placeholder="Cargo"
+          />
+        </p>
+        <p className="mt-3 line-clamp-3 font-mono text-[11px] text-neutral-600 leading-relaxed">
+          <EditableField
+            value={membro.bio ?? ""}
+            onChange={(v) => onEdit({ bio: v })}
+            isAdmin={isAdmin}
+            multiline
+            tag="span"
+            className="inline"
+            placeholder="Bio"
+          />
+        </p>
+        {isAdmin && (
+          <button
+            onClick={onRemove}
+            className="absolute top-12 right-3 z-10 p-1 text-black/30 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+          >
+            <Trash2 size={14} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   data: EquipeBlockData;
@@ -41,11 +146,10 @@ export default function EquipeBlock({ data, isAdmin = false, onChange }: Props) 
       if (!container.current || !cardsRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
       const cards = cardsRef.current.querySelectorAll("[data-equipe-card]");
-      gsap.set(cards, { opacity: 0, y: 24 });
+      gsap.set(cards, { scale: 0 });
       gsap.to(cards, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
+        scale: 1,
+        duration: 0.4,
         stagger: 0.1,
         ease: "power2.out",
         scrollTrigger: {
@@ -75,66 +179,28 @@ export default function EquipeBlock({ data, isAdmin = false, onChange }: Props) 
           </p>
         </header>
 
-        <div ref={cardsRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <AnimatePresence>
-            {membros.map((membro, i) => (
-              <motion.div
-                key={i}
-                layout
-                data-equipe-card
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={`group relative ${cardStyle}`}
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-xl border border-black/10 bg-[#bdfa3c]/20 font-serif text-2xl font-bold text-black/70 mb-4">
-                  {membro.nome.charAt(0)}
-                </div>
-                <h3 className="text-xl font-semibold text-black">
-                  <EditableField
-                    value={membro.nome}
-                    onChange={(v) => setMembro(i, { nome: v })}
-                    isAdmin={isAdmin}
-                    className="inline"
-                  />
-                </h3>
-                <p className="mt-1 font-mono text-sm text-[#bdfa3c]">
-                  <EditableField
-                    value={membro.cargo ?? ""}
-                    onChange={(v) => setMembro(i, { cargo: v })}
-                    isAdmin={isAdmin}
-                    className="inline"
-                    placeholder="Cargo"
-                  />
-                </p>
-                <p className="mt-3 text-sm text-black/60 leading-relaxed">
-                  <EditableField
-                    value={membro.bio ?? ""}
-                    onChange={(v) => setMembro(i, { bio: v })}
-                    isAdmin={isAdmin}
-                    multiline
-                    tag="span"
-                    className="inline"
-                    placeholder="Bio"
-                  />
-                </p>
-                {isAdmin && (
-                  <button
-                    onClick={() => removeMembro(i)}
-                    className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity text-black/30 hover:text-black/60"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
+        <div ref={cardsRef} className="grid grid-cols-1 gap-6 pt-2 md:grid-cols-2 lg:grid-cols-3">
+          {membros.map((membro, i) => (
+            <div
+              key={i}
+              data-equipe-card
+              className="group overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:ring-2 hover:ring-[#bdfa3c]/50"
+            >
+              <EquipeRetroCard
+                membro={membro}
+                index={i}
+                isAdmin={isAdmin}
+                onEdit={(p) => setMembro(i, p)}
+                onRemove={() => removeMembro(i)}
+              />
+            </div>
+          ))}
         </div>
 
         {isAdmin && (
           <button
             onClick={addMembro}
-            className="mt-6 flex items-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/[0.02] px-6 py-4 text-sm text-black/50 hover:border-black/30 hover:bg-black/[0.04] hover:text-black/70 transition-colors"
+            className="mt-6 flex items-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/2 px-6 py-4 text-sm text-black/50 hover:border-black/30 hover:bg-black/4 hover:text-black/70 transition-colors"
           >
             <Plus size={16} />
             Adicionar membro

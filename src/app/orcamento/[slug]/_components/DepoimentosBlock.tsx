@@ -4,11 +4,73 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
-import type { DepoimentosBlockData } from "@/lib/types/budget-content";
+import type { DepoimentosBlockData, DepoimentoItem } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 
-const cardStyle =
-  "rounded-xl border border-black/10 bg-gradient-to-br from-white to-zinc-50/50 p-6 md:p-8 [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]";
+const GREEN_VARIANTS = [
+  { bar: "#bdfa3c", border: "#22c55e", shadow: "#166534" },
+  { bar: "#86efac", border: "#16a34a", shadow: "#15803d" },
+  { bar: "#4ade80", border: "#22c55e", shadow: "#166534" },
+  { bar: "#bdfa3c", border: "#16a34a", shadow: "#15803d" },
+  { bar: "#86efac", border: "#22c55e", shadow: "#166534" },
+  { bar: "#4ade80", border: "#16a34a", shadow: "#15803d" },
+];
+
+function toSysSlug(text: string, i: number): string {
+  const slug = (text ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]/g, "") || `CLIENT_${i + 1}`;
+  return `SYS://${slug}`;
+}
+
+function DepoimentoRetroCard({ item, index }: { item: DepoimentoItem; index: number }) {
+  const v = GREEN_VARIANTS[index % GREEN_VARIANTS.length];
+  const sysLabel = toSysSlug(item.autor ?? "", index);
+
+  return (
+    <div
+      className="retro-window flex flex-col overflow-hidden rounded-sm border-2 bg-white text-left"
+      style={{
+        borderColor: v.border,
+        boxShadow: `6px 6px 0 ${v.shadow}`,
+      }}
+    >
+      <div
+        className="flex items-center justify-between px-2 py-1.5 text-black/90"
+        style={{ backgroundColor: v.bar }}
+      >
+        <span className="font-mono text-[10px] font-bold tracking-wide">
+          {sysLabel}
+        </span>
+        <div className="flex gap-0.5">
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-red-400" />
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col border-t-2 border-neutral-300 bg-white p-4 md:p-5">
+        <span className="text-3xl font-serif leading-none text-[#22c55e]/30 select-none">"</span>
+        <p className="mt-2 font-mono text-[13px] text-neutral-700 leading-relaxed md:text-sm">
+          {item.texto}
+        </p>
+        <div className="mt-5 flex items-center gap-3 border-t border-neutral-200 pt-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-neutral-300 bg-neutral-100 font-mono text-xs font-bold text-neutral-600">
+            {(item.autor ?? "?").charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <p className="font-mono text-xs font-semibold text-black">{item.autor}</p>
+            {item.cargo && (
+              <p className="font-mono text-[11px] text-neutral-500">{item.cargo}</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   data: DepoimentosBlockData;
@@ -29,12 +91,11 @@ export default function DepoimentosBlock({ data, isAdmin = false, onChange }: Pr
       if (!container.current || !cardsRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
       const cards = cardsRef.current.querySelectorAll("[data-depoimento-card]");
-      gsap.set(cards, { opacity: 0, y: 32 });
+      gsap.set(cards, { scale: 0 });
       gsap.to(cards, {
-        opacity: 1,
-        y: 0,
-        duration: 0.55,
-        stagger: 0.12,
+        scale: 1,
+        duration: 0.4,
+        stagger: 0.1,
         ease: "power2.out",
         scrollTrigger: {
           trigger: cardsRef.current,
@@ -67,22 +128,11 @@ export default function DepoimentosBlock({ data, isAdmin = false, onChange }: Pr
 
         <div ref={cardsRef} className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {itens.map((item, i) => (
-            <div key={i} data-depoimento-card className={cardStyle}>
-              <span className="text-5xl font-serif leading-none text-[#bdfa3c]/30 select-none">
-                "
-              </span>
-              <p className="mt-2 text-black/80 leading-relaxed">{item.texto}</p>
-              <div className="mt-6 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-black/5 flex items-center justify-center font-bold text-black/60 text-sm">
-                  {item.autor.charAt(0)}
-                </div>
-                <div>
-                  <p className="font-semibold text-black">{item.autor}</p>
-                  {item.cargo && (
-                    <p className="text-sm text-[#7D6B58]">{item.cargo}</p>
-                  )}
-                </div>
-              </div>
+            <div
+              key={i}
+              data-depoimento-card
+            >
+              <DepoimentoRetroCard item={item} index={i} />
             </div>
           ))}
         </div>

@@ -10,6 +10,70 @@ import EditableField from "./EditableField";
 const CARD_OFFSET = 28;
 const STACK_OVERLAP = 12;
 
+const WINDOW_VARIANTS = [
+  { bar: "#A855F7", border: "#A855F7", shadow: "#6B21A8" },
+  { bar: "#22D3EE", border: "#22D3EE", shadow: "#0891B2" },
+  { bar: "#A855F7", border: "#A855F7", shadow: "#6B21A8" },
+  { bar: "#22D3EE", border: "#22D3EE", shadow: "#0891B2" },
+  { bar: "#EF4444", border: "#EF4444", shadow: "#B91C1C" },
+  { bar: "#A855F7", border: "#A855F7", shadow: "#6B21A8" },
+];
+
+function toSysSlug(text: string, i: number): string {
+  const slug = (text ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]/g, "") || `SERVICE_${i + 1}`;
+  return `SYS://${slug}`;
+}
+
+function ServicoRetroCard({ item, index }: { item: ServicoItem; index: number }) {
+  const v = WINDOW_VARIANTS[index % WINDOW_VARIANTS.length];
+  const sysLabel = toSysSlug(item.nome ?? item.titulo ?? "", index);
+
+  return (
+    <div
+      className="retro-window flex flex-col overflow-hidden rounded-sm border-2 bg-white text-left"
+      style={{
+        borderColor: v.border,
+        boxShadow: `6px 6px 0 ${v.shadow}`,
+      }}
+    >
+      <div
+        className="flex items-center justify-between px-2 py-1 text-white"
+        style={{ backgroundColor: v.bar }}
+      >
+        <span className="font-mono text-[10px] font-bold tracking-wide">
+          {sysLabel}
+        </span>
+        <div className="flex gap-0.5">
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-red-400" />
+        </div>
+      </div>
+      <div className="border-t-2 border-neutral-300 bg-white p-2.5">
+        <p className="font-mono text-xs font-semibold text-neutral-800">
+          {"{ "}
+          {item.titulo ?? item.nome ?? "Item"}
+          {" }"}
+        </p>
+        <p className="mt-1 font-mono text-[11px] text-neutral-600">
+          &gt; {(item.descricao ?? "").slice(0, 80)}
+          {(item.descricao ?? "").length > 80 ? "..." : ""}
+        </p>
+        <div className="mt-1.5 flex items-center gap-1">
+          <span className="rounded border border-neutral-300 bg-neutral-100 px-1.5 py-0.5 font-mono text-[10px] text-neutral-600">
+            [X] INCLUSO
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface Props {
   data: ServicosBlockData;
   isAdmin?: boolean;
@@ -35,7 +99,7 @@ export default function ServicosBlock({ data, isAdmin = false, onChange }: Props
       gsap.registerPlugin(ScrollTrigger);
 
       const cards = cardsRef.current.querySelectorAll("[data-service-card]");
-      gsap.set(cards, { opacity: 0, y: 32 });
+      gsap.set(cards, { scale: 0 });
       const shown = new Set<number>();
 
       const vhPerItem = 50;
@@ -55,10 +119,10 @@ export default function ServicosBlock({ data, isAdmin = false, onChange }: Props
             const shouldShow = progress >= threshold;
             if (shouldShow && !shown.has(i)) {
               shown.add(i);
-              gsap.to(card, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" });
+              gsap.to(card, { scale: 1, duration: 0.4, ease: "power2.out", overwrite: true });
             } else if (!shouldShow && shown.has(i)) {
               shown.delete(i);
-              gsap.to(card, { opacity: 0, y: 32, duration: 0.3 });
+              gsap.to(card, { scale: 0, duration: 0.3, ease: "power2.in", overwrite: true });
             }
           });
         },
@@ -109,7 +173,7 @@ export default function ServicosBlock({ data, isAdmin = false, onChange }: Props
               <div
                 key={i}
                 data-service-card
-                className="absolute right-0 w-full max-w-md rounded-xl border border-black/10 bg-white p-5 shadow-md transition-shadow hover:shadow-lg md:p-6"
+                className="absolute right-0 w-full max-w-md"
                 style={{
                   top: i * CARD_OFFSET,
                   right: i * STACK_OVERLAP,
@@ -118,19 +182,7 @@ export default function ServicosBlock({ data, isAdmin = false, onChange }: Props
                   zIndex: i,
                 }}
               >
-                <div className="flex gap-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#bdfa3c]/30 text-sm font-bold text-black">
-                    {i + 1}
-                  </span>
-                  <div className="flex flex-col gap-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-black md:text-xl">
-                      {item.titulo ?? item.nome}
-                    </h3>
-                    <span className="text-xs font-medium uppercase tracking-wider text-[#bdfa3c]">
-                      Incluso
-                    </span>
-                  </div>
-                </div>
+                <ServicoRetroCard item={item} index={i} />
               </div>
             ))}
           </div>
