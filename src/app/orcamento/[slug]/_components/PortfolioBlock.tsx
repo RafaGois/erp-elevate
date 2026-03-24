@@ -104,7 +104,7 @@ export default function PortfolioBlock({ data, isAdmin = false, onChange }: Prop
         ease: "none",
         scrollTrigger: {
           trigger: section,
-          start: "top 12%",
+          start: "top top",
           end: () => `+=${getScrollAmount()}`,
           scrub: true,
           pin: true,
