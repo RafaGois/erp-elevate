@@ -1,58 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import api from "@/lib/api";
-import type Budget from "@/lib/models/Budget";
+import Budget from "@/lib/models/Budget";
 import BudgetViewClient from "./BudgetViewClient";
 
-interface Props {
+type Props = {
   slug: string;
-  id?: string;
+};
+
+async function fetchBudgetBySlug(slug: string): Promise<Budget | null> {
+  try {
+    const res = await api.get<Budget>(`/budgets/slug/${encodeURIComponent(slug)}`);
+    return res.data?.id ? res.data : null;
+  } catch {
+    return null;
+  }
 }
 
-export default function OrcamentoResolveClient({ slug, id }: Props) {
-  const [loading, setLoading] = useState(true);
-  const [budget, setBudget] = useState<Budget | null>(null);
+export default function OrcamentoPageClient({ slug }: Props) {
+  const { data, isPending } = useQuery({
+    queryKey: ["budget", "orcamento", slug],
+    queryFn: () => fetchBudgetBySlug(slug),
+    staleTime: 60_000,
+  });
 
-  useEffect(() => {
-    let mounted = true;
-
-    async function resolveBudget() {
-      try {
-        const bySlug = await api.get<Budget>(`/budgets/slug/${encodeURIComponent(slug)}`);
-        if (mounted && bySlug?.data?.id) {
-          setBudget(bySlug.data);
-          setLoading(false);
-          return;
-        }
-      } catch {
-        // tenta fallback abaixo
-      }
-
-      if (id) {
-        try {
-          const byId = await api.get<Budget>(`/budgets/${id}`);
-          if (mounted && byId?.data?.id) {
-            setBudget(byId.data);
-            setLoading(false);
-            return;
-          }
-        } catch {
-          // sem budget
-        }
-      }
-
-      if (mounted) setLoading(false);
-    }
-
-    resolveBudget();
-    return () => {
-      mounted = false;
-    };
-  }, [slug, id]);
-
-  if (loading) {
+  if (isPending) {
     return (
       <main className="min-h-[60vh] flex items-center justify-center">
         <p className="text-sm text-muted-foreground">Carregando proposta...</p>
@@ -60,7 +34,7 @@ export default function OrcamentoResolveClient({ slug, id }: Props) {
     );
   }
 
-  if (!budget) {
+  if (!data) {
     return (
       <main className="min-h-[60vh] flex items-center justify-center px-6">
         <div className="text-center space-y-3">
@@ -75,6 +49,8 @@ export default function OrcamentoResolveClient({ slug, id }: Props) {
       </main>
     );
   }
+
+  const budget = data;
 
   return (
     <main>
@@ -94,4 +70,3 @@ export default function OrcamentoResolveClient({ slug, id }: Props) {
     </main>
   );
 }
-

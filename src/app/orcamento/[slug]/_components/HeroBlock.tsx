@@ -9,6 +9,8 @@ import type { BudgetBlock, HeroBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 import ProposalIntro from "./ProposalIntro";
 
+gsap.registerPlugin(ScrollTrigger);
+
 interface Props {
   data: HeroBlockData;
   blocks: BudgetBlock[];
@@ -23,18 +25,33 @@ interface Props {
  */
 const TRACK_VH = 80;
 
-const MOUSE_PARALLAX_RANGE = 8;
-const SCROLL_PARALLAX_MAX = 2.2;
-const CURSOR_LERP_FACTOR = 0.035;
+const MOUSE_PARALLAX_RANGE = 7;
+const MOUSE_SMOOTH_TIME = 0.12;
+const SCROLL_PARALLAX_Y_PX = 42;
+const SCROLL_PARALLAX_X_PX = 30;
+
+const EMOJI_DRIFT = {
+  amp: 0.26,
+  speed: 0.21,
+} as const;
 
 const EMOJI_CONFIG = [
-  { emoji: "🟢", top: "-10%", left: "-8%", delay: 0, depth: 0.7, mouseX: 0.55, mouseY: 0.4, scrollY: 0.5, driftAmp: 0.8, driftSpeed: 0.45, phase: 0.2, opacity: 0.42 },
-  { emoji: "✅", top: "5%", right: "-12%", delay: 0.3, depth: 0.9, mouseX: -0.35, mouseY: 0.6, scrollY: 0.8, driftAmp: 1, driftSpeed: 0.32, phase: 1.1, opacity: 0.44 },
-  { emoji: "🌿", top: "-5%", right: "-5%", delay: 0.5, depth: 0.8, mouseX: 0.5, mouseY: -0.45, scrollY: 0.6, driftAmp: 0.7, driftSpeed: 0.5, phase: 2.4, opacity: 0.4 },
-  { emoji: "💚", bottom: "10%", left: "-15%", delay: 0.2, depth: 0.85, mouseX: -0.45, mouseY: 0.45, scrollY: 0.65, driftAmp: 0.95, driftSpeed: 0.38, phase: 3.2, opacity: 0.38 },
-  { emoji: "🟢", bottom: "-8%", right: "-10%", delay: 0.4, depth: 0.75, mouseX: 0.4, mouseY: -0.35, scrollY: 0.55, driftAmp: 0.75, driftSpeed: 0.55, phase: 4.4, opacity: 0.36 },
-  { emoji: "🌱", bottom: "5%", right: "-18%", delay: 0.6, depth: 0.95, mouseX: -0.55, mouseY: 0.35, scrollY: 0.9, driftAmp: 1.1, driftSpeed: 0.3, phase: 5.1, opacity: 0.42 },
+  { emoji: "🟢", top: "-10%", left: "-8%", delay: 0, depth: 0.7, mouseX: 0.55, mouseY: 0.4, scrollX: -0.55, scrollY: 0.52, driftAmp: 1, driftSpeed: 1, phase: 0.2, opacity: 0.42 },
+  { emoji: "✅", top: "5%", right: "-12%", delay: 0.3, depth: 0.9, mouseX: -0.35, mouseY: 0.6, scrollX: 0.48, scrollY: 0.85, driftAmp: 0.95, driftSpeed: 1.05, phase: 1.1, opacity: 0.44 },
+  { emoji: "🌿", top: "-5%", right: "-5%", delay: 0.5, depth: 0.8, mouseX: 0.5, mouseY: -0.45, scrollX: 0.62, scrollY: 0.58, driftAmp: 1.05, driftSpeed: 0.92, phase: 2.4, opacity: 0.4 },
+  { emoji: "💚", bottom: "10%", left: "-15%", delay: 0.2, depth: 0.85, mouseX: -0.45, mouseY: 0.45, scrollX: -0.5, scrollY: 0.68, driftAmp: 0.92, driftSpeed: 1.08, phase: 3.2, opacity: 0.38 },
+  { emoji: "🟢", bottom: "-8%", right: "-10%", delay: 0.4, depth: 0.75, mouseX: 0.4, mouseY: -0.35, scrollX: 0.52, scrollY: 0.5, driftAmp: 1.02, driftSpeed: 0.98, phase: 4.4, opacity: 0.36 },
+  { emoji: "🌱", bottom: "5%", right: "-18%", delay: 0.6, depth: 0.95, mouseX: -0.55, mouseY: 0.35, scrollX: -0.58, scrollY: 0.92, driftAmp: 0.98, driftSpeed: 1.02, phase: 5.1, opacity: 0.42 },
 ] as const;
+
+function emojiShellStyle(cfg: (typeof EMOJI_CONFIG)[number]): CSSProperties {
+  const style: CSSProperties = { opacity: cfg.opacity };
+  if ("top" in cfg) style.top = cfg.top;
+  if ("left" in cfg) style.left = cfg.left;
+  if ("right" in cfg) style.right = cfg.right;
+  if ("bottom" in cfg) style.bottom = cfg.bottom;
+  return style;
+}
 
 export default function HeroBlock({
   data,
@@ -44,12 +61,12 @@ export default function HeroBlock({
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const emojisRef = useRef<HTMLDivElement>(null);
   const [introDone, setIntroDone] = useState(false);
   const [stagePassthrough, setStagePassthrough] = useState(false);
 
   const mouseTargetRef = useRef({ x: 0, y: 0 });
-  const mouseCurrentRef = useRef({ x: 0, y: 0 });
+  const mouseSmoothRef = useRef({ x: 0, y: 0 });
+  const scrollProgressRef = useRef(0);
 
   function set<K extends keyof HeroBlockData>(key: K, value: HeroBlockData[K]) {
     onChange?.({ ...data, [key]: value });
@@ -57,77 +74,102 @@ export default function HeroBlock({
 
   useGSAP(
     () => {
-      if (!containerRef.current || !stageRef.current || !emojisRef.current) return;
-      gsap.registerPlugin(ScrollTrigger);
+      const track = containerRef.current;
+      const stage = stageRef.current;
+      if (!track || !stage) return;
 
-      const emojiEls = emojisRef.current.querySelectorAll("[data-emoji-item]");
-      let scrollProgress = 0;
+      const emojiEls = gsap.utils.toArray<HTMLElement>("[data-emoji-item]", stage);
+      if (emojiEls.length === 0) return;
 
-      const updateParallax = () => {
-        mouseCurrentRef.current.x +=
-          (mouseTargetRef.current.x - mouseCurrentRef.current.x) * CURSOR_LERP_FACTOR;
-        mouseCurrentRef.current.y +=
-          (mouseTargetRef.current.y - mouseCurrentRef.current.y) * CURSOR_LERP_FACTOR;
+      let rafId = 0;
+      let lastTs = performance.now();
 
-        const mx = mouseCurrentRef.current.x;
-        const my = mouseCurrentRef.current.y;
+      const applyParallax = () => {
+        const mx = mouseSmoothRef.current.x;
+        const my = mouseSmoothRef.current.y;
+        const sp = scrollProgressRef.current;
         const t = performance.now() / 1000;
 
-        emojiEls.forEach((el, i) => {
+        for (let i = 0; i < emojiEls.length; i++) {
+          const el = emojiEls[i];
           const cfg = EMOJI_CONFIG[i];
-          if (!cfg) return;
+          if (!cfg) continue;
+
           const d = cfg.depth;
-          const driftX = Math.sin(t * cfg.driftSpeed + cfg.phase) * cfg.driftAmp;
-          const driftY = Math.cos(t * cfg.driftSpeed * 0.9 + cfg.phase) * cfg.driftAmp * 0.7;
-          const x = mx * MOUSE_PARALLAX_RANGE * d * cfg.mouseX + driftX;
-          const y =
-            my * MOUSE_PARALLAX_RANGE * d * cfg.mouseY -
-            scrollProgress * SCROLL_PARALLAX_MAX * d * cfg.scrollY +
-            driftY;
-          gsap.set(el, { x, y });
-        });
+          const driftX =
+            Math.sin(t * EMOJI_DRIFT.speed * cfg.driftSpeed + cfg.phase) *
+            EMOJI_DRIFT.amp *
+            cfg.driftAmp *
+            d;
+          const driftY =
+            Math.cos(t * EMOJI_DRIFT.speed * 0.82 * cfg.driftSpeed + cfg.phase) *
+            EMOJI_DRIFT.amp *
+            cfg.driftAmp *
+            d *
+            0.62;
+
+          const scrollX = sp * SCROLL_PARALLAX_X_PX * d * cfg.scrollX;
+          const scrollY = sp * SCROLL_PARALLAX_Y_PX * d * cfg.scrollY;
+          const x = mx * MOUSE_PARALLAX_RANGE * d * cfg.mouseX + driftX + scrollX;
+          const y = my * MOUSE_PARALLAX_RANGE * d * cfg.mouseY - scrollY + driftY;
+
+          gsap.set(el, { x, y, force3D: true });
+        }
+      };
+
+      const loop = (now: number) => {
+        const dt = Math.min((now - lastTs) / 1000, 0.05);
+        lastTs = now;
+        const k = 1 - Math.exp(-dt / MOUSE_SMOOTH_TIME);
+        mouseSmoothRef.current.x +=
+          (mouseTargetRef.current.x - mouseSmoothRef.current.x) * k;
+        mouseSmoothRef.current.y +=
+          (mouseTargetRef.current.y - mouseSmoothRef.current.y) * k;
+        applyParallax();
+        rafId = requestAnimationFrame(loop);
       };
 
       const progressTrigger = ScrollTrigger.create({
-        trigger: containerRef.current,
+        trigger: track,
         start: "top top",
         end: "bottom top",
-        onUpdate: () => {
-          scrollProgress = progressTrigger.progress;
-          setStagePassthrough(progressTrigger.progress >= 0.68);
-          updateParallax();
+        onUpdate: (self) => {
+          scrollProgressRef.current = self.progress;
+          setStagePassthrough(self.progress >= 0.68);
         },
       });
 
-      const stageTween = gsap.to(stageRef.current, {
+      const stageTween = gsap.to(stage, {
         opacity: 0,
         scrollTrigger: {
-          trigger: containerRef.current,
+          trigger: track,
           start: "35% top",
           end: "70% top",
           scrub: true,
         },
       });
 
-      const onMove = (e: MouseEvent) => {
+      const onMove = (e: PointerEvent) => {
         mouseTargetRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouseTargetRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
       };
 
-      ScrollTrigger.addEventListener("refresh", updateParallax);
-      window.addEventListener("mousemove", onMove);
-      gsap.ticker.add(updateParallax);
-      updateParallax();
+      window.addEventListener("pointermove", onMove, { passive: true });
+      rafId = requestAnimationFrame(loop);
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        applyParallax();
+      });
 
       return () => {
-        ScrollTrigger.removeEventListener("refresh", updateParallax);
-        window.removeEventListener("mousemove", onMove);
-        gsap.ticker.remove(updateParallax);
+        cancelAnimationFrame(rafId);
+        window.removeEventListener("pointermove", onMove);
         progressTrigger.kill();
         stageTween.scrollTrigger?.kill();
+        stageTween.kill();
       };
     },
-    { scope: containerRef }
+    { scope: stageRef, dependencies: [introDone] }
   );
 
   return (
@@ -210,19 +252,24 @@ export default function HeroBlock({
         </div>
 
         <div className="absolute left-1/2 top-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-[clamp(1.5rem,4vw,6rem)]">
-          <div ref={emojisRef} className="relative flex flex-col items-center text-center">
-            {EMOJI_CONFIG.map(({ emoji, delay, depth, opacity, ...pos }, i) => (
+          <div className="relative flex flex-col items-center text-center">
+            {EMOJI_CONFIG.map((cfg, i) => (
               <span
                 key={i}
-                data-emoji-item
                 className="absolute text-xl md:text-2xl select-none pointer-events-none inline-block"
-                style={{ ...(pos as CSSProperties), opacity }}
+                style={emojiShellStyle(cfg)}
               >
+                {/* GSAP anima só este nó — o shell acima mantém top/left e não recebe transform do React */}
                 <span
-                  className="hero-emoji-float block"
-                  style={{ animationDelay: `${delay}s`, animationDuration: `${10 + i * 1.2}s` }}
+                  data-emoji-item
+                  className="inline-block will-change-transform"
                 >
-                  {emoji}
+                  <span
+                    className="hero-emoji-float block"
+                    style={{ animationDelay: `${cfg.delay}s`, animationDuration: `${10 + i * 1.2}s` }}
+                  >
+                    {cfg.emoji}
+                  </span>
                 </span>
               </span>
             ))}

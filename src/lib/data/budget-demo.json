@@ -40,13 +40,89 @@
       {
         "type": "projeto",
         "data": {
-          "titulo": "O projeto",
-          "descricao": "O site institucional da Casa França será a principal vitrine digital da marca, comunicando seus valores, história e produtos de forma envolvente. O projeto contempla design exclusivo, experiência de navegação fluida e otimização para mecanismos de busca — garantindo que os clientes certos encontrem você online.",
-          "objetivos": [
-            "Fortalecer a presença e credibilidade digital da marca",
-            "Apresentar produtos e serviços de forma clara e atraente",
-            "Gerar novos contatos e oportunidades de negócio",
-            "Garantir performance e carregamento rápido em todos os dispositivos"
+          "titulo": "Por que um site institucional",
+          "descricao": "O site é o ponto em que marca, oferta e confiança se encontram — antes mesmo do primeiro contato humano.",
+          "introducao": "Hoje a maioria das decisões de compra começa online. Um site institucional bem estruturado não é apenas “presença na internet”: é a base para ser encontrado, compreendido e escolhido. Abaixo detalhamos por que esse investimento é estratégico para a Casa França e como cada entrega desta proposta reforça credibilidade, clareza e resultados.",
+          "estatisticas": [
+            { "valor": "24/7", "legenda": "Sua marca disponível a qualquer hora" },
+            { "valor": "1º", "legenda": "Contato muitas vezes acontece no site" },
+            { "valor": "SEO", "legenda": "Ser encontrado no momento certo" },
+            { "valor": "100%", "legenda": "Experiência alinhada à identidade" }
+          ],
+          "capitulos": [
+            {
+              "titulo": "Credibilidade antes da conversa",
+              "corpo": "Clientes e parceiros pesquisam a empresa antes de ligar ou visitar. Um site profissional transmite solidez, organização e cuidado com a imagem — sinais que reduzem o risco percebido e aceleram a confiança.",
+              "pontos": [
+                "Primeira impressão alinhada ao posicionamento da Casa França",
+                "Conteúdo claro sobre história, valores e diferenciais",
+                "Canais de contato e informações institucionais sempre atualizadas"
+              ]
+            },
+            {
+              "titulo": "Clareza na oferta",
+              "corpo": "Produtos e serviços bem apresentados geram menos dúvidas e mais pedidos qualificados. Estruturamos navegação, hierarquia visual e textos para que o visitante entenda rapidamente o que vocês fazem e para quem.",
+              "pontos": [
+                "Páginas pensadas para escaneabilidade e conversão",
+                "Suporte a campanhas e materiais de divulgação",
+                "Base para futuras expansões (blog, catálogo, área logada)"
+              ]
+            },
+            {
+              "titulo": "Performance e descoberta",
+              "corpo": "Velocidade e boas práticas de SEO técnico ajudam o Google a indexar bem o site e mantêm a experiência agradável em celular — onde a maior parte do tráfego acontece.",
+              "pontos": [
+                "Carregamento rápido e layout responsivo",
+                "Metadados, sitemap e estrutura amigável a buscadores",
+                "Integração com analytics para medir o que importa"
+              ]
+            },
+            {
+              "titulo": "Um ativo que acompanha o negócio",
+              "corpo": "O projeto foi pensado para evoluir: arquitetura moderna facilita ajustes de conteúdo, novas seções e integrações sem recomeçar do zero a cada mudança de estratégia.",
+              "pontos": [
+                "Stack atual (Next.js) com foco em manutenção e escala",
+                "Documentação e handoff para o time interno",
+                "Suporte pós-lançamento para estabilizar o go-live"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "portfolio",
+        "data": {
+          "titulo": "Sites que já entregamos",
+          "subtitulo": "Navegue por alguns dos projetos que desenvolvemos — cada um pensado sob medida para o negócio do cliente.",
+          "itens": [
+            {
+              "titulo": "Codinome Barbearia",
+              "descricao": "Site institucional com foco em branding, serviços e captação de contatos.",
+              "url": "https://codinomebarbearia.com.br/",
+              "imagem": "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png?q=80&w=800&auto=format",
+              "tags": ["Institucional", "Branding", "Conversao"]
+            },
+            {
+              "titulo": "Sistemas Elevate",
+              "descricao": "Website institucional para software industrial com narrativa técnica e seções de serviços.",
+              "url": "https://www.sistemaselevate.com/",
+              "imagem": "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png?q=80&w=800&auto=format",
+              "tags": ["Software", "Industria", "Institucional"]
+            },
+            {
+              "titulo": "Pollis Pollen Intelligence",
+              "descricao": "Plataforma institucional com apresentação de tecnologia, processo e diferenciais de IA.",
+              "url": "https://pollenintelligence.com/",
+              "imagem": "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png?q=80&w=800&auto=format",
+              "tags": ["IA", "Agtech", "Tecnologia"]
+            },
+            {
+              "titulo": "CTNine",
+              "descricao": "Site institucional com foco em serviços, metodologia e captação para matrículas.",
+              "url": "https://ctnine.com.br/",
+              "imagem": "https://res.cloudinary.com/dn454izoh/image/upload/v1755006181/us_agf6k4.png?q=80&w=800&auto=format",
+              "tags": ["Esporte", "Institucional", "Captacao"]
+            }
           ]
         }
       },

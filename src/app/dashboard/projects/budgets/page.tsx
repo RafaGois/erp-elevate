@@ -139,7 +139,7 @@ export default function BudgetsPage() {
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
-            viewUrl={item.slug ? `/orcamento/${item.slug}?id=${item.id}` : undefined}
+            viewUrl={item.slug ? `/orcamento/${item.slug}` : undefined}
           />
         );
       },

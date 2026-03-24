@@ -42,13 +42,81 @@ function softwareTemplate(budget: Budget): BudgetContent {
       {
         type: "projeto",
         data: {
-          titulo: "Sobre o projeto",
+          titulo: "Por que este projeto importa",
           descricao:
-            "Este orçamento contempla o desenvolvimento da solução com foco em usabilidade, segurança e evolução contínua.",
-          objetivos: [
-            "Resolver dores operacionais",
-            "Melhorar produtividade do time",
-            "Aumentar previsibilidade de processos",
+            "Alinhamos tecnologia aos objetivos do negócio para que cada investimento em produto digital gere retorno mensurável.",
+          introducao:
+            "Uma solução bem desenhada reduz atrito operacional, fortalece a confiança dos usuários e prepara o terreno para escalar sem retrabalho. Abaixo resumimos o valor estratégico que este trabalho entrega — do primeiro acesso ao crescimento contínuo.",
+          estatisticas: [
+            { valor: "360°", legenda: "Visão completa do problema e da solução" },
+            { valor: "ROI", legenda: "Decisões guiadas por métricas e uso real" },
+            { valor: "UX", legenda: "Experiência pensada para conversão e retenção" },
+            { valor: "Dev", legenda: "Base técnica sustentável e evolutiva" },
+          ],
+          capitulos: [
+            {
+              titulo: "Clareza para quem decide",
+              corpo:
+                "Propostas comerciais fortes não começam pelo código: começam por uma narrativa que conecta dor, oportunidade e entrega. Este projeto estrutura essa narrativa em interfaces e fluxos que o time pode apresentar com segurança a stakeholders e clientes.",
+              pontos: [
+                "Menos idas e vindas por escopo mal definido",
+                "Demonstração visual do valor antes do investimento total",
+                "Alinhamento entre negócio, produto e tecnologia",
+              ],
+            },
+            {
+              titulo: "Operação e crescimento",
+              corpo:
+                "Soluções enxutas e bem arquitetadas custam menos para manter e evoluir. Priorizamos padrões que permitem novas funcionalidades sem reescrever o que já funciona — essencial para roadmap vivo.",
+              pontos: [
+                "Redução de débito técnico em decisões conscientes",
+                "Entregas incrementais com validação contínua",
+                "Segurança e boas práticas desde o primeiro sprint",
+              ],
+            },
+            {
+              titulo: "Confiança e profissionalismo",
+              corpo:
+                "Em mercados competitivos, a percepção de seriedade e qualidade influencia conversão e parcerias. Um produto polido transmite maturidade e reduz o risco percebido na compra.",
+              pontos: [
+                "Identidade visual e interação coerentes com a marca",
+                "Performance e acessibilidade como padrão, não extra",
+                "Documentação e handoff que facilitam o time interno",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "portfolio",
+        data: {
+          titulo: "Projetos entregues",
+          subtitulo: "Conheça alguns dos produtos digitais que já desenvolvemos.",
+          itens: [
+            {
+              titulo: "Codinome Barbearia",
+              descricao: "Site institucional com foco em branding, serviços e captação de contatos.",
+              url: "https://codinomebarbearia.com.br/",
+              tags: ["Institucional", "Branding", "Conversao"],
+            },
+            {
+              titulo: "Sistemas Elevate",
+              descricao: "Website institucional para software industrial com narrativa técnica e seções de serviços.",
+              url: "https://www.sistemaselevate.com/",
+              tags: ["Software", "Industria", "Institucional"],
+            },
+            {
+              titulo: "Pollis Pollen Intelligence",
+              descricao: "Plataforma institucional com apresentação de tecnologia, processo e diferenciais de IA.",
+              url: "https://pollenintelligence.com/",
+              tags: ["IA", "Agtech", "Tecnologia"],
+            },
+            {
+              titulo: "CTNine",
+              descricao: "Site institucional com foco em serviços, metodologia e captação para matrículas.",
+              url: "https://ctnine.com.br/",
+              tags: ["Esporte", "Institucional", "Captacao"],
+            },
           ],
         },
       },
@@ -80,10 +148,48 @@ function softwareTemplate(budget: Budget): BudgetContent {
           titulo: "Investimento",
           pacotes: [
             {
-              nome: "Plano Proposto",
-              valor: budget.value || 0,
-              inclui: ["Desenvolvimento", "Testes", "Entrega assistida"],
+              nome: "Landing Page",
+              descricao: "Para presença digital objetiva e conversão rápida.",
+              valor: 3000,
+              parcelas: "ou 3x de R$ 1.000,00",
+              inclui: [
+                "Design de 1 página",
+                "Desenvolvimento responsivo",
+                "Seção de serviços e contato",
+                "Integração com WhatsApp",
+                "SEO básico",
+              ],
+              destaque: false,
+            },
+            {
+              nome: "Site Institucional",
+              descricao: "Estrutura completa para apresentar empresa, serviços e diferenciais.",
+              valor: 4000,
+              parcelas: "ou 4x de R$ 1.000,00",
+              inclui: [
+                "Design de até 5 páginas",
+                "Desenvolvimento em Next.js",
+                "Responsividade total",
+                "SEO técnico inicial",
+                "Formulário de contato",
+                "30 dias de suporte",
+              ],
               destaque: true,
+            },
+            {
+              nome: "Site Institucional Completo",
+              descricao: "Versão robusta com mais páginas, performance e estratégia digital.",
+              valor: 6000,
+              parcelas: "ou 6x de R$ 1.000,00",
+              inclui: [
+                "Design de até 10 páginas",
+                "Arquitetura e conteúdo estratégico",
+                "SEO técnico completo",
+                "Integração com Analytics",
+                "Blog/CMS básico",
+                "60 dias de suporte",
+              ],
+              destaque: false,
             },
           ],
         },
@@ -119,13 +225,72 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
       {
         type: "projeto",
         data: {
-          titulo: "Sobre a produção",
+          titulo: "Impacto da produção na sua marca",
           descricao:
-            "Planejamento e execução audiovisual com direção criativa, captação e pós-produção.",
-          objetivos: [
-            "Fortalecer posicionamento da marca",
-            "Gerar conteúdo de alto impacto",
-            "Melhorar comunicação com o público",
+            "Audiovisual é hoje a principal forma de humanizar a marca, explicar ofertas complexas e gerar conexão emocional em poucos segundos.",
+          introducao:
+            "Um roteiro sólido e uma execução cuidadosa transformam mensagens genéricas em histórias que as pessoas lembram e compartilham. Esta proposta organiza cada etapa — da ideia à entrega final — para maximizar alcance, qualidade percebida e consistência com o posicionamento da empresa.",
+          estatisticas: [
+            { valor: "Vídeo", legenda: "Formato preferido em redes e sites" },
+            { valor: "Story", legenda: "Narrativa clara do problema à solução" },
+            { valor: "4K", legenda: "Captação com padrão broadcast quando aplicável" },
+            { valor: "Prazo", legenda: "Cronograma transparente por fase" },
+          ],
+          capitulos: [
+            {
+              titulo: "Presença que converte",
+              corpo:
+                "Conteúdo em vídeo aumenta o tempo de permanência e a compreensão da oferta. Direcionamos estética, ritmo e chamadas à ação para que cada peça cumpra um papel na jornada do cliente — awareness, consideração ou fechamento.",
+              pontos: [
+                "Roteiro alinhado ao tom de voz da marca",
+                "Versões adaptadas para redes e site",
+                "Indicadores sugeridos para medir desempenho",
+              ],
+            },
+            {
+              titulo: "Credibilidade e diferenciação",
+              corpo:
+                "Em mercados saturados, produções bem acabadas separam quem apenas anuncia de quem é lembrado. Iluminação, som e edição profissionais elevam a percepção de valor do produto ou serviço.",
+              pontos: [
+                "Direção de arte coerente com guidelines",
+                "Tratamento de cor e áudio em padrão profissional",
+                "Depoimentos e bastidores que geram confiança",
+              ],
+            },
+            {
+              titulo: "Processo previsível",
+              corpo:
+                "Definimos entregas por fase (pré, captação, pós) com aprovações explícitas. Isso reduz retrabalho, evita surpresas de escopo e mantém o projeto dentro do cronograma combinado.",
+              pontos: [
+                "Checkpoints de aprovação em cada etapa",
+                "Arquivos finais organizados para uso omnichannel",
+                "Suporte claro para ajustes dentro do escopo",
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: "portfolio",
+        data: {
+          titulo: "Produções anteriores",
+          subtitulo: "Alguns projetos audiovisuais que já realizamos.",
+          itens: [
+            {
+              titulo: "Institucional Elevate",
+              descricao: "Vídeo manifesto de 90s com captação em estúdio e locação externa.",
+              tags: ["Institucional", "4K", "Motion"],
+            },
+            {
+              titulo: "Campanha Verão",
+              descricao: "Série de 6 vídeos curtos para redes sociais com ritmo dinâmico.",
+              tags: ["Social Media", "Reels", "Edição"],
+            },
+            {
+              titulo: "Depoimentos Clientes",
+              descricao: "Captação de depoimentos reais com direção de luz e roteiro guiado.",
+              tags: ["Depoimento", "Storytelling"],
+            },
           ],
         },
       },

@@ -32,12 +32,31 @@ export interface SobreEmpresaBlockData {
 }
 
 // ─── Sobre o projeto ─────────────────────────────────────────────────────────
+export interface ProjetoEstatistica {
+  valor: string;
+  legenda: string;
+}
+
+/** Capítulo editorial (benefícios, importância, argumentação comercial) */
+export interface ProjetoCapitulo {
+  titulo: string;
+  corpo: string;
+  pontos?: string[];
+}
+
 export interface ProjetoBlockData {
   titulo?: string;
   descricao: string;
   imagem?: string;
+  /** Parágrafo de abertura em destaque (abaixo do subtítulo) */
+  introducao?: string;
+  /** Faixa de números / destaques rápidos */
+  estatisticas?: ProjetoEstatistica[];
+  /** Seções com título, texto corrido e listas */
+  capitulos?: ProjetoCapitulo[];
+  /** Legado: mapeado para capítulos quando `capitulos` está vazio */
   objetivos?: string[];
-  /** Challenges / pain-points identified */
+  /** Legado: contexto ou dor alinhada a cada objetivo */
   desafios?: string[];
 }
 
@@ -112,6 +131,24 @@ export interface GaleriaBlockData {
   imagens: { url: string; legenda?: string }[];
 }
 
+// ─── Portfólio — cases / sites entregues ─────────────────────────────────────
+export interface PortfolioItem {
+  titulo: string;
+  descricao?: string;
+  /** URL pública do projeto (abre em nova aba) */
+  url?: string;
+  /** Imagem de capa / screenshot */
+  imagem?: string;
+  /** Tags curtas: tecnologia, tipo de projeto, etc. */
+  tags?: string[];
+}
+
+export interface PortfolioBlockData {
+  titulo?: string;
+  subtitulo?: string;
+  itens: PortfolioItem[];
+}
+
 // ─── Equipe ──────────────────────────────────────────────────────────────────
 export interface EquipeItem {
   nome: string;
@@ -151,6 +188,7 @@ export type BudgetBlock =
   | { type: "preco"; data: PrecoBlockData }
   | { type: "depoimentos"; data: DepoimentosBlockData }
   | { type: "galeria"; data: GaleriaBlockData }
+  | { type: "portfolio"; data: PortfolioBlockData }
   | { type: "equipe"; data: EquipeBlockData }
   | { type: "cta"; data: CtaBlockData }
   | { type: "texto"; data: TextoBlockData };

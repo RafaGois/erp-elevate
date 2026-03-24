@@ -5,14 +5,256 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Crown, Plus, Trash2 } from "lucide-react";
+import { Crown, Plus, Trash2 } from "lucide-react";
 import type { PacoteItem, PrecoBlockData } from "@/lib/types/budget-content";
+import { cn } from "@/lib/utils";
 import EditableField from "./EditableField";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Props {
   data: PrecoBlockData;
   isAdmin?: boolean;
   onChange?: (d: PrecoBlockData) => void;
+}
+
+/** Paleta alinhada à proposta + variáveis “CRT” para cards não-destaque */
+const PRECO_WINDOW_VARIANTS = [
+  { bar: "#15803d", border: "#22c55e", shadow: "#14532d" },
+  { bar: "#27272a", border: "#404040", shadow: "#0a0a0a" },
+  { bar: "#0f766e", border: "#14b8a6", shadow: "#115e59" },
+] as const;
+
+const DESTAQUE_VARIANT = {
+  bar: "#bdfa3c",
+  border: "#84cc16",
+  shadow: "#3f6212",
+} as const;
+
+/** Botões 8-bit: classes em orcamento-theme.css (`.preco-pixel-btn`, variantes de cor/tamanho) */
+
+function pkgWindowSlug(nome: string, i: number): string {
+  const slug = (nome ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_")
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]/g, "") || `PLAN_${i + 1}`;
+  return `PKG://${slug}`;
+}
+
+interface PrecoRetroCardProps {
+  pacote: PacoteItem;
+  pi: number;
+  destaque: boolean;
+  isAdmin: boolean;
+  setPacote: (i: number, partial: Partial<PacoteItem>) => void;
+  setDestaque: (i: number) => void;
+  removePacote: (i: number) => void;
+  setInclui: (pi: number, ii: number, v: string) => void;
+  addInclui: (pi: number) => void;
+  removeInclui: (pi: number, ii: number) => void;
+}
+
+function PrecoRetroCard({
+  pacote,
+  pi,
+  destaque,
+  isAdmin,
+  setPacote,
+  setDestaque,
+  removePacote,
+  setInclui,
+  addInclui,
+  removeInclui,
+}: PrecoRetroCardProps) {
+  const v = destaque ? DESTAQUE_VARIANT : PRECO_WINDOW_VARIANTS[pi % PRECO_WINDOW_VARIANTS.length];
+  const barFg = destaque ? "text-black" : "text-white";
+
+  const barStyle = destaque
+    ? {
+        backgroundColor: v.bar,
+        backgroundImage:
+          "repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0,0,0,0.06) 5px, rgba(0,0,0,0.06) 6px)",
+      }
+    : { backgroundColor: v.bar };
+
+  const window = (
+    <div
+      className={cn(
+        "retro-window flex min-h-0 flex-1 flex-col overflow-hidden rounded-sm border-2 bg-white text-left",
+        destaque && "border-black"
+      )}
+      style={
+        destaque
+          ? { borderColor: "#171717", boxShadow: "7px 7px 0 #0f172a" }
+          : { borderColor: v.border, boxShadow: `6px 6px 0 ${v.shadow}` }
+      }
+    >
+      <div
+        className={`flex items-center justify-between gap-1 px-2 py-1 ${barFg}`}
+        style={barStyle}
+      >
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="truncate font-mono text-[10px] font-bold tracking-wide">
+            {pkgWindowSlug(pacote.nome, pi)}
+          </span>
+        </div>
+        {isAdmin && (
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setDestaque(pi)}
+              className="preco-pixel-btn preco-pixel-btn--xs preco-pixel-btn--cyan"
+              title="Marcar recomendado"
+            >
+              <Crown size={11} aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={() => removePacote(pi)}
+              className="preco-pixel-btn preco-pixel-btn--xs preco-pixel-btn--pink"
+              title="Remover pacote"
+            >
+              <Trash2 size={11} aria-hidden />
+            </button>
+          </div>
+        )}
+        <div className="flex shrink-0 gap-0.5">
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-red-400/90" />
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          "flex flex-1 flex-col border-t-2 border-neutral-300 bg-white p-3 md:p-4",
+          destaque && "relative bg-[linear-gradient(180deg,#ffffff_0%,#f7fee7_55%,#ffffff_100%)]"
+        )}
+      >
+        <h3 className="font-mono text-sm font-bold text-neutral-900 md:text-base">
+          {"{ "}
+          <EditableField
+            value={pacote.nome}
+            onChange={(v) => setPacote(pi, { nome: v })}
+            isAdmin={isAdmin}
+            className="inline"
+          />
+          {" }"}
+        </h3>
+
+        {isAdmin ? (
+          <div className="mt-1.5 font-mono text-[11px] leading-snug text-neutral-600">
+            <span className="text-neutral-400">&gt; </span>
+            <EditableField
+              value={pacote.descricao ?? ""}
+              onChange={(v) => setPacote(pi, { descricao: v })}
+              isAdmin={isAdmin}
+              multiline
+              tag="span"
+              className="inline"
+              placeholder="Descrição do pacote"
+            />
+          </div>
+        ) : (
+          pacote.descricao && (
+            <p className="mt-1.5 font-mono text-[11px] leading-snug text-neutral-600">
+              <span className="text-neutral-400">&gt;</span> {pacote.descricao}
+            </p>
+          )
+        )}
+
+        <div
+          className={cn(
+            "mt-4 flex flex-wrap items-baseline gap-1 px-2 py-1.5 font-mono",
+            destaque
+              ? "border-2 border-black bg-[#ecfccb] shadow-[4px_4px_0_#171717]"
+              : "border border-neutral-200 bg-neutral-50"
+          )}
+        >
+          <span className={cn("text-xs", destaque ? "text-neutral-700" : "text-neutral-500")}>
+            {pacote.moeda ?? "R$"}
+          </span>
+          <EditableField
+            value={String(pacote.valor)}
+            onChange={(v) => setPacote(pi, { valor: parseFloat(v) || 0 })}
+            isAdmin={isAdmin}
+            className={cn(
+              "text-2xl font-bold md:text-3xl",
+              destaque ? "text-neutral-950" : "text-neutral-900"
+            )}
+          />
+        </div>
+        {pacote.parcelas && (
+          <p className="mt-1 font-mono text-[10px] text-neutral-500">[{pacote.parcelas}]</p>
+        )}
+
+        <div className="mt-4 flex-1 space-y-1.5">
+          {(pacote.inclui ?? []).map((item, ii) => (
+            <div key={ii} className="group/item flex items-start gap-2 font-mono text-[11px] text-neutral-700">
+              {destaque ? (
+                <span className="mt-0.5 flex h-4 w-4 shrink-0 select-none items-center justify-center rounded-sm border border-black bg-[#bdfa3c] text-[10px] font-bold leading-none text-black">
+                  ✓
+                </span>
+              ) : (
+                <span className="mt-0.5 shrink-0 select-none text-[#22c55e]">✓</span>
+              )}
+              <EditableField
+                value={item}
+                onChange={(v) => setInclui(pi, ii, v)}
+                isAdmin={isAdmin}
+                className="min-w-0 flex-1"
+              />
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={() => removeInclui(pi, ii)}
+                  className={cn(
+                    "preco-pixel-btn preco-pixel-btn--xs preco-pixel-btn--outline shrink-0 opacity-0 group-hover/item:opacity-100"
+                  )}
+                  aria-label="Remover item"
+                >
+                  <Trash2 size={10} aria-hidden />
+                </button>
+              )}
+            </div>
+          ))}
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => addInclui(pi)}
+              className="preco-pixel-btn preco-pixel-btn--sm preco-pixel-btn--peach mt-0.5 gap-1"
+            >
+              <Plus size={10} aria-hidden /> + incluir
+            </button>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className={cn(
+            "preco-pixel-btn preco-pixel-btn--lg preco-pixel-btn--wide mt-4 cursor-pointer",
+            destaque ? "preco-pixel-btn--lime" : "preco-pixel-btn--dark"
+          )}
+        >
+          Escolher plano
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="mx-0.5 flex h-full min-h-0 flex-col">
+      {destaque ? (
+        <div className="preco-card-destaque-shell flex min-h-0 flex-1 flex-col rounded-sm bg-linear-to-br from-[#f7fee7] via-[#bdfa96] to-[#166534] p-[3px] shadow-[12px_12px_0_#18181b]">
+          {window}
+        </div>
+      ) : (
+        window
+      )}
+    </div>
+  );
 }
 
 export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
@@ -29,7 +271,10 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
   function addPacote() {
     onChange?.({
       ...data,
-      pacotes: [...pacotes, { nome: "Novo", descricao: "...", valor: 0, inclui: ["Item"], destaque: false }],
+      pacotes: [
+        ...pacotes,
+        { nome: "Novo", descricao: "...", valor: 0, inclui: ["Item"], destaque: false },
+      ],
     });
   }
   function removePacote(i: number) {
@@ -53,7 +298,6 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
   useGSAP(
     () => {
       if (!container.current || !cardsRef.current) return;
-      gsap.registerPlugin(ScrollTrigger);
       const cards = cardsRef.current.querySelectorAll("[data-preco-card]");
       gsap.set(cards, { opacity: 0, y: 32 });
       gsap.to(cards, {
@@ -86,7 +330,7 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
               className="block"
             />
           </h2>
-          <p className="mt-2 max-w-xl text-[#7D6B58]">
+          <p className="mt-2 max-w-xl font-mono text-sm text-[#7D6B58]">
             <EditableField
               value={data.subtitulo ?? "Opções flexíveis para cada momento do seu negócio."}
               onChange={(v) => set("subtitulo", v)}
@@ -97,7 +341,7 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
           </p>
         </header>
 
-        <div ref={cardsRef} className={`grid grid-cols-1 gap-6 md:gap-8 ${colClass}`}>
+        <div ref={cardsRef} className={`grid grid-cols-1 gap-8 md:gap-10 ${colClass}`}>
           <AnimatePresence>
             {pacotes.map((pacote, pi) => {
               const destaque = !!pacote.destaque;
@@ -109,86 +353,26 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
                   initial={{ opacity: 0, y: 32 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className={`group relative flex flex-col rounded-xl border p-6 md:p-8 ${
-                    destaque
-                      ? "border-[#bdfa3c] bg-[#bdfa3c]/5 [box-shadow:0_-20px_80px_-20px_rgba(189,250,60,0.08)_inset]"
-                      : "border-black/10 bg-white [box-shadow:0_-20px_80px_-20px_rgba(0,0,0,0.03)_inset]"
-                  }`}
+                  className={cn("relative h-full overflow-visible", destaque && "z-1")}
                 >
                   {destaque && (
-                    <div className="absolute -top-3 left-6 flex items-center gap-1 rounded-full bg-[#bdfa3c] px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-black">
-                      <Crown size={10} /> Recomendado
+                    <div className="preco-pixel-badge pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 whitespace-nowrap">
+                      <Crown strokeWidth={2.4} aria-hidden />
+                      Plano em destaque
                     </div>
                   )}
-                  <div className="flex items-start justify-between">
-                    <h3 className="text-xl font-bold text-black md:text-2xl">
-                      <EditableField
-                        value={pacote.nome}
-                        onChange={(v) => setPacote(pi, { nome: v })}
-                        isAdmin={isAdmin}
-                        className="inline"
-                      />
-                    </h3>
-                    {isAdmin && (
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                        <button onClick={() => setDestaque(pi)} className="p-1 text-black/40 hover:text-[#bdfa3c]">
-                          <Crown size={12} />
-                        </button>
-                        <button onClick={() => removePacote(pi)} className="p-1 text-black/40 hover:text-black/70">
-                          <Trash2 size={12} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <p className="mt-2 text-sm text-black/60">{pacote.descricao}</p>
-                  <div className="mt-6 flex items-baseline gap-1">
-                    <span className="text-sm text-black/50">R$</span>
-                    <EditableField
-                      value={String(pacote.valor)}
-                      onChange={(v) => setPacote(pi, { valor: parseFloat(v) || 0 })}
-                      isAdmin={isAdmin}
-                      className="text-3xl font-bold text-black md:text-4xl"
-                    />
-                  </div>
-                  {pacote.parcelas && (
-                    <p className="mt-1 font-mono text-xs text-black/50">{pacote.parcelas}</p>
-                  )}
-                  <div className="mt-6 flex-1 space-y-2">
-                    {(pacote.inclui ?? []).map((item, ii) => (
-                      <div key={ii} className="flex items-start gap-2 group/item">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#bdfa3c]" />
-                        <EditableField
-                          value={item}
-                          onChange={(v) => setInclui(pi, ii, v)}
-                          isAdmin={isAdmin}
-                          className="text-sm text-black/80"
-                        />
-                        {isAdmin && (
-                          <button
-                            onClick={() => removeInclui(pi, ii)}
-                            className="opacity-0 group-hover/item:opacity-100 p-0.5 text-black/30 hover:text-black/60"
-                          >
-                            <Trash2 size={10} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    {isAdmin && (
-                      <button
-                        onClick={() => addInclui(pi)}
-                        className="flex items-center gap-1 text-xs text-black/40 hover:text-black/60"
-                      >
-                        <Plus size={10} /> Adicionar item
-                      </button>
-                    )}
-                  </div>
-                  <div
-                    className={`mt-6 flex items-center justify-center rounded-xl py-3 font-mono text-xs font-bold uppercase tracking-wider ${
-                      destaque ? "bg-black text-white" : "bg-black/5 text-black"
-                    }`}
-                  >
-                    Escolher plano
-                  </div>
+                  <PrecoRetroCard
+                    pacote={pacote}
+                    pi={pi}
+                    destaque={destaque}
+                    isAdmin={isAdmin}
+                    setPacote={setPacote}
+                    setDestaque={setDestaque}
+                    removePacote={removePacote}
+                    setInclui={setInclui}
+                    addInclui={addInclui}
+                    removeInclui={removeInclui}
+                  />
                 </motion.div>
               );
             })}
@@ -197,15 +381,16 @@ export default function PrecoBlock({ data, isAdmin = false, onChange }: Props) {
 
         {isAdmin && (
           <button
+            type="button"
             onClick={addPacote}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/[0.02] py-8 text-sm text-black/50 hover:border-black/30 hover:bg-black/[0.04] hover:text-black/70"
+            className="preco-pixel-btn preco-pixel-btn--outline-lg preco-pixel-btn--wide mt-8"
           >
-            <Plus size={16} /> Novo pacote
+            <Plus size={14} aria-hidden /> + Novo pacote
           </button>
         )}
 
         {data.observacao && (
-          <p className="mt-8 text-center font-mono text-xs text-black/50">{data.observacao}</p>
+          <p className="mt-8 text-center font-mono text-xs text-neutral-500">{data.observacao}</p>
         )}
       </div>
     </section>

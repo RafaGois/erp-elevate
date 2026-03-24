@@ -11,6 +11,7 @@ const SECTION_LABELS: Partial<Record<BudgetBlock["type"], string>> = {
   equipe: "Equipe",
   preco: "Investimento",
   galeria: "Galeria",
+  portfolio: "Portfólio",
   cta: "Contato",
 };
 
@@ -23,6 +24,7 @@ const SECTION_IDS: Partial<Record<BudgetBlock["type"], string>> = {
   equipe: "equipe",
   preco: "preco",
   galeria: "galeria",
+  portfolio: "portfolio",
   cta: "contato",
 };
 

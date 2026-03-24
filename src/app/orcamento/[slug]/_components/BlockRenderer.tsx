@@ -10,6 +10,7 @@ import TimelineBlock from "./TimelineBlock";
 import PrecoBlock from "./PrecoBlock";
 import DepoimentosBlock from "./DepoimentosBlock";
 import GaleriaBlock from "./GaleriaBlock";
+import PortfolioBlock from "./PortfolioBlock";
 import EquipeBlock from "./EquipeBlock";
 import CtaBlock from "./CtaBlock";
 import TextoBlock from "./TextoBlock";
@@ -25,6 +26,7 @@ const BLOCK_IDS: Partial<Record<BudgetBlock["type"], string>> = {
   equipe: "equipe",
   preco: "preco",
   galeria: "galeria",
+  portfolio: "portfolio",
   cta: "contato",
 };
 
@@ -115,6 +117,10 @@ export default function BlockRenderer({
             case "galeria":
               return (
                 <GaleriaBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
+              );
+            case "portfolio":
+              return (
+                <PortfolioBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
               );
             case "equipe":
               return (

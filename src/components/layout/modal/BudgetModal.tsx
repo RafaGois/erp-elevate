@@ -12,17 +12,11 @@ import TextAreaForm from "../components/inputs/TextareaForm";
 import api from "@/lib/api";
 import { getErrorMessage } from "@/lib/utils";
 import { toast } from "sonner";
-import { useState } from "react";
-import {
-  FileAttachmentsPanel,
-  FILE_ATTACHMENTS_CONFIG,
-} from "./components/FileAttachmentsPanel";
 
 type BudgetModalProps = BaseModalProps<Budget>;
 
 export default function BudgetModal(props: BudgetModalProps) {
   const budgetId = props.selectedObject?.id;
-  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
 
   const form = useForm<Budget>({
     defaultValues: {
@@ -30,7 +24,7 @@ export default function BudgetModal(props: BudgetModalProps) {
       slug: props.selectedObject?.slug ?? "",
       description: props.selectedObject?.description ?? "",
       value: props.selectedObject?.value ?? 0,
-      type: props.selectedObject?.type ?? "",
+      type: props.selectedObject?.type ?? BudgetType.SOFTWARE,
       client: props.selectedObject?.client ?? "",
       project: props.selectedObject?.project ?? "",
     },
@@ -52,19 +46,11 @@ export default function BudgetModal(props: BudgetModalProps) {
   }
 
   async function create(data: Partial<Budget>) {
-    const res = await api.post<Budget>("/budgets", data);
-    const newId = res.data.id;
-    const config = FILE_ATTACHMENTS_CONFIG.budget;
-    if (pendingFiles.length > 0) {
-      for (const file of pendingFiles) {
-        const formData = new FormData();
-        formData.append("file", file);
-        Object.entries(config.getUploadExtraFields(newId)).forEach(
-          ([k, v]) => formData.append(k, v)
-        );
-        await api.post("/files", formData);
-      }
-    }
+    data.slug = data.client?.toLowerCase().replace(/ /g, "-");
+    data.slug += "-" + data.project?.toLowerCase().replace(/ /g, "-");
+    data.slug += "-" + new Date().getTime().toString();
+    console.log(data.slug);
+    await api.post<Budget>("/budgets", data);
   }
 
   async function update(data: Partial<Budget>) {
@@ -75,7 +61,6 @@ export default function BudgetModal(props: BudgetModalProps) {
     if (props?.setAction) props.setAction(null);
     if (props?.setSelectedObject) props.setSelectedObject(null);
     form.reset();
-    setPendingFiles([]);
     if (props?.refetch) props.refetch();
   }
 
@@ -99,13 +84,6 @@ export default function BudgetModal(props: BudgetModalProps) {
             required
             form={form}
           />
-          <InputForm
-            name="slug"
-            label="Slug (URL pública)"
-            placeholder="ex: proposta-casa-franca"
-            type="text"
-            form={form}
-          />
           <SelectForm
             name="type"
             label="Tipo de orçamento"
@@ -114,6 +92,7 @@ export default function BudgetModal(props: BudgetModalProps) {
               { id: BudgetType.AUDIOVISUAL, name: "Audiovisual" },
             ]}
             form={form}
+            required
           />
           <div className="grid grid-cols-2 gap-4">
             <InputForm
@@ -121,6 +100,7 @@ export default function BudgetModal(props: BudgetModalProps) {
               label="Cliente"
               placeholder="Nome do cliente"
               type="text"
+              required
               form={form}
             />
             <InputForm
@@ -128,6 +108,7 @@ export default function BudgetModal(props: BudgetModalProps) {
               label="Projeto"
               placeholder="Nome do projeto"
               type="text"
+              required
               form={form}
             />
           </div>
@@ -145,16 +126,6 @@ export default function BudgetModal(props: BudgetModalProps) {
             type="number"
             required
             form={form}
-          />
-
-          <FileAttachmentsPanel
-            ownerId={budgetId}
-            ownerType="budget"
-            pendingFiles={pendingFiles}
-            onPendingFilesChange={setPendingFiles}
-            label="Anexos"
-            createDescription="Os arquivos serão enviados após salvar o orçamento (opcional)"
-            editDescription="Documentos, imagens ou PDFs do orçamento (opcional)"
           />
         </form>
       </Form>

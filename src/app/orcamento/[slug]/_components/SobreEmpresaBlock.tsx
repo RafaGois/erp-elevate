@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { SobreEmpresaBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
 
@@ -37,6 +37,13 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
 
   const arcsRef = useRef<SVGGElement>(null);
 
+  useLayoutEffect(() => {
+    const id = requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   useGSAP(
     () => {
       if (!container.current || !leftRef.current || !rightRef.current) return;
@@ -52,8 +59,10 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
         paused: true,
         scrollTrigger: {
           trigger: container.current,
-          start: "bottom bottom",
+          // Topo da dobra ainda ~140px acima do fundo da viewport = anima antes de entrar por completo
+          start: "top bottom-=140",
           toggleActions: "play none none none",
+          invalidateOnRefresh: true,
         },
       });
       tl.to(leftRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
