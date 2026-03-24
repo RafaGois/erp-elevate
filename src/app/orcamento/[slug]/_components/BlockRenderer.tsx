@@ -32,15 +32,21 @@ interface BlockRendererProps {
   blocks: BudgetBlock[];
   isAdmin?: boolean;
   onBlockChange?: (index: number, newData: BudgetBlock["data"]) => void;
+  onBlockSave?: (index: number, newData: BudgetBlock["data"]) => void;
 }
 
 export default function BlockRenderer({
   blocks,
   isAdmin = false,
   onBlockChange,
+  onBlockSave,
 }: BlockRendererProps) {
   function change(i: number) {
     return (newData: BudgetBlock["data"]) => onBlockChange?.(i, newData);
+  }
+
+  function save(i: number) {
+    return (newData: BudgetBlock["data"]) => onBlockSave?.(i, newData);
   }
 
   /* Marquee após hero — storytelling light */
@@ -81,7 +87,13 @@ export default function BlockRenderer({
               );
             case "servicos":
               return (
-                <ServicosBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
+                <ServicosBlock
+                  key={i}
+                  data={block.data}
+                  isAdmin={isAdmin}
+                  onChange={change(i)}
+                  onSave={save(i)}
+                />
               );
             case "timeline":
               return (

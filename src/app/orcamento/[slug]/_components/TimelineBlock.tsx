@@ -151,6 +151,14 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
       if (!container.current || !timelineRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
 
+      // Evita duplicações em re-render e garante reconstrução quando a lista muda.
+      ScrollTrigger.getAll().forEach((trigger) => {
+        const triggerEl = trigger.vars.trigger as Element | undefined;
+        if (triggerEl && timelineRef.current?.contains(triggerEl)) {
+          trigger.kill();
+        }
+      });
+
       const cards = timelineRef.current.querySelectorAll("[data-timeline-card]");
       gsap.set(cards, { scale: 0 });
       cards.forEach((el) => {
@@ -201,8 +209,11 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
           },
         });
       });
+
+      // Recalcula medidas após inserir/remover cards para incluir novos elementos na animação.
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     },
-    { scope: container }
+    { scope: container, dependencies: [etapas.length], revertOnUpdate: true }
   );
 
   return (

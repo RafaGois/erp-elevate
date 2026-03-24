@@ -29,11 +29,13 @@ api.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
       const url = error.config?.url ?? "";
+      const isBudgetPublicPage = window.location.pathname.startsWith("/orcamento");
       // Não desloga em 401 em rotas públicas (login, register, validate)
       const isPublicRoute =
         url.includes("/login") ||
         url.includes("/users/register") ||
-        url.includes("/users/validate");
+        url.includes("/users/validate") ||
+        isBudgetPublicPage;
       if (!isPublicRoute) {
         Cookies.remove("elevate-auth", { path: "/" });
         Cookies.remove("elevate-token", { path: "/" });

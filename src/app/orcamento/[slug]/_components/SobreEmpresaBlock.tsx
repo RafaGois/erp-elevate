@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { SobreEmpresaBlockData } from "@/lib/types/budget-content";
@@ -28,6 +29,10 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
 
   function set<K extends keyof SobreEmpresaBlockData>(key: K, value: SobreEmpresaBlockData[K]) {
     onChange?.({ ...data, [key]: value });
+  }
+
+  function setDiferenciais(next: string[]) {
+    set("diferenciais", next);
   }
 
   const arcsRef = useRef<SVGGElement>(null);
@@ -111,7 +116,7 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
     <section
       ref={container}
       id="sobre"
-      className="proposal-section relative overflow-hidden bg-zinc-950"
+      className="proposal-section relative overflow-hidden bg-zinc-950 min-h-screen flex items-center"
     >
       {/* Arcos concêntricos — profundidade e identidade elevate */}
       <div
@@ -285,10 +290,32 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
               </h3>
               <ul className="flex flex-col gap-3">
                 {diferenciais.length > 0 ? (
-                  diferenciais.map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-zinc-300">
+                  diferenciais.map((item, index) => (
+                    <li key={`${item}-${index}`} className="flex items-center gap-3 text-zinc-300">
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#bdfa3c]" />
-                      <span>{item}</span>
+                      <EditableField
+                        value={item}
+                        onChange={(v) => {
+                          const next = [...diferenciais];
+                          next[index] = v;
+                          setDiferenciais(next);
+                        }}
+                        isAdmin={isAdmin}
+                        className="block w-full"
+                      />
+                      {isAdmin && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = diferenciais.filter((_, i) => i !== index);
+                            setDiferenciais(next);
+                          }}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded border border-white/20 text-zinc-300 hover:text-red-300 hover:border-red-300/50 transition-colors"
+                          title="Remover item"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
                     </li>
                   ))
                 ) : (
@@ -298,6 +325,18 @@ export default function SobreEmpresaBlock({ data, isAdmin = false, onChange }: P
                   </li>
                 )}
               </ul>
+              {isAdmin && (
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setDiferenciais([...diferenciais, "Novo diferencial"])}
+                    className="inline-flex items-center gap-2 rounded border border-[#bdfa3c]/40 px-3 py-1.5 text-xs text-[#bdfa3c] hover:bg-[#bdfa3c]/10 transition-colors"
+                  >
+                    <Plus size={14} />
+                    Adicionar diferencial
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Marcador decorativo de fim de seção */}

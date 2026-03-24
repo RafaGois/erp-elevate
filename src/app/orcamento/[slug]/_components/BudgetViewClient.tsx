@@ -57,14 +57,49 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
   const isDirty =
     isAdmin && content !== null && JSON.stringify(content) !== JSON.stringify(savedContent);
 
+  function buildNextContent(
+    prev: BudgetContent,
+    index: number,
+    data: BudgetContent["blocks"][number]["data"]
+  ): BudgetContent {
+    const blocks = [...prev.blocks];
+    blocks[index] = { ...blocks[index], data } as typeof blocks[number];
+    return { ...prev, blocks };
+  }
+
   function handleBlockChange(index: number, data: BudgetContent["blocks"][number]["data"]) {
     setContent((prev) => {
       if (!prev) return prev;
-      const blocks = [...prev.blocks];
-      blocks[index] = { ...blocks[index], data } as typeof blocks[number];
-      return { ...prev, blocks };
+      return buildNextContent(prev, index, data);
     });
     setSaved(false);
+  }
+
+  function handleBlockSave(index: number, data: BudgetContent["blocks"][number]["data"]) {
+    setContent((prev) => {
+      if (!prev) return prev;
+      return buildNextContent(prev, index, data);
+    });
+
+    startTransition(async () => {
+      try {
+        const current = content;
+        if (!current) return;
+        const next = buildNextContent(current, index, data);
+        await api.put(`/budgets/${budget.id}`, {
+          content: JSON.stringify(next),
+        });
+        setSavedContent(next);
+        toast.success("Cards salvos com sucesso.");
+        window.location.reload();
+      } catch (err) {
+        const error = err as { response?: { data?: string | string[] }; message?: string };
+        const message = Array.isArray(error?.response?.data)
+          ? error.response?.data?.[0]
+          : error?.response?.data;
+        toast.error(message ?? error?.message ?? "Erro ao salvar cards.");
+      }
+    });
   }
 
   function handleSave() {
@@ -118,6 +153,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
           blocks={content.blocks}
           isAdmin={isAdmin}
           onBlockChange={handleBlockChange}
+          onBlockSave={handleBlockSave}
         />
       ) : (
         <OrcamentoEmpty />
