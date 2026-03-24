@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { ChevronDown } from "lucide-react";
 import type { BudgetBlock, HeroBlockData } from "@/lib/types/budget-content";
 import EditableField from "./EditableField";
@@ -23,16 +23,17 @@ interface Props {
  */
 const TRACK_VH = 80;
 
-const PARALLAX_INTENSITY = 2.5;
-const SCROLL_PARALLAX_MAX = 6;
+const MOUSE_PARALLAX_RANGE = 8;
+const SCROLL_PARALLAX_MAX = 2.2;
+const CURSOR_LERP_FACTOR = 0.035;
 
 const EMOJI_CONFIG = [
-  { emoji: "🟢", top: "-10%", left: "-8%", delay: 0, depth: 0.8 },
-  { emoji: "✅", top: "5%", right: "-12%", delay: 0.3, depth: 1.2 },
-  { emoji: "🌿", top: "-5%", right: "-5%", delay: 0.5, depth: 1 },
-  { emoji: "💚", bottom: "10%", left: "-15%", delay: 0.2, depth: 1.1 },
-  { emoji: "🟢", bottom: "-8%", right: "-10%", delay: 0.4, depth: 0.9 },
-  { emoji: "🌱", bottom: "5%", right: "-18%", delay: 0.6, depth: 1.3 },
+  { emoji: "🟢", top: "-10%", left: "-8%", delay: 0, depth: 0.7, mouseX: 0.55, mouseY: 0.4, scrollY: 0.5, driftAmp: 0.8, driftSpeed: 0.45, phase: 0.2, opacity: 0.42 },
+  { emoji: "✅", top: "5%", right: "-12%", delay: 0.3, depth: 0.9, mouseX: -0.35, mouseY: 0.6, scrollY: 0.8, driftAmp: 1, driftSpeed: 0.32, phase: 1.1, opacity: 0.44 },
+  { emoji: "🌿", top: "-5%", right: "-5%", delay: 0.5, depth: 0.8, mouseX: 0.5, mouseY: -0.45, scrollY: 0.6, driftAmp: 0.7, driftSpeed: 0.5, phase: 2.4, opacity: 0.4 },
+  { emoji: "💚", bottom: "10%", left: "-15%", delay: 0.2, depth: 0.85, mouseX: -0.45, mouseY: 0.45, scrollY: 0.65, driftAmp: 0.95, driftSpeed: 0.38, phase: 3.2, opacity: 0.38 },
+  { emoji: "🟢", bottom: "-8%", right: "-10%", delay: 0.4, depth: 0.75, mouseX: 0.4, mouseY: -0.35, scrollY: 0.55, driftAmp: 0.75, driftSpeed: 0.55, phase: 4.4, opacity: 0.36 },
+  { emoji: "🌱", bottom: "5%", right: "-18%", delay: 0.6, depth: 0.95, mouseX: -0.55, mouseY: 0.35, scrollY: 0.9, driftAmp: 1.1, driftSpeed: 0.3, phase: 5.1, opacity: 0.42 },
 ] as const;
 
 export default function HeroBlock({
@@ -47,7 +48,8 @@ export default function HeroBlock({
   const [introDone, setIntroDone] = useState(false);
   const [stagePassthrough, setStagePassthrough] = useState(false);
 
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const mouseTargetRef = useRef({ x: 0, y: 0 });
+  const mouseCurrentRef = useRef({ x: 0, y: 0 });
 
   function set<K extends keyof HeroBlockData>(key: K, value: HeroBlockData[K]) {
     onChange?.({ ...data, [key]: value });
@@ -59,17 +61,29 @@ export default function HeroBlock({
       gsap.registerPlugin(ScrollTrigger);
 
       const emojiEls = emojisRef.current.querySelectorAll("[data-emoji-item]");
+      let scrollProgress = 0;
 
       const updateParallax = () => {
-        const mx = mouseRef.current.x;
-        const my = mouseRef.current.y;
+        mouseCurrentRef.current.x +=
+          (mouseTargetRef.current.x - mouseCurrentRef.current.x) * CURSOR_LERP_FACTOR;
+        mouseCurrentRef.current.y +=
+          (mouseTargetRef.current.y - mouseCurrentRef.current.y) * CURSOR_LERP_FACTOR;
+
+        const mx = mouseCurrentRef.current.x;
+        const my = mouseCurrentRef.current.y;
+        const t = performance.now() / 1000;
+
         emojiEls.forEach((el, i) => {
           const cfg = EMOJI_CONFIG[i];
           if (!cfg) return;
           const d = cfg.depth;
-          const sp = progressTrigger.progress;
-          const x = mx * PARALLAX_INTENSITY * d * 20;
-          const y = my * PARALLAX_INTENSITY * d * 20 - sp * SCROLL_PARALLAX_MAX * d * 20;
+          const driftX = Math.sin(t * cfg.driftSpeed + cfg.phase) * cfg.driftAmp;
+          const driftY = Math.cos(t * cfg.driftSpeed * 0.9 + cfg.phase) * cfg.driftAmp * 0.7;
+          const x = mx * MOUSE_PARALLAX_RANGE * d * cfg.mouseX + driftX;
+          const y =
+            my * MOUSE_PARALLAX_RANGE * d * cfg.mouseY -
+            scrollProgress * SCROLL_PARALLAX_MAX * d * cfg.scrollY +
+            driftY;
           gsap.set(el, { x, y });
         });
       };
@@ -79,6 +93,7 @@ export default function HeroBlock({
         start: "top top",
         end: "bottom top",
         onUpdate: () => {
+          scrollProgress = progressTrigger.progress;
           setStagePassthrough(progressTrigger.progress >= 0.68);
           updateParallax();
         },
@@ -95,18 +110,19 @@ export default function HeroBlock({
       });
 
       const onMove = (e: MouseEvent) => {
-        mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
-        updateParallax();
+        mouseTargetRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseTargetRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
       };
 
       ScrollTrigger.addEventListener("refresh", updateParallax);
       window.addEventListener("mousemove", onMove);
+      gsap.ticker.add(updateParallax);
       updateParallax();
 
       return () => {
         ScrollTrigger.removeEventListener("refresh", updateParallax);
         window.removeEventListener("mousemove", onMove);
+        gsap.ticker.remove(updateParallax);
         progressTrigger.kill();
         stageTween.scrollTrigger?.kill();
       };
@@ -132,7 +148,7 @@ export default function HeroBlock({
         style={{ opacity: 1 }}
       >
         <svg
-          className="absolute inset-0 z-[5] h-full w-full pointer-events-none"
+          className="absolute inset-0 z-5 h-full w-full pointer-events-none"
           viewBox="0 0 1440 900"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid slice"
@@ -195,16 +211,16 @@ export default function HeroBlock({
 
         <div className="absolute left-1/2 top-1/2 z-10 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 px-[clamp(1.5rem,4vw,6rem)]">
           <div ref={emojisRef} className="relative flex flex-col items-center text-center">
-            {EMOJI_CONFIG.map(({ emoji, delay, depth, ...pos }, i) => (
+            {EMOJI_CONFIG.map(({ emoji, delay, depth, opacity, ...pos }, i) => (
               <span
                 key={i}
                 data-emoji-item
-                className="absolute text-2xl md:text-3xl select-none pointer-events-none opacity-70 inline-block"
-                style={pos as React.CSSProperties}
+                className="absolute text-xl md:text-2xl select-none pointer-events-none inline-block"
+                style={{ ...(pos as CSSProperties), opacity }}
               >
                 <span
                   className="hero-emoji-float block"
-                  style={{ animationDelay: `${delay}s`, animationDuration: `${6 + i * 0.8}s` }}
+                  style={{ animationDelay: `${delay}s`, animationDuration: `${10 + i * 1.2}s` }}
                 >
                   {emoji}
                 </span>

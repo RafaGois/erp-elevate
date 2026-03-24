@@ -1,25 +1,71 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import api from "@/lib/api";
+import { cookies } from "next/headers";
 import Budget from "@/lib/models/Budget";
 import BudgetViewClient from "./_components/BudgetViewClient";
+import OrcamentoResolveClient from "./_components/OrcamentoResolveClient";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ id?: string }>;
+};
 
-async function getBudget(slug: string): Promise<Budget | null> {
+type BudgetLookup =
+  | { kind: "found"; budget: Budget }
+  | { kind: "not_found" }
+  | { kind: "error" };
+
+async function getBudget(slug: string): Promise<BudgetLookup> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("elevate-token")?.value;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["token"] = token.replace(/^Bearer\s+/i, "") || token;
+  }
+
   try {
-    const res = await api.get<Budget>(`/budgets/slug/${slug}`);
-    return res.data;
+    const safeSlug = encodeURIComponent(slug);
+    const bySlug = await fetch(
+      `https://elevatepromedia.com/api/budgets/slug/${safeSlug}`,
+      { method: "GET", headers, cache: "no-store" }
+    );
+
+    if (bySlug.ok) {
+      return { kind: "found", budget: (await bySlug.json()) as Budget };
+    }
+
+    // 404 real => não encontrado
+    if (bySlug.status === 404) {
+      return { kind: "not_found" };
+    }
+
+    // Fallback para evitar falso 404 (ex.: variação de endpoint/ambiente)
+    const list = await fetch("https://elevatepromedia.com/api/budgets", {
+      method: "GET",
+      headers,
+      cache: "no-store",
+    });
+
+    if (list.ok) {
+      const budgets = (await list.json()) as Budget[];
+      const matched = budgets.find((b) => b.slug === slug);
+      if (matched) return { kind: "found", budget: matched };
+      return { kind: "not_found" };
+    }
+
+    return { kind: "error" };
   } catch {
-    return null;
+    return { kind: "error" };
   }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const budget = await getBudget(slug);
+  const result = await getBudget(slug);
 
-  if (!budget) return { title: "Proposta não encontrada" };
+  if (result.kind !== "found") return { title: "Proposta não encontrada" };
+  const { budget } = result;
 
   return {
     title: budget.name,
@@ -32,11 +78,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function OrcamentoPage({ params }: Props) {
+export default async function OrcamentoPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const budget = await getBudget(slug);
+  const { id } = await searchParams;
+  const result = await getBudget(slug);
 
-  if (!budget) notFound();
+  if (result.kind !== "found") {
+    return <OrcamentoResolveClient slug={slug} id={id} />;
+  }
+  const { budget } = result;
 
   return (
     <main>

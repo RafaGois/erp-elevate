@@ -5,18 +5,18 @@ import FloatingMenu from "@/components/layout/components/datatable/FloatingMenu"
 import { Button } from "@/components/ui/button";
 import ModalAction from "@/lib/enums/modalAction";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, ExternalLink } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import ToolkitModal from "@/components/layout/modal/components/ToolkitModal";
 import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import Budget from "@/lib/models/Budget";
+import BudgetType from "@/lib/enums/BudgetType";
 import ConfirmDialog from "@/components/layout/modal/assistants/ConfirmDialog";
 import useAppData from "@/data/hooks/useAppData";
 import BudgetModal from "@/components/layout/modal/BudgetModal";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
 export default function BudgetsPage() {
@@ -45,6 +45,19 @@ export default function BudgetsPage() {
               <span className="text-xs text-muted-foreground font-mono">/{slug}</span>
             )}
           </div>
+        );
+      },
+    },
+    {
+      header: "Tipo",
+      accessorKey: "type",
+      cell: ({ row }) => {
+        const type = row.original?.type;
+        if (!type) return <span className="text-muted-foreground">-</span>;
+        return (
+          <Badge variant="outline" className="text-xs">
+            {type === BudgetType.SOFTWARE ? "Software" : "Audiovisual"}
+          </Badge>
         );
       },
     },
@@ -100,26 +113,6 @@ export default function BudgetsPage() {
       },
     },
     {
-      header: "Proposta",
-      accessorKey: "slug",
-      cell: ({ row }) => {
-        const { slug } = row.original;
-        if (!slug) {
-          return <Badge variant="outline" className="text-muted-foreground text-xs">Sem slug</Badge>;
-        }
-        return (
-          <Link
-            href={`/orcamento/${slug}`}
-            target="_blank"
-            className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-medium"
-          >
-            Ver proposta
-            <ExternalLink className="h-3 w-3" />
-          </Link>
-        );
-      },
-    },
-    {
       header: "Criado em",
       accessorKey: "createdAt",
       cell: ({ row }) => {
@@ -146,7 +139,7 @@ export default function BudgetsPage() {
             selectedObject={item}
             setSelectedObject={setSelectedObject}
             setAction={setAction}
-            viewUrl={item.slug ? `/orcamento/${item.slug}` : undefined}
+            viewUrl={item.slug ? `/orcamento/${item.slug}?id=${item.id}` : undefined}
           />
         );
       },

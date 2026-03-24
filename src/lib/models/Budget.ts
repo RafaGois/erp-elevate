@@ -1,4 +1,5 @@
 import { BudgetContent } from "@/lib/types/budget-content";
+import { BudgetType } from "@/lib/enums/BudgetType";
 
 export default interface Budget {
   id: string;
@@ -6,6 +7,7 @@ export default interface Budget {
   slug?: string | null;
   description?: string | null;
   value: number;
+  type?: BudgetType | null;
   client?: string | null;
   project?: string | null;
   content?: BudgetContent | null;

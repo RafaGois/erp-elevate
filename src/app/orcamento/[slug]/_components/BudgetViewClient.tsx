@@ -8,21 +8,49 @@ import type { BudgetContent } from "@/lib/types/budget-content";
 import useAuth from "@/data/hooks/useAuth";
 import { UserLevel } from "@/lib/enums/UserLevel";
 import api from "@/lib/api";
+import { toast } from "sonner";
+import { getBudgetTemplateByType } from "@/lib/data/budget-templates";
 import BlockRenderer from "./BlockRenderer";
-import OrcamentoEmpty from "../_components/OrcamentoEmpty";
+import OrcamentoEmpty from "./OrcamentoEmpty";
 
 interface Props {
   budget: Budget; 
   isDemoMode?: boolean;
 }
 
+function normalizeContent(raw: unknown): BudgetContent | null {
+  if (!raw) return null;
+
+  let parsed: unknown = raw;
+  if (typeof raw === "string") {
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    Array.isArray((parsed as { blocks?: unknown }).blocks)
+  ) {
+    return parsed as BudgetContent;
+  }
+
+  return null;
+}
+
 export default function BudgetViewClient({ budget, isDemoMode = false }: Props) {
   const { user } = useAuth();
   const isAdmin = !!user && user.level === UserLevel.ADMIN;
 
-  const initial = budget.content ?? null;
+  const normalizedContent = normalizeContent((budget as { content?: unknown }).content);
+  const initial =
+    normalizedContent ??
+    getBudgetTemplateByType(budget.type, budget);
   const [content, setContent] = useState<BudgetContent | null>(initial);
-  const [savedContent, setSavedContent] = useState<BudgetContent | null>(initial);
+  const [savedContent, setSavedContent] = useState<BudgetContent | null>(normalizedContent);
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
 
@@ -41,10 +69,21 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
 
   function handleSave() {
     startTransition(async () => {
-      await api.put(`/budgets/${budget.id}`, { content });
-      setSavedContent(content);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      try {
+        await api.put(`/budgets/${budget.id}`, {
+          content: JSON.stringify(content),
+        });
+        setSavedContent(content);
+        setSaved(true);
+        toast.success("Orçamento salvo com sucesso.");
+        setTimeout(() => setSaved(false), 2000);
+      } catch (err) {
+        const error = err as { response?: { data?: string | string[] }; message?: string };
+        const message = Array.isArray(error?.response?.data)
+          ? error.response?.data?.[0]
+          : error?.response?.data;
+        toast.error(message ?? error?.message ?? "Erro ao salvar orçamento. Tente novamente.");
+      }
     });
   }
 
@@ -92,7 +131,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
-            className="fixed bottom-[clamp(1.5rem,3vw,2.5rem)] left-1/2 -translate-x-1/2 z-[100]"
+            className="fixed bottom-[clamp(1.5rem,3vw,2.5rem)] left-1/2 -translate-x-1/2 z-100"
           >
             <div className="flex items-center gap-4 bg-black text-white px-6 py-4 shadow-2xl border border-white/10">
               <button

@@ -1,13 +1,16 @@
 "use client";
 
 import Budget from "@/lib/models/Budget";
+import BudgetType from "@/lib/enums/BudgetType";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
+import SelectForm from "../components/inputs/SelectForm";
 import TextAreaForm from "../components/inputs/TextareaForm";
 import api from "@/lib/api";
+import { getErrorMessage } from "@/lib/utils";
 import { toast } from "sonner";
 import { useState } from "react";
 import {
@@ -27,6 +30,7 @@ export default function BudgetModal(props: BudgetModalProps) {
       slug: props.selectedObject?.slug ?? "",
       description: props.selectedObject?.description ?? "",
       value: props.selectedObject?.value ?? 0,
+      type: props.selectedObject?.type ?? "",
       client: props.selectedObject?.client ?? "",
       project: props.selectedObject?.project ?? "",
     },
@@ -42,13 +46,8 @@ export default function BudgetModal(props: BudgetModalProps) {
         toast.success("Orçamento criado com sucesso.");
       }
       handleClose();
-    } catch (error: unknown) {
-      const err = error as { response?: { data?: string | string[] }; message?: string };
-      toast.error(
-        (Array.isArray(err.response?.data) ? err.response?.data[0] : err.response?.data) ??
-          err.message ??
-          "Erro ao criar ou atualizar orçamento."
-      );
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Erro ao criar ou atualizar orçamento."));
     }
   }
 
@@ -105,6 +104,15 @@ export default function BudgetModal(props: BudgetModalProps) {
             label="Slug (URL pública)"
             placeholder="ex: proposta-casa-franca"
             type="text"
+            form={form}
+          />
+          <SelectForm
+            name="type"
+            label="Tipo de orçamento"
+            options={[
+              { id: BudgetType.SOFTWARE, name: "Software" },
+              { id: BudgetType.AUDIOVISUAL, name: "Audiovisual" },
+            ]}
             form={form}
           />
           <div className="grid grid-cols-2 gap-4">
