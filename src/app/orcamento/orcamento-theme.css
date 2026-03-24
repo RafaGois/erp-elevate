@@ -267,7 +267,45 @@
   border-radius: inherit;
 }
 
+/* ─── Intro — cursor retrô (ProposalIntro) ───────────────────────── */
+@keyframes proposal-intro-cursor-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(189, 250, 60, 0.55)) drop-shadow(5px 5px 0 #000);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(189, 250, 60, 0.85)) drop-shadow(5px 5px 0 #000);
+  }
+}
+.proposal-intro-cursor-wrap {
+  position: relative;
+  width: 56px;
+  height: 72px;
+  transform: translate(-50%, -50%);
+  animation: proposal-intro-cursor-glow 1.4s ease-in-out infinite;
+}
+.proposal-intro-cursor-svg {
+  display: block;
+  width: 56px;
+  height: 72px;
+  shape-rendering: crispEdges;
+}
+.proposal-intro-click-ring {
+  box-shadow:
+    0 0 0 3px #000,
+    0 0 0 6px #bdfa3c,
+    0 0 24px rgba(189, 250, 60, 0.5);
+}
+.proposal-intro-click-label {
+  font-family: var(--font-preco-pixel), ui-monospace, monospace;
+  box-shadow: 4px 4px 0 #000;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .proposal-intro-cursor-wrap {
+    animation: none;
+    filter: drop-shadow(5px 5px 0 #000);
+  }
   .proposal-marquee-track,
   .door-float-card,
   .hero-emoji-float,
