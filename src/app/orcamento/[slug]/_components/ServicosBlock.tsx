@@ -224,7 +224,7 @@ export default function ServicosBlock({ data, isAdmin = false, onChange, onSave 
     >
       <div
         ref={pinRef}
-        className="proposal-container relative z-10 bg-white py-20 md:py-28 overflow-x-clip"
+        className="proposal-container relative z-10 bg-white  overflow-x-clip"
       >
         <header className="mb-12 md:mb-16 text-center">
           <h2 className="text-3xl font-bold text-black md:text-4xl lg:text-5xl">

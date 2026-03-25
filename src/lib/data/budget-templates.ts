@@ -97,24 +97,32 @@ function softwareTemplate(budget: Budget): BudgetContent {
               titulo: "Codinome Barbearia",
               descricao: "Site institucional com foco em branding, serviços e captação de contatos.",
               url: "https://codinomebarbearia.com.br/",
+              imagem:
+                "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.20_i4s3sv.png?q=80&w=800&auto=format",
               tags: ["Institucional", "Branding", "Conversao"],
             },
             {
               titulo: "Sistemas Elevate",
               descricao: "Website institucional para software industrial com narrativa técnica e seções de serviços.",
               url: "https://www.sistemaselevate.com/",
+              imagem:
+                "https://res.cloudinary.com/dn454izoh/image/upload/v1774457305/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.38_fxgvdt.png?q=80&w=800&auto=format",
               tags: ["Software", "Industria", "Institucional"],
             },
             {
               titulo: "Pollis Pollen Intelligence",
               descricao: "Plataforma institucional com apresentação de tecnologia, processo e diferenciais de IA.",
               url: "https://pollenintelligence.com/",
+              imagem:
+                "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.50_kuqjnl.png?q=80&w=800&auto=format",
               tags: ["IA", "Agtech", "Tecnologia"],
             },
             {
               titulo: "CTNine",
               descricao: "Site institucional com foco em serviços, metodologia e captação para matrículas.",
               url: "https://ctnine.com.br/",
+              imagem:
+                "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.48.05_zulve1.png?q=80&w=800&auto=format",
               tags: ["Esporte", "Institucional", "Captacao"],
             },
           ],
@@ -351,3 +359,44 @@ export function getBudgetTemplateByType(
   return null;
 }
 
+function normalizePortfolioTitulo(titulo: string): string {
+  return titulo
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+/**
+ * Orçamentos salvos sem `imagem` nos itens do portfólio exibem só o placeholder "screenshot".
+ * Preenche URLs faltando a partir do template do mesmo tipo (match por título).
+ */
+export function enrichBudgetPortfolioImages(
+  content: BudgetContent,
+  budget: Budget
+): BudgetContent {
+  const template = getBudgetTemplateByType(budget.type, budget);
+  if (!template) return content;
+
+  const imagemByTitulo = new Map<string, string>();
+  for (const block of template.blocks) {
+    if (block.type !== "portfolio") continue;
+    for (const it of block.data.itens ?? []) {
+      const url = it.imagem?.trim();
+      if (url && it.titulo) imagemByTitulo.set(normalizePortfolioTitulo(it.titulo), url);
+    }
+  }
+  if (imagemByTitulo.size === 0) return content;
+
+  const blocks = content.blocks.map((block) => {
+    if (block.type !== "portfolio") return block;
+    const itens = block.data.itens.map((item) => {
+      if (item.imagem?.trim()) return item;
+      const fallback = imagemByTitulo.get(normalizePortfolioTitulo(item.titulo));
+      return fallback ? { ...item, imagem: fallback } : item;
+    });
+    return { ...block, data: { ...block.data, itens } };
+  });
+
+  return { ...content, blocks };
+}

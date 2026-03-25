@@ -9,7 +9,10 @@ import useAuth from "@/data/hooks/useAuth";
 import { UserLevel } from "@/lib/enums/UserLevel";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { getBudgetTemplateByType } from "@/lib/data/budget-templates";
+import {
+  enrichBudgetPortfolioImages,
+  getBudgetTemplateByType,
+} from "@/lib/data/budget-templates";
 import BlockRenderer from "./BlockRenderer";
 import OrcamentoEmpty from "./OrcamentoEmpty";
 
@@ -46,11 +49,13 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
   const isAdmin = !!user && user.level === UserLevel.ADMIN;
 
   const normalizedContent = normalizeContent((budget as { content?: unknown }).content);
-  const initial =
-    normalizedContent ??
-    getBudgetTemplateByType(budget.type, budget);
+  const template = getBudgetTemplateByType(budget.type, budget);
+  const base = normalizedContent ?? template;
+  const initial = base ? enrichBudgetPortfolioImages(base, budget) : null;
   const [content, setContent] = useState<BudgetContent | null>(initial);
-  const [savedContent, setSavedContent] = useState<BudgetContent | null>(normalizedContent);
+  const [savedContent, setSavedContent] = useState<BudgetContent | null>(
+    normalizedContent ? enrichBudgetPortfolioImages(normalizedContent, budget) : null
+  );
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
 
