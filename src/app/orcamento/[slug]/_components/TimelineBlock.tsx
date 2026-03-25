@@ -128,6 +128,10 @@ function TimelineCard({
 export default function TimelineBlock({ data, isAdmin = false, onChange }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const scrollCursorRef = useRef<HTMLDivElement>(null);
+  const scrollClickWrapRef = useRef<HTMLDivElement>(null);
+  const scrollClickRingRef = useRef<HTMLDivElement>(null);
+  const scrollClickLabelRef = useRef<HTMLDivElement>(null);
   const etapas: TimelineEtapa[] = data.etapas ?? [];
 
   function setEtapa(i: number, partial: Partial<TimelineEtapa>) {
@@ -151,6 +155,10 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
       if (!container.current || !timelineRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
 
+      const reduceMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
       // Evita duplicações em re-render e garante reconstrução quando a lista muda.
       ScrollTrigger.getAll().forEach((trigger) => {
         const triggerEl = trigger.vars.trigger as Element | undefined;
@@ -158,6 +166,102 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
           trigger.kill();
         }
       });
+
+      const scrollCursorEl = scrollCursorRef.current;
+      const scrollClickWrapEl = scrollClickWrapRef.current;
+      const scrollClickRingEl = scrollClickRingRef.current;
+      const scrollClickLabelEl = scrollClickLabelRef.current;
+      let cursorTl: gsap.core.Timeline | null = null;
+      const teardownCursor = () => {
+        if (cursorTl?.scrollTrigger) cursorTl.scrollTrigger.kill();
+        cursorTl?.kill();
+        cursorTl = null;
+      };
+
+      const buildScrollCursor = () => {
+        teardownCursor();
+        if (
+          reduceMotion ||
+          !container.current ||
+          !scrollCursorEl ||
+          !scrollClickWrapEl ||
+          !scrollClickRingEl ||
+          !scrollClickLabelEl
+        )
+          return;
+
+        const w = container.current.clientWidth || window.innerWidth;
+        const pad = 90;
+
+        gsap.set(scrollCursorEl, { opacity: 0, x: -pad, y: 0, scale: 1 });
+        gsap.set(scrollClickWrapEl, { opacity: 0, x: -pad, y: 0 });
+        gsap.set(scrollClickRingEl, { opacity: 0, scale: 0.55 });
+        gsap.set(scrollClickLabelEl, { opacity: 0, y: 8 });
+
+        cursorTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top 85%",
+            end: "top 30%",
+            scrub: true,
+          },
+        });
+
+        cursorTl.to(
+          [scrollCursorEl, scrollClickWrapEl],
+          { opacity: 1, duration: 0.15, ease: "power1.out" },
+          0
+        );
+        cursorTl.to(
+          [scrollCursorEl, scrollClickWrapEl],
+          {
+            x: w + pad,
+            duration: 1.8,
+            ease: "none",
+          },
+          0
+        );
+
+        // "Click" no meio do trajeto (sem interromper o movimento horizontal)
+        cursorTl.to(scrollCursorEl, { scale: 0.78, duration: 0.07, ease: "power2.out" }, 0.78);
+        cursorTl.to(
+          scrollClickRingEl,
+          { opacity: 1, scale: 1.12, duration: 0.16, ease: "power2.out" },
+          0.78
+        );
+        cursorTl.to(
+          scrollClickLabelEl,
+          { opacity: 1, y: 0, duration: 0.18, ease: "power2.out" },
+          0.8
+        );
+        cursorTl.to(scrollCursorEl, { scale: 1, duration: 0.12, ease: "back.out(2.2)" }, 0.86);
+        cursorTl.to(
+          [scrollClickRingEl, scrollClickLabelEl],
+          { opacity: 0, duration: 0.2, ease: "power2.out" },
+          0.95
+        );
+
+        cursorTl.to(
+          [scrollCursorEl, scrollClickWrapEl],
+          { opacity: 0, duration: 0.22, ease: "power1.out" },
+          1.55
+        );
+      };
+
+      const onResize = () => buildScrollCursor();
+
+      if (
+        scrollCursorEl &&
+        scrollClickWrapEl &&
+        scrollClickRingEl &&
+        scrollClickLabelEl &&
+        !reduceMotion
+      ) {
+        gsap.set(scrollCursorEl, { opacity: 0 });
+        buildScrollCursor();
+        window.addEventListener("resize", onResize);
+        ScrollTrigger.addEventListener("refreshInit", onResize);
+      }
 
       const cards = timelineRef.current.querySelectorAll("[data-timeline-card]");
       gsap.set(cards, { scale: 0 });
@@ -212,6 +316,12 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
 
       // Recalcula medidas após inserir/remover cards para incluir novos elementos na animação.
       requestAnimationFrame(() => ScrollTrigger.refresh());
+
+      return () => {
+        teardownCursor();
+        window.removeEventListener("resize", onResize);
+        ScrollTrigger.removeEventListener("refreshInit", onResize);
+      };
     },
     { scope: container, dependencies: [etapas.length], revertOnUpdate: true }
   );
@@ -222,6 +332,51 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
       ref={container}
       className="proposal-section relative min-h-[60vh] bg-white"
     >
+      {/* Scroll cursor hint (scrubbed) */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 z-20">
+        <div className="proposal-container relative h-16 md:h-18">
+          <div ref={scrollClickWrapRef} className="absolute left-0 top-3 md:top-4">
+            <div
+              ref={scrollClickRingRef}
+              className="proposal-intro-click-ring absolute left-[0.3rem] top-2 h-[3.25rem] w-[3.25rem] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-black bg-lime-300/25"
+            />
+            <div
+              ref={scrollClickLabelRef}
+              className="proposal-intro-click-label absolute left-[2.9rem] top-2 -translate-y-1/2 border-[3px] border-black bg-lime-300 px-2.5 py-1.5 text-[8px] font-bold uppercase tracking-[0.12em] text-black md:text-[9px]"
+            >
+              click
+            </div>
+          </div>
+          <div ref={scrollCursorRef} className="absolute left-0 top-3 md:top-4">
+            <div className="proposal-intro-cursor-wrap" style={{ width: 40, height: 52 }}>
+              <svg
+                className="proposal-intro-cursor-svg"
+                style={{ width: 40, height: 52 }}
+                viewBox="0 0 22 28"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <title>Cursor</title>
+                <path
+                  d="M3 3v18.5l5.2-4.8 3.2 6.8 2.4-1.6-3-6.2 7.4-3.6z"
+                  fill="#000"
+                  transform="translate(2.25 2.25)"
+                />
+                <path
+                  d="M3 3v18.5l5.2-4.8 3.2 6.8 2.4-1.6-3-6.2 7.4-3.6z"
+                  fill="#bdfa3c"
+                  stroke="#000"
+                  strokeWidth="1.25"
+                  strokeLinejoin="miter"
+                />
+                <path d="M4.5 5.5v9l4-2.2v-4.2z" fill="#fff" opacity="0.42" />
+                <rect x="2.25" y="2.25" width="2.5" height="2.5" fill="#fff" stroke="#000" strokeWidth="0.75" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="proposal-container relative z-10">
         <header className="mb-12 md:mb-16 text-center">
           <h2 className="text-3xl font-bold text-black md:text-4xl lg:text-5xl">
@@ -241,7 +396,7 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
         <div ref={timelineRef} className="relative flex justify-center">
           <div className="relative flex w-full max-w-5xl">
             <div
-              className="absolute left-1/2 top-8 bottom-8 w-0.5 -translate-x-1/2 bg-gradient-to-b from-[#bdfa3c]/60 via-[#22c55e]/40 to-transparent"
+              className="absolute left-1/2 top-8 bottom-8 w-0.5 -translate-x-1/2 bg-linear-to-b from-[#bdfa3c]/60 via-[#22c55e]/40 to-transparent"
               aria-hidden
             />
 
@@ -325,7 +480,7 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
                     <div className="h-3 w-3 shrink-0 rounded-full border-2 border-black/20 bg-white ring-4 ring-white" />
                   </div>
                   <div
-                    className="order-3 rounded-xl border border-dashed border-black/20 bg-black/[0.02] p-5 text-center text-black/40 md:p-6"
+                    className="order-3 rounded-xl border border-dashed border-black/20 bg-black/2 p-5 text-center text-black/40 md:p-6"
                     data-timeline-right
                   >
                     Adicione etapas no painel admin
@@ -340,7 +495,7 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
           <div className="mt-12 flex justify-center">
             <button
               onClick={addEtapa}
-              className="flex items-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/[0.02] px-6 py-4 text-sm text-black/50 hover:border-black/30 hover:bg-black/[0.04] hover:text-black/70 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-dashed border-black/20 bg-black/2 px-6 py-4 text-sm text-black/50 hover:border-black/30 hover:bg-black/4 hover:text-black/70 transition-colors"
             >
               <Plus size={16} />
               Adicionar etapa
