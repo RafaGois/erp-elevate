@@ -31,18 +31,33 @@ export default function CtaBlock({ data, isAdmin = false, onChange }: Props) {
     () => {
       if (!container.current || !contentRef.current) return;
       gsap.registerPlugin(ScrollTrigger);
-      gsap.set(contentRef.current, { opacity: 0, y: 32 });
-      gsap.to(contentRef.current, {
+      const contentEl = contentRef.current;
+      const sectionEl0 = container.current;
+
+      // Fade-in robusto: se o ScrollTrigger não disparar (mobile/layout/pins),
+      // ainda garantimos visibilidade quando a seção entra na viewport.
+      gsap.set(contentEl, { opacity: 0, y: 32 });
+      gsap.to(contentEl, {
         opacity: 1,
         y: 0,
         duration: 0.8,
         ease: "power2.out",
         scrollTrigger: {
-          trigger: contentRef.current,
-          start: "top 85%",
+          trigger: sectionEl0,
+          start: "top 80%",
+          end: "bottom 60%",
           toggleActions: "play none none none",
+          invalidateOnRefresh: true,
         },
       });
+
+      // Fallback: se já estiver visível (ex.: reload no mobile), mostra imediatamente.
+      const rect = contentEl.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.9) {
+        gsap.set(contentEl, { opacity: 1, y: 0 });
+      }
+
+      requestAnimationFrame(() => ScrollTrigger.refresh());
 
       const sectionEl = container.current;
       const btnEl = ctaBtnRef.current;

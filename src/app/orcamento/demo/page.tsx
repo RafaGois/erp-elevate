@@ -12,10 +12,10 @@ export default function OrcamentoDemoPage() {
   const budget = demoBudgetJson as unknown as Budget;
 
   return (
-    <main>
+    <main className="overflow-x-clip">
       {/* Demo warning banner */}
       <div className="bg-[#FAFAF9] border-b border-black/10">
-        <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
+        <div className="mx-auto w-full max-w-[140rem] px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[#bdfa3c]" />
             <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-[#7D6B58]">
@@ -32,7 +32,7 @@ export default function OrcamentoDemoPage() {
 
       {/* Footer */}
       <footer className="bg-white border-t border-black/10">
-        <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mx-auto w-full max-w-[140rem] px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-[0.75rem] text-[#7D6B58]">
             Demo · Proposta para Casa França
           </p>

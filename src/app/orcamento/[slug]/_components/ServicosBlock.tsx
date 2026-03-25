@@ -217,8 +217,15 @@ export default function ServicosBlock({ data, isAdmin = false, onChange, onSave 
   const active = servicos[activeIndex] ?? servicos[0];
 
   return (
-    <section id="servicos" ref={sectionRef} className="proposal-section relative bg-white">
-      <div ref={pinRef} className="proposal-container relative z-10 bg-white py-20 md:py-28">
+    <section
+      id="servicos"
+      ref={sectionRef}
+      className="proposal-section relative bg-white overflow-x-clip"
+    >
+      <div
+        ref={pinRef}
+        className="proposal-container relative z-10 bg-white py-20 md:py-28 overflow-x-clip"
+      >
         <header className="mb-12 md:mb-16 text-center">
           <h2 className="text-3xl font-bold text-black md:text-4xl lg:text-5xl">
             <EditableField
@@ -266,12 +273,12 @@ export default function ServicosBlock({ data, isAdmin = false, onChange, onSave 
               <div
                 key={i}
                 data-service-card
-                className="absolute right-0 w-full max-w-md"
+                className="absolute left-1/2 w-full max-w-md -translate-x-1/2 lg:left-auto lg:right-(--stack-right) lg:translate-x-0"
                 style={{
-                  top: i * CARD_OFFSET,
-                  right: i * STACK_OVERLAP,
-                  left: "auto",
-                  width: "min(100%, 360px)",
+                  // Usamos vars pra conseguir offsets responsivos via classes (Tailwind arbitrary values).
+                  ["--stack-top" as string]: `${i * CARD_OFFSET}px`,
+                  ["--stack-right" as string]: `${i * STACK_OVERLAP}px`,
+                  top: "var(--stack-top)",
                   zIndex: i,
                 }}
               >

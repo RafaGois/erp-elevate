@@ -53,11 +53,11 @@ export default function OrcamentoPageClient({ slug }: Props) {
   const budget = data;
 
   return (
-    <main>
+    <main className="overflow-x-clip">
       <BudgetViewClient budget={budget} />
 
       <footer className="bg-white border-t border-black/10">
-        <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mx-auto w-full max-w-[140rem] px-[clamp(1.5rem,4vw,5rem)] py-[clamp(2rem,4vw,3rem)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[0.75rem] text-[#7D6B58]">
             {budget.name}
             {budget.client && <span> · Para {budget.client}</span>}

@@ -132,7 +132,7 @@ export default function BudgetViewClient({ budget, isDemoMode = false }: Props) 
       {/* Admin ribbon */}
       {isAdmin && (
         <div className="relative z-50 bg-black text-white">
-          <div className="max-w-[clamp(90rem,95vw,140rem)] mx-auto px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
+          <div className="mx-auto w-full max-w-[140rem] px-[clamp(1.5rem,4vw,5rem)] py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="w-2 h-2 bg-[#D9381E] rounded-full animate-pulse" />
               <span className=" text-[0.6rem] uppercase tracking-[0.2em] text-white/60">

@@ -178,7 +178,7 @@ export default function PortfolioBlock({ data, isAdmin = false, onChange }: Prop
       >
         <div
           ref={trackRef}
-          className="flex gap-5 pl-[max(1rem,calc((100vw-72rem)/2+1rem))] pr-16 lg:gap-6"
+          className="flex gap-5 pl-[max(1rem,calc((100%-72rem)/2+1rem))] pr-16 lg:gap-6"
         >
           {itens.length > 0 ? (
             itens.map((item, i) => {
