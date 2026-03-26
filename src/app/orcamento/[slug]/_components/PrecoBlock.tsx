@@ -186,8 +186,24 @@ function PrecoRetroCard({
             )}
           />
         </div>
-        {pacote.parcelas && (
-          <p className="mt-1 font-mono text-[10px] text-neutral-500">[{pacote.parcelas}]</p>
+        {isAdmin ? (
+          <p className="mt-1 font-mono text-[10px] text-neutral-500">
+            [
+            <EditableField
+              value={pacote.parcelas ?? ""}
+              onChange={(v) => setPacote(pi, { parcelas: v ? v : undefined })}
+              isAdmin={isAdmin}
+              allowEmpty
+              tag="span"
+              className="inline"
+              placeholder="Ex.: ou 3x de R$ 1.000,00"
+            />
+            ]
+          </p>
+        ) : (
+          pacote.parcelas && (
+            <p className="mt-1 font-mono text-[10px] text-neutral-500">[{pacote.parcelas}]</p>
+          )
         )}
 
         <div className="mt-4 flex-1 space-y-1.5">

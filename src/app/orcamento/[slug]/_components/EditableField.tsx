@@ -10,6 +10,8 @@ interface EditableFieldProps {
   className?: string;
   placeholder?: string;
   tag?: ElementType;
+  /** When true, blur/commit keeps an empty string instead of reverting to the previous value. */
+  allowEmpty?: boolean;
 }
 
 export default function EditableField({
@@ -20,6 +22,7 @@ export default function EditableField({
   className = "",
   placeholder = "Clique para editar",
   tag: Tag = "span",
+  allowEmpty = false,
 }: EditableFieldProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -47,9 +50,10 @@ export default function EditableField({
   }
 
   function commit() {
-    const trimmed = draft.trim() || value;
-    setDraft(trimmed);
-    onChange(trimmed);
+    const trimmed = draft.trim();
+    const next = allowEmpty ? trimmed : trimmed || value;
+    setDraft(next);
+    onChange(next);
     setEditing(false);
   }
 

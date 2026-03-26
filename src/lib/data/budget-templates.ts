@@ -95,35 +95,39 @@ function softwareTemplate(budget: Budget): BudgetContent {
           itens: [
             {
               titulo: "Codinome Barbearia",
-              descricao: "Site institucional com foco em branding, serviços e captação de contatos.",
+              descricao:
+                "Site institucional focado em fortalecer o posicionamento da marca no ambiente digital. Desenvolvido com HTML, CSS e JavaScript.",
               url: "https://codinomebarbearia.com.br/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.20_i4s3sv.png?q=80&w=800&auto=format",
-              tags: ["Institucional", "Branding", "Conversao"],
+              tags: ["Institucional", "Posicionamento", "HTML/CSS/JS"],
             },
             {
               titulo: "Sistemas Elevate",
-              descricao: "Website institucional para software industrial com narrativa técnica e seções de serviços.",
+              descricao:
+                "Sistema completo em Next.js com controle financeiro, inventário, projetos e propostas — integrando o escopo operacional que envolve a empresa.",
               url: "https://www.sistemaselevate.com/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457305/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.38_fxgvdt.png?q=80&w=800&auto=format",
-              tags: ["Software", "Industria", "Institucional"],
+              tags: ["Next.js", "Financeiro", "Inventário", "Projetos", "Propostas"],
             },
             {
               titulo: "Pollis Pollen Intelligence",
-              descricao: "Plataforma institucional com apresentação de tecnologia, processo e diferenciais de IA.",
+              descricao:
+                "Site institucional em HTML, CSS e JavaScript, pensado para apresentar a empresa ao mercado e captar novos clientes.",
               url: "https://pollenintelligence.com/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.50_kuqjnl.png?q=80&w=800&auto=format",
-              tags: ["IA", "Agtech", "Tecnologia"],
+              tags: ["Institucional", "HTML/CSS/JS", "Captacao"],
             },
             {
               titulo: "CTNine",
-              descricao: "Site institucional com foco em serviços, metodologia e captação para matrículas.",
+              descricao:
+                "Site institucional criado para posicionar a marca na internet e captar novos alunos.",
               url: "https://ctnine.com.br/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.48.05_zulve1.png?q=80&w=800&auto=format",
-              tags: ["Esporte", "Institucional", "Captacao"],
+              tags: ["Institucional", "Posicionamento", "Alunos"],
             },
           ],
         },

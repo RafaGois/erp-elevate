@@ -201,8 +201,9 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
         cursorTl = gsap.timeline({
           scrollTrigger: {
             trigger: container.current,
-            start: "top 85%",
-            end: "top 30%",
+            start: "top 90%",
+            // Ancora o fim no fim da seção para exigir mais rolagem (o intervalo top→top era ~55vh, muito rápido).
+            end: "bottom 70%",
             scrub: true,
           },
         });

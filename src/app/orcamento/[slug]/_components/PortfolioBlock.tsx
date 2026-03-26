@@ -15,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 /* ─── Window palette (same family as PrecoBlock / ProjetoBlock) ─── */
 type WinColors = { bar: string; border: string; shadow: string };
 
+/** Demais projetos: rotação estável por índice */
 const CARD_COLORS: WinColors[] = [
   { bar: "#27272a", border: "#52525b", shadow: "#09090b" },
   { bar: "#15803d", border: "#22c55e", shadow: "#14532d" },
@@ -23,6 +24,36 @@ const CARD_COLORS: WinColors[] = [
   { bar: "#7c3aed", border: "#a78bfa", shadow: "#4c1d95" },
   { bar: "#b45309", border: "#f59e0b", shadow: "#78350f" },
 ];
+
+const BARBEARIA_BLUES: WinColors = { bar: "#1d4ed8", border: "#3b82f6", shadow: "#1e3a8a" };
+const ELEVATE_BLACKS: WinColors = { bar: "#0a0a0a", border: "#404040", shadow: "#000000" };
+const POLIS_YELLOWS: WinColors = { bar: "#ca8a04", border: "#eab308", shadow: "#713f12" };
+
+function normalizePortfolioTituloKey(titulo: string): string {
+  return titulo
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+/** Cores fixas para projetos que aparecem sempre na vitrine; demais caem na rotação. */
+function portfolioCardColors(titulo: string, index: number): WinColors {
+  const n = normalizePortfolioTituloKey(titulo);
+  if (n.includes("codinome") || n.includes("dodinome") || n.includes("barbearia")) {
+    return BARBEARIA_BLUES;
+  }
+  if (n.includes("elevate")) {
+    return ELEVATE_BLACKS;
+  }
+  if (
+    n.includes("pollis") ||
+    n.includes("pollen") ||
+    /\bpolis\b/i.test(titulo)
+  ) {
+    return POLIS_YELLOWS;
+  }
+  return CARD_COLORS[index % CARD_COLORS.length];
+}
 
 function cardSlug(titulo: string, i: number): string {
   const slug = titulo
@@ -182,7 +213,7 @@ export default function PortfolioBlock({ data, isAdmin = false, onChange }: Prop
         >
           {itens.length > 0 ? (
             itens.map((item, i) => {
-              const colors = CARD_COLORS[i % CARD_COLORS.length];
+              const colors = portfolioCardColors(item.titulo, i);
               const slug = cardSlug(item.titulo, i);
 
               return (
