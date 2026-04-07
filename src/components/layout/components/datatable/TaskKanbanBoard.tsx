@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { toast } from "sonner";
+import { fireKanbanCompleteConfetti } from "@/lib/kanban-complete-confetti";
 
 interface TaskKanbanBoardProps {
   tasks: Task[];
@@ -207,6 +208,9 @@ export default function TaskKanbanBoard({
     try {
       await onUpdateTaskStatus(task.id, status);
       toast.success("Status atualizado.");
+      if (status === TaskStatus.CONCLUIDA) {
+        fireKanbanCompleteConfetti();
+      }
     } catch (error: unknown) {
       setStatusOverrides((prev) => {
         const next = { ...prev };

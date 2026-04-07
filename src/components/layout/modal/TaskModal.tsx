@@ -1,6 +1,7 @@
 import Task from "@/lib/models/task/Task";
 import Modal from "./components/Modal";
 import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
@@ -18,24 +19,73 @@ import {
 
 import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
 import TextAreaForm from "../components/inputs/TextareaForm";
+import useAuth from "@/data/hooks/useAuth";
+import ModalAction from "@/lib/enums/modalAction";
 
 type TaskModalProps = BaseModalProps<Task>;
 
+type TaskFormShape = Partial<Task> & {
+  Responsible?: { id?: string };
+  Project?: { id?: string };
+};
+
+function toDateInputValue(d: unknown): string | undefined {
+  if (d == null || d === "") return undefined;
+  const date = d instanceof Date ? d : new Date(d as string);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date.toISOString().slice(0, 10);
+}
+
 export default function TaskModal(props: TaskModalProps) {
+  const { user } = useAuth();
+
   const form = useForm<Task>({
     defaultValues: {
-      name: props.selectedObject?.name,
-      description: props.selectedObject?.description,
-      responsibleId: props.selectedObject?.responsibleId,
-      Priority:
-        (props.selectedObject?.Priority as TaskPriorities) ??
-        TaskPriorities.BAIXA,
-      Status:
-        (props.selectedObject?.Status as TaskStatus) ?? TaskStatus.PENDENTE,
-      projectId: props.selectedObject?.projectId,
-      deadline: props.selectedObject?.deadline,
+      name: "",
+      description: "",
+      responsibleId: user?.id ?? "",
+      Priority: TaskPriorities.BAIXA,
+      Status: TaskStatus.PENDENTE,
+      projectId: undefined,
+      deadline: undefined,
     },
   });
+
+  useEffect(() => {
+    if (props.action !== ModalAction.Create && props.action !== ModalAction.Update) {
+      return;
+    }
+
+    const task = props.selectedObject as TaskFormShape | null | undefined;
+    const isEdit = !!task?.id;
+
+    if (isEdit) {
+      form.reset({
+        name: task.name ?? "",
+        description: task.description ?? "",
+        responsibleId:
+          task.responsibleId ??
+          task.Responsible?.id ??
+          "",
+        Priority:
+          (task.Priority as TaskPriorities) ?? TaskPriorities.BAIXA,
+        Status: (task.Status as TaskStatus) ?? TaskStatus.PENDENTE,
+        projectId: task.projectId ?? task.Project?.id,
+        // input type="date" usa string YYYY-MM-DD (modelo Task usa Date na API)
+        deadline: toDateInputValue(task.deadline) as unknown as Task["deadline"],
+      });
+    } else {
+      form.reset({
+        name: "",
+        description: "",
+        responsibleId: user?.id ?? "",
+        Priority: TaskPriorities.BAIXA,
+        Status: TaskStatus.PENDENTE,
+        projectId: undefined,
+        deadline: undefined,
+      });
+    }
+  }, [props.action, props.selectedObject, user?.id, form]);
 
   async function handleSubmit(data: Partial<Task>) {
     
@@ -94,7 +144,15 @@ export default function TaskModal(props: TaskModalProps) {
   async function handleClose() {
     if (props?.setAction) props.setAction(null);
     if (props?.setSelectedObject) props.setSelectedObject(null);
-    form.reset();
+    form.reset({
+      name: "",
+      description: "",
+      responsibleId: user?.id ?? "",
+      Priority: TaskPriorities.BAIXA,
+      Status: TaskStatus.PENDENTE,
+      projectId: undefined,
+      deadline: undefined,
+    });
     if (props?.refetch) props.refetch();
   }
 
