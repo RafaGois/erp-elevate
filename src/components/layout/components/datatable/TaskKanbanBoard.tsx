@@ -335,7 +335,7 @@ export default function TaskKanbanBoard({
 
             <div
               data-status-scroll
-              className={`grid max-h-[55vh] flex-1 grid-cols-1 gap-3 overflow-y-auto pr-1 [touch-action:pan-y] md:max-h-[62vh] ${cardsGridClass}`}
+              className={`grid max-h-[55vh] flex-1 auto-rows-min grid-cols-1 content-start items-start gap-3 overflow-y-auto pr-1 [touch-action:pan-y] md:max-h-[62vh] ${cardsGridClass}`}
             >
               {column.tasks.length === 0 ? (
                 <div className="text-muted-foreground col-span-full rounded-md border border-dashed p-3 text-xs">
@@ -372,7 +372,7 @@ export default function TaskKanbanBoard({
                         setDraggedTaskId(null);
                         setDropTargetStatus(null);
                       }}
-                      className={`bg-background rounded-md border p-2.5 shadow-xs h-full flex flex-col ${
+                      className={`bg-background flex w-full max-w-full flex-col rounded-md border p-2.5 shadow-xs ${
                         onUpdateTaskStatus ? "cursor-grab active:cursor-grabbing" : ""
                       } ${draggedTaskId === task.id ? "opacity-60" : ""}`}
                     >
@@ -413,7 +413,7 @@ export default function TaskKanbanBoard({
                           type="button"
                           variant="outline"
                           size="sm"
-                          className="w-full mt-auto"
+                          className="mt-3 w-full shrink-0"
                           onClick={() => onEditTask(task)}
                         >
                           Abrir tarefa
