@@ -98,6 +98,7 @@ export default function Movimentations() {
         columns={columns}
         data={data?.[0]?.id ? data : []}
         setAction={setAction}
+        setSelectedObject={setSelectedObject}
       />
       <ToolkitModal
         action={action}

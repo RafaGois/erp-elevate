@@ -498,6 +498,7 @@ export default function Tasks() {
             columns={columns}
             data={tableFilteredData ?? []}
             setAction={setAction}
+            setSelectedObject={setSelectedObject}
             toolbarStart={
               <Button
                 type="button"

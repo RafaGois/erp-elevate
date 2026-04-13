@@ -85,7 +85,12 @@ export default function Projects() {
 
   return (
     <>
-      <DataTable columns={columns} data={data ?? []} setAction={setAction} />
+      <DataTable
+        columns={columns}
+        data={data ?? []}
+        setAction={setAction}
+        setSelectedObject={setSelectedObject}
+      />
       <ToolkitModal
         action={action}
         setAction={setAction}

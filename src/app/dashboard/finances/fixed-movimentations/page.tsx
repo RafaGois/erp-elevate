@@ -221,6 +221,7 @@ export default function FixedMovimentations() {
         columns={columns}
         data={filteredData}
         setAction={setAction}
+        setSelectedObject={setSelectedObject}
         form={form}
         options={MOVIMENTATION_TYPE_OPTIONS}
       />

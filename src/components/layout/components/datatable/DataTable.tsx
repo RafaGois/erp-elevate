@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -25,11 +26,37 @@ import { DataTableToolbar } from "./DataTableToolbar";
 import { DataTablePagination } from "./DataTablePagination";
 import ModalAction from "@/lib/enums/modalAction";
 import { UseFormReturn } from "react-hook-form";
+import { cn } from "@/lib/utils";
+
+/** Clique veio de controle interativo — não abrir modal de edição na linha. */
+function isInteractiveTableCellTarget(target: EventTarget | null) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest(
+      [
+        "button",
+        "a[href]",
+        "input",
+        "select",
+        "textarea",
+        "label",
+        '[role="button"]',
+        '[role="combobox"]',
+        '[role="menuitem"]',
+        '[role="menuitemcheckbox"]',
+        '[role="switch"]',
+        "[data-table-row-click-ignore]",
+      ].join(", "),
+    ),
+  );
+}
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   setAction?: (newAction: ModalAction) => void;
+  /** Com `setAction`, em telas estreitas (&lt; md) o toque na linha abre o modal de edição. */
+  setSelectedObject?: (row: NoInfer<TData>) => void;
   /** Conteúdo opcional antes do campo de busca (ex.: filtros específicos da rota). */
   toolbarStart?: ReactNode;
   form?: UseFormReturn<any>;
@@ -46,6 +73,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   setAction,
+  setSelectedObject,
   toolbarStart,
   form,
   options,
@@ -56,6 +84,19 @@ export function DataTable<TData, TValue>({
   hiddenResponsibleIds,
   onToggleResponsibleFilter,
 }: DataTableProps<TData, TValue>) {
+  const [narrowScreen, setNarrowScreen] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setNarrowScreen(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const rowTapOpensEdit =
+    narrowScreen && Boolean(setAction) && Boolean(setSelectedObject);
+
   const table = useReactTable({
     data,
     columns,
@@ -109,6 +150,16 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className={cn(rowTapOpensEdit && "cursor-pointer md:cursor-default")}
+                  onClick={(event) => {
+                    if (!rowTapOpensEdit || !setAction || !setSelectedObject) return;
+                    if (isInteractiveTableCellTarget(event.target)) return;
+                    const original = row.original as { id?: unknown };
+                    const id = original?.id;
+                    if (id === undefined || id === null || String(id).trim() === "") return;
+                    setSelectedObject(row.original);
+                    setAction(ModalAction.Update);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

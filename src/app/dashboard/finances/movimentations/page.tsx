@@ -378,6 +378,7 @@ export default function Movimentations() {
         columns={columns}
         data={filteredData}
         setAction={setAction}
+        setSelectedObject={setSelectedObject}
         toolbarStart={
           <Button
             type="button"
