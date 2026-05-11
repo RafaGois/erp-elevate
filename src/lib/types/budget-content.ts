@@ -178,6 +178,12 @@ export interface TextoBlockData {
   conteudo: string;
 }
 
+// ─── Customização ────────────────────────────────────────────────────────────
+export interface CustomizacaoBlockData {
+  titulo?: string;
+  subtitulo?: string;
+}
+
 // ─── Union de todos os blocks ─────────────────────────────────────────────────
 export type BudgetBlock =
   | { type: "hero"; data: HeroBlockData }
@@ -191,7 +197,8 @@ export type BudgetBlock =
   | { type: "portfolio"; data: PortfolioBlockData }
   | { type: "equipe"; data: EquipeBlockData }
   | { type: "cta"; data: CtaBlockData }
-  | { type: "texto"; data: TextoBlockData };
+  | { type: "texto"; data: TextoBlockData }
+  | { type: "customizacao"; data: CustomizacaoBlockData };
 
 export interface BudgetContent {
   blocks: BudgetBlock[];

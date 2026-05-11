@@ -16,11 +16,13 @@ import CtaBlock from "./CtaBlock";
 import TextoBlock from "./TextoBlock";
 import MarqueeStrip from "./MarqueeStrip";
 import ProposalNav from "./ProposalNav";
+import CustomizacaoBlock from "./CustomizacaoBlock";
 
 const BLOCK_IDS: Partial<Record<BudgetBlock["type"], string>> = {
   sobre_empresa: "sobre",
   projeto: "projeto",
   servicos: "servicos",
+  customizacao: "customizacao",
   timeline: "cronograma",
   depoimentos: "depoimentos",
   equipe: "equipe",
@@ -133,6 +135,15 @@ export default function BlockRenderer({
             case "texto":
               return (
                 <TextoBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
+              );
+            case "customizacao":
+              return (
+                <CustomizacaoBlock
+                  key={i}
+                  data={block.data}
+                  isAdmin={isAdmin}
+                  onChange={change(i)}
+                />
               );
             default:
               return null;

@@ -127,42 +127,10 @@
         }
       },
       {
-        "type": "servicos",
+        "type": "customizacao",
         "data": {
-          "titulo": "O que está incluso",
-          "subtitulo": "Tudo o que sua empresa precisa para ter uma presença digital sólida e profissional",
-          "itens": [
-            {
-              "titulo": "Design UI/UX exclusivo",
-              "descricao": "Interface personalizada criada do zero, alinhada com a identidade visual da marca.",
-              "icone": "design"
-            },
-            {
-              "titulo": "Desenvolvimento front-end",
-              "descricao": "Código limpo e performático em Next.js com animações suaves e responsividade total.",
-              "icone": "code"
-            },
-            {
-              "titulo": "Versão mobile",
-              "descricao": "Experiência otimizada para smartphones e tablets, garantindo acesso perfeito em qualquer tela.",
-              "icone": "mobile"
-            },
-            {
-              "titulo": "SEO técnico",
-              "descricao": "Configuração completa de metadados, sitemap, schema markup e práticas de otimização para Google.",
-              "icone": "seo"
-            },
-            {
-              "titulo": "Analytics e rastreamento",
-              "descricao": "Integração com Google Analytics 4 e Meta Pixel para mensurar resultados em tempo real.",
-              "icone": "analytics"
-            },
-            {
-              "titulo": "Suporte pós-lançamento",
-              "descricao": "30 dias de suporte técnico após o go-live para ajustes, correções e orientações.",
-              "icone": "support"
-            }
-          ]
+          "titulo": "Seu site, sua identidade",
+          "subtitulo": "Cada projeto é construído do zero — seguindo a história, os gostos e o posicionamento de cada cliente."
         }
       },
       {

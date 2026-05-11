@@ -133,14 +133,11 @@ function softwareTemplate(budget: Budget): BudgetContent {
         },
       },
       {
-        type: "servicos",
+        type: "customizacao",
         data: {
-          titulo: "Escopo inicial",
-          itens: [
-            { titulo: "Discovery", descricao: "Levantamento de requisitos e escopo." },
-            { titulo: "Implementação", descricao: "Desenvolvimento das funcionalidades." },
-            { titulo: "Homologação", descricao: "Validação e ajustes finais." },
-          ],
+          titulo: "Seu site, sua identidade",
+          subtitulo:
+            "Cada projeto é construído do zero — seguindo a história, os gostos e o posicionamento de cada cliente.",
         },
       },
       {
