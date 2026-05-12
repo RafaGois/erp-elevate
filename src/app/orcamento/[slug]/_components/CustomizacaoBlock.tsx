@@ -14,6 +14,8 @@ interface Theme {
   label: string;
   description: string;
   tag: string;
+  windowBorder: string;
+  windowShadow: string;
   // Browser chrome
   chromeBg: string;
   chromeText: string;
@@ -63,6 +65,8 @@ const THEMES: Theme[] = [
     label: "Identidade corporativa",
     description: "Transmite autoridade e credibilidade para o seu segmento.",
     tag: "Formal · Confiança",
+    windowBorder: "#1E3A8A",
+    windowShadow: "#0F1F4A",
     chromeBg: "#E8ECF0",
     chromeText: "#4A5568",
     navBg: "#1E3A8A",
@@ -101,6 +105,8 @@ const THEMES: Theme[] = [
     label: "Presença criativa",
     description: "Cores e formas que traduzem a personalidade única da sua marca.",
     tag: "Vibrante · Expressivo",
+    windowBorder: "#7C3AED",
+    windowShadow: "#5B21B6",
     chromeBg: "#EDE9FE",
     chromeText: "#5B21B6",
     navBg: "#7C3AED",
@@ -139,6 +145,8 @@ const THEMES: Theme[] = [
     label: "Toque de luxo",
     description: "Elegância e sofisticação para quem quer se posicionar no topo.",
     tag: "Premium · Exclusivo",
+    windowBorder: "#D4AF37",
+    windowShadow: "#0A0A0A",
     chromeBg: "#1C1C1C",
     chromeText: "#D4AF37",
     navBg: "#0F0F0F",
@@ -177,6 +185,8 @@ const THEMES: Theme[] = [
     label: "Modernidade minimalista",
     description: "Clareza e foco: o essencial, com design que encanta.",
     tag: "Limpo · Contemporâneo",
+    windowBorder: "#10B981",
+    windowShadow: "#047857",
     chromeBg: "#E8F5F0",
     chromeText: "#047857",
     navBg: "#FFFFFF",
@@ -220,7 +230,7 @@ const TOTAL_SCROLL_VH = VH_PER_STEP * (THEMES.length - 1);
 interface MockupRefs {
   chrome: HTMLDivElement | null;
   nav: HTMLDivElement | null;
-  navLinks: HTMLSpanElement | null;
+  navLinks: HTMLDivElement | null;
   hero: HTMLDivElement | null;
   heroHeading: HTMLDivElement | null;
   heroSub: HTMLDivElement | null;
@@ -296,7 +306,11 @@ function applyThemeInstant(refs: MockupRefs, t: Theme) {
   cardBodies.forEach((el) => { el.style.color = t.cardBody; });
   if (footerStrip) footerStrip.style.background = t.footerBg;
   if (footerText) footerText.style.color = t.footerText;
-  if (page) page.style.background = t.pageBg;
+  if (page) {
+    page.style.background = "#FFFFFF";
+    page.style.borderColor = t.windowBorder;
+    page.style.boxShadow = `10px 10px 0 ${t.windowShadow}`;
+  }
 }
 
 // ─── Animate theme (smooth tween) ────────────────────────────────────────────
@@ -333,7 +347,14 @@ function morphToTheme(refs: MockupRefs, t: Theme) {
   cardBodies.forEach((el) => gsap.to(el, { color: t.cardBody, duration: dur, ease }));
   if (footerStrip) gsap.to(footerStrip, { backgroundColor: t.footerBg, duration: dur, ease });
   if (footerText) gsap.to(footerText, { color: t.footerText, duration: dur, ease });
-  if (page) gsap.to(page, { backgroundColor: t.pageBg, duration: dur, ease });
+  if (page) {
+    gsap.to(page, {
+      borderColor: t.windowBorder,
+      boxShadow: `10px 10px 0 ${t.windowShadow}`,
+      duration: dur,
+      ease,
+    });
+  }
 }
 
 // ─── MockupWindow component ───────────────────────────────────────────────────
@@ -345,183 +366,210 @@ function MockupWindow({ refs }: { refs: MockupRefs }) {
   return (
     <div
       ref={(el) => { refs.page = el; }}
-      className="relative w-full overflow-hidden rounded-xl shadow-2xl"
-      style={{ background: THEMES[0].pageBg }}
+      className="retro-window relative w-full overflow-hidden rounded-sm border-2 bg-white text-left"
+      style={{
+        borderColor: THEMES[0].windowBorder,
+        boxShadow: `10px 10px 0 ${THEMES[0].windowShadow}`,
+      }}
     >
-      {/* Browser chrome */}
       <div
         ref={(el) => { refs.chrome = el; }}
-        className="flex items-center gap-2 px-3 py-2.5"
-        style={{ background: THEMES[0].chromeBg }}
+        className="flex items-center justify-between gap-2 px-2 py-1"
+        style={{ background: THEMES[0].chromeBg, color: THEMES[0].chromeText }}
       >
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-          <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
-          <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
-        </div>
-        <div
-          className="mx-2 flex-1 rounded px-2 py-0.5 text-center font-mono"
-          style={{ fontSize: "9px", background: "rgba(0,0,0,0.08)", color: "inherit" }}
-        >
-          seumercado.com.br
-        </div>
-      </div>
-
-      {/* Nav bar */}
-      <div
-        ref={(el) => { refs.nav = el; }}
-        className="mx-3 mt-3 flex items-center justify-between px-4 py-2.5"
-        style={{
-          background: THEMES[0].navBg,
-          borderRadius: THEMES[0].navRadius,
-          border: THEMES[0].navBorder,
-        }}
-      >
-        {/* Logo placeholder */}
-        <div className="flex items-center gap-2">
-          <div
-            className="h-5 w-5 rounded-sm"
-            style={{ background: "currentColor", opacity: 0.9 }}
-          />
-          <span className="text-[10px] font-bold tracking-wide" style={{ color: "inherit" }}>
-            MARCA
-          </span>
-        </div>
-        {/* Nav links */}
-        <span
-          ref={(el) => { refs.navLinks = el; }}
-          className="hidden gap-4 text-[9px] font-medium tracking-wide sm:flex"
-          style={{ color: THEMES[0].navText }}
-        >
-          <span>Sobre</span>
-          <span>Serviços</span>
-          <span>Contato</span>
+        <span className="truncate font-mono text-[10px] font-bold tracking-wide">
+          STYLE://MORPH_ENGINE
         </span>
-      </div>
-
-      {/* Hero section */}
-      <div
-        ref={(el) => { refs.hero = el; }}
-        className="relative overflow-hidden px-5 pt-6 pb-5"
-        style={{ background: THEMES[0].heroBg, minHeight: "160px" }}
-      >
-        {/* Decorative shapes */}
-        <div
-          ref={(el) => { refs.shape1 = el; }}
-          className="pointer-events-none absolute right-4 top-2 h-24 w-24"
-          style={{
-            background: THEMES[0].shapeBg,
-            borderRadius: THEMES[0].shapeRadius,
-            opacity: parseFloat(THEMES[0].shapeOpacity),
-          }}
-        />
-        <div
-          ref={(el) => { refs.shape2 = el; }}
-          className="pointer-events-none absolute right-12 top-10 h-10 w-10"
-          style={{
-            background: THEMES[0].shape2Bg,
-            borderRadius: THEMES[0].shape2Radius,
-            opacity: 0.4,
-          }}
-        />
-
-        <div className="relative z-10 max-w-[55%]">
-          <div
-            ref={(el) => { refs.heroHeading = el; }}
-            className="font-bold leading-tight"
-            style={{ fontSize: "clamp(14px, 2.5vw, 22px)", color: THEMES[0].heroHeading }}
-          >
-            Feito para<br />você crescer.
-          </div>
-          <div
-            ref={(el) => { refs.heroSub = el; }}
-            className="mt-1.5 leading-snug"
-            style={{ fontSize: "clamp(9px, 1.2vw, 11px)", color: THEMES[0].heroSub }}
-          >
-            Soluções digitais sob medida para o seu negócio.
-          </div>
-          <button
-            ref={(el) => { refs.btn = el; }}
-            className="mt-3 px-4 py-1.5 text-[10px] font-semibold tracking-wide transition-none"
-            style={{
-              background: THEMES[0].btnBg,
-              color: THEMES[0].btnText,
-              borderRadius: THEMES[0].btnRadius,
-              border: THEMES[0].btnBorder,
-              boxShadow: THEMES[0].btnShadow,
-            }}
-          >
-            Falar com a gente
-          </button>
+        <div className="flex shrink-0 gap-0.5">
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-white/90" />
+          <span className="h-2.5 w-2.5 rounded-sm border border-black/30 bg-red-400/90" />
         </div>
       </div>
 
-      {/* Cards row */}
-      <div
-        ref={(el) => { refs.cardsSection = el; }}
-        className="grid grid-cols-3 gap-2 px-3 pb-3 pt-2"
-        style={{ background: THEMES[0].heroBg }}
-      >
-        {CARD_LABELS.map((label, i) => (
+      <div className="border-t-2 border-neutral-300 bg-white p-3 md:p-4">
+        <div
+          ref={(el) => { refs.nav = el; }}
+          className="mb-3 flex items-center justify-between gap-3 px-3 py-2"
+          style={{
+            background: THEMES[0].navBg,
+            color: THEMES[0].navText,
+            borderRadius: THEMES[0].navRadius,
+            border: THEMES[0].navBorder,
+          }}
+        >
+          <span className="font-mono text-[10px] font-bold tracking-wide">{"{ estilo://ativo }"}</span>
           <div
-            key={label}
-            ref={(el) => { if (el) refs.cards[i] = el; }}
-            className="flex flex-col gap-1 border p-2.5"
-            style={{
-              background: THEMES[0].cardBg,
-              borderColor: THEMES[0].cardBorder,
-              borderRadius: THEMES[0].cardRadius,
-              boxShadow: THEMES[0].cardShadow,
-            }}
+            ref={(el) => { refs.navLinks = el; }}
+            className="flex items-center gap-1.5"
+            style={{ color: THEMES[0].navText }}
           >
+            <span className="h-1.5 w-6 rounded-full bg-current opacity-80" />
+            <span className="h-1.5 w-4 rounded-full bg-current opacity-55" />
+            <span className="h-1.5 w-8 rounded-full bg-current opacity-35" />
+          </div>
+        </div>
+
+        <div
+          ref={(el) => { refs.hero = el; }}
+          className="relative overflow-hidden border border-neutral-200 p-4 md:p-6"
+          style={{ background: THEMES[0].heroBg, minHeight: "232px" }}
+        >
+          <div
+            ref={(el) => { refs.shape1 = el; }}
+            className="pointer-events-none absolute right-[-3%] top-[-6%] h-36 w-36 blur-[2px] md:h-44 md:w-44"
+            style={{
+              background: THEMES[0].shapeBg,
+              borderRadius: THEMES[0].shapeRadius,
+              opacity: parseFloat(THEMES[0].shapeOpacity),
+            }}
+          />
+          <div
+            ref={(el) => { refs.shape2 = el; }}
+            className="pointer-events-none absolute bottom-[16%] left-[48%] h-16 w-16 md:h-20 md:w-20"
+            style={{
+              background: THEMES[0].shape2Bg,
+              borderRadius: THEMES[0].shape2Radius,
+              opacity: 0.45,
+            }}
+          />
+
+          <div className="relative z-10 grid grid-cols-1 gap-5 md:grid-cols-[1.05fr_0.95fr]">
+            <div className="space-y-4">
+              <div
+                ref={(el) => { refs.heroHeading = el; }}
+                className="space-y-2"
+                style={{ color: THEMES[0].heroHeading }}
+              >
+                <span className="block h-4 w-[78%] rounded-full bg-current opacity-95" />
+                <span className="block h-4 w-[56%] rounded-full bg-current opacity-80" />
+              </div>
+              <div
+                ref={(el) => { refs.heroSub = el; }}
+                className="space-y-2"
+                style={{ color: THEMES[0].heroSub }}
+              >
+                <span className="block h-2.5 w-[88%] rounded-full bg-current opacity-75" />
+                <span className="block h-2.5 w-[72%] rounded-full bg-current opacity-60" />
+                <span className="block h-2.5 w-[60%] rounded-full bg-current opacity-45" />
+              </div>
+              <button
+                ref={(el) => { refs.btn = el; }}
+                className="flex h-10 w-32 items-center rounded-full border px-3 transition-none"
+                style={{
+                  background: THEMES[0].btnBg,
+                  color: THEMES[0].btnText,
+                  borderRadius: THEMES[0].btnRadius,
+                  border: THEMES[0].btnBorder,
+                  boxShadow: THEMES[0].btnShadow,
+                }}
+                aria-label="Elemento de destaque"
+              >
+                <span className="block h-2 w-16 rounded-full bg-current opacity-80" />
+              </button>
+
+              <div className="grid grid-cols-4 gap-2 pt-1">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-10 rounded-2xl border border-black/5 bg-white/25 backdrop-blur-[2px]"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="grid min-h-[148px] grid-cols-[1.15fr_0.85fr] gap-3">
+              <div className="rounded-[28px] border border-white/20 bg-white/20 p-3 backdrop-blur-[2px]">
+                <div className="space-y-2">
+                  <span className="block h-2.5 w-8 rounded-full bg-white/75" />
+                  <span className="block h-2.5 w-16 rounded-full bg-white/45" />
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="h-14 rounded-[20px] bg-white/20" />
+                  <div className="h-14 rounded-[20px] bg-white/10" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-3">
+                <div className="h-24 rounded-[24px] border border-white/15 bg-white/15 backdrop-blur-[2px]" />
+                <div className="h-10 rounded-full bg-white/20" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          ref={(el) => { refs.cardsSection = el; }}
+          className="mt-3 grid grid-cols-3 gap-2"
+          style={{ background: THEMES[0].heroBg }}
+        >
+          {CARD_LABELS.map((label, i) => (
             <div
-              ref={(el) => { if (el) refs.cardIcons[i] = el; }}
-              className="flex h-7 w-7 items-center justify-center text-base font-bold"
+              key={label}
+              ref={(el) => { if (el) refs.cards[i] = el; }}
+              className={`flex flex-col gap-3 border p-3 ${i === 1 ? "translate-y-4" : ""}`}
               style={{
-                background: THEMES[0].cardIconBg,
-                color: THEMES[0].cardIconColor,
+                background: THEMES[0].cardBg,
+                borderColor: THEMES[0].cardBorder,
                 borderRadius: THEMES[0].cardRadius,
+                boxShadow: THEMES[0].cardShadow,
               }}
             >
-              {CARD_ICONS[i]}
-            </div>
-            <span
-              ref={(el) => { if (el) refs.cardTitles[i] = el; }}
-              className="text-[9px] font-bold leading-none"
-              style={{ color: THEMES[0].cardTitle }}
-            >
-              {label}
-            </span>
-            <span
-              ref={(el) => { if (el) refs.cardBodies[i] = el; }}
-              className="text-[8px] leading-snug"
-              style={{ color: THEMES[0].cardBody }}
-            >
-              Estratégia para resultado real.
-            </span>
-          </div>
-        ))}
-      </div>
+              <div className="flex items-center justify-between">
+                <div
+                  ref={(el) => { if (el) refs.cardIcons[i] = el; }}
+                  className="flex h-8 w-8 items-center justify-center text-base font-bold"
+                  style={{
+                    background: THEMES[0].cardIconBg,
+                    color: THEMES[0].cardIconColor,
+                    borderRadius: THEMES[0].cardRadius,
+                  }}
+                >
+                  {CARD_ICONS[i]}
+                </div>
+                <span className="h-1.5 w-7 rounded-full bg-black/10" />
+              </div>
 
-      {/* Footer strip */}
-      <div
-        ref={(el) => { refs.footerStrip = el; }}
-        className="flex items-center justify-between px-5 py-2"
-        style={{ background: THEMES[0].footerBg }}
-      >
-        <span
-          ref={(el) => { refs.footerText = el; }}
-          className="font-mono"
-          style={{ fontSize: "8px", color: THEMES[0].footerText, letterSpacing: "0.12em" }}
+              <div
+                ref={(el) => { if (el) refs.cardTitles[i] = el; }}
+                className="space-y-2"
+                style={{ color: THEMES[0].cardTitle }}
+              >
+                <span className="block h-2.5 w-[78%] rounded-full bg-current" />
+                <span className="block h-2.5 w-[54%] rounded-full bg-current opacity-65" />
+              </div>
+
+              <div
+                ref={(el) => { if (el) refs.cardBodies[i] = el; }}
+                className="space-y-1.5"
+                style={{ color: THEMES[0].cardBody }}
+              >
+                <span className="block h-1.5 w-full rounded-full bg-current opacity-70" />
+                <span className="block h-1.5 w-[88%] rounded-full bg-current opacity-55" />
+                <span className="block h-1.5 w-[62%] rounded-full bg-current opacity-40" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div
+          ref={(el) => { refs.footerStrip = el; }}
+          className="mt-3 flex items-center gap-2 border border-neutral-200 px-3 py-2"
+          style={{ background: THEMES[0].footerBg }}
         >
-          © 2026 MARCA · Todos os direitos reservados
-        </span>
-        <span
-          className="font-mono"
-          style={{ fontSize: "8px", color: THEMES[0].footerText, opacity: 0.6 }}
-        >
-          ↑ Topo
-        </span>
+          <span
+            ref={(el) => { refs.footerText = el; }}
+            className="font-mono text-[10px] uppercase tracking-wide"
+            style={{ color: THEMES[0].footerText }}
+          >
+            [ estilo em transicao ]
+          </span>
+          <div className="h-1.5 flex-1 rounded-full bg-white/20" />
+        </div>
+
+        <div className="mt-2 flex items-center justify-between font-mono text-[10px] text-neutral-500">
+          <span>{"{ layout://adaptavel }"}</span>
+          <span>&gt; identidade ativa</span>
+        </div>
       </div>
     </div>
   );
