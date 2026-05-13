@@ -224,7 +224,8 @@ const THEMES: Theme[] = [
 
 // ─── Scroll config ────────────────────────────────────────────────────────────
 
-const VH_LEAD_IN = 120;
+/** Antes da 1.ª troca (0 → 1): pouco scroll — o 1.º estilo já está visível ao fixar a seção. */
+const VH_LEAD_IN = 18;
 const VH_PER_STEP = 90;
 const TOTAL_SCROLL_VH = VH_LEAD_IN + VH_PER_STEP * (THEMES.length - 1);
 
@@ -1346,13 +1347,12 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
 
           {/* Right: device mockups */}
           <div className="relative lg:order-2">
-            {/* Ambient glow behind active device */}
+            {/* Fundo suave contido no bloco (sem blur — blur era cortado por overflow-x-clip e formava uma “linha”) */}
             <div
-              className="pointer-events-none absolute inset-0 -z-10 blur-3xl transition-colors duration-700"
+              aria-hidden
+              className="pointer-events-none absolute inset-0 -z-10 rounded-3xl transition-[background] duration-700 ease-out"
               style={{
-                background: currentTheme.accentColor,
-                opacity: 0.09,
-                transform: "scale(1.25)",
+                background: `radial-gradient(ellipse 92% 78% at 50% 42%, color-mix(in srgb, ${currentTheme.accentColor} 16%, transparent) 0%, transparent 72%)`,
               }}
             />
 
