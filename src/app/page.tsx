@@ -15,6 +15,7 @@ import { useRef, useEffect } from "react";
 import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
 import Clients from "@/components/landing/clients/Clients";
 import CallToAction from "@/components/landing/CTA/CallToAction";
+import LandingCustomCursor from "@/components/landing/cursor/LandingCustomCursor";
 import Lenis from "lenis";
 
 export default function Home() {
@@ -32,62 +33,6 @@ export default function Home() {
 
       // Disable lag smoothing in GSAP to prevent any delay in scroll animations
       gsap.ticker.lagSmoothing(0);
-
-      const cursor = container.current.querySelector(".cursor");
-      const cursorDot = container.current.querySelector(".cursor-point");
-
-      container.current.addEventListener("mousemove", (e) => {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-
-        // Atualizar cursor customizado
-        gsap.to(cursor, {
-          x: mouseX,
-          y: mouseY,
-          ease: "power2.out",
-          duration: 1,
-        });
-
-        gsap.to(cursorDot, {
-          x: mouseX + 20,
-          y: mouseY + 20,
-          ease: "power2.out",
-          duration: 1.4,
-        }); 
-      });
-
-
-      container.current.addEventListener("mousedown", () => {
-        
-       gsap.to(cursor, {
-        scale: 2,
-        backgroundColor: "#fff",
-        duration: 0.5,
-        ease: "power4.inOut",
-       })
-
-       gsap.to(cursorDot, {
-        scale: 2,
-        backgroundColor: "#bdfa3c",
-       })
-      });
-
-      container.current.addEventListener("mouseup", () => {
-        gsap.to(cursor, {
-         scale: 1,
-         backgroundColor: "transparent",
-         
-         ease: "bounce",
-        })
-        gsap.to(cursorDot, {
-          scale: 1,
-          backgroundColor: "#fff",
-          ease: "bounce",
-          duration: 1,
-         })
-       });
-
-       
 
     },
     { scope: container }
@@ -130,9 +75,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div ref={container} className="overflow-x-hidden relative select-none">
-      <div className="hidden cursor fixed h-12 w-12 border border-white rounded-full cursor-none z-50 sm:flex justify-center items-center mix-blend-difference"></div>
-      <div className="hidden sm:flex cursor-point fixed bg-white h-2 w-2 rounded-full z-50 mix-blend-difference"></div>
+    <div
+      ref={container}
+      data-custom-cursor=""
+      className="relative overflow-x-hidden select-none"
+    >
+      <LandingCustomCursor />
       <Hero />
       <ScrollText />
       <AboutUs />

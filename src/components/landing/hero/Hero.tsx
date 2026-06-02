@@ -97,9 +97,7 @@ export default function Hero() {
       id="hero"
       className={`landing-hero relative flex min-h-[100svh] flex-col overflow-hidden ${fontDisplay.variable} ${fontPixel.variable}`}
     >
-      <div className="absolute inset-x-0 top-0 z-50">
-        <Menu />
-      </div>
+      <Menu />
 
       <video
         className="landing-hero__video"

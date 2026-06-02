@@ -1,10 +1,29 @@
-import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import MenuItem from "./MenuItem";
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowUpRight, Menu as MenuIcon, X } from "lucide-react";
+import { DotGothic16, Press_Start_2P } from "next/font/google";
+import MenuItem from "./MenuItem";
+import "./menu.css";
+
+const fontDisplay = DotGothic16({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-hero-display",
+  display: "swap",
+});
+
+const fontPixel = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-hero-pixel",
+  display: "swap",
+});
+
+const COMPANY_LOGO =
+  "https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png";
 
 const menuLinks = [
   { key: "about-us", label: "Sobre nós", href: "#about-us" },
@@ -12,222 +31,167 @@ const menuLinks = [
   { key: "problemas", label: "Problemas", href: "#problemas" },
   { key: "clients", label: "Clientes", href: "#clients" },
   { key: "contact", label: "Contato", href: "#contact" },
-];
+] as const;
+
+const socialLinks = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/eduardomarketingcraze?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+  },
+  { label: "LinkedIn", href: "https://www.linkedin.com" },
+  { label: "Dribbble", href: "https://dribbble.com" },
+] as const;
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 export default function Menu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const container = useRef<HTMLDivElement | null>(null);
-  const tl = useRef<gsap.core.Timeline | null>(null);
-  const initTl = useRef<gsap.core.Timeline | null>(null);
+  const closeMenu = useCallback(() => setIsOpen(false), []);
 
-  // Função para bloquear/desbloquear o scroll
-  const toggleScroll = (shouldBlock: boolean) => {
-    if (shouldBlock) {
-      // Bloquear scroll
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${window.scrollY}px`;
-    } else {
-      // Restaurar scroll
-      const scrollY = document.body.style.top;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-    }
-  };
-
-  useGSAP(
-    () => {
-      tl.current = gsap
-        .timeline({ paused: true })
-        .to(".menu-start-button", {
-          rotate: 90,
-          duration: 0.2,
-          ease: "power4.inOut",
-          x: 60,
-        })
-        .to(
-          ".menu-start-button",
-          {
-            opacity: 0,
-          },
-          "<"
-        )
-        .to(
-          ".menu-overlay",
-          {
-            display: "flex",
-            duration: 0.7,
-            clipPath: "polygon(0% 100%, 0% 0%, 100% 100%, 0% 100%)",
-            ease: "power4.inOut",
-          },
-          "<"
-        )
-        .to(".menu-overlay", {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          ease: "power4.inOut",
-        })
-        .to(
-          ".menu-logo, .menu-close, .enter-menu-button",
-          {
-            opacity: 1,
-            xPercent: 0,
-            duration: 0.2,
-            ease: "expo.inOut",
-            stagger: 0.1,
-          },
-          "+=0.3"
-        )
-        .to(
-          ".link-menu-item",
-          {
-            x: 0,
-            duration: 0.2,
-            ease: "expo.inOut",
-            stagger: 0.15,
-            opacity: 1,
-          },
-          "<"
-        );
-
-      initTl.current = gsap
-        .timeline()
-        .from(".navitem", {
-          scale: 0,
-          delay: 1,
-          stagger: {
-            from: "start",
-            each: 0.5,
-            amount: 0.5,
-          },
-        })
+  const navigateTo = useCallback(
+    (link: (typeof menuLinks)[number]) => {
+      closeMenu();
+      window.setTimeout(() => {
+        scrollToSection(link.key);
+        window.history.replaceState(null, "", link.href);
+      }, 320);
     },
-    { scope: container }
+    [closeMenu]
   );
 
   useEffect(() => {
-    if (isOpen) {
-      tl.current?.play();
-      toggleScroll(true); // Bloquear scroll quando abrir
-    } else {
-      tl.current?.reverse();
-      toggleScroll(false); // Restaurar scroll quando fechar
-    }
+    if (!isOpen) return;
 
-    // Cleanup para restaurar scroll quando componente for desmontado
-    return () => {
-      if (isOpen) {
-        toggleScroll(false);
-      }
+    const scrollY = window.scrollY;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+    document.body.style.top = `-${scrollY}px`;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMenu();
     };
-  }, [isOpen]);
+    window.addEventListener("keydown", onKeyDown);
 
-  // Cleanup adicional para garantir que o scroll seja restaurado
-  useEffect(() => {
     return () => {
-      toggleScroll(false);
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.top = "";
+      window.scrollTo(0, scrollY);
+      window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
-
-  //faça com que o box do gráfico de pizza ocupe apenas 1/3 da tela, e o ao seu lado
-
-  function toggleMenu() {
-    setIsOpen(!isOpen);
-  }
-
-  function renderOptions() {
-    return menuLinks.map(ml => {
-      return (
-        <a 
-          className="navitem cursor-pointer" 
-          key={ml.key}
-          href={ml.href}
-          onClick={(e) => {
-            e.preventDefault();
-            const targetElement = document.getElementById(ml.key);
-            if (targetElement) {
-              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }}
-        >
-          {ml.label}
-        </a>
-      )
-    })
-  }
+  }, [isOpen, closeMenu]);
 
   return (
-    <div ref={container} className="flex justify-between w-full p-4 z-50">
-      <Image
-        src="https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png"
-        alt="logo"
-        height={50}
-        width={50}
-        className="logo-img"
-      />
-      <div className="flex-row gap-8 hidden sm:flex">
-        {renderOptions()}
-      </div>
-      <Link href="/auth" className="underline  hidden sm:flex">ENTRAR</Link>
-      <div className="flex md:hidden w-full justify-end items-center">
-        <p
-          className="menu-start-button text-sm text-white underline cursor-pointer"
-          onClick={toggleMenu}
-        >
-          MENU
-        </p>
-      </div>
-      <div
-        className={`hidden menu-overlay fixed w-full h-svh overflow-hidden top-0 left-0 bg-[#bdfa3c] text-gray-800 z-[99999] flex-col items-center justify-center p-4`}
-      >
-        <div className="flex w-full justify-between">
-          <p className="menu-logo">ELEVATE SISTEMAS</p>
-          <div>
-            <p
-              className="menu-close text-sm uppercase cursor-pointer underline"
-              onClick={toggleMenu}
-            >
-              FECHAR
-            </p>
+    <header
+      className={`landing-menu ${fontDisplay.variable} ${fontPixel.variable}`}
+    >
+      <div className="landing-menu__header">
+        <nav className="landing-menu__pill" aria-label="Navegação principal">
+          <Link href="#hero" className="landing-menu__logo">
+            <Image
+              src={COMPANY_LOGO}
+              alt="Elevate"
+              width={120}
+              height={36}
+              className="landing-menu__logo-img"
+              priority
+            />
+          </Link>
+
+          <div className="landing-menu__links">
+            {menuLinks.map((link) => (
+              <a
+                key={link.key}
+                href={link.href}
+                className="landing-menu__link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.key);
+                  window.history.replaceState(null, "", link.href);
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
-        </div>
-        <div className="flex flex-col justify-center gap-4 flex-1">
-          {menuLinks.map((link) => (
-            <MenuItem key={link.href} link={link} toggleMenu={toggleMenu} />
-          ))}
-        </div>
-        <div className="flex flex-col gap-4 w-full">
-          <Link
-            className="link-menu-item flex items-center gap-1"
-            href="https://www.instagram.com/eduardomarketingcraze?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-            target="_blank"
-          >
-            INSTAGRAM
-            <ArrowUpRight size={14} />
-          </Link>
-          <Link className="link-menu-item flex items-center gap-1" href="LINKEDIN">
-            LINKEDIN
-            <ArrowUpRight size={14} />
-          </Link>
-          <Link className="link-menu-item flex items-center gap-1" href="DRIBBLE">
-            DRIBBLE
-            <ArrowUpRight size={14} />
-          </Link>
-        </div>
-        <div className="enter-menu-button flex w-full justify-end">
-          <Link href="/auth">
-            <p className="text-sm uppercase cursor-pointer underline">
+
+          <div className="landing-menu__end">
+            <Link href="/auth" className="landing-menu__cta">
               Entrar
-            </p>
+            </Link>
+            <button
+              type="button"
+              className="landing-menu__toggle"
+              aria-expanded={isOpen}
+              aria-controls="landing-menu-overlay"
+              aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+              onClick={() => setIsOpen((open) => !open)}
+            >
+              {isOpen ? <X size={18} /> : <MenuIcon size={18} />}
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <div
+        id="landing-menu-overlay"
+        className={`landing-menu__overlay ${isOpen ? "is-open" : ""}`}
+        aria-hidden={!isOpen}
+      >
+        <div className="landing-menu__overlay-scanlines" aria-hidden />
+
+        <div className="landing-menu__overlay-top">
+          <span className="landing-menu__overlay-kicker">// Menu</span>
+          <button
+            type="button"
+            className="landing-menu__overlay-close"
+            onClick={closeMenu}
+          >
+            Fechar
+          </button>
+        </div>
+
+        <nav className="landing-menu__overlay-nav" aria-label="Menu mobile">
+          {menuLinks.map((link, i) => (
+            <MenuItem
+              key={link.key}
+              link={link}
+              index={i}
+              onNavigate={navigateTo}
+            />
+          ))}
+        </nav>
+
+        <div className="landing-menu__overlay-footer">
+          <div className="landing-menu__social">
+            {socialLinks.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="landing-menu__social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {item.label}
+                <ArrowUpRight size={12} aria-hidden />
+              </Link>
+            ))}
+          </div>
+          <Link
+            href="/auth"
+            className="landing-menu__overlay-cta"
+            onClick={closeMenu}
+          >
+            Iniciar projeto
           </Link>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
