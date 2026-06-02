@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { ArrowRight, ChevronDown, Gamepad2 } from "lucide-react";
+import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
 import Menu from "./Menu";
 import "./hero.css";
 
@@ -21,7 +22,15 @@ const fontPixel = Press_Start_2P({
   display: "swap",
 });
 
-const GLYPHS = [
+type HeroGlyph = {
+  char: string;
+  className: string;
+  depth: number;
+  delay: string;
+  pixel?: boolean;
+};
+
+const GLYPHS: HeroGlyph[] = [
   { char: "▲", className: "left-[12%] top-[22%] text-3xl opacity-40", depth: 0.7, delay: "0s" },
   {
     char: "◆",
@@ -50,7 +59,7 @@ const GLYPHS = [
     delay: "0.9s",
     pixel: true,
   },
-] as const;
+];
 
 export default function Hero() {
   const glyphLayerRef = useRef<HTMLDivElement>(null);
@@ -178,12 +187,12 @@ export default function Hero() {
         <div className="landing-hero__rise landing-hero__rise--1 mb-6 flex justify-center">
           <span className="landing-hero__badge">
             <span className="landing-hero__badge-dot" />
-            Fábrica de software · UX em primeiro lugar
+            Fábrica de software · Usuário em primeiro lugar
           </span>
         </div>
 
         <h1 className="landing-hero__title landing-hero__rise landing-hero__rise--2">
-          Construímos o <span className="landing-hero__title-accent">futuro</span> digital
+          Construímos seu <span className="landing-hero__title-accent">futuro</span> digital
           <span className="landing-hero__cursor">_</span>
         </h1>
 
@@ -192,14 +201,22 @@ export default function Hero() {
           com um diferencial ousado, retro e <span className="landing-hero__arcade">arcade</span>.
         </p>
 
-        <div className="landing-hero__rise landing-hero__rise--4 mt-9 flex flex-wrap items-center justify-center gap-4">
-          <Link href="/auth" className="landing-hero__pixel-btn">
+        <div className="landing-hero__actions landing-hero__rise landing-hero__rise--4 mt-9">
+          <Link
+            href={ELEVATE_WHATSAPP_URL}
+            className="landing-hero__pixel-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Gamepad2 size={14} strokeWidth={2.5} aria-hidden />
             Iniciar projeto
           </Link>
-          <Link href="#services" className="landing-hero__glass-btn">
+          <Link
+            href="#services"
+            className="landing-hero__pixel-btn landing-hero__pixel-btn--secondary"
+          >
             Ver serviços
-            <ArrowRight size={16} aria-hidden />
+            <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
           </Link>
         </div>
 

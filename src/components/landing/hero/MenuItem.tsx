@@ -19,6 +19,7 @@ export default function MenuItem({
     <a
       href={link.href}
       className="landing-menu__overlay-link"
+      style={{ "--menu-i": index } as React.CSSProperties}
       onClick={(e) => {
         e.preventDefault();
         onNavigate(link);
