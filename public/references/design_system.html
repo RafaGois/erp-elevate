@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ELEVATE — Design System</title>
+  <meta name="description" content="Design system retro/futurista da Elevate — fábrica de software. Tipografia, cores, componentes e animações." />
+
+  <!-- Fonts (mesma estratégia das referências: Google Fonts + display=swap + preconnect) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Geist:wght@300;400;500;600;700&family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind (mesma versão das referências) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ["selector", '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"DotGothic16"', "monospace"],
+            body: ['"Geist"', "Inter", "sans-serif"],
+            pixel: ['"Press Start 2P"', "cursive"],
+          },
+          colors: {
+            accent: "#DFFF00",
+            ink: "var(--bg)",
+            alt: "var(--alt)",
+            surface: "var(--surface)",
+            fg: "var(--fg)",
+            muted: "var(--muted)",
+          },
+          borderColor: { line: "var(--line)" },
+        },
+      },
+    };
+  </script>
+
+  <!-- Iconify (mesmo web component das referências) -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <!-- GSAP + ScrollTrigger (animações de entrada retro) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       TOKENS DE TEMA (claro / escuro) — comutados por [data-theme]
+       Escuro: paleta main-design  |  Claro: paleta color-design/orcamento
+       Accent fixo: #DFFF00 (lime elétrico do color-design)
+    ───────────────────────────────────────────────────────────── */
+    :root,
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --alt: #f4f4f5;
+      --surface: #ffffff;
+      --surface-2: #fafafa;
+      --fg: #09090b;
+      --muted: #71717a;
+      --line: rgba(0, 0, 0, 0.10);
+      --line-strong: rgba(0, 0, 0, 0.18);
+      --grid: rgba(0, 0, 0, 0.045);
+      --scan: rgba(0, 0, 0, 0.05);
+      --glass: rgba(255, 255, 255, 0.6);
+      --pixel-shadow: #000;
+    }
+    [data-theme="dark"] {
+      --bg: #050505;
+      --alt: #0a0a0a;
+      --surface: #1c1917;
+      --surface-2: #292524;
+      --fg: #f2f0eb;
+      --muted: #a8a29e;
+      --line: rgba(242, 240, 235, 0.12);
+      --line-strong: rgba(242, 240, 235, 0.25);
+      --grid: rgba(242, 240, 235, 0.06);
+      --scan: rgba(223, 255, 0, 0.05);
+      --glass: rgba(28, 25, 23, 0.5);
+      --pixel-shadow: #000;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Geist", "Inter", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    ::selection {
+      background: #dfff00;
+      color: #000;
+    }
+    .font-display { font-family: "DotGothic16", monospace; }
+    .font-pixel { font-family: "Press Start 2P", cursive; }
+
+    /* ─── Overlays globais ─────────────────────────────────────── */
+    .scanlines-global {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 80;
+      opacity: 0.5;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        var(--scan) 2px,
+        var(--scan) 3px
+      );
+      mix-blend-mode: screen;
+    }
+    [data-theme="light"] .scanlines-global { mix-blend-mode: multiply; opacity: 0.6; }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 3.5rem 3.5rem;
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000 30%, transparent 100%);
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000 30%, transparent 100%);
+    }
+
+    /* Blobs de glow verde reutilizáveis por seção */
+    .glow-blob {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(80px);
+      pointer-events: none;
+      will-change: transform;
+    }
+    .glow-lime { background: radial-gradient(circle, rgba(223,255,0,0.28) 0%, rgba(223,255,0,0.06) 45%, transparent 70%); }
+    .glow-emerald { background: radial-gradient(circle, rgba(34,197,94,0.22) 0%, rgba(34,197,94,0.05) 45%, transparent 70%); }
+
+    /* ─── CRT / scanline em elementos ──────────────────────────── */
+    .crt::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    }
+
+    /* ─── Botão pixel 8-bit (recipe do orcamento-theme.css) ────── */
+    .pixel-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: "Press Start 2P", cursive;
+      font-size: 9px;
+      line-height: 1.4;
+      padding: 13px 18px;
+      color: #000;
+      background: #dfff00;
+      border: 3px solid #000;
+      border-radius: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      box-shadow:
+        4px 4px 0 0 #000,
+        inset 2px 2px 0 rgba(255, 255, 255, 0.55),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.12);
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.08s ease-out, background 0.15s;
+    }
+    .pixel-btn:hover {
+      transform: translate(-1px, -1px);
+      filter: brightness(1.04);
+      box-shadow:
+        6px 6px 0 0 #000,
+        inset 2px 2px 0 rgba(255, 255, 255, 0.65),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.1);
+    }
+    .pixel-btn:active {
+      transform: translate(3px, 3px);
+      filter: brightness(0.98);
+      box-shadow:
+        1px 1px 0 0 #000,
+        inset 2px 2px 0 rgba(255, 255, 255, 0.35),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.18);
+    }
+    .pixel-btn:focus-visible { outline: 3px solid #06b6d4; outline-offset: 3px; }
+    .pixel-btn.is-cyan { background: #67e8f9; }
+    .pixel-btn.is-magenta { background: #f9a8d4; }
+    .pixel-btn.is-outline { background: var(--surface-2); color: var(--fg); }
+    [data-theme="dark"] .pixel-btn.is-outline { box-shadow: 4px 4px 0 0 #dfff00, inset 0 0 0 0 transparent; border-color: #dfff00; }
+    .pixel-btn.is-sm { font-size: 8px; padding: 9px 12px; }
+
+    /* Botão moderno (glass / cream CTA) com beam cônico (main-design) */
+    .btn-glass {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--fg);
+      background: var(--glass);
+      border: 1px solid var(--line-strong);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .btn-glass:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 32px -8px rgba(223, 255, 0, 0.4);
+    }
+    .btn-beam { position: relative; isolation: isolate; }
+    .btn-beam::before {
+      content: "";
+      position: absolute;
+      inset: -150%;
+      z-index: -2;
+      background: conic-gradient(from 0deg, transparent 0 300deg, #dfff00 360deg);
+      animation: beam-spin 3.5s linear infinite;
+    }
+    .btn-beam::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      z-index: -1;
+      border-radius: inherit;
+      background: var(--bg);
+    }
+
+    /* Card moderno (glass) */
+    .card-glass {
+      border-radius: 1.5rem;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      transition: transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1), border-color 0.4s, box-shadow 0.4s;
+    }
+    .card-glass:hover {
+      transform: translateY(-8px);
+      border-color: var(--line-strong);
+      box-shadow: 0 24px 60px -28px rgba(223, 255, 0, 0.35);
+    }
+
+    /* Card retro (hard shadow + CRT) */
+    .card-retro {
+      position: relative;
+      background: var(--surface);
+      border: 4px solid var(--fg);
+      border-radius: 0;
+      box-shadow: 8px 8px 0 var(--fg);
+      transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+    }
+    .card-retro:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 12px 12px 0 #dfff00;
+    }
+
+    /* Bento retro cell (orcamento) */
+    .bento-cell {
+      position: relative;
+      border: 3px solid var(--fg);
+      background: var(--surface);
+      box-shadow: 6px 6px 0 var(--fg);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+    .bento-cell:hover { transform: translate(-1px, -1px); box-shadow: 7px 7px 0 #dfff00; }
+    .bento-cell:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--fg); }
+
+    /* Badge pixel */
+    .badge-pixel {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: "Press Start 2P", cursive;
+      font-size: 7px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 10px;
+      color: #000;
+      background: #dfff00;
+      border: 3px solid #000;
+      border-radius: 0;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.16rem;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      border: 1px solid var(--line-strong);
+      color: var(--muted);
+    }
+
+    /* Input retro + moderno */
+    .input-modern {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.85rem;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--fg);
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-modern::placeholder { color: var(--muted); }
+    .input-modern:focus {
+      outline: none;
+      border-color: #dfff00;
+      box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+    }
+    .input-retro {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 0;
+      background: var(--surface);
+      border: 3px solid var(--fg);
+      color: var(--fg);
+      font-family: "Geist", sans-serif;
+      font-size: 0.9rem;
+      box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.06);
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .input-retro:focus { outline: none; border-color: #dfff00; box-shadow: 4px 4px 0 #dfff00; }
+
+    /* Tooltip */
+    .tip { position: relative; }
+    .tip > .tip-body {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: "Press Start 2P", cursive;
+      font-size: 7px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #000;
+      color: #dfff00;
+      border: 2px solid #dfff00;
+      padding: 7px 9px;
+      box-shadow: 3px 3px 0 #dfff00;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    .tip:hover > .tip-body { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Swatch */
+    .swatch { height: 84px; border-radius: 0.5rem 0.5rem 0 0; }
+
+    /* Cursor pixel piscando */
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .cursor-blink { animation: blink 1s step-end infinite; }
+
+    @keyframes beam-spin { to { transform: rotate(360deg); } }
+    @keyframes streakFlow { 0% { stroke-dashoffset: 600; } 100% { stroke-dashoffset: -600; } }
+    @keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes neon-pulse {
+      0%, 100% { box-shadow: 0 0 16px rgba(223,255,0,0.4), 0 0 36px rgba(223,255,0,0.18); }
+      50% { box-shadow: 0 0 26px rgba(223,255,0,0.65), 0 0 60px rgba(223,255,0,0.3); }
+    }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes scan-bar { 0% { transform: translateY(-100%); } 100% { transform: translateY(900%); } }
+
+    .anim-float { animation: float-y 6s ease-in-out infinite; }
+    .anim-neon { animation: neon-pulse 2.4s ease-in-out infinite; }
+    .marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    /* Reveal base (GSAP define o estado final) */
+    .reveal { opacity: 0; transform: translateY(28px); filter: blur(6px); }
+    .reveal.is-in { opacity: 1; transform: none; filter: blur(0); }
+
+    /* Eyebrow / kicker */
+    .kicker {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18rem;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .kicker-accent { color: #84a700; }
+    [data-theme="dark"] .kicker-accent { color: #dfff00; }
+    .hl-accent { color: #5f7a00; }
+    [data-theme="dark"] .hl-accent { color: #dfff00; }
+
+    .spec-row { border-top: 1px solid var(--line); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .anim-float, .anim-neon, .marquee-track, .cursor-blink,
+      .btn-beam::before { animation: none !important; }
+      .reveal { opacity: 1; transform: none; filter: none; }
+    }
+  </style>
+</head>
+
+<body class="font-body antialiased">
+  <!-- Scanlines globais -->
+  <div class="scanlines-global" aria-hidden="true"></div>
+
+  <!-- ───────────────────────── NAV ───────────────────────── -->
+  <header class="fixed inset-x-0 top-4 z-[70] px-4">
+    <nav
+      class="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-full border px-4 py-2.5 backdrop-blur-2xl"
+      style="background: var(--glass); border-color: var(--line-strong);"
+    >
+      <a href="#hero" class="flex items-center gap-2">
+        <span class="grid h-7 w-7 place-items-center bg-accent text-black" style="box-shadow: 3px 3px 0 #000;">
+          <iconify-icon icon="solar:bolt-bold" width="16"></iconify-icon>
+        </span>
+        <span class="font-display text-lg tracking-tight">ELEVATE</span>
+      </a>
+
+      <div class="hidden items-center gap-7 md:flex">
+        <a href="#type" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Tipografia</a>
+        <a href="#color" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Cores</a>
+        <a href="#components" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Componentes</a>
+        <a href="#icons" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Ícones</a>
+        <a href="#motion" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Animações</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          id="themeToggle"
+          aria-label="Alternar tema"
+          class="grid h-9 w-9 place-items-center rounded-full border transition hover:border-accent"
+          style="border-color: var(--line-strong);"
+        >
+          <iconify-icon id="themeIcon" icon="solar:moon-bold" width="17"></iconify-icon>
+        </button>
+        <button class="pixel-btn is-sm hidden sm:inline-flex">Começar</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ───────────────────────── HERO ───────────────────────── -->
+  <section id="hero" class="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
+    <!-- vídeo de fundo -->
+    <video
+      class="absolute inset-0 h-full w-full object-cover opacity-[0.28]"
+      autoplay muted loop playsinline aria-hidden="true"
+    >
+      <source src="main-design/assets/6a6f2eb0736cb112_1779167002223-99fabe3c-2225-4a.mp4" type="video/mp4" />
+    </video>
+
+    <!-- camadas de glow / grid -->
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 0%, var(--bg) 100%);"></div>
+    <div class="grid-overlay"></div>
+    <div data-blob class="glow-blob glow-lime left-[8%] top-1/3 h-[min(55vw,460px)] w-[min(55vw,460px)] -translate-y-1/2"></div>
+    <div data-blob class="glow-blob glow-emerald bottom-[12%] right-[6%] h-[min(48vw,400px)] w-[min(48vw,400px)]"></div>
+
+    <!-- streaks animados (porta do HeroBlock.tsx) -->
+    <svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M200,0 Q1320,80 1440,180" stroke="#22c55e" stroke-width="6" fill="none" opacity="0.4" stroke-dasharray="100 200" style="animation: streakFlow 28s linear infinite;" stroke-linecap="round" />
+      <path d="M160,0 Q1300,100 1440,220" stroke="#22c55e" stroke-width="5" fill="none" opacity="0.32" stroke-dasharray="90 210" style="animation: streakFlow 32s linear infinite 4s;" stroke-linecap="round" />
+      <path d="M240,900 Q120,780 0,620" stroke="#dfff00" stroke-width="6" fill="none" opacity="0.42" stroke-dasharray="100 200" style="animation: streakFlow 26s linear infinite 1s;" stroke-linecap="round" />
+      <path d="M200,900 Q100,820 0,720" stroke="#dfff00" stroke-width="5" fill="none" opacity="0.32" stroke-dasharray="90 210" style="animation: streakFlow 30s linear infinite 6s;" stroke-linecap="round" />
+    </svg>
+
+    <!-- glyphs flutuantes com parallax -->
+    <div id="glyphLayer" class="pointer-events-none absolute inset-0 z-10">
+      <span data-glyph data-depth="0.7" class="absolute left-[12%] top-[22%] text-3xl opacity-40 anim-float">▲</span>
+      <span data-glyph data-depth="1.1" class="absolute right-[14%] top-[18%] text-4xl opacity-40 anim-float" style="animation-delay:.6s; color:#dfff00;">◆</span>
+      <span data-glyph data-depth="0.9" class="absolute left-[18%] bottom-[20%] font-pixel text-xl opacity-50 anim-float" style="animation-delay:1.1s; color:#22c55e;">{ }</span>
+      <span data-glyph data-depth="1.2" class="absolute right-[20%] bottom-[24%] text-3xl opacity-40 anim-float" style="animation-delay:.3s;">●</span>
+      <span data-glyph data-depth="0.8" class="absolute left-[44%] top-[12%] text-2xl opacity-30 anim-float" style="animation-delay:1.4s; color:#dfff00;">✦</span>
+      <span data-glyph data-depth="1.0" class="absolute right-[40%] bottom-[12%] font-pixel text-base opacity-40 anim-float" style="animation-delay:.9s;">&lt;/&gt;</span>
+    </div>
+
+    <!-- conteúdo -->
+    <div class="relative z-20 mx-auto w-full max-w-4xl px-6 text-center">
+      <div class="mb-6 flex justify-center" data-hero="1">
+        <span class="badge-pill"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span> Fábrica de software · UX em primeiro lugar</span>
+      </div>
+
+      <h1 class="font-display text-[clamp(2.4rem,9vw,5.5rem)] font-normal leading-[0.92] tracking-tight" data-hero="2">
+        <span data-split>Construímos o</span><br />
+        <span data-split class="hl-accent">futuro</span>
+        <span data-split>digital</span>
+        <span class="cursor-blink font-pixel align-middle text-[0.4em]" style="color:#dfff00;">_</span>
+      </h1>
+
+      <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted md:text-lg" data-hero="3">
+        Automações, sistemas de controle industrial e digitalização de empresas —
+        com um diferencial ousado, retro e <span class="font-pixel text-[0.75em]" style="color:#84a700;">arcade</span>.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-4" data-hero="4">
+        <button class="pixel-btn"><iconify-icon icon="solar:gamepad-bold" width="14"></iconify-icon> Iniciar projeto</button>
+        <a href="#components" class="btn-glass btn-beam">
+          Ver componentes <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>
+        </a>
+      </div>
+
+      <div class="mt-16 flex flex-col items-center gap-2 text-muted" data-hero="5">
+        <span class="font-pixel text-[7px] uppercase tracking-[0.2em]">Role para explorar</span>
+        <iconify-icon icon="solar:alt-arrow-down-linear" width="20" class="anim-float"></iconify-icon>
+      </div>
+    </div>
+  </section>
+
+  <!-- marquee retro -->
+  <div class="relative overflow-hidden border-y" style="border-color: var(--line); background: var(--alt);">
+    <div class="marquee-track py-3">
+      <div class="flex shrink-0 items-center gap-8 pr-8 font-pixel text-[9px] uppercase tracking-[0.15em]">
+        <span style="color:#84a700;">★ Retro</span><span>Futurista</span><span style="color:#84a700;">★ Pixel Perfect</span><span>UX First</span><span style="color:#84a700;">★ Automação</span><span>Indústria 4.0</span><span style="color:#84a700;">★ Digitalização</span><span>Elevate</span>
+      </div>
+      <div class="flex shrink-0 items-center gap-8 pr-8 font-pixel text-[9px] uppercase tracking-[0.15em]" aria-hidden="true">
+        <span style="color:#84a700;">★ Retro</span><span>Futurista</span><span style="color:#84a700;">★ Pixel Perfect</span><span>UX First</span><span style="color:#84a700;">★ Automação</span><span>Indústria 4.0</span><span style="color:#84a700;">★ Digitalização</span><span>Elevate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────────────────── TIPOGRAFIA ───────────────────────── -->
+  <section id="type" class="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32">
+    <div data-blob class="glow-blob glow-lime -left-20 top-10 h-[320px] w-[320px] opacity-60"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <header class="reveal mb-14 max-w-2xl">
+        <p class="kicker kicker-accent">// 02 — Tipografia</p>
+        <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Type system</h2>
+        <p class="mt-4 text-muted">DotGothic16 para títulos (caráter retro), Geist para corpo e UI, e Press Start 2P para detalhes arcade. Carregadas via Google Fonts com <span class="mono">display=swap</span> + preconnect.</p>
+      </header>
+
+      <!-- famílias -->
+      <div class="reveal mb-14 grid gap-4 md:grid-cols-3">
+        <div class="card-glass p-6">
+          <p class="kicker">Heading</p>
+          <p class="font-display mt-3 text-4xl">DotGothic16</p>
+          <p class="mt-3 text-sm text-muted">Pixel-grotesk · peso 400 · usada em h1–h3, logo e números.</p>
+        </div>
+        <div class="card-glass p-6">
+          <p class="kicker">Body / UI</p>
+          <p class="mt-3 text-4xl" style="font-family:Geist,sans-serif;">Geist Sans</p>
+          <p class="mt-3 text-sm text-muted">Pesos 300–700 · parágrafos, navegação, forms, botões.</p>
+        </div>
+        <div class="card-glass p-6">
+          <p class="kicker">Accent / Retro</p>
+          <p class="font-pixel mt-4 text-xl">Press Start</p>
+          <p class="mt-4 text-sm text-muted">Peso 400 · labels, badges, CTAs pixel e detalhes arcade.</p>
+        </div>
+      </div>
+
+      <!-- escala -->
+      <div class="reveal overflow-hidden rounded-2xl border" style="border-color: var(--line);">
+        <div class="hidden grid-cols-12 gap-4 px-6 py-3 text-[0.7rem] uppercase tracking-[0.16rem] text-muted md:grid" style="background: var(--alt);">
+          <div class="col-span-5">Amostra</div>
+          <div class="col-span-2">Role / Família</div>
+          <div class="col-span-2">Size / Line</div>
+          <div class="col-span-3">Weight · Tracking · Transform</div>
+        </div>
+
+        <!-- linhas -->
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 font-display text-5xl leading-[0.95] tracking-tight">Heading 1</div>
+          <div class="col-span-2 text-sm text-muted">h1 · DotGothic16</div>
+          <div class="col-span-2 mono text-sm">3rem→6rem / 0.92</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · -0.025em · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 font-display text-4xl leading-tight tracking-tight">Heading 2</div>
+          <div class="col-span-2 text-sm text-muted">h2 · DotGothic16</div>
+          <div class="col-span-2 mono text-sm">2.25→3.75rem / 1.1</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · -0.025em · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 font-display text-3xl tracking-tight">Heading 3</div>
+          <div class="col-span-2 text-sm text-muted">h3 · DotGothic16</div>
+          <div class="col-span-2 mono text-sm">1.875rem / 1.2</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · -0.02em · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-2xl font-semibold" style="font-family:Geist;">Heading 4</div>
+          <div class="col-span-2 text-sm text-muted">h4 · Geist</div>
+          <div class="col-span-2 mono text-sm">1.5rem / 1.3</div>
+          <div class="col-span-3 mono text-xs text-muted">600 · -0.01em · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-xl font-semibold" style="font-family:Geist;">Heading 5</div>
+          <div class="col-span-2 text-sm text-muted">h5 · Geist</div>
+          <div class="col-span-2 mono text-sm">1.25rem / 1.4</div>
+          <div class="col-span-3 mono text-xs text-muted">600 · 0 · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-base font-semibold uppercase tracking-[0.16rem]" style="font-family:Geist;">Heading 6</div>
+          <div class="col-span-2 text-sm text-muted">h6 · Geist</div>
+          <div class="col-span-2 mono text-sm">1rem / 1.5</div>
+          <div class="col-span-3 mono text-xs text-muted">600 · 0.16rem · uppercase</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-lg leading-relaxed" style="font-family:Geist;">Body Large — texto de destaque em introduções.</div>
+          <div class="col-span-2 text-sm text-muted">body-lg · Geist</div>
+          <div class="col-span-2 mono text-sm">1.125rem / 1.625</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · 0 · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-base leading-relaxed" style="font-family:Geist;">Body — texto padrão de parágrafo.</div>
+          <div class="col-span-2 text-sm text-muted">body · Geist</div>
+          <div class="col-span-2 mono text-sm">1rem / 1.6</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · 0 · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-sm leading-relaxed text-muted" style="font-family:Geist;">Body Small — apoio e descrições secundárias.</div>
+          <div class="col-span-2 text-sm text-muted">body-sm · Geist</div>
+          <div class="col-span-2 mono text-sm">0.875rem / 1.6</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · 0 · none</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-xs uppercase tracking-[0.18rem] text-muted" style="font-family:Geist;">Label / Eyebrow</div>
+          <div class="col-span-2 text-sm text-muted">label · Geist</div>
+          <div class="col-span-2 mono text-sm">0.75rem / 1.4</div>
+          <div class="col-span-3 mono text-xs text-muted">500 · 0.18rem · uppercase</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 font-pixel text-[10px] uppercase">Caption Pixel</div>
+          <div class="col-span-2 text-sm text-muted">caption · Press Start</div>
+          <div class="col-span-2 mono text-sm">10px / 1.4</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · 0.06em · uppercase</div>
+        </div>
+        <div class="spec-row grid grid-cols-1 gap-2 px-6 py-5 md:grid-cols-12 md:items-center md:gap-4">
+          <div class="col-span-5 text-xs text-muted" style="font-family:Geist;">Helper text — mensagem auxiliar de formulário.</div>
+          <div class="col-span-2 text-sm text-muted">helper · Geist</div>
+          <div class="col-span-2 mono text-sm">0.75rem / 1.5</div>
+          <div class="col-span-3 mono text-xs text-muted">400 · 0 · none</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── CORES ───────────────────────── -->
+  <section id="color" class="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32" style="background: var(--alt);">
+    <div data-blob class="glow-blob glow-emerald right-0 top-20 h-[360px] w-[360px] opacity-60"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <header class="reveal mb-14 max-w-2xl">
+        <p class="kicker kicker-accent">// 03 — Sistema de cores</p>
+        <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Color system</h2>
+        <p class="mt-4 text-muted">Monocromático preto e branco com um único verde neon — <span class="font-pixel text-[0.7em]" style="color:#84a700;">#DFFF00</span> — que carrega toda a energia da marca. Verde sempre pareia com preto.</p>
+      </header>
+
+      <!-- swatches principais -->
+      <div class="reveal grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- accent -->
+        <div class="overflow-hidden rounded-xl border" style="border-color: var(--line);">
+          <div class="swatch" style="background:#dfff00;"></div>
+          <div class="space-y-1 p-4 text-xs" style="background: var(--surface);">
+            <p class="font-pixel text-[9px]">Accent / Primary</p>
+            <p class="mono text-muted">HEX #DFFF00</p>
+            <p class="mono text-muted">RGB 223 255 0</p>
+            <p class="mono text-muted">HSL 67 100% 50%</p>
+            <p class="pt-1 text-muted">CTAs · highlights · glow · seleção</p>
+          </div>
+        </div>
+        <!-- ink -->
+        <div class="overflow-hidden rounded-xl border" style="border-color: var(--line);">
+          <div class="swatch" style="background:#050505;"></div>
+          <div class="space-y-1 p-4 text-xs" style="background: var(--surface);">
+            <p class="font-pixel text-[9px]">Ink / Dark</p>
+            <p class="mono text-muted">HEX #050505</p>
+            <p class="mono text-muted">RGB 5 5 5</p>
+            <p class="mono text-muted">HSL 0 0% 2%</p>
+            <p class="pt-1 text-muted">Fundo (dark) · texto em verde</p>
+          </div>
+        </div>
+        <!-- cream -->
+        <div class="overflow-hidden rounded-xl border" style="border-color: var(--line);">
+          <div class="swatch" style="background:#f2f0eb;"></div>
+          <div class="space-y-1 p-4 text-xs" style="background: var(--surface);">
+            <p class="font-pixel text-[9px]">Cream / Light</p>
+            <p class="mono text-muted">HEX #F2F0EB</p>
+            <p class="mono text-muted">RGB 242 240 235</p>
+            <p class="mono text-muted">HSL 43 18% 94%</p>
+            <p class="pt-1 text-muted">Texto (dark) · superfícies</p>
+          </div>
+        </div>
+        <!-- muted -->
+        <div class="overflow-hidden rounded-xl border" style="border-color: var(--line);">
+          <div class="swatch" style="background:#71717a;"></div>
+          <div class="space-y-1 p-4 text-xs" style="background: var(--surface);">
+            <p class="font-pixel text-[9px]">Neutral / Muted</p>
+            <p class="mono text-muted">HEX #71717A</p>
+            <p class="mono text-muted">RGB 113 113 122</p>
+            <p class="mono text-muted">HSL 240 4% 46%</p>
+            <p class="pt-1 text-muted">Texto secundário · labels</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- secundárias / feedback / decorativas -->
+      <div class="reveal mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border p-4" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-3">Decorativas (arcade)</p>
+          <div class="flex gap-2">
+            <span class="h-9 flex-1 rounded" style="background:#22c55e;" title="#22c55e"></span>
+            <span class="h-9 flex-1 rounded" style="background:#67e8f9;" title="#67e8f9"></span>
+            <span class="h-9 flex-1 rounded" style="background:#f9a8d4;" title="#f9a8d4"></span>
+          </div>
+          <p class="mono mt-3 text-xs text-muted">#22C55E · #67E8F9 · #F9A8D4</p>
+        </div>
+        <div class="rounded-xl border p-4" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-3">Feedback</p>
+          <div class="flex gap-2">
+            <span class="grid h-9 flex-1 place-items-center rounded text-black" style="background:#22c55e;"><iconify-icon icon="solar:check-circle-bold" width="16"></iconify-icon></span>
+            <span class="grid h-9 flex-1 place-items-center rounded text-black" style="background:#fbbf24;"><iconify-icon icon="solar:danger-triangle-bold" width="16"></iconify-icon></span>
+            <span class="grid h-9 flex-1 place-items-center rounded text-white" style="background:#ef4444;"><iconify-icon icon="solar:close-circle-bold" width="16"></iconify-icon></span>
+          </div>
+          <p class="mono mt-3 text-xs text-muted">success · warning · error</p>
+        </div>
+        <div class="rounded-xl border p-4" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-3">Gradiente</p>
+          <div class="h-9 rounded" style="background: linear-gradient(135deg,#dfff00 0%, #22c55e 100%);"></div>
+          <p class="mono mt-3 text-xs text-muted">lime → emerald 135°</p>
+        </div>
+        <div class="rounded-xl border p-4" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-3">Glow</p>
+          <div class="grid h-9 place-items-center rounded" style="background:#050505; box-shadow: inset 0 0 30px rgba(223,255,0,0.5);">
+            <span class="h-4 w-4 rounded-full anim-neon" style="background:#dfff00;"></span>
+          </div>
+          <p class="mono mt-3 text-xs text-muted">drop-shadow rgba(223,255,0,.4)</p>
+        </div>
+      </div>
+
+      <!-- opacidade + uso contextual -->
+      <div class="reveal mt-4 grid gap-4 lg:grid-cols-2">
+        <div class="rounded-xl border p-6" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-4">Variações de opacidade — #DFFF00</p>
+          <div class="grid grid-cols-6 gap-1.5">
+            <div class="h-10 rounded" style="background: rgba(223,255,0,0.05);"></div>
+            <div class="h-10 rounded" style="background: rgba(223,255,0,0.15);"></div>
+            <div class="h-10 rounded" style="background: rgba(223,255,0,0.3);"></div>
+            <div class="h-10 rounded" style="background: rgba(223,255,0,0.5);"></div>
+            <div class="h-10 rounded" style="background: rgba(223,255,0,0.75);"></div>
+            <div class="h-10 rounded" style="background: rgba(223,255,0,1);"></div>
+          </div>
+          <div class="mono mt-2 grid grid-cols-6 gap-1.5 text-center text-[10px] text-muted">
+            <span>5%</span><span>15%</span><span>30%</span><span>50%</span><span>75%</span><span>100%</span>
+          </div>
+        </div>
+        <div class="rounded-xl border p-6" style="border-color: var(--line); background: var(--surface);">
+          <p class="kicker mb-4">Uso contextual · Contraste</p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center gap-3"><span class="badge-pill" style="background:#dfff00;color:#000;border-color:#000;">Text</span> verde sobre preto/branco · <span class="mono text-muted">AAA</span></li>
+            <li class="flex items-center gap-3"><span class="badge-pill" style="border-color:var(--line-strong)">Background</span> preto sobre verde · <span class="mono text-muted">AAA</span></li>
+            <li class="flex items-center gap-3"><span class="badge-pill" style="border-color:var(--line-strong)">Border</span> accent /20 → /100 no hover</li>
+            <li class="flex items-center gap-3"><span class="badge-pill" style="border-color:var(--line-strong)">Hover</span> superfície → fill verde + texto preto</li>
+            <li class="flex items-center gap-3"><span class="badge-pill" style="border-color:var(--line-strong)">Disabled</span> muted /40 · sem glow</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── COMPONENTES ───────────────────────── -->
+  <section id="components" class="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32">
+    <div class="grid-overlay opacity-60"></div>
+    <div data-blob class="glow-blob glow-lime left-1/2 top-0 h-[320px] w-[320px] -translate-x-1/2 opacity-50"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <header class="reveal mb-14 max-w-2xl">
+        <p class="kicker kicker-accent">// 04 — Componentes UI</p>
+        <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Components</h2>
+        <p class="mt-4 text-muted">Cada bloco combina o moderno (glass, rounded) com o arcade (pixel, hard-shadow, CRT). Passe o mouse para ver as animações.</p>
+      </header>
+
+      <!-- BOTÕES -->
+      <div class="reveal mb-6 card-glass p-6 md:p-8">
+        <div class="mb-5 flex items-center justify-between">
+          <h3 class="font-display text-2xl tracking-tight">Buttons</h3>
+          <span class="badge-pill">8-bit press · beam · glass</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+          <button class="pixel-btn"><iconify-icon icon="solar:gamepad-bold" width="14"></iconify-icon> Pixel Lime</button>
+          <button class="pixel-btn is-cyan">Pixel Cyan</button>
+          <button class="pixel-btn is-magenta">Pixel Pink</button>
+          <button class="pixel-btn is-outline">Outline</button>
+          <a class="btn-glass btn-beam">Glass Beam <iconify-icon icon="solar:arrow-right-linear" width="15"></iconify-icon></a>
+          <button class="btn-glass">Glass <iconify-icon icon="solar:download-minimalistic-linear" width="15"></iconify-icon></button>
+          <button class="text-sm font-medium text-muted underline-offset-4 transition hover:text-fg hover:underline">Ghost link</button>
+        </div>
+        <p class="mt-5 text-xs text-muted">Spec · pixel: <span class="mono">border 3px #000 · box-shadow 4px 4px 0 · hover translate(-1,-1) · active translate(3,3)</span></p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- INPUTS -->
+        <div class="reveal card-glass p-6 md:p-8">
+          <div class="mb-5 flex items-center justify-between">
+            <h3 class="font-display text-2xl tracking-tight">Inputs</h3>
+            <span class="badge-pill">modern + retro</span>
+          </div>
+          <div class="space-y-5">
+            <div>
+              <label class="kicker mb-2 block">E-mail (moderno)</label>
+              <input class="input-modern" type="email" placeholder="voce@empresa.com" />
+              <p class="mt-1.5 text-xs text-muted">Helper · focus = ring verde /25</p>
+            </div>
+            <div>
+              <label class="kicker mb-2 block">Projeto (retro)</label>
+              <input class="input-retro" type="text" placeholder="Descreva sua ideia..." />
+            </div>
+            <div>
+              <label class="kicker mb-2 block" style="color:#ef4444;">Erro</label>
+              <input class="input-modern" type="text" value="cnpj inválido" style="border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,0.2);" />
+              <p class="mt-1.5 text-xs" style="color:#ef4444;">CNPJ não encontrado.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD RETRO -->
+        <div class="reveal flex flex-col gap-6">
+          <article class="card-retro overflow-hidden">
+            <div class="crt relative h-32 overflow-hidden" style="background: linear-gradient(135deg,#dfff00 0%,#22c55e 100%);">
+              <div class="absolute left-0 top-0 h-2 w-full bg-white/30" style="animation: scan-bar 3s linear infinite;"></div>
+              <span class="absolute bottom-3 left-3 font-pixel text-[9px] text-black">SISTEMA.EXE</span>
+            </div>
+            <div class="p-5">
+              <h4 class="font-display text-xl">Card Retro</h4>
+              <p class="mt-1.5 text-sm text-muted">Hard-shadow 8px + CRT no header. No hover a sombra cresce e fica verde.</p>
+              <div class="mt-4 flex gap-2">
+                <span class="badge-pixel" style="background:#000;color:#dfff00;">v2.0</span>
+                <span class="badge-pixel">novo</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- CARDS GLASS / BENTO -->
+      <div class="reveal mt-6 grid gap-4 md:grid-cols-3">
+        <div class="card-glass p-6">
+          <span class="grid h-11 w-11 place-items-center rounded-xl text-black" style="background:#dfff00;">
+            <iconify-icon icon="solar:cpu-bolt-bold" width="22"></iconify-icon>
+          </span>
+          <h4 class="mt-4 text-lg font-semibold">Card Glass</h4>
+          <p class="mt-1.5 text-sm text-muted">Rounded 1.5rem · backdrop-blur · lift -8px no hover com glow verde.</p>
+        </div>
+        <div class="bento-cell p-6">
+          <p class="font-pixel text-[9px]" style="color:#84a700;">// BENTO</p>
+          <p class="font-display mt-3 text-4xl">99.9%</p>
+          <p class="mt-1 text-sm text-muted">uptime garantido <span class="cursor-blink">_</span></p>
+        </div>
+        <div class="bento-cell p-6">
+          <p class="font-pixel text-[9px]" style="color:#84a700;">// STACK</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="badge-pill">Next.js</span>
+            <span class="badge-pill">GSAP</span>
+            <span class="badge-pill">Tailwind</span>
+            <span class="badge-pill">Node</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAVBAR / SECTION / BADGES / TOOLTIP / MODAL -->
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <!-- navbar demo -->
+        <div class="reveal card-glass p-6 md:p-8">
+          <h3 class="font-display mb-4 text-2xl tracking-tight">Navbar</h3>
+          <div class="flex items-center justify-between rounded-full border px-4 py-2.5" style="border-color: var(--line-strong); background: var(--surface-2);">
+            <span class="font-display text-base tracking-tight">ELEVATE</span>
+            <div class="hidden items-center gap-4 text-xs uppercase tracking-[0.16rem] text-muted sm:flex">
+              <span class="text-fg">Home</span><span>Sobre</span><span>Contato</span>
+            </div>
+            <button class="pixel-btn is-sm">Menu</button>
+          </div>
+          <p class="mt-4 text-xs text-muted">Pill flutuante · blur · borda gradiente sutil.</p>
+        </div>
+
+        <!-- badges + tooltip + modal trigger -->
+        <div class="reveal card-glass p-6 md:p-8">
+          <h3 class="font-display mb-4 text-2xl tracking-tight">Badges · Tooltip · Modal</h3>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="badge-pixel"><iconify-icon icon="solar:star-bold" width="10"></iconify-icon> Destaque</span>
+            <span class="badge-pixel" style="background:#67e8f9;">Beta</span>
+            <span class="badge-pill"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span> Online</span>
+            <span class="tip">
+              <button class="btn-glass">Hover tooltip</button>
+              <span class="tip-body">Dica retro!</span>
+            </span>
+            <button class="pixel-btn" id="openModal"><iconify-icon icon="solar:square-top-down-bold" width="13"></iconify-icon> Abrir modal</button>
+          </div>
+          <p class="mt-4 text-xs text-muted">Tooltip e badge usam Press Start 2P + hard-shadow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div id="modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4">
+    <div id="modalBackdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div class="card-retro crt relative z-10 w-full max-w-md overflow-hidden">
+      <div class="flex items-center justify-between border-b-4 px-5 py-3" style="border-color: var(--fg); background:#dfff00;">
+        <span class="font-pixel text-[10px] text-black">DIALOG.SYS</span>
+        <button id="closeModal" class="grid h-7 w-7 place-items-center border-2 border-black bg-white text-black" style="box-shadow:2px 2px 0 #000;">
+          <iconify-icon icon="solar:close-linear" width="14"></iconify-icon>
+        </button>
+      </div>
+      <div class="p-6">
+        <h4 class="font-display text-2xl">Pronto para elevar?</h4>
+        <p class="mt-2 text-sm text-muted">Modal retro com header pixel, borda 4px e scanlines CRT. Animação de entrada via GSAP.</p>
+        <div class="mt-5 flex gap-3">
+          <button class="pixel-btn">Confirmar</button>
+          <button class="pixel-btn is-outline" id="closeModal2">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────────────────── ÍCONES ───────────────────────── -->
+  <section id="icons" class="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32" style="background: var(--alt);">
+    <div data-blob class="glow-blob glow-lime right-10 bottom-0 h-[300px] w-[300px] opacity-50"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <header class="reveal mb-14 max-w-2xl">
+        <p class="kicker kicker-accent">// 05 — Ícones</p>
+        <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Iconography</h2>
+        <p class="mt-4 text-muted">Set <span class="mono">Solar</span> via Iconify (mesmo das referências). Linear para UI, Bold para destaques. Tamanhos 16 / 20 / 24.</p>
+      </header>
+
+      <div id="iconGrid" class="reveal grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── ANIMAÇÕES ───────────────────────── -->
+  <section id="motion" class="relative overflow-hidden px-4 py-24 sm:px-6 md:py-32">
+    <div class="grid-overlay opacity-50"></div>
+    <div data-blob class="glow-blob glow-emerald left-0 top-1/3 h-[340px] w-[340px] opacity-50"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <header class="reveal mb-14 max-w-2xl">
+        <p class="kicker kicker-accent">// 06 — Animações</p>
+        <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Motion library</h2>
+        <p class="mt-4 text-muted">Cada dobra reutiliza: background animado (mesh/streaks/grid), entrada (GSAP fade+blur+rise) e micro-interações em botões e cards.</p>
+      </header>
+
+      <div class="reveal grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="card-glass overflow-hidden p-6">
+          <div class="mb-4 grid h-24 place-items-center overflow-hidden rounded-lg" style="background: var(--surface-2);">
+            <div class="h-10 w-10 rounded-full anim-neon" style="background:#dfff00;"></div>
+          </div>
+          <p class="font-display text-lg">Neon Pulse</p>
+          <p class="mono mt-1 text-xs text-muted">box-shadow 2.4s ease-in-out</p>
+        </div>
+        <div class="card-glass overflow-hidden p-6">
+          <div class="mb-4 grid h-24 place-items-center overflow-hidden rounded-lg" style="background: var(--surface-2);">
+            <span class="text-4xl anim-float">◆</span>
+          </div>
+          <p class="font-display text-lg">Float</p>
+          <p class="mono mt-1 text-xs text-muted">translateY 6s loop</p>
+        </div>
+        <div class="card-glass overflow-hidden p-6">
+          <div class="crt mb-4 grid h-24 place-items-center overflow-hidden rounded-lg" style="background: linear-gradient(135deg,#dfff00,#22c55e);">
+            <div class="h-1.5 w-full bg-white/40" style="animation: scan-bar 2.4s linear infinite;"></div>
+          </div>
+          <p class="font-display text-lg">CRT Scan</p>
+          <p class="mono mt-1 text-xs text-muted">scanlines + scan-bar</p>
+        </div>
+        <div class="card-glass overflow-hidden p-6">
+          <div class="mb-4 grid h-24 place-items-center overflow-hidden rounded-lg" style="background: var(--surface-2);">
+            <a class="btn-glass btn-beam scale-90">Beam</a>
+          </div>
+          <p class="font-display text-lg">Conic Beam</p>
+          <p class="mono mt-1 text-xs text-muted">beam-spin 3.5s linear</p>
+        </div>
+        <div class="card-glass overflow-hidden p-6">
+          <div class="mb-4 grid h-24 place-items-center overflow-hidden rounded-lg" style="background: var(--surface-2);">
+            <button class="pixel-btn">PRESS</button>
+          </div>
+          <p class="font-display text-lg">8-bit Press</p>
+          <p class="mono mt-1 text-xs text-muted">transform + shadow 0.08s</p>
+        </div>
+        <div class="card-glass overflow-hidden p-6">
+          <div class="mb-4 flex h-24 items-center overflow-hidden rounded-lg" style="background: var(--surface-2);">
+            <div class="marquee-track">
+              <span class="px-4 font-pixel text-[9px]" style="color:#84a700;">★ ELEVATE ★ ELEVATE ★ ELEVATE&nbsp;</span>
+              <span class="px-4 font-pixel text-[9px]" style="color:#84a700;">★ ELEVATE ★ ELEVATE ★ ELEVATE&nbsp;</span>
+            </div>
+          </div>
+          <p class="font-display text-lg">Marquee</p>
+          <p class="mono mt-1 text-xs text-muted">translateX 26s linear</p>
+        </div>
+      </div>
+
+      <p class="reveal mono mt-10 text-center text-xs text-muted">
+        Entrada global: <span style="color:#84a700;">.reveal</span> → GSAP ScrollTrigger (opacity + translateY 28px + blur 6px) · stagger por seção
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── FOOTER ───────────────────────── -->
+  <footer class="relative overflow-hidden border-t px-4 py-16" style="border-color: var(--line); background: var(--alt);">
+    <div data-blob class="glow-blob glow-lime left-1/2 -bottom-20 h-[300px] w-[400px] -translate-x-1/2 opacity-40"></div>
+    <div class="relative mx-auto flex max-w-6xl flex-col items-center gap-5 text-center">
+      <span class="grid h-12 w-12 place-items-center bg-accent text-black" style="box-shadow:4px 4px 0 #000;">
+        <iconify-icon icon="solar:bolt-bold" width="26"></iconify-icon>
+      </span>
+      <h2 class="font-display text-3xl tracking-tight">ELEVATE Design System</h2>
+      <p class="max-w-md text-sm text-muted">Retro + futurista. Tecnológico, exclusivo e com a experiência do usuário no centro.</p>
+      <div class="flex gap-3">
+        <button class="pixel-btn">Começar projeto</button>
+        <button class="btn-glass">Documentação</button>
+      </div>
+      <p class="font-pixel mt-4 text-[8px] uppercase tracking-[0.15em] text-muted">© 2026 Elevate · feito com pixels &amp; cuidado</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ─── Tema ─────────────────────────────────────────────── */
+    (function () {
+      const html = document.documentElement;
+      const icon = document.getElementById("themeIcon");
+      const saved = localStorage.getItem("elevate-theme");
+      if (saved) html.setAttribute("data-theme", saved);
+      const sync = () =>
+        icon.setAttribute(
+          "icon",
+          html.getAttribute("data-theme") === "dark" ? "solar:moon-bold" : "solar:sun-bold"
+        );
+      sync();
+      document.getElementById("themeToggle").addEventListener("click", () => {
+        const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", next);
+        localStorage.setItem("elevate-theme", next);
+        sync();
+      });
+    })();
+
+    /* ─── Ícones (Solar via Iconify) ───────────────────────── */
+    (function () {
+      const icons = [
+        ["solar:bolt-bold", "bolt"],["solar:cpu-bolt-bold", "cpu"],["solar:gamepad-bold", "gamepad"],
+        ["solar:code-square-linear", "code"],["solar:rocket-2-bold", "rocket"],["solar:settings-linear", "settings"],
+        ["solar:chart-2-bold", "chart"],["solar:shield-check-bold", "shield"],["solar:cloud-linear", "cloud"],
+        ["solar:database-bold", "database"],["solar:smartphone-linear", "mobile"],["solar:widget-bold", "widget"],
+        ["solar:user-circle-linear", "user"],["solar:bell-bold", "bell"],["solar:magnifer-linear", "search"],
+        ["solar:heart-bold", "heart"],["solar:star-bold", "star"],["solar:fire-bold", "fire"],
+        ["solar:lightbulb-bolt-bold", "idea"],["solar:graph-up-bold", "growth"],["solar:wallet-money-linear", "wallet"],
+        ["solar:letter-linear", "mail"],["solar:check-circle-bold", "check"],["solar:arrow-right-linear", "arrow"],
+      ];
+      const grid = document.getElementById("iconGrid");
+      grid.innerHTML = icons
+        .map(
+          ([ic, name]) => `
+          <div class="group flex flex-col items-center gap-2 rounded-xl border p-4 transition hover:border-accent" style="border-color: var(--line); background: var(--surface);">
+            <iconify-icon icon="${ic}" width="26" class="transition group-hover:scale-110" style="color: var(--fg);"></iconify-icon>
+            <span class="mono text-[10px] text-muted">${name}</span>
+          </div>`
+        )
+        .join("");
+    })();
+
+    /* ─── Modal ────────────────────────────────────────────── */
+    (function () {
+      const modal = document.getElementById("modal");
+      const panel = modal.querySelector(".card-retro");
+      const open = () => {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        if (window.gsap) gsap.fromTo(panel, { y: 40, scale: 0.92, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.35, ease: "back.out(1.6)" });
+      };
+      const close = () => { modal.classList.add("hidden"); modal.classList.remove("flex"); };
+      document.getElementById("openModal").addEventListener("click", open);
+      document.getElementById("closeModal").addEventListener("click", close);
+      document.getElementById("closeModal2").addEventListener("click", close);
+      document.getElementById("modalBackdrop").addEventListener("click", close);
+      document.addEventListener("keydown", (e) => e.key === "Escape" && close());
+    })();
+
+    /* ─── GSAP: split headline, entrada, parallax ──────────── */
+    window.addEventListener("load", function () {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!window.gsap || reduce) {
+        document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-in"));
+        return;
+      }
+      gsap.registerPlugin(ScrollTrigger);
+
+      // split de caracteres no headline do hero
+      document.querySelectorAll("[data-split]").forEach((el) => {
+        const text = el.textContent;
+        el.textContent = "";
+        text.split("").forEach((ch) => {
+          const s = document.createElement("span");
+          s.textContent = ch;
+          s.style.display = "inline-block";
+          s.style.whiteSpace = "pre";
+          s.className = "hero-char";
+          el.appendChild(s);
+        });
+      });
+
+      // timeline de entrada do hero
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.from('[data-hero="1"]', { y: 20, opacity: 0, duration: 0.5 })
+        .from(".hero-char", { y: 40, opacity: 0, filter: "blur(8px)", duration: 0.5, stagger: 0.018 }, "-=0.2")
+        .from('[data-hero="3"]', { y: 20, opacity: 0, duration: 0.5 }, "-=0.3")
+        .from('[data-hero="4"] > *', { y: 20, opacity: 0, duration: 0.45, stagger: 0.12 }, "-=0.25")
+        .from('[data-hero="5"]', { opacity: 0, duration: 0.5 }, "-=0.1")
+        .from("[data-glyph]", { scale: 0, opacity: 0, duration: 0.6, stagger: 0.08, ease: "back.out(2)" }, "-=0.9");
+
+      // reveal por seção (boot-up retro)
+      gsap.utils.toArray(".reveal").forEach((el) => {
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 85%",
+          once: true,
+          onEnter: () =>
+            gsap.to(el, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "power3.out", onStart: () => el.classList.add("is-in") }),
+        });
+      });
+
+      // parallax dos blobs de glow no scroll
+      gsap.utils.toArray("[data-blob]").forEach((blob, i) => {
+        gsap.to(blob, {
+          yPercent: i % 2 ? -18 : 18,
+          ease: "none",
+          scrollTrigger: { trigger: blob.closest("section, footer") || document.body, start: "top bottom", end: "bottom top", scrub: true },
+        });
+      });
+
+      // failsafe: se o rAF estiver paralisado (aba em background / preview
+      // offscreen), força o estado final para nada ficar invisível.
+      const startFrame = gsap.ticker.frame;
+      setTimeout(() => {
+        if (gsap.ticker.frame - startFrame < 5) {
+          gsap.set('[data-hero], .hero-char, [data-glyph]', { opacity: 1, y: 0, scale: 1, clearProps: "filter,transform" });
+          document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-in"));
+        }
+      }, 2600);
+
+      // parallax dos glyphs do hero com o mouse
+      const glyphs = gsap.utils.toArray("[data-glyph]");
+      let mx = 0, my = 0, sx = 0, sy = 0;
+      window.addEventListener("pointermove", (e) => {
+        mx = (e.clientX / window.innerWidth) * 2 - 1;
+        my = (e.clientY / window.innerHeight) * 2 - 1;
+      }, { passive: true });
+      gsap.ticker.add(() => {
+        sx += (mx - sx) * 0.06;
+        sy += (my - sy) * 0.06;
+        glyphs.forEach((g) => {
+          const d = parseFloat(g.dataset.depth || "1");
+          g.style.marginLeft = sx * 18 * d + "px";
+          g.style.marginTop = sy * 18 * d + "px";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
