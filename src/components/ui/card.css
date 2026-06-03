@@ -1,0 +1,286 @@
+/* Card — retro-window + bento (orcamento / orcamento-theme.css) */
+
+.elevate-card {
+  /* Mesmo verde do Hero (--hero-accent em globals.css) */
+  --ec-accent: var(--hero-accent, #dfff00);
+  --ec-fg: #09090b;
+  --ec-muted: #71717a;
+  --ec-surface: #ffffff;
+  --ec-panel-line: #d4d4d8;
+  --ec-bar: var(--hero-accent, #dfff00);
+  --ec-border: #171717;
+  --ec-shadow: #0f172a;
+  --ec-glass: rgba(255, 255, 255, 0.62);
+  --ec-glow: rgba(223, 255, 0, 0.35);
+
+  position: relative;
+  color: var(--ec-fg);
+  text-align: left;
+}
+
+.dark .elevate-card {
+  --ec-fg: #f2f0eb;
+  --ec-muted: #a8a29e;
+  --ec-surface: #1c1917;
+  --ec-panel-line: #44403c;
+  --ec-glass: rgba(28, 25, 23, 0.52);
+  --ec-glow: rgba(223, 255, 0, 0.38);
+}
+
+/* ─── Window (default — retro-window do orçamento) ──────────── */
+.elevate-card--window {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 0.125rem;
+  border: 2px solid var(--ec-border);
+  background: var(--ec-surface);
+  padding: 0;
+  box-shadow: 6px 6px 0 var(--ec-shadow);
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out,
+    border-color 0.12s ease;
+}
+
+.elevate-card--window:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 var(--ec-shadow);
+}
+
+.elevate-card--window:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--ec-shadow);
+}
+
+/* ─── Bento (bento-retro-cell) ────────────────────────────────── */
+.elevate-card--bento {
+  gap: 0;
+  overflow: hidden;
+  border-radius: 0.125rem;
+  border: 2px solid var(--ec-border);
+  background: var(--ec-surface);
+  padding: 0;
+  box-shadow: 6px 6px 0 var(--ec-shadow);
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+.elevate-card--bento:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 var(--ec-shadow);
+}
+
+.elevate-card--bento:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--ec-shadow);
+}
+
+/* ─── Glass (contextos suaves — auth legado) ──────────────────── */
+.elevate-card--glass {
+  gap: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--ec-glass);
+  padding: 1.5rem 0;
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.dark .elevate-card--glass {
+  border-color: rgba(242, 240, 235, 0.12);
+}
+
+.elevate-card--glass:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow: 0 20px 48px -24px var(--ec-glow);
+}
+
+.elevate-card--glass:active {
+  transform: none;
+}
+
+/* ─── Unstyled (composição totalmente custom) ─────────────────── */
+.elevate-card--unstyled {
+  gap: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.elevate-card--unstyled:hover,
+.elevate-card--unstyled:active {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── Title bar (CardChrome) ──────────────────────────────────── */
+.elevate-card__chrome {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--ec-bar);
+  color: #000;
+}
+
+.elevate-card__chrome-label {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-elevate-pixel), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.elevate-card__chrome-controls {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.125rem;
+}
+
+.elevate-card__chrome-dot {
+  display: block;
+  height: 0.625rem;
+  width: 0.625rem;
+  border-radius: 0.125rem;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.elevate-card__chrome-dot--close {
+  background: #f87171;
+}
+
+/* ─── Painel de conteúdo ──────────────────────────────────────── */
+.elevate-card--window .elevate-card__header,
+.elevate-card--window .elevate-card__content,
+.elevate-card--window .elevate-card__footer,
+.elevate-card--bento .elevate-card__header,
+.elevate-card--bento .elevate-card__content,
+.elevate-card--bento .elevate-card__footer {
+  position: relative;
+  z-index: 1;
+  border-top: 2px solid var(--ec-panel-line);
+  background: var(--ec-surface);
+}
+
+.elevate-card--window > .elevate-card__chrome + .elevate-card__header,
+.elevate-card--bento > .elevate-card__chrome + .elevate-card__header {
+  border-top-width: 2px;
+}
+
+.elevate-card--window:not(:has(.elevate-card__chrome)) > :first-child,
+.elevate-card--bento:not(:has(.elevate-card__chrome)) > :first-child {
+  border-top: none;
+}
+
+.elevate-card--window .elevate-card__header,
+.elevate-card--bento .elevate-card__header {
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+.elevate-card--window .elevate-card__content,
+.elevate-card--bento .elevate-card__content {
+  padding: 0.25rem 1rem 1rem;
+}
+
+.elevate-card--window .elevate-card__footer,
+.elevate-card--bento .elevate-card__footer {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.elevate-card--glass .elevate-card__header,
+.elevate-card--glass .elevate-card__content,
+.elevate-card--glass .elevate-card__footer {
+  border-top: none;
+}
+
+/* ─── Tipografia ──────────────────────────────────────────────── */
+.elevate-card__title {
+  font-family: var(--font-elevate-display), ui-monospace, monospace;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--ec-fg);
+}
+
+.elevate-card--window .elevate-card__title,
+.elevate-card--bento .elevate-card__title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.elevate-card__description {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ec-muted);
+}
+
+.elevate-card--window .elevate-card__description,
+.elevate-card--bento .elevate-card__description {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.6875rem;
+}
+
+/* Scanlines sutis (portfolio / CRT) */
+.elevate-card--window.elevate-card--scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.018) 2px,
+    rgba(0, 0, 0, 0.018) 4px
+  );
+}
+
+.dark .elevate-card--window.elevate-card--scanlines::after {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(242, 240, 235, 0.03) 2px,
+    rgba(242, 240, 235, 0.03) 4px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-card--window,
+  .elevate-card--bento,
+  .elevate-card--glass {
+    transition: none;
+  }
+
+  .elevate-card--window:hover,
+  .elevate-card--window:active,
+  .elevate-card--bento:hover,
+  .elevate-card--bento:active,
+  .elevate-card--glass:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,80 @@
+/* Painéis flutuantes — glass (select, dropdown, popover, command) */
+
+.elevate-overlay {
+  --eo-fg: #09090b;
+  --eo-muted: #71717a;
+  --eo-glass: rgba(255, 255, 255, 0.92);
+  --eo-line: rgba(0, 0, 0, 0.1);
+  --eo-line-strong: rgba(0, 0, 0, 0.16);
+  --eo-accent: #dfff00;
+
+  z-index: 50;
+  color: var(--eo-fg);
+  border-radius: 0.85rem;
+  border: 1px solid var(--eo-line);
+  background: var(--eo-glass);
+  box-shadow:
+    0 16px 48px -24px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dark .elevate-overlay {
+  --eo-fg: #f2f0eb;
+  --eo-muted: #a8a29e;
+  --eo-glass: rgba(28, 25, 23, 0.94);
+  --eo-line: rgba(242, 240, 235, 0.12);
+  --eo-line-strong: rgba(242, 240, 235, 0.22);
+}
+
+.elevate-overlay__item {
+  position: relative;
+  display: flex;
+  cursor: default;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--eo-fg);
+  outline: none;
+  user-select: none;
+}
+
+.elevate-overlay__item[data-highlighted],
+.elevate-overlay__item[data-state="open"],
+.elevate-overlay__item:focus,
+.elevate-overlay__item:focus-visible {
+  background: color-mix(in srgb, var(--eo-accent) 18%, transparent);
+  color: var(--eo-fg);
+}
+
+.elevate-overlay__item[data-disabled] {
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.elevate-overlay__item[data-variant="destructive"] {
+  color: #ef4444;
+}
+
+.elevate-overlay__item[data-variant="destructive"][data-highlighted] {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.elevate-overlay__label {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--eo-muted);
+}
+
+.elevate-overlay__separator {
+  margin: 0.25rem -0.25rem;
+  height: 1px;
+  background: var(--eo-line);
+}

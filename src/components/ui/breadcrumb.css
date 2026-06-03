@@ -1,0 +1,42 @@
+/* Breadcrumb — kicker trail */
+
+.elevate-breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground, #71717a);
+}
+
+@media (min-width: 640px) {
+  .elevate-breadcrumb__list {
+    gap: 0.5rem;
+  }
+}
+
+.elevate-breadcrumb__link {
+  transition: color 0.15s ease;
+}
+
+.elevate-breadcrumb__link:hover {
+  color: #dfff00;
+}
+
+.elevate-breadcrumb__page {
+  color: var(--foreground, #09090b);
+  font-weight: 600;
+}
+
+.dark .elevate-breadcrumb__page {
+  color: #f2f0eb;
+}
+
+.elevate-breadcrumb__separator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  opacity: 0.45;
+}

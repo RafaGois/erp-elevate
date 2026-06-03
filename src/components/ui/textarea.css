@@ -1,0 +1,94 @@
+/* Textarea — espelha input modern/retro (design_system.html) */
+
+.elevate-textarea {
+  --et-accent: #dfff00;
+  --et-fg: #09090b;
+  --et-muted: #71717a;
+  --et-surface: #ffffff;
+  --et-surface-2: #fafafa;
+  --et-line: rgba(0, 0, 0, 0.1);
+  --et-line-strong: rgba(0, 0, 0, 0.18);
+
+  width: 100%;
+  min-height: 4rem;
+  color: var(--et-fg);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  field-sizing: content;
+}
+
+.dark .elevate-textarea {
+  --et-fg: #f2f0eb;
+  --et-muted: #a8a29e;
+  --et-surface: #1c1917;
+  --et-surface-2: #292524;
+  --et-line: rgba(242, 240, 235, 0.12);
+  --et-line-strong: rgba(242, 240, 235, 0.25);
+}
+
+.elevate-textarea--modern {
+  padding: 0.75rem 1rem;
+  border-radius: 0.85rem;
+  background: var(--et-surface-2);
+  border: 1px solid var(--et-line);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.elevate-textarea--modern::placeholder {
+  color: var(--et-muted);
+}
+
+.elevate-textarea--modern:focus-visible {
+  outline: none;
+  border-color: var(--et-accent);
+  box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+}
+
+.elevate-textarea--retro {
+  padding: 0.7rem 0.9rem;
+  border-radius: 0;
+  background: var(--et-surface);
+  border: 3px solid var(--et-fg);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.06);
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.dark .elevate-textarea--retro {
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.elevate-textarea--retro:focus-visible {
+  outline: none;
+  border-color: var(--et-accent);
+  box-shadow: 4px 4px 0 var(--et-accent);
+}
+
+.elevate-textarea[aria-invalid="true"] {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.elevate-textarea::selection {
+  background: var(--et-accent);
+  color: #000;
+}
+
+.elevate-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-textarea--modern,
+  .elevate-textarea--retro {
+    transition: none;
+  }
+}

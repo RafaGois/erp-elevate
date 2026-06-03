@@ -1,0 +1,76 @@
+/* Sheet — painel glass lateral */
+
+.elevate-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.elevate-sheet-content {
+  --es-fg: #09090b;
+  --es-glass: rgba(255, 255, 255, 0.94);
+  --es-line: rgba(0, 0, 0, 0.12);
+
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--es-fg);
+  background: var(--es-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease-in-out;
+}
+
+.dark .elevate-sheet-content {
+  --es-fg: #f2f0eb;
+  --es-glass: rgba(28, 25, 23, 0.96);
+  --es-line: rgba(242, 240, 235, 0.15);
+}
+
+.elevate-sheet-content[data-side="right"] {
+  inset-block: 0;
+  right: 0;
+  height: 100%;
+  width: 75%;
+  max-width: 24rem;
+  border-left: 1px solid var(--es-line);
+}
+
+.elevate-sheet-content[data-side="left"] {
+  inset-block: 0;
+  left: 0;
+  height: 100%;
+  width: 75%;
+  max-width: 24rem;
+  border-right: 1px solid var(--es-line);
+}
+
+.elevate-sheet__close {
+  display: grid;
+  height: 1.75rem;
+  width: 1.75rem;
+  place-items: center;
+  border: 2px solid #000;
+  background: #fff;
+  color: #000;
+  box-shadow: 2px 2px 0 #000;
+  opacity: 1;
+}
+
+.elevate-sheet__title {
+  font-family: var(--font-elevate-display), ui-monospace, monospace;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--es-fg);
+}
+
+.elevate-sheet__description {
+  font-size: 0.875rem;
+  color: color-mix(in srgb, var(--es-fg) 55%, transparent);
+}

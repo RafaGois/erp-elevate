@@ -1,0 +1,74 @@
+/* Table — linhas com hover lime sutil */
+
+.elevate-table {
+  --etb-fg: #09090b;
+  --etb-muted: #71717a;
+  --etb-line: rgba(0, 0, 0, 0.1);
+  --etb-accent: #dfff00;
+  --etb-head: rgba(0, 0, 0, 0.03);
+
+  width: 100%;
+  caption-side: bottom;
+  font-size: 0.875rem;
+  color: var(--etb-fg);
+}
+
+.dark .elevate-table {
+  --etb-fg: #f2f0eb;
+  --etb-muted: #a8a29e;
+  --etb-line: rgba(242, 240, 235, 0.12);
+  --etb-head: rgba(242, 240, 235, 0.05);
+}
+
+.elevate-table thead tr {
+  border-bottom: 1px solid var(--etb-line);
+}
+
+.elevate-table tbody tr {
+  border-bottom: 1px solid var(--etb-line);
+  transition: background-color 0.15s ease;
+}
+
+.elevate-table tbody tr:last-child {
+  border-bottom: 0;
+}
+
+.elevate-table tbody tr:hover {
+  background: color-mix(in srgb, var(--etb-accent) 8%, transparent);
+}
+
+.elevate-table tbody tr[data-state="selected"] {
+  background: color-mix(in srgb, var(--etb-accent) 14%, transparent);
+}
+
+.elevate-table__head {
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--etb-muted);
+  white-space: nowrap;
+  background: var(--etb-head);
+}
+
+.elevate-table__cell {
+  padding: 0.5rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.elevate-table__footer {
+  border-top: 1px solid var(--etb-line);
+  background: var(--etb-head);
+  font-weight: 500;
+}
+
+.elevate-table__caption {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--etb-muted);
+}

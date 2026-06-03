@@ -2,6 +2,7 @@
 
 import {
   Card,
+  CardChrome,
   CardContent,
   CardDescription,
   CardHeader,
@@ -291,6 +292,7 @@ export default function FinanceDashboard() {
       {/* Cards de resumo */}
       <div className="grid gap-4 @xl/main:grid-cols-3 @5xl/main:grid-cols-3 grid-cols-1">
         <Card>
+          <CardChrome label="SYS://ENTRADAS" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total de Entradas</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -310,6 +312,7 @@ export default function FinanceDashboard() {
         </Card>
 
         <Card>
+          <CardChrome label="SYS://SAIDAS" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total de Saídas</CardTitle>
             <TrendingDown className="h-4 w-4 text-muted-foreground" />
@@ -329,6 +332,7 @@ export default function FinanceDashboard() {
         </Card>
 
         <Card>
+          <CardChrome label="SYS://LUCRO" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Lucro Líquido</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -348,7 +352,8 @@ export default function FinanceDashboard() {
       </div>
 
       {/* Gráfico de Linha - Evolução Mensal */}
-      <Card>
+      <Card scanlines>
+        <CardChrome label="SYS://EVOLUCAO_MENSAL" />
         <CardHeader>
           <CardTitle>Evolução Mensal - Entradas vs Saídas</CardTitle>
           <CardDescription>
@@ -418,6 +423,7 @@ export default function FinanceDashboard() {
       <div className="grid gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-2 grid-cols-1">
         {/* Gráfico de Pizza - Distribuição por Categoria */}
         <Card>
+          <CardChrome label="SYS://RECEITA_CAT" />
           <CardHeader>
             <CardTitle>Receita por Categoria</CardTitle>
             <CardDescription>
@@ -463,6 +469,7 @@ export default function FinanceDashboard() {
 
         {/* Gráfico de Barras - Comparação Semanal */}
         <Card>
+          <CardChrome label="SYS://SEMANAL" />
           <CardHeader>
             <CardTitle>Comparação Semanal - Último Mês</CardTitle>
             <CardDescription>
@@ -524,6 +531,7 @@ export default function FinanceDashboard() {
 
       {/* Gráfico de Área - Lucro Acumulado */}
       <Card>
+        <CardChrome label="SYS://LUCRO_ACUM" />
         <CardHeader>
           <CardTitle>Lucro Acumulado</CardTitle>
           <CardDescription>

@@ -1,0 +1,27 @@
+/* Tooltip — pixel retro (.tip-body no design_system.html) */
+
+.elevate-tooltip {
+  --ett-accent: #dfff00;
+  --ett-bg: #000;
+
+  z-index: 50;
+  width: fit-content;
+  text-wrap: balance;
+  font-family: var(--font-elevate-pixel), ui-monospace, cursive;
+  font-size: 7px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  padding: 7px 9px;
+  border-radius: 0;
+  border: 2px solid var(--ett-accent);
+  background: var(--ett-bg);
+  color: var(--ett-accent);
+  box-shadow: 3px 3px 0 var(--ett-accent);
+}
+
+.elevate-tooltip__arrow {
+  fill: var(--ett-bg);
+  color: var(--ett-accent);
+}

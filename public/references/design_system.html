@@ -158,51 +158,48 @@
       );
     }
 
-    /* ─── Botão pixel 8-bit (recipe do orcamento-theme.css) ────── */
+    /* ─── Botão retro minimal (orcamento / elevate-btn) ───────── */
     .pixel-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      font-family: "Press Start 2P", cursive;
-      font-size: 9px;
-      line-height: 1.4;
-      padding: 13px 18px;
+      font-family: ui-monospace, monospace;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      line-height: 1.35;
+      padding: 8px 14px;
       color: #000;
       background: #dfff00;
-      border: 3px solid #000;
+      border: 2px solid #171717;
       border-radius: 0;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       cursor: pointer;
-      box-shadow:
-        4px 4px 0 0 #000,
-        inset 2px 2px 0 rgba(255, 255, 255, 0.55),
-        inset -2px -2px 0 rgba(0, 0, 0, 0.12);
-      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.08s ease-out, background 0.15s;
+      box-shadow: 4px 4px 0 #0f172a;
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.12s;
     }
     .pixel-btn:hover {
       transform: translate(-1px, -1px);
-      filter: brightness(1.04);
-      box-shadow:
-        6px 6px 0 0 #000,
-        inset 2px 2px 0 rgba(255, 255, 255, 0.65),
-        inset -2px -2px 0 rgba(0, 0, 0, 0.1);
+      box-shadow: 5px 5px 0 #0f172a;
     }
     .pixel-btn:active {
-      transform: translate(3px, 3px);
-      filter: brightness(0.98);
-      box-shadow:
-        1px 1px 0 0 #000,
-        inset 2px 2px 0 rgba(255, 255, 255, 0.35),
-        inset -2px -2px 0 rgba(0, 0, 0, 0.18);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #0f172a;
     }
-    .pixel-btn:focus-visible { outline: 3px solid #06b6d4; outline-offset: 3px; }
+    .pixel-btn:focus-visible { outline: 3px solid #0ea5e9; outline-offset: 3px; }
     .pixel-btn.is-cyan { background: #67e8f9; }
     .pixel-btn.is-magenta { background: #f9a8d4; }
-    .pixel-btn.is-outline { background: var(--surface-2); color: var(--fg); }
-    [data-theme="dark"] .pixel-btn.is-outline { box-shadow: 4px 4px 0 0 #dfff00, inset 0 0 0 0 transparent; border-color: #dfff00; }
-    .pixel-btn.is-sm { font-size: 8px; padding: 9px 12px; }
+    .pixel-btn.is-outline { background: #fafafa; color: var(--fg); }
+    .pixel-btn.is-secondary { background: #64748b; color: #fff; }
+    [data-theme="dark"] .pixel-btn.is-outline {
+      background: #292524;
+      border-color: color-mix(in srgb, #dfff00 55%, #e7e5e4);
+      box-shadow: 4px 4px 0 color-mix(in srgb, #dfff00 70%, #000);
+    }
+    .pixel-btn.is-sm { font-size: 0.625rem; padding: 6px 12px; }
+    .pixel-btn.is-lg { font-size: 0.75rem; padding: 14px 20px; }
+    .pixel-btn.is-outline.is-lg { background: #fef3c7; color: #000; }
 
     /* Botão moderno (glass / cream CTA) com beam cônico (main-design) */
     .btn-glass {
@@ -243,21 +240,69 @@
       background: var(--bg);
     }
 
-    /* Card moderno (glass) */
+    /* Card window (orçamento — retro-window / ERP default) */
+    .card-window {
+      --cw-bar: #dfff00;
+      --cw-border: #171717;
+      --cw-shadow: #0f172a;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border-radius: 0.125rem;
+      border: 2px solid var(--cw-border);
+      background: var(--surface);
+      box-shadow: 6px 6px 0 var(--cw-shadow);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+    .card-chrome { color: #000; }
+    .card-window:hover { transform: translate(-1px, -1px); box-shadow: 7px 7px 0 var(--cw-shadow); }
+    .card-window:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--cw-shadow); }
+    .card-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      background: var(--cw-bar);
+      color: #fff;
+    }
+    .card-chrome-label {
+      font-family: "Press Start 2P", cursive;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-chrome-dots { display: flex; gap: 0.125rem; }
+    .card-chrome-dots span {
+      width: 10px; height: 10px; border-radius: 2px;
+      border: 1px solid rgba(0,0,0,0.3); background: rgba(255,255,255,0.9);
+    }
+    .card-chrome-dots span:last-child { background: #f87171; }
+    .card-panel {
+      border-top: 2px solid rgba(0,0,0,0.12);
+      padding: 1rem 1.1rem 1.15rem;
+      background: var(--surface);
+    }
+    [data-theme="dark"] .card-panel { border-top-color: rgba(242,240,235,0.12); }
+
+    /* Card glass (secundário — auth legado / marketing) */
     .card-glass {
       border-radius: 1.5rem;
       border: 1px solid var(--line);
       background: var(--glass);
       backdrop-filter: blur(16px);
-      transition: transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1), border-color 0.4s, box-shadow 0.4s;
+      transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1), border-color 0.35s, box-shadow 0.35s;
     }
     .card-glass:hover {
-      transform: translateY(-8px);
+      transform: translateY(-4px);
       border-color: var(--line-strong);
-      box-shadow: 0 24px 60px -28px rgba(223, 255, 0, 0.35);
+      box-shadow: 0 20px 48px -24px rgba(223, 255, 0, 0.35);
     }
 
-    /* Card retro (hard shadow + CRT) */
+    /* Card retro modal (4px — diálogos) */
     .card-retro {
       position: relative;
       background: var(--surface);
@@ -271,16 +316,18 @@
       box-shadow: 12px 12px 0 #dfff00;
     }
 
-    /* Bento retro cell (orcamento) */
+    /* Bento retro cell (orçamento — bento-retro-cell) */
     .bento-cell {
       position: relative;
-      border: 3px solid var(--fg);
+      overflow: hidden;
+      border-radius: 0.125rem;
+      border: 2px solid var(--cw-border, #a855f7);
       background: var(--surface);
-      box-shadow: 6px 6px 0 var(--fg);
+      box-shadow: 6px 6px 0 var(--cw-shadow, #6b21a8);
       transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
     }
-    .bento-cell:hover { transform: translate(-1px, -1px); box-shadow: 7px 7px 0 #dfff00; }
-    .bento-cell:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--fg); }
+    .bento-cell:hover { transform: translate(-1px, -1px); box-shadow: 7px 7px 0 var(--cw-shadow, #6b21a8); }
+    .bento-cell:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--cw-shadow, #6b21a8); }
 
     /* Badge pixel */
     .badge-pixel {
@@ -786,18 +833,18 @@
       <div class="reveal mb-6 card-glass p-6 md:p-8">
         <div class="mb-5 flex items-center justify-between">
           <h3 class="font-display text-2xl tracking-tight">Buttons</h3>
-          <span class="badge-pill">8-bit press · beam · glass</span>
+          <span class="badge-pill">orçamento · retro minimal</span>
         </div>
         <div class="flex flex-wrap items-center gap-4">
-          <button class="pixel-btn"><iconify-icon icon="solar:gamepad-bold" width="14"></iconify-icon> Pixel Lime</button>
-          <button class="pixel-btn is-cyan">Pixel Cyan</button>
-          <button class="pixel-btn is-magenta">Pixel Pink</button>
+          <button class="pixel-btn"><iconify-icon icon="solar:gamepad-bold" width="14"></iconify-icon> Primary</button>
+          <button class="pixel-btn is-secondary">Secondary</button>
           <button class="pixel-btn is-outline">Outline</button>
-          <a class="btn-glass btn-beam">Glass Beam <iconify-icon icon="solar:arrow-right-linear" width="15"></iconify-icon></a>
-          <button class="btn-glass">Glass <iconify-icon icon="solar:download-minimalistic-linear" width="15"></iconify-icon></button>
-          <button class="text-sm font-medium text-muted underline-offset-4 transition hover:text-fg hover:underline">Ghost link</button>
+          <button class="pixel-btn is-outline is-lg">CTA cream</button>
+          <button class="pixel-btn is-cyan">Cyan</button>
+          <button class="pixel-btn is-magenta">Pink</button>
+          <button class="text-sm font-medium font-mono uppercase tracking-widest text-muted transition hover:text-fg">Ghost</button>
         </div>
-        <p class="mt-5 text-xs text-muted">Spec · pixel: <span class="mono">border 3px #000 · box-shadow 4px 4px 0 · hover translate(-1,-1) · active translate(3,3)</span></p>
+        <p class="mt-5 text-xs text-muted">Spec · <span class="mono">border 2px · shadow 4px 4px 0 (sem inset) · mono 11px · --hero-accent #dfff00</span></p>
       </div>
 
       <div class="grid gap-6 lg:grid-cols-2">
@@ -825,49 +872,53 @@
           </div>
         </div>
 
-        <!-- CARD RETRO -->
+        <!-- CARD WINDOW (orçamento) -->
         <div class="reveal flex flex-col gap-6">
-          <article class="card-retro overflow-hidden">
-            <div class="crt relative h-32 overflow-hidden" style="background: linear-gradient(135deg,#dfff00 0%,#22c55e 100%);">
-              <div class="absolute left-0 top-0 h-2 w-full bg-white/30" style="animation: scan-bar 3s linear infinite;"></div>
-              <span class="absolute bottom-3 left-3 font-pixel text-[9px] text-black">SISTEMA.EXE</span>
+          <article class="card-window">
+            <div class="card-chrome">
+              <span class="card-chrome-label">SYS://SERVICO_01</span>
+              <div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div>
             </div>
-            <div class="p-5">
-              <h4 class="font-display text-xl">Card Retro</h4>
-              <p class="mt-1.5 text-sm text-muted">Hard-shadow 8px + CRT no header. No hover a sombra cresce e fica verde.</p>
+            <div class="card-panel">
+              <h4 class="font-mono text-sm font-semibold text-fg">{ Landing + ERP }</h4>
+              <p class="mt-2 font-mono text-[11px] text-muted">&gt; Janela retro-window do orçamento · borda 2px · sombra 6px 6px 0</p>
               <div class="mt-4 flex gap-2">
                 <span class="badge-pixel" style="background:#000;color:#dfff00;">v2.0</span>
-                <span class="badge-pixel">novo</span>
+                <span class="badge-pixel">live</span>
               </div>
             </div>
           </article>
         </div>
       </div>
 
-      <!-- CARDS GLASS / BENTO -->
-      <div class="reveal mt-6 grid gap-4 md:grid-cols-3">
+      <!-- CARDS WINDOW / BENTO / GLASS -->
+      <div class="reveal mt-6 grid gap-5 md:grid-cols-3">
+        <article class="card-window">
+          <div class="card-chrome">
+            <span class="card-chrome-label">SYS://METRICA</span>
+            <div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div>
+          </div>
+          <div class="card-panel">
+            <p class="kicker mb-1">Total de entradas</p>
+            <p class="font-display text-3xl">R$ 128.450</p>
+            <p class="mt-2 font-mono text-[10px] text-muted">&gt; // métrica ao vivo · DataCard ERP</p>
+          </div>
+        </article>
+        <div class="bento-cell p-6">
+          <p class="font-pixel text-[9px]" style="color:#84a700;">// BENTO</p>
+          <p class="font-display mt-3 text-4xl">99.9%</p>
+          <p class="mt-1 font-mono text-xs text-muted">uptime garantido <span class="cursor-blink">_</span></p>
+        </div>
         <div class="card-glass p-6">
           <span class="grid h-11 w-11 place-items-center rounded-xl text-black" style="background:#dfff00;">
             <iconify-icon icon="solar:cpu-bolt-bold" width="22"></iconify-icon>
           </span>
-          <h4 class="mt-4 text-lg font-semibold">Card Glass</h4>
-          <p class="mt-1.5 text-sm text-muted">Rounded 1.5rem · backdrop-blur · lift -8px no hover com glow verde.</p>
-        </div>
-        <div class="bento-cell p-6">
-          <p class="font-pixel text-[9px]" style="color:#84a700;">// BENTO</p>
-          <p class="font-display mt-3 text-4xl">99.9%</p>
-          <p class="mt-1 text-sm text-muted">uptime garantido <span class="cursor-blink">_</span></p>
-        </div>
-        <div class="bento-cell p-6">
-          <p class="font-pixel text-[9px]" style="color:#84a700;">// STACK</p>
-          <div class="mt-3 flex flex-wrap gap-2">
-            <span class="badge-pill">Next.js</span>
-            <span class="badge-pill">GSAP</span>
-            <span class="badge-pill">Tailwind</span>
-            <span class="badge-pill">Node</span>
-          </div>
+          <h4 class="mt-4 font-display text-lg">Card Glass</h4>
+          <p class="mt-1.5 text-sm text-muted">Variante secundária · blur · lift suave (auth / marketing).</p>
         </div>
       </div>
+
+      <p class="reveal mt-4 text-xs text-muted mono">Spec window · barra #DFFF00 (hero-accent) · borda #171717 · sombra #0f172a · hover translate(-1,-1)</p>
 
       <!-- NAVBAR / SECTION / BADGES / TOOLTIP / MODAL -->
       <div class="mt-6 grid gap-6 lg:grid-cols-2">

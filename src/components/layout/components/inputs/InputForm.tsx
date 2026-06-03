@@ -40,7 +40,6 @@ export default function InputForm(props: InputFormProps) {
           <FormControl>
             <Input
               disabled={props?.disabled}
-              className="[&:-webkit-autofill]:text-black [&:-webkit-autofill]:bg-foreground"
               placeholder={props.placeholder}
               required={props?.required}
               type={props.type}

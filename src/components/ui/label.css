@@ -1,0 +1,70 @@
+/* Label — kicker / eyebrow (public/references/design_system.html) */
+
+.elevate-label {
+  --el-fg: #09090b;
+  --el-muted: #71717a;
+  --el-accent: #84a700;
+  --el-accent-dark: #dfff00;
+  --el-error: #ef4444;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.4;
+  user-select: none;
+}
+
+.dark .elevate-label {
+  --el-fg: #f2f0eb;
+  --el-muted: #a8a29e;
+  --el-accent: #dfff00;
+}
+
+/* ─── Default (form labels — spec: label / Geist) ───────────── */
+.elevate-label--default {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--el-muted);
+}
+
+/* ─── Accent (section eyebrows) ─────────────────────────────── */
+.elevate-label--accent {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--el-accent);
+}
+
+/* ─── Pixel (caption arcade) ────────────────────────────────── */
+.elevate-label--pixel {
+  font-family: var(--font-elevate-pixel), ui-monospace, cursive;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--el-muted);
+  line-height: 1.4;
+}
+
+.dark .elevate-label--pixel {
+  color: color-mix(in srgb, var(--el-accent-dark) 55%, var(--el-muted));
+}
+
+/* ─── Inline (checkbox / switch — sans, sem uppercase) ──────── */
+.elevate-label--inline {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--el-fg);
+}
+
+/* ─── Error (FormLabel data-error) ──────────────────────────── */
+.elevate-label[data-error="true"] {
+  color: var(--el-error);
+}

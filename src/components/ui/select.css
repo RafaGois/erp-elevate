@@ -1,0 +1,74 @@
+/* Select — trigger espelha input-modern */
+
+.elevate-select-trigger {
+  --est-accent: #dfff00;
+  --est-fg: #09090b;
+  --est-muted: #71717a;
+  --est-surface-2: #fafafa;
+  --est-line: rgba(0, 0, 0, 0.1);
+  --est-line-strong: rgba(0, 0, 0, 0.18);
+
+  display: flex;
+  width: fit-content;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  white-space: nowrap;
+  border-radius: 0.85rem;
+  border: 1px solid var(--est-line);
+  background: var(--est-surface-2);
+  color: var(--est-fg);
+  font-size: 0.875rem;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dark .elevate-select-trigger {
+  --est-fg: #f2f0eb;
+  --est-muted: #a8a29e;
+  --est-surface-2: #292524;
+  --est-line: rgba(242, 240, 235, 0.12);
+  --est-line-strong: rgba(242, 240, 235, 0.25);
+}
+
+.elevate-select-trigger[data-placeholder] {
+  color: var(--est-muted);
+}
+
+.elevate-select-trigger[data-size="default"] {
+  height: 2.25rem;
+  padding: 0 0.75rem;
+}
+
+.elevate-select-trigger[data-size="sm"] {
+  height: 2rem;
+  padding: 0 0.65rem;
+  font-size: 0.8125rem;
+}
+
+.elevate-select-trigger:hover:not(:disabled) {
+  border-color: var(--est-line-strong);
+}
+
+.elevate-select-trigger:focus-visible {
+  border-color: var(--est-accent);
+  box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+}
+
+.elevate-select-trigger[aria-invalid="true"] {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.elevate-select-trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.elevate-select-trigger svg {
+  opacity: 0.55;
+  flex-shrink: 0;
+}

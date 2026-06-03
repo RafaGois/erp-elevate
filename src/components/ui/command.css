@@ -1,0 +1,73 @@
+/* Command palette — overlay glass + itens */
+
+.elevate-command {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  outline: hidden;
+}
+
+.elevate-command__input-wrapper {
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0 0.75rem;
+}
+
+.dark .elevate-command__input-wrapper {
+  border-bottom-color: rgba(242, 240, 235, 0.1);
+}
+
+.elevate-command__input {
+  flex: 1;
+  height: 2.5rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.elevate-command__input::placeholder {
+  color: #71717a;
+}
+
+.elevate-command__group-heading {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #71717a;
+}
+
+.elevate-command__item {
+  position: relative;
+  display: flex;
+  cursor: default;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.875rem;
+  user-select: none;
+  outline: hidden;
+}
+
+.elevate-command__item[data-selected="true"] {
+  background: color-mix(in srgb, #dfff00 20%, transparent);
+  color: inherit;
+}
+
+.elevate-command__separator {
+  margin: 0.25rem -0.25rem;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.dark .elevate-command__separator {
+  background: rgba(242, 240, 235, 0.1);
+}

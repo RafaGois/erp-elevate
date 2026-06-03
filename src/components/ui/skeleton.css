@@ -1,0 +1,37 @@
+/* Skeleton — shimmer com accent lime */
+
+@keyframes elevate-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.elevate-skeleton {
+  --esk-base: rgba(0, 0, 0, 0.06);
+  --esk-shine: rgba(223, 255, 0, 0.22);
+
+  border-radius: 0.65rem;
+  background: linear-gradient(
+    90deg,
+    var(--esk-base) 0%,
+    var(--esk-shine) 45%,
+    var(--esk-base) 90%
+  );
+  background-size: 200% 100%;
+  animation: elevate-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.dark .elevate-skeleton {
+  --esk-base: rgba(242, 240, 235, 0.08);
+  --esk-shine: rgba(223, 255, 0, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-skeleton {
+    animation: none;
+    background: var(--esk-base);
+  }
+}

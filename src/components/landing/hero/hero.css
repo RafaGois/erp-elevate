@@ -3,7 +3,7 @@
   --hero-bg: #050505;
   --hero-fg: #f2f0eb;
   --hero-muted: #a8a29e;
-  --hero-accent: #dfff00;
+  --hero-accent: var(--hero-accent, #dfff00);
   --hero-grid: rgba(242, 240, 235, 0.06);
   --hero-scan: rgba(223, 255, 0, 0.05);
   --hero-line: rgba(242, 240, 235, 0.12);

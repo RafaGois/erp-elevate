@@ -1,0 +1,75 @@
+/* Checkbox — pixel toggle (design system arcade) */
+
+.elevate-checkbox {
+  --ec-accent: #dfff00;
+  --ec-fg: #09090b;
+  --ec-surface-2: #fafafa;
+  --ec-line: rgba(0, 0, 0, 0.18);
+  --ec-shadow: #000;
+
+  display: inline-flex;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  border: 3px solid var(--ec-shadow);
+  background: var(--ec-surface-2);
+  box-shadow: 2px 2px 0 var(--ec-shadow);
+  color: #000;
+  outline: none;
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.08s ease-out,
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.dark .elevate-checkbox {
+  --ec-fg: #f2f0eb;
+  --ec-surface-2: #292524;
+  --ec-line: rgba(242, 240, 235, 0.25);
+}
+
+.elevate-checkbox:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ec-shadow);
+}
+
+.elevate-checkbox[data-state="checked"] {
+  background: var(--ec-accent);
+  border-color: var(--ec-shadow);
+}
+
+.elevate-checkbox:focus-visible {
+  outline: 3px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+.elevate-checkbox[aria-invalid="true"] {
+  border-color: #ef4444;
+  box-shadow: 2px 2px 0 #ef4444;
+}
+
+.elevate-checkbox:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.elevate-checkbox__indicator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  stroke-width: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-checkbox {
+    transition: none;
+  }
+
+  .elevate-checkbox:hover:not(:disabled) {
+    transform: none;
+  }
+}

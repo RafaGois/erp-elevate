@@ -1,0 +1,21 @@
+/* Separator — linha do tema */
+
+.elevate-separator {
+  --esep-line: rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  background: var(--esep-line);
+}
+
+.dark .elevate-separator {
+  --esep-line: rgba(242, 240, 235, 0.12);
+}
+
+.elevate-separator[data-orientation="horizontal"] {
+  height: 1px;
+  width: 100%;
+}
+
+.elevate-separator[data-orientation="vertical"] {
+  height: 100%;
+  width: 1px;
+}

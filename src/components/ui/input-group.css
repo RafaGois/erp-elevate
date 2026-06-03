@@ -1,0 +1,53 @@
+/* InputGroup — wrapper alinhado ao input modern */
+
+.elevate-input-group {
+  --eig-accent: #dfff00;
+  --eig-fg: #09090b;
+  --eig-muted: #71717a;
+  --eig-surface-2: #fafafa;
+  --eig-line: rgba(0, 0, 0, 0.1);
+  --eig-line-strong: rgba(0, 0, 0, 0.18);
+
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  border-radius: 0.85rem;
+  border: 1px solid var(--eig-line);
+  background: var(--eig-surface-2);
+  box-shadow: none;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dark .elevate-input-group {
+  --eig-fg: #f2f0eb;
+  --eig-muted: #a8a29e;
+  --eig-surface-2: #292524;
+  --eig-line: rgba(242, 240, 235, 0.12);
+  --eig-line-strong: rgba(242, 240, 235, 0.25);
+}
+
+.elevate-input-group:has([data-slot=input-group-control]:focus-visible) {
+  border-color: var(--eig-accent);
+  box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+}
+
+.elevate-input-group:has([data-slot][aria-invalid="true"]) {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.elevate-input-group[data-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.elevate-input-group__addon {
+  color: var(--eig-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}

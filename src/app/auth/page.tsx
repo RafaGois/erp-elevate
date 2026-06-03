@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardChrome, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 
 import useAuth from "@/data/hooks/useAuth";
@@ -60,7 +60,8 @@ export default function Auth() {
       </div>
       <div className="w-full max-w-sm md:max-w-3xl">
         <div className="flex flex-col gap-6">
-          <Card className="overflow-hidden p-0">
+          <Card variant="window" className="overflow-hidden">
+            <CardChrome label="SYS://ACESSO" />
             <CardContent className="grid p-0 md:grid-cols-2">
               <Form {...form}>
                 <form

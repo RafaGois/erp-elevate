@@ -1,0 +1,81 @@
+/* Switch — trilho arcade + thumb lime */
+
+.elevate-switch {
+  --es-accent: #dfff00;
+  --es-fg: #09090b;
+  --es-track: #e4e4e7;
+  --es-shadow: #000;
+
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 9999px;
+  border: 3px solid var(--es-shadow);
+  background: var(--es-track);
+  box-shadow: 2px 2px 0 var(--es-shadow);
+  outline: none;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease-out;
+}
+
+.dark .elevate-switch {
+  --es-fg: #f2f0eb;
+  --es-track: #292524;
+}
+
+.elevate-switch[data-state="checked"] {
+  background: color-mix(in srgb, var(--es-accent) 85%, #000);
+}
+
+.elevate-switch:focus-visible {
+  outline: 3px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+.elevate-switch:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.elevate-switch[data-size="default"] {
+  height: 1.35rem;
+  width: 2.35rem;
+}
+
+.elevate-switch[data-size="sm"] {
+  height: 1.15rem;
+  width: 2rem;
+}
+
+.elevate-switch__thumb {
+  display: block;
+  border-radius: 9999px;
+  border: 2px solid var(--es-shadow);
+  background: #fff;
+  box-shadow: 1px 1px 0 var(--es-shadow);
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+.elevate-switch[data-size="default"] .elevate-switch__thumb {
+  width: 1rem;
+  height: 1rem;
+}
+
+.elevate-switch[data-size="sm"] .elevate-switch__thumb {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.elevate-switch[data-state="checked"] .elevate-switch__thumb {
+  background: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-switch,
+  .elevate-switch__thumb {
+    transition: none;
+  }
+}

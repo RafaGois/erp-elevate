@@ -1,0 +1,162 @@
+/* Input — modern + retro (public/references/design_system.html) */
+
+.elevate-input {
+  --ei-accent: #dfff00;
+  --ei-fg: #09090b;
+  --ei-muted: #71717a;
+  --ei-surface: #ffffff;
+  --ei-surface-2: #fafafa;
+  --ei-line: rgba(0, 0, 0, 0.1);
+  --ei-line-strong: rgba(0, 0, 0, 0.18);
+
+  color: var(--ei-fg);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark .elevate-input {
+  --ei-fg: #f2f0eb;
+  --ei-muted: #a8a29e;
+  --ei-surface: #1c1917;
+  --ei-surface-2: #292524;
+  --ei-line: rgba(242, 240, 235, 0.12);
+  --ei-line-strong: rgba(242, 240, 235, 0.25);
+}
+
+/* ─── Modern (default — auth, dashboard, filtros) ───────────── */
+.elevate-input--modern {
+  border-radius: 0.85rem;
+  background: var(--ei-surface-2);
+  border: 1px solid var(--ei-line);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.elevate-input--modern::placeholder {
+  color: var(--ei-muted);
+}
+
+.elevate-input--modern:hover:not(:disabled):not(:focus-visible) {
+  border-color: var(--ei-line-strong);
+}
+
+.elevate-input--modern:focus-visible {
+  outline: none;
+  border-color: var(--ei-accent);
+  box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+}
+
+/* ─── Retro (hard border + lime shadow on focus) ────────────── */
+.elevate-input--retro {
+  border-radius: 0;
+  background: var(--ei-surface);
+  border: 3px solid var(--ei-fg);
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.06);
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.dark .elevate-input--retro {
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.elevate-input--retro::placeholder {
+  color: var(--ei-muted);
+}
+
+.elevate-input--retro:focus-visible {
+  outline: none;
+  border-color: var(--ei-accent);
+  box-shadow: 4px 4px 0 var(--ei-accent);
+}
+
+/* ─── Sizes ─────────────────────────────────────────────────── */
+.elevate-input--sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.elevate-input--md {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.elevate-input--lg {
+  padding: 0.875rem 1.125rem;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+/* ─── Error (FormMessage / aria-invalid) ────────────────────── */
+.elevate-input[aria-invalid="true"] {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.elevate-input--retro[aria-invalid="true"]:focus-visible {
+  border-color: #ef4444;
+  box-shadow:
+    4px 4px 0 #ef4444,
+    0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* ─── Selection & file ──────────────────────────────────────── */
+.elevate-input::selection {
+  background: var(--ei-accent);
+  color: #000;
+}
+
+.elevate-input::file-selector-button {
+  margin-inline-end: 0.75rem;
+  border: 0;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ei-fg);
+  cursor: pointer;
+}
+
+.elevate-input:-webkit-autofill,
+.elevate-input:-webkit-autofill:hover,
+.elevate-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ei-fg);
+  caret-color: var(--ei-fg);
+  transition: background-color 9999s ease-out 0s;
+}
+
+/* ─── Dentro de InputGroup (borda no wrapper) ───────────────── */
+[data-slot="input-group"] .elevate-input {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 0;
+  height: 100%;
+}
+
+[data-slot="input-group"] .elevate-input:focus-visible {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+[data-slot="input-group"] .elevate-input[aria-invalid="true"] {
+  box-shadow: none;
+}
+
+.elevate-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-input--modern,
+  .elevate-input--retro {
+    transition: none;
+  }
+}

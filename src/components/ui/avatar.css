@@ -1,0 +1,38 @@
+/* Avatar — borda pixel + fallback lime */
+
+.elevate-avatar {
+  --ea-accent: #dfff00;
+  --ea-fg: #09090b;
+  --ea-muted: #e4e4e7;
+  --ea-shadow: #000;
+
+  position: relative;
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0.65rem;
+  border: 2px solid var(--ea-shadow);
+  box-shadow: 2px 2px 0 var(--ea-shadow);
+}
+
+.dark .elevate-avatar {
+  --ea-fg: #f2f0eb;
+  --ea-muted: #292524;
+}
+
+.elevate-avatar__fallback {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--ea-accent) 35%, var(--ea-muted));
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ea-fg);
+}
