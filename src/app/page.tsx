@@ -12,7 +12,6 @@ import gsap from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useEffect } from "react";
-import InstitutionalVideo from "@/components/landing/institutionalVideo/InstitutionalVideo";
 import Clients from "@/components/landing/clients/Clients";
 import CallToAction from "@/components/landing/CTA/CallToAction";
 import LandingCustomCursor from "@/components/landing/cursor/LandingCustomCursor";
@@ -85,7 +84,6 @@ export default function Home() {
       <ScrollText />
       <AboutUs />
       <Services />
-      <InstitutionalVideo />
       {/* <Testimonials /> */}
       <Problems />
       {/* <Clients /> */}

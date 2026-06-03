@@ -1,133 +1,373 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { DotGothic16, Press_Start_2P } from "next/font/google";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FileSpreadsheet,
   ClipboardList,
-  Search,
-  GitBranch,
-  Lock,
+  ScanSearch,
+  RadioTower,
+  Blocks,
+  ArrowRight,
+  type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
+import "./problems.css";
 
-const problems = [
+/* ─── Fonts ──────────────────────────────────────────────────── */
+const fontDisplay = DotGothic16({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pb-display",
+  display: "swap",
+});
+
+const fontPixel = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pb-pixel",
+  display: "swap",
+});
+
+/* ─── Data ───────────────────────────────────────────────────── */
+type Severity = "critical" | "warn";
+
+type ProblemEntry = {
+  code: string;
+  sys: string;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  severity: Severity;
+  severityLabel: string;
+  tags: string[];
+  ghost: string;
+  causeLabel: string;
+};
+
+const PROBLEMS: ProblemEntry[] = [
   {
+    code: "ERR::001",
+    sys: "PLAN",
     icon: FileSpreadsheet,
-    title: "Planilhas desorganizadas",
-    description: "Informação espalhada em várias abas e arquivos, sem single source of truth.",
+    title: "Planilhas como sistema de gestão",
+    description:
+      "Seis abas, três versões do mesmo arquivo, ninguém sabe qual é o atual. Cada setor mantém sua própria 'verdade' — e as decisões são tomadas com dados que já nasceram errados.",
+    severity: "warn",
+    severityLabel: "Alerta",
+    tags: ["Alta recorrência", "Fonte de retrabalho"],
+    ghost: "PLAN",
+    causeLabel: "sem dados confiáveis, o planejamento fica no escuro",
   },
   {
+    code: "ERR::002",
+    sys: "CTRL",
     icon: ClipboardList,
-    title: "Controle manual de produção",
-    description: "Apontamentos no papel ou em planilhas que atrasam e geram retrabalho.",
+    title: "Produção controlada no papel",
+    description:
+      "Apontamentos em folhas que somem, chegam atrasados ou têm letra ilegível. O planejamento vive um passo atrás do chão de fábrica — e a fábrica trabalha sem saber o que o planejamento precisa.",
+    severity: "warn",
+    severityLabel: "Alerta",
+    tags: ["Impacto direto em prazos", "Retrabalho de dados"],
+    ghost: "CTRL",
+    causeLabel: "sem rastreamento, nenhuma ordem tem histórico",
   },
   {
-    icon: Search,
-    title: "Falta de rastreabilidade",
-    description: "Dificuldade para saber onde está cada ordem, lote ou decisão tomada.",
+    code: "ERR::003",
+    sys: "TRACE",
+    icon: ScanSearch,
+    title: "Rastreabilidade inexistente",
+    description:
+      "Onde está a ordem 4812? Em qual etapa? Quem tocou por último? A resposta exige ligar para três pessoas, abrir duas planilhas e ainda assim não ter certeza.",
+    severity: "critical",
+    severityLabel: "Crítico",
+    tags: ["Visibilidade zero", "Decisão às cegas"],
+    ghost: "TRACE",
+    causeLabel: "setores operam com dados diferentes do mesmo processo",
   },
   {
-    icon: GitBranch,
-    title: "Dificuldade de integração entre setores",
-    description: "Comercial, PCP, produção e estoque sem falar a mesma língua nem os mesmos dados.",
+    code: "ERR::004",
+    sys: "SYNC",
+    icon: RadioTower,
+    title: "Setores que falam línguas diferentes",
+    description:
+      "Comercial prometeu prazo com base em dados que a produção não conhecia. PCP planejou sem saber do estoque real. O resultado é sempre o mesmo: atraso, conflito e cliente insatisfeito.",
+    severity: "critical",
+    severityLabel: "Crítico",
+    tags: ["Silos de informação", "Conflito operacional"],
+    ghost: "SYNC",
+    causeLabel: "quando os setores falham, o sistema inteiro trava",
   },
   {
-    icon: Lock,
-    title: "Sistemas engessados",
-    description: "Ferramentas que não se adaptam ao seu processo ou não conversam entre si.",
+    code: "ERR::005",
+    sys: "LOCK",
+    icon: Blocks,
+    title: "Ferramentas que aprisionam o processo",
+    description:
+      "O ERP foi configurado há dez anos para um processo diferente. Mudar é caro, o fornecedor demora meses, e a operação foi se adaptando à ferramenta — quando deveria ser o contrário.",
+    severity: "critical",
+    severityLabel: "Crítico",
+    tags: ["Rigidez sistêmica", "Alto custo de mudança"],
+    ghost: "LOCK",
+    causeLabel: "",
   },
 ];
 
+/* ─── Component ──────────────────────────────────────────────── */
 export default function Problems() {
-  const container = useRef<HTMLDivElement | null>(null);
-  const titleRef = useRef<HTMLHeadingElement | null>(null);
-  const itemsRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const scannerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      if (!container.current || !titleRef.current || !itemsRef.current) return;
-
       gsap.registerPlugin(ScrollTrigger);
 
-      gsap.set(titleRef.current, { opacity: 0, y: 24 });
-      gsap.set(itemsRef.current.querySelectorAll("[data-problem-item]"), {
-        opacity: 0,
-        x: -20,
+      const header = sectionRef.current?.querySelector("[data-pb-header]");
+      const entries =
+        sectionRef.current?.querySelectorAll("[data-pb-entry]");
+      const connectors =
+        sectionRef.current?.querySelectorAll("[data-pb-connector]");
+      const footer = sectionRef.current?.querySelector("[data-pb-footer]");
+      const scanner = scannerRef.current;
+
+      if (!header || !entries?.length) return;
+
+      /* initial states */
+      gsap.set(header, { y: -32, opacity: 0, filter: "blur(6px)" });
+      gsap.set(entries, { opacity: 0, x: 24, filter: "blur(3px)" });
+      if (connectors?.length) gsap.set(connectors, { opacity: 0 });
+      if (footer) gsap.set(footer, { opacity: 0, y: 24 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 65%",
+          toggleActions: "play none none none",
+        },
       });
 
-      gsap.to(titleRef.current, {
-        opacity: 1,
+      /* 1 — header descends */
+      tl.to(header, {
         y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.75,
+        ease: "power3.out",
+        clearProps: "filter",
       });
 
-      gsap.to(itemsRef.current.querySelectorAll("[data-problem-item]"), {
-        opacity: 1,
-        x: 0,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: itemsRef.current,
-          start: "top 82%",
-          toggleActions: "play none none none",
+      /* 2 — scanner sweeps down the log */
+      if (scanner && logRef.current) {
+        const logH = logRef.current.scrollHeight;
+        tl.fromTo(
+          scanner,
+          { y: 0, opacity: 1 },
+          {
+            y: logH,
+            duration: 2.4,
+            ease: "power1.inOut",
+            onComplete: () => gsap.to(scanner, { opacity: 0, duration: 0.4 }),
+          },
+          "-=0.1",
+        );
+      }
+
+      /* 3 — entries reveal, staggered & timed with scanner sweep */
+      tl.to(
+        entries,
+        {
+          opacity: 1,
+          x: 0,
+          filter: "blur(0px)",
+          stagger: 0.42,
+          duration: 0.6,
+          ease: "power2.out",
+          clearProps: "filter",
         },
-      });
+        0.45,
+      );
+
+      /* 4 — causal connectors */
+      if (connectors?.length) {
+        tl.to(
+          connectors,
+          {
+            opacity: 1,
+            stagger: 0.42,
+            duration: 0.3,
+            ease: "power1.out",
+          },
+          0.9,
+        );
+      }
+
+      /* 5 — footer */
+      if (footer) {
+        tl.to(
+          footer,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: "power2.out",
+          },
+          "-=0.2",
+        );
+      }
     },
-    { scope: container }
+    { scope: sectionRef },
   );
 
   return (
     <section
+      ref={sectionRef}
       id="problemas"
-      ref={container}
-      className="relative bg-black px-4 py-20 md:px-6 md:py-28"
+      className={`pb ${fontDisplay.variable} ${fontPixel.variable}`}
+      aria-labelledby="pb-title"
     >
-      <div className="mx-auto max-w-4xl">
-        <h2
-          ref={titleRef}
-          className="text-center text-3xl font-bold text-white md:text-4xl lg:text-5xl"
-        >
-          Sua indústria ainda depende de planilhas e processos manuais?
-        </h2>
-        <p className="mt-4 text-center text-lg text-gray-400">
-          A indústria metal mecânica sofre com dores que atrasam resultados e
-          geram retrabalho. Se alguma delas é familiar, podemos ajudar.
-        </p>
+      {/* atmosphere */}
+      <div className="pb__scanlines" aria-hidden />
+      <div className="pb__grid" aria-hidden />
+      <div className="pb__glow pb__glow--red" aria-hidden />
+      <div className="pb__glow pb__glow--amber" aria-hidden />
 
-        <div
-          ref={itemsRef}
-          className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6"
-        >
-          {problems.map((item) => {
-            const Icon = item.icon;
+      <div className="pb__inner">
+
+        {/* ── Header ─────────────────────────────────────────── */}
+        <header data-pb-header className="pb__header">
+          <div className="pb__header-top">
+            <p className="pb__kicker">
+              <span className="pb__kicker-mark">// </span>SYS — Diagnóstico
+              operacional
+            </p>
+            <span className="pb__status-badge">
+              <span className="pb__status-dot" aria-hidden />
+              Sistema em estado crítico
+            </span>
+          </div>
+
+          <h2 id="pb-title" className="pb__title">
+            Reconhece
+            <span className="pb__title-break"> esses sintomas?</span>
+          </h2>
+
+          <p className="pb__subtitle">
+            Não são falhas isoladas — são sintomas de um sistema que cresceu
+            além das ferramentas que usava. E cada um alimenta o próximo.
+          </p>
+        </header>
+
+        {/* ── Error log ──────────────────────────────────────── */}
+        <div ref={logRef} className="pb__log">
+          {/* animated scanner line */}
+          <div ref={scannerRef} className="pb__scanner" aria-hidden />
+
+          {PROBLEMS.map((p, i) => {
+            const Icon = p.icon;
+            const isLast = i === PROBLEMS.length - 1;
             return (
-              <div
-                key={item.title}
-                data-problem-item
-                className="flex gap-4 rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/[0.07] md:p-6"
-              >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-[#bdfa3c]">
-                  <Icon className="h-6 w-6" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">{item.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-gray-400">
-                    {item.description}
-                  </p>
-                </div>
+              <div key={p.code} className="pb__entry-wrap">
+                <article data-pb-entry className="pb__entry">
+                  {/* ── Rail ── */}
+                  <div className="pb__rail">
+                    <span className="pb__err-code" aria-label={`Código de erro ${p.code}`}>
+                      {p.code}
+                    </span>
+                    <div className="pb__rail-icon" aria-hidden>
+                      <Icon strokeWidth={1.5} />
+                    </div>
+                  </div>
+
+                  {/* ── Content ── */}
+                  <div className="pb__content">
+                    <span className="pb__ghost" aria-hidden>
+                      {p.ghost}
+                    </span>
+
+                    <div className="pb__entry-header">
+                      <h3 className="pb__entry-title">{p.title}</h3>
+                      <span
+                        className={`pb__severity pb__severity--${p.severity}`}
+                      >
+                        <span className="pb__severity-dot" aria-hidden />
+                        {p.severityLabel}
+                      </span>
+                    </div>
+
+                    <p className="pb__entry-desc">{p.description}</p>
+
+                    <div className="pb__tags" aria-label="Tags">
+                      {p.tags.map((tag) => (
+                        <span key={tag} className="pb__tag">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+
+                {/* causal connector between entries */}
+                {!isLast && (
+                  <div
+                    data-pb-connector
+                    className="pb__connector"
+                    aria-hidden
+                  >
+                    <span className="pb__connector-label">
+                      <ArrowRight
+                        style={{
+                          width: "0.55rem",
+                          height: "0.55rem",
+                          flexShrink: 0,
+                        }}
+                        strokeWidth={2}
+                      />
+                      {p.causeLabel}
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
+
+        {/* ── Footer resolution ──────────────────────────────── */}
+        <footer data-pb-footer className="pb__footer">
+          <div className="pb__footer-text">
+            <p className="pb__footer-kicker">// resolução disponível</p>
+            <p className="pb__footer-lead">
+              Cada linha desse log tem solução.
+            </p>
+            <p className="pb__footer-sub">
+              É o que fazemos — sistemas que eliminam esses erros de vez, na
+              medida do seu processo.
+            </p>
+          </div>
+
+          <div className="pb__footer-tally" aria-hidden>
+            <div className="pb__tally-item">
+              <span className="pb__tally-val">5</span>
+              <span className="pb__tally-label">Falhas<br />detectadas</span>
+            </div>
+            <div className="pb__tally-item">
+              <span className="pb__tally-val">1</span>
+              <span className="pb__tally-label">Causa<br />raiz</span>
+            </div>
+          </div>
+
+          <Link href="#services" className="pb__footer-arrow">
+            Ver soluções
+            <ArrowRight
+              style={{ width: "0.75rem", height: "0.75rem" }}
+              strokeWidth={2}
+            />
+          </Link>
+        </footer>
+
       </div>
     </section>
   );
