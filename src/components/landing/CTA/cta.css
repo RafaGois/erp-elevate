@@ -1,0 +1,355 @@
+/* ─── CTA Final — Morph Gate ─────────────────────────────────── */
+
+.cta {
+  --cta-bg: #010101;
+  --cta-fg: #f2f0eb;
+  --cta-muted: #a8a29e;
+  --cta-accent: var(--hero-accent, #dfff00);
+  --cta-emerald: #22c55e;
+  --cta-line: rgba(242, 240, 235, 0.1);
+  --cta-grid: rgba(242, 240, 235, 0.045);
+  --cta-scan: rgba(223, 255, 0, 0.05);
+  --cta-border: #1c1c1c;
+  --cta-shadow: #07080f;
+
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--cta-bg);
+  color: var(--cta-fg);
+}
+
+/* ── Video background ────────────────────────────────────────── */
+.cta__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Overlays ────────────────────────────────────────────────── */
+.cta__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(1,1,1,0.45) 0%, rgba(1,1,1,0.85) 100%),
+    linear-gradient(to bottom, rgba(1,1,1,0.6) 0%, rgba(1,1,1,0.5) 50%, rgba(1,1,1,0.75) 100%);
+  pointer-events: none;
+}
+
+/* lime edge glow */
+.cta__scrim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(223,255,0,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.22;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--cta-scan) 2px,
+    var(--cta-scan) 3px
+  );
+  mix-blend-mode: screen;
+}
+
+.cta__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    linear-gradient(to right, var(--cta-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--cta-grid) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, #000 10%, transparent 100%);
+}
+
+/* ── Fragment layer (above scrim, below gate) ────────────────── */
+.cta__frags {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* ── Gate — the clip-path morphism wrapper ───────────────────── */
+.cta__gate {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(5rem, 12vw, 8rem) clamp(1rem, 5vw, 4rem);
+  /* GSAP starts this at circle(0%) → expands to circle(160%) */
+  will-change: clip-path;
+}
+
+/* ── Sonar rings (SVG inside gate) ──────────────────────────── */
+.cta__sonar {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.cta__sonar-ring {
+  fill: none;
+  stroke: rgba(223, 255, 0, 0.15);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cta-sonar 4s ease-out infinite;
+  animation-fill-mode: both;
+}
+
+.cta__sonar-ring:nth-child(2) { animation-delay: 1.3s; stroke: rgba(34,197,94,0.12); }
+.cta__sonar-ring:nth-child(3) { animation-delay: 2.6s; stroke: rgba(223,255,0,0.08); }
+
+/* ── Inner content ───────────────────────────────────────────── */
+.cta__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 52rem;
+  margin-inline: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+/* corner brackets */
+.cta__inner::before,
+.cta__inner::after {
+  content: "";
+  position: absolute;
+  width: clamp(1.8rem, 3vw, 2.5rem);
+  height: clamp(1.8rem, 3vw, 2.5rem);
+  border-color: rgba(223, 255, 0, 0.35);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.cta__inner::before {
+  top: -1.5rem;
+  left: -1.5rem;
+  border-width: 2px 0 0 2px;
+}
+
+.cta__inner::after {
+  bottom: -1.5rem;
+  right: -1.5rem;
+  border-width: 0 2px 2px 0;
+}
+
+/* ── Kicker ──────────────────────────────────────────────────── */
+.cta__kicker {
+  font-family: var(--font-cta-pixel, ui-monospace), monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: var(--cta-accent);
+}
+
+/* ── Title ───────────────────────────────────────────────────── */
+.cta__title {
+  font-family: var(--font-cta-display, monospace);
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  text-align: center;
+}
+
+.cta__title-l1 {
+  display: block;
+  color: var(--cta-fg);
+}
+
+.cta__title-l2 {
+  display: block;
+  color: var(--cta-accent);
+  text-shadow:
+    0 0 40px rgba(223, 255, 0, 0.55),
+    0 0 80px rgba(223, 255, 0, 0.2);
+}
+
+/* divider rule */
+.cta__rule {
+  width: clamp(3rem, 8vw, 6rem);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cta-accent), transparent);
+  border: none;
+  flex-shrink: 0;
+}
+
+/* ── Subtitle ────────────────────────────────────────────────── */
+.cta__subtitle {
+  font-size: clamp(0.92rem, 1.6vw, 1.08rem);
+  line-height: 1.65;
+  color: rgba(168, 162, 158, 0.9);
+  max-width: 30rem;
+  text-align: center;
+}
+
+/* ── Actions ─────────────────────────────────────────────────── */
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.cta__btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.65rem;
+  font-family: var(--font-cta-pixel, ui-monospace), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--cta-accent);
+  border: 2px solid #171717;
+  border-radius: 0;
+  box-shadow: 5px 5px 0 var(--cta-shadow);
+  text-decoration: none;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.1s ease-out;
+}
+
+.cta__btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--cta-shadow);
+}
+
+.cta__btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--cta-shadow);
+}
+
+.cta__btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  font-family: var(--font-cta-pixel, ui-monospace), monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cta-fg);
+  background: rgba(242, 240, 235, 0.05);
+  border: 1.5px solid rgba(242, 240, 235, 0.2);
+  border-radius: 0;
+  box-shadow: 5px 5px 0 rgba(242, 240, 235, 0.06);
+  text-decoration: none;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.1s ease-out,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.cta__btn-secondary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 rgba(242, 240, 235, 0.1);
+  border-color: rgba(242, 240, 235, 0.38);
+  background: rgba(242, 240, 235, 0.08);
+}
+
+.cta__btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 3px 3px 0 rgba(242, 240, 235, 0.06);
+}
+
+/* ── Bottom tag ──────────────────────────────────────────────── */
+.cta__tag {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-cta-pixel, ui-monospace), monospace;
+  font-size: 0.36rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(168, 162, 158, 0.45);
+  margin-top: 0.3rem;
+}
+
+.cta__tag-dot {
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: var(--cta-emerald);
+  box-shadow: 0 0 5px var(--cta-emerald);
+  animation: cta-pulse 2.2s ease-in-out infinite;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────── */
+@keyframes cta-sonar {
+  0% {
+    r: 0;
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.05;
+  }
+  100% {
+    r: 38vmin;
+    opacity: 0;
+  }
+}
+
+@keyframes cta-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--cta-emerald); }
+  50% { opacity: 0.35; box-shadow: none; }
+}
+
+/* ── Initial GSAP state ──────────────────────────────────────── */
+[data-cta-reveal] {
+  opacity: 0;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cta__sonar-ring { animation: none; }
+  .cta__tag-dot { animation: none; }
+  [data-cta-reveal] { opacity: 1; }
+  .cta__gate { clip-path: none !important; }
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .cta__inner::before,
+  .cta__inner::after { display: none; }
+
+  .cta__actions { flex-direction: column; align-items: stretch; }
+  .cta__btn-primary,
+  .cta__btn-secondary {
+    justify-content: center;
+    width: 100%;
+  }
+}
