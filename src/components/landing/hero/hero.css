@@ -3,7 +3,6 @@
   --hero-bg: #050505;
   --hero-fg: #f2f0eb;
   --hero-muted: #a8a29e;
-  --hero-accent: var(--hero-accent, #dfff00);
   --hero-grid: rgba(242, 240, 235, 0.06);
   --hero-scan: rgba(223, 255, 0, 0.05);
   --hero-line: rgba(242, 240, 235, 0.12);
@@ -170,9 +169,36 @@
 }
 
 .landing-hero__arcade {
-  font-family: var(--font-hero-pixel), cursive;
-  font-size: 0.75em;
-  color: var(--hero-accent);
+ 
+  font-family: var(--font-hero-pixel), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  
+  letter-spacing: 0.02em;
+  
+  
+  color: var(--hero-accent, #dfff00);
+  text-shadow: 0 0 10px rgba(223, 255, 0, 0.32);
+  
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+@media (min-width: 768px) {
+  .landing-hero__arcade {
+    font-size: 0.75rem;
+  }
+}
+
+
+@keyframes landing-hero-arcade-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 8px rgba(223, 255, 0, 0.25);
+  }
+  50% {
+    text-shadow: 0 0 14px rgba(223, 255, 0, 0.48);
+  }
 }
 
 .landing-hero__actions {
@@ -210,7 +236,7 @@
   line-height: 1.4;
   padding: 13px 18px;
   color: #000;
-  background: var(--hero-accent);
+  background: var(--hero-accent, #dfff00);
   border: 3px solid #000;
   border-radius: 0;
   text-transform: uppercase;
@@ -346,6 +372,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .landing-hero__arcade {
+    animation: none;
+  }
+
   .landing-hero__cursor,
   .landing-hero__float,
   .landing-hero__streak {

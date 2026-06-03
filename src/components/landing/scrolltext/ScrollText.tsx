@@ -1,156 +1,332 @@
 "use client";
 
-export default function ScrollText() {
+import { useRef } from "react";
+import type { LucideIcon } from "lucide-react";
+import { DotGothic16, Press_Start_2P } from "next/font/google";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ClipboardList, Cog, Layers } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import "./scroll-text.css";
+
+const fontDisplay = DotGothic16({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-industrial-display",
+  display: "swap",
+});
+
+const fontPixel = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-industrial-pixel",
+  display: "swap",
+});
+
+const COPY = {
+  title: "Desenvolvimento de software com mentalidade industrial",
+  subtitle:
+    "Planejamento, produção, automação e gestão industrial sob medida — flexível e focado no seu processo.",
+  stackHeading: "Três frentes, um sistema",
+  stackFootLead: "Um único sistema conecta",
+  stackFootFlow: "planejamento → produção → automação → gestão",
+  stackFootTail: " — sem planilhas paralelas.",
+} as const;
+
+type StepItem = {
+  step: string;
+  chrome: string;
+  title: string;
+  description: string;
+  outcome: string;
+  icon: LucideIcon;
+};
+
+const STEPS: StepItem[] = [
+  {
+    step: "01",
+    chrome: "PLANEJAR",
+    title: "Da ordem ao chão de fábrica",
+    description:
+      "Programação, filas e apontamentos no mesmo lugar — quem opera e quem planeja enxergam a mesma prioridade.",
+    outcome: "Capacidade sob controle",
+    icon: ClipboardList,
+  },
+  {
+    step: "02",
+    chrome: "AUTOMATIZAR",
+    title: "Um fluxo entre os setores",
+    description:
+      "Pedido, estoque, PCP e expedição conversam no sistema. Menos planilha paralela, menos retrabalho entre áreas.",
+    outcome: "Operação sem ruído",
+    icon: Cog,
+  },
+  {
+    step: "03",
+    chrome: "GERIR",
+    title: "Gestão no ritmo da fábrica",
+    description:
+      "Painéis e indicadores moldados na sua operação — não adaptação forçada a um ERP genérico de prateleira.",
+    outcome: "Dado certo, na hora",
+    icon: Layers,
+  },
+];
+
+function StepCard({
+  item,
+  wide = false,
+}: {
+  item: StepItem;
+  wide?: boolean;
+}) {
+  const Icon = item.icon;
+
   return (
-    <section className="w-full h-svh md:h-[50svw] bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Texto principal */}
-      <div className="z-10 relative">
-        <h1 className="text-wrap text-center max-w-6xl text-4xl md:text-7xl font-bold text-white">
-          Desenvolvimento de software com mentalidade industrial
-        </h1>
-        <div className="w-full flex justify-center mt-4">
-          <p className="text-white/80 max-w-4xl text-wrap text-center text-sm md:text-base">
-            Desenvolvimento de soluções para planejamento, controle de produção,
-            automação de processos e gestão industrial customizadas e flexíveis
-            para resolver o seu problema de forma real
-          </p>
-        </div>
+    <article className={cn("sf-card", wide && "sf-card--wide")}>
+      {/* nameplate */}
+      <div className="sf-card__nameplate">
+        <span className="sf-card__num">{item.step}</span>
+        <span className="sf-card__rule" aria-hidden />
+        <span className="sf-card__verb">{item.chrome}</span>
       </div>
 
-      {/* Cards flutuantes — puro CSS */}
-      <div
-        className="absolute top-[5%] left-[5%] w-24 h-24 md:w-32 md:h-32 rounded-xl border border-white/20 bg-white/5 flex items-center justify-center anim-float"
-        style={{ animationDelay: "0s" }}
-        aria-hidden
-      >
-        <svg
-          viewBox="0 0 64 64"
-          className="w-12 h-12 md:w-16 md:h-16 text-white/80"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        >
-          <path d="M20 16v32M44 16v32M20 24h28M20 40h28" />
-          <path d="M28 24v16M36 24v16" strokeWidth="1" opacity="0.7" />
-        </svg>
+      {/* corpo */}
+      <div className="sf-card__body">
+        <span className="sf-card__ghost" aria-hidden>{item.step}</span>
+
+        {wide ? (
+          <>
+            <div className="sf-card__wide-left">
+              <span className="sf-card__icon-wrap" aria-hidden>
+                <Icon className="sf-card__icon" strokeWidth={1.75} />
+              </span>
+              <h3 className="sf-card__title">{item.title}</h3>
+            </div>
+            <p className="sf-card__desc">{item.description}</p>
+          </>
+        ) : (
+          <>
+            <span className="sf-card__icon-wrap" aria-hidden>
+              <Icon className="sf-card__icon" strokeWidth={1.75} />
+            </span>
+            <h3 className="sf-card__title">{item.title}</h3>
+            <p className="sf-card__desc">{item.description}</p>
+          </>
+        )}
       </div>
 
-      <div
-        className="absolute top-[15%] right-[12%] w-28 h-20 md:w-36 md:h-24 rounded-xl border border-white/20 bg-white/5 p-2 anim-float"
-        style={{ animationDelay: "1s" }}
-        aria-hidden
-      >
-        <div className="h-full w-full rounded border border-white/10 flex flex-col overflow-hidden">
-          <div className="flex gap-1.5 px-2 py-1.5 border-b border-white/10">
-            <span className="w-2 h-2 rounded-full bg-white/30" />
-            <span className="w-2 h-2 rounded-full bg-white/20" />
-            <span className="w-2 h-2 rounded-full bg-white/20" />
-          </div>
-          <div className="flex-1 font-mono text-[8px] md:text-[10px] text-[#bdfa3c]/90 p-1.5 leading-tight">
-            <span className="text-white/50">&gt;</span> run dev
-          </div>
-        </div>
+      {/* status bar */}
+      <div className="sf-card__foot">
+        <span className="sf-card__dot" aria-hidden />
+        <span className="sf-card__foot-label" aria-hidden>output</span>
+        <span className="sf-card__outcome">{item.outcome}</span>
       </div>
+    </article>
+  );
+}
 
-      <div
-        className="absolute bottom-[12%] left-[12%] w-24 h-24 md:w-32 md:h-32 rounded-xl border border-white/20 bg-white/5 flex items-center justify-center anim-float"
-        style={{ animationDelay: "2s" }}
-        aria-hidden
-      >
-        <svg
-          viewBox="0 0 64 64"
-          className="w-14 h-14 md:w-20 md:h-20 text-white/80"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.2"
-        >
-          <circle cx="32" cy="32" r="20" opacity="0.4" />
-          <circle cx="32" cy="32" r="12" opacity="0.6" />
-          <circle cx="32" cy="20" r="4" />
-          <circle cx="44" cy="36" r="4" />
-          <circle cx="20" cy="36" r="4" />
-          <circle cx="32" cy="48" r="4" />
-          <path
-            d="M32 24v8M32 40v4M28 36h-4M40 36h4M26 28l4 4M34 38l4 4M26 44l4-4M34 30l4 4"
-            strokeWidth="1"
-            opacity="0.5"
-          />
-        </svg>
-      </div>
+const PIPELINE = ["Planejar", "Produzir", "Automatizar", "Gerir"] as const;
 
-      <div
-        className="absolute bottom-[6%] right-[7%] w-28 h-20 md:w-36 md:h-24 rounded-xl border border-white/20 bg-white/5 p-2 font-mono text-[10px] md:text-xs text-white/70 anim-float"
-        style={{ animationDelay: "0.5s" }}
-        aria-hidden
-      >
-        <div className="flex flex-col gap-0.5">
-          <span>
-            <span className="text-white/40">0</span> 1011 0010
-          </span>
-          <span>
-            <span className="text-white/40">1</span> 0100 1110
-          </span>
-          <span>
-            <span className="text-[#bdfa3c]/70">2</span> 1110 0001
-          </span>
-        </div>
-      </div>
+const MARQUEE_ITEMS = [
+  "Planejamento",
+  "Controle de produção",
+  "Automação",
+  "Gestão industrial",
+  "Customizado",
+  "Flexível",
+  "Elevate",
+] as const;
 
-      <div
-        className="absolute left-[6%] top-[32%] w-20 h-20 md:w-24 md:h-24 rounded-xl border border-white/20 bg-white/5 flex items-center justify-center anim-float"
-        style={{ animationDelay: "1.5s" }}
-        aria-hidden
-      >
-        <svg
-          viewBox="0 0 48 48"
-          className="w-10 h-10 md:w-12 md:h-12 text-white/80"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        >
-          <path d="M16 8v32M32 8v32M16 8h4a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4h-4M32 8h-4a4 4 0 0 0-4 4v24a4 4 0 0 0 4 4h4" />
-        </svg>
-      </div>
-
-      <div
-        className="absolute right-[6%] top-[32%] w-20 h-16 md:w-24 md:h-20 rounded-xl border border-white/20 bg-white/5 flex items-center justify-center anim-float"
-        style={{ animationDelay: "2.5s" }}
-        aria-hidden
-      >
-        <span className="font-mono text-white/80 text-sm md:text-base">
-          <span className="text-[#bdfa3c]/90">&lt;</span>/
-          <span className="text-[#bdfa3c]/90">&gt;</span>
+function MarqueeGroup() {
+  return (
+    <div className="industrial-fold__marquee-group" aria-hidden>
+      {MARQUEE_ITEMS.map((item) => (
+        <span key={item} className={item === "Elevate" ? "is-accent" : undefined}>
+          ★ {item}
         </span>
-      </div>
+      ))}
+    </div>
+  );
+}
 
-      <div
-        className="absolute left-1/2 -translate-x-1/2 bottom-[8%] w-24 h-14 md:w-28 md:h-16 rounded-xl border border-white/20 bg-white/5 flex items-center justify-center gap-1 font-mono text-[9px] md:text-[10px] text-white/60 anim-float"
-        style={{ animationDelay: "3s" }}
+export default function ScrollText() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const pipelineFillRef = useRef<HTMLSpanElement>(null);
+
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      if (!section) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const reveals = section.querySelectorAll("[data-industrial-reveal]");
+      gsap.set(reveals, { opacity: 0, y: 28, filter: "blur(6px)" });
+
+      gsap.to(reveals, {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.85,
+        stagger: 0.08,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 72%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      if (pipelineFillRef.current) {
+        ScrollTrigger.create({
+          trigger: pipelineFillRef.current,
+          start: "top 88%",
+          onEnter: () => pipelineFillRef.current?.classList.add("is-ready"),
+          once: true,
+        });
+      }
+
+      const glyphs = section.querySelectorAll("[data-industrial-glyph]");
+      glyphs.forEach((el) => {
+        gsap.to(el, {
+          y: -18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      });
+    },
+    { scope: sectionRef },
+  );
+
+  return (
+    <section
+      id="mentalidade-industrial"
+      ref={sectionRef}
+      className={`industrial-fold ${fontDisplay.variable} ${fontPixel.variable}`}
+      aria-labelledby="industrial-fold-title"
+    >
+      <div className="industrial-fold__scanlines" aria-hidden />
+      <div className="industrial-fold__grid" aria-hidden />
+      <div className="industrial-fold__glow industrial-fold__glow--lime" aria-hidden />
+      <div className="industrial-fold__glow industrial-fold__glow--emerald" aria-hidden />
+
+      <svg
+        className="industrial-fold__blueprint"
+        viewBox="0 0 1200 800"
+        preserveAspectRatio="xMidYMid slice"
         aria-hidden
       >
-        <span className="text-white/40">main</span>
-        <span className="text-white/30">→</span>
-        <span className="text-[#bdfa3c]/80">feat/ui</span>
-      </div>
+        <defs>
+          <pattern id="industrial-fold-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.8" fill="rgba(223,255,0,0.25)" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#industrial-fold-dots)" opacity="0.4" />
+        <path
+          d="M80,400 H1120 M600,80 V720"
+          stroke="rgba(242,240,235,0.08)"
+          strokeWidth="1"
+          strokeDasharray="8 10"
+        />
+        <path
+          d="M200,120 Q600,40 1000,200 T1120,520"
+          fill="none"
+          stroke="#22c55e"
+          strokeWidth="2"
+          opacity="0.35"
+          strokeDasharray="100 200"
+          style={{ animation: "industrial-streak 28s linear infinite" }}
+        />
+        <path
+          d="M120,680 Q480,620 900,700 T1120,400"
+          fill="none"
+          stroke="#dfff00"
+          strokeWidth="2"
+          opacity="0.4"
+          strokeDasharray="90 210"
+          style={{ animation: "industrial-streak 32s linear infinite 4s" }}
+        />
+      </svg>
 
-      {/* Flutuação pura CSS */}
-      <style jsx>{`
-        .anim-float {
-          animation: float 6s ease-in-out infinite;
-          will-change: transform;
-        }
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-12px);
-          }
-        }
-      `}</style>
+      <span className="industrial-fold__glyph industrial-fold__glyph--a" data-industrial-glyph aria-hidden>
+        {"{ }"}
+      </span>
+      <span className="industrial-fold__glyph industrial-fold__glyph--b" data-industrial-glyph aria-hidden>
+        ◆
+      </span>
+      <span className="industrial-fold__glyph industrial-fold__glyph--c" data-industrial-glyph aria-hidden>
+        PCP
+      </span>
+
+      <div className="industrial-fold__inner">
+        <header className="industrial-fold__header" data-industrial-reveal>
+          <p className="industrial-fold__kicker">
+            <span className="industrial-fold__kicker-accent">// 01</span> — Mentalidade industrial
+          </p>
+        </header>
+
+        <div className="industrial-fold__bento">
+          <div className="industrial-fold__hero-panel" data-industrial-reveal>
+            <h2 id="industrial-fold-title" className="industrial-fold__title">
+              <span className="industrial-fold__title-line">Desenvolvimento de software</span>
+              <span className="industrial-fold__title-line">
+                com mentalidade{" "}
+                <span className="industrial-fold__title-accent">industrial</span>
+              </span>
+            </h2>
+            <p className="industrial-fold__subtitle">{COPY.subtitle}</p>
+          </div>
+
+          <div className="industrial-fold__pipeline" data-industrial-reveal>
+            <div className="industrial-fold__pipeline-inner">
+              <p className="industrial-fold__pipeline-kicker">
+                <span className="industrial-fold__pipeline-kicker-mark">//</span> conexão total
+              </p>
+              <p className="industrial-fold__pipeline-copy">
+                {COPY.stackFootLead}{" "}
+                <span className="industrial-fold__pipeline-flow">{COPY.stackFootFlow}</span>
+                {COPY.stackFootTail}
+              </p>
+              <div className="industrial-fold__pipeline-track" aria-hidden>
+                <span ref={pipelineFillRef} className="industrial-fold__pipeline-fill" />
+              </div>
+              <div className="industrial-fold__pipeline-nodes">
+                {PIPELINE.map((node) => (
+                  <span key={node} className="industrial-fold__pipeline-node is-active">
+                    {node}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="industrial-fold__steps-rail" data-industrial-reveal>
+            <p className="industrial-fold__stack-heading">{COPY.stackHeading}</p>
+            <div className="industrial-fold__steps-duo">
+              <StepCard item={STEPS[0]} />
+              <StepCard item={STEPS[1]} />
+            </div>
+          </div>
+
+          <div className="industrial-fold__step-item industrial-fold__step-item--step3" data-industrial-reveal>
+            <StepCard item={STEPS[2]} wide />
+          </div>
+        </div>
+
+        <div className="industrial-fold__marquee-wrap" data-industrial-reveal>
+          <div className="industrial-fold__marquee-track">
+            <MarqueeGroup />
+            <MarqueeGroup />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

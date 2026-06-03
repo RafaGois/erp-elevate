@@ -197,8 +197,8 @@ export default function Hero() {
         </h1>
 
         <p className="landing-hero__rise landing-hero__rise--3 mx-auto mt-6 max-w-xl text-base leading-relaxed text-[var(--hero-muted)] md:text-lg">
-          Automações, sistemas de controle industrial e digitalização de empresas —
-          com um diferencial ousado, retro e <span className="landing-hero__arcade">arcade</span>.
+          Digitalização de empresas, Sistemas de Controle Industrial com adaptabilidade e
+           <span className="landing-hero__arcade">personalização</span> para o seu problema e negócio.
         </p>
 
         <div className="landing-hero__actions landing-hero__rise landing-hero__rise--4 mt-9">

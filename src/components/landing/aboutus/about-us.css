@@ -1,0 +1,498 @@
+/* ─── Dobra Sobre Nós — vocabulário retro-industrial Elevate ─────── */
+
+.au {
+  --au-bg: #050505;
+  --au-alt: #080808;
+  --au-fg: #f2f0eb;
+  --au-muted: #a8a29e;
+  --au-accent: var(--hero-accent, #dfff00);
+  --au-emerald: #22c55e;
+  --au-line: rgba(242, 240, 235, 0.12);
+  --au-grid: rgba(242, 240, 235, 0.055);
+  --au-scan: rgba(223, 255, 0, 0.045);
+  --au-glow-lime: rgba(223, 255, 0, 0.2);
+  --au-glow-em: rgba(34, 197, 94, 0.14);
+  --au-shadow: #060c1a;
+  --au-border: #171717;
+
+  position: relative;
+  padding: clamp(4.5rem, 10vw, 7rem) clamp(1rem, 4vw, 3rem);
+  background: var(--au-bg);
+  color: var(--au-fg);
+  overflow: hidden;
+}
+
+/* ── Atmosfera ───────────────────────────────────────────────── */
+.au__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0.38;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--au-scan) 2px,
+    var(--au-scan) 3px
+  );
+  mix-blend-mode: screen;
+}
+
+.au__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, var(--au-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--au-grid) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, #000 20%, transparent 100%);
+}
+
+.au__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(90px);
+}
+
+.au__glow--lime {
+  right: -5%;
+  top: 5%;
+  width: min(55vw, 440px);
+  height: min(55vw, 440px);
+  background: var(--au-glow-lime);
+}
+
+.au__glow--emerald {
+  left: -5%;
+  bottom: 8%;
+  width: min(45vw, 360px);
+  height: min(45vw, 360px);
+  background: var(--au-glow-em);
+}
+
+/* ── Inner wrap ──────────────────────────────────────────────── */
+.au__inner {
+  position: relative;
+  z-index: 10;
+  max-width: 78rem;
+  margin-inline: auto;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.au__header {
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+.au__kicker {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  color: var(--au-muted);
+}
+
+.au__kicker-mark {
+  color: var(--au-accent);
+}
+
+.au__title {
+  margin-top: 0.9rem;
+  font-family: var(--font-au-display), monospace;
+  font-size: clamp(2.6rem, 6.5vw, 4.75rem);
+  font-weight: 400;
+  line-height: 0.93;
+  letter-spacing: -0.03em;
+}
+
+.au__title-line {
+  display: block;
+}
+
+.au__title-accent {
+  color: var(--au-accent);
+  text-shadow: 0 0 48px rgba(223, 255, 0, 0.32);
+}
+
+/* ── Main grid (about + values) ──────────────────────────────── */
+.au__main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.85rem, 2vw, 1.25rem);
+  margin-bottom: clamp(0.85rem, 2vw, 1.25rem);
+}
+
+@media (min-width: 768px) {
+  .au__main {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: stretch;
+  }
+}
+
+/* ── Shared card shell ───────────────────────────────────────── */
+.au__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--au-border);
+  background: linear-gradient(148deg, #141414 0%, #090909 55%, #111 100%);
+  box-shadow: 6px 6px 0 var(--au-shadow);
+  overflow: hidden;
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+.au__card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 8px 8px 0 var(--au-shadow);
+}
+
+/* diagonal stripe overlay */
+.au__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -12deg,
+    transparent,
+    transparent 46px,
+    rgba(223, 255, 0, 0.022) 46px,
+    rgba(223, 255, 0, 0.022) 47px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Chrome bar ──────────────────────────────────────────────── */
+.au__chrome {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.38rem 0.65rem;
+  background: var(--au-accent);
+  flex-shrink: 0;
+}
+
+.au__chrome-label {
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.au__chrome-dots {
+  display: flex;
+  gap: 0.22rem;
+  align-items: center;
+}
+
+.au__chrome-dots span {
+  display: block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.au__chrome-dots span:last-child {
+  background: #f87171;
+}
+
+/* ── Card body ───────────────────────────────────────────────── */
+.au__card-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: clamp(1.35rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem);
+}
+
+/* ── About text ──────────────────────────────────────────────── */
+.au__about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: clamp(0.87rem, 1.35vw, 0.97rem);
+  line-height: 1.72;
+  color: rgba(242, 240, 235, 0.8);
+}
+
+/* Accent left border on first paragraph */
+.au__about-text p:first-child {
+  position: relative;
+  padding-left: 1rem;
+  color: rgba(242, 240, 235, 0.9);
+}
+
+.au__about-text p:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  bottom: 0.2em;
+  width: 3px;
+  background: var(--au-accent);
+}
+
+/* ── Values card specific ─────────────────────────────────────── */
+.au__values-heading {
+  margin: 0 0 1.15rem;
+  font-family: var(--font-au-display), monospace;
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--au-fg);
+}
+
+.au__values-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.au__value-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.78rem 0;
+  border-bottom: 1px solid var(--au-line);
+}
+
+.au__value-item:last-child {
+  border-bottom: none;
+}
+
+.au__value-num {
+  flex-shrink: 0;
+  min-width: 1.6rem;
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: 0.42rem;
+  letter-spacing: 0.12em;
+  color: var(--au-accent);
+}
+
+.au__value-pip {
+  flex-shrink: 0;
+  width: 0.42rem;
+  height: 0.42rem;
+  background: var(--au-accent);
+  box-shadow: 0 0 8px rgba(223, 255, 0, 0.55);
+}
+
+.au__value-label {
+  font-size: clamp(0.82rem, 1.25vw, 0.9rem);
+  line-height: 1.35;
+  color: rgba(242, 240, 235, 0.85);
+}
+
+/* ── Stats section ───────────────────────────────────────────── */
+.au__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.au__stats-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.au__stats-eyebrow-label {
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--au-muted);
+  white-space: nowrap;
+}
+
+.au__stats-eyebrow-rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--au-line), transparent);
+}
+
+.au__stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(0.75rem, 1.8vw, 1.2rem);
+}
+
+@media (min-width: 640px) {
+  .au__stats-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Individual stat cell ─────────────────────────────────────── */
+.au__stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--au-border);
+  background: #0d0d0d;
+  box-shadow: 5px 5px 0 var(--au-shadow);
+  overflow: hidden;
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.12s ease-out;
+}
+
+/* lime accent stripe top */
+.au__stat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--au-accent);
+  z-index: 2;
+}
+
+/* corner bracket bottom-right */
+.au__stat::after {
+  content: "";
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-right: 2px solid rgba(223, 255, 0, 0.35);
+  border-bottom: 2px solid rgba(223, 255, 0, 0.35);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.au__stat:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 7px 7px 0 var(--au-shadow);
+}
+
+.au__stat-chrome {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.42rem 0.8rem;
+  background: #080808;
+  border-bottom: 1px solid #1c1c1c;
+}
+
+.au__stat-chrome-label {
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: 0.4rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(168, 162, 158, 0.45);
+}
+
+.au__stat-chrome-dot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--au-emerald);
+  box-shadow: 0 0 6px var(--au-emerald);
+  animation: au-pulse 2.4s ease-in-out infinite;
+}
+
+.au__stat-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1rem, 2.5vw, 1.35rem) clamp(0.9rem, 2vw, 1.15rem) clamp(1.2rem, 2.5vw, 1.5rem);
+}
+
+.au__stat-num-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.05em;
+  line-height: 1;
+}
+
+.au__stat-prefix {
+  font-family: var(--font-au-display), monospace;
+  font-size: clamp(1.5rem, 3.5vw, 2.35rem);
+  letter-spacing: -0.04em;
+  color: rgba(223, 255, 0, 0.75);
+}
+
+.au__stat-number {
+  font-family: var(--font-au-display), monospace;
+  font-size: clamp(3rem, 6.5vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  color: var(--au-accent);
+  text-shadow:
+    0 0 30px rgba(223, 255, 0, 0.28),
+    0 0 60px rgba(223, 255, 0, 0.12);
+}
+
+.au__stat-label {
+  margin-top: 0.65rem;
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: clamp(0.38rem, 0.7vw, 0.47rem);
+  line-height: 1.65;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--au-muted);
+}
+
+.au__stat-cursor {
+  position: absolute;
+  bottom: 0.72rem;
+  left: clamp(0.9rem, 2vw, 1.15rem);
+  font-family: var(--font-au-pixel), ui-monospace, monospace;
+  font-size: 0.62rem;
+  color: var(--au-accent);
+  opacity: 0.7;
+  animation: au-blink 1.1s step-end infinite;
+  pointer-events: none;
+}
+
+/* ── Animations ──────────────────────────────────────────────── */
+@keyframes au-blink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0; }
+}
+
+@keyframes au-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ── Reveal ──────────────────────────────────────────────────── */
+[data-au-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-au-reveal] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .au__stat-cursor {
+    animation: none;
+  }
+
+  .au__stat-chrome-dot {
+    animation: none;
+  }
+}

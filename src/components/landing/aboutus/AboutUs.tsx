@@ -1,177 +1,262 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { DotGothic16, Press_Start_2P } from "next/font/google";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import "./about-us.css";
 
-const cardStyle =
-  "rounded-xl transform-gpu bg-gradient-to-br from-zinc-950 via-black to-zinc-900 [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]";
+const fontDisplay = DotGothic16({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-au-display",
+  display: "swap",
+});
+
+const fontPixel = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-au-pixel",
+  display: "swap",
+});
+
+const STATS = [
+  {
+    id: "au-stat-0",
+    value: 1000,
+    prefix: "+",
+    label: "Usuários\nImpactados",
+    sys: "USR",
+    snap: 10,
+  },
+  {
+    id: "au-stat-1",
+    value: 100,
+    prefix: "+",
+    label: "Projetos\nConcluídos",
+    sys: "PROJ",
+    snap: 5,
+  },
+  {
+    id: "au-stat-2",
+    value: 50,
+    prefix: "",
+    label: "Sistemas\nDesenvolvidos",
+    sys: "SYS",
+    snap: 1,
+  },
+  {
+    id: "au-stat-3",
+    value: 20,
+    prefix: "+",
+    label: "Cidades com\nSistemas Ativos",
+    sys: "GEO",
+    snap: 1,
+  },
+] as const;
+
+const VALUES = [
+  "Simplicidade com Propósito",
+  "Visão de Processo",
+  "Eficiência Operacional",
+  "Precisão Técnica",
+  "Compromisso com Resultado",
+] as const;
 
 export default function AboutUs() {
-  const container = useRef<HTMLDivElement | null>(null);
-  const cardsRef = useRef<HTMLDivElement | null>(null);
-  const card1Ref = useRef<HTMLDivElement | null>(null);
-  const card2Ref = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      if (!container.current || !card1Ref.current || !card2Ref.current) return;
+      const section = sectionRef.current;
+      if (!section) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // Animação de entrada dos cards: visíveis só quando o bloco entra na viewport
-      gsap.set([card1Ref.current, card2Ref.current], { opacity: 0, y: 40 });
-
-      const tl = gsap.timeline({
-        paused: true,
+      // Reveal stagger
+      const reveals = section.querySelectorAll("[data-au-reveal]");
+      gsap.set(reveals, { opacity: 0, y: 32, filter: "blur(6px)" });
+      gsap.to(reveals, {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        duration: 0.85,
+        stagger: 0.1,
+        ease: "power3.out",
         scrollTrigger: {
-          trigger: cardsRef.current,
-          start: "top 85%",
+          trigger: section,
+          start: "top 72%",
           toggleActions: "play none none none",
         },
       });
 
-      tl.to(card1Ref.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-      }).to(
-        card2Ref.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        },
-        "-=0.35"
-      );
-
-      // Contadores
-      function counterAnim(id: string, value: number) {
-        const el = container.current?.querySelector(id);
+      // Counter animations
+      STATS.forEach((stat) => {
+        const el = section.querySelector(`[data-au-counter="${stat.id}"]`);
         if (!el) return;
-        gsap.to(el, {
-          innerText: value,
-          duration: 1.5,
-          snap: { innerText: value > 200 ? 10 : 1 },
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none none",
+        gsap.fromTo(
+          el,
+          { innerText: 0 },
+          {
+            innerText: stat.value,
+            duration: 2.2,
+            ease: "power2.out",
+            snap: { innerText: stat.snap },
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
           },
-        });
-      }
-
-      counterAnim("#businessCounter", 1000);
-      counterAnim("#projectsCounter", 100);
-      counterAnim("#clientsApprovalCounter", 50);
-      counterAnim("#otherCounter", 20);
+        );
+      });
     },
-    { scope: container, dependencies: [] }
+    { scope: sectionRef },
   );
 
   return (
     <section
-      ref={container}
+      ref={sectionRef}
       id="about-us"
-      className="min-h-screen flex flex-col p-6 md:p-8 bg-black text-white pt-28 pb-16"
+      className={`au ${fontDisplay.variable} ${fontPixel.variable}`}
+      aria-labelledby="au-title"
     >
-      <header className="mb-12 md:mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold">Sobre nós</h2>
-        <p className="mt-2 max-w-xl text-gray-400 text-lg">
-          Conheça a Elevate e o que nos move.
-        </p>
-      </header>
+      {/* Atmosphere */}
+      <div className="au__scanlines" aria-hidden />
+      <div className="au__grid" aria-hidden />
+      <div className="au__glow au__glow--lime" aria-hidden />
+      <div className="au__glow au__glow--emerald" aria-hidden />
 
-      <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-16">
-        <div
-          ref={card1Ref}
-          className={`p-6 md:p-8 lg:col-span-7 min-h-[280px] flex flex-col justify-center ${cardStyle}`}
-        >
-          <h3 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            A elevate
-          </h3>
-          <div className="text-lg leading-relaxed text-gray-200 space-y-4 max-w-2xl">
-            <p>
-              Somos uma empresa especializada no desenvolvimento de sistemas sob medida para a indústria metal mecânica. Nosso trabalho nasce da união entre conhecimento técnico em desenvolvimento de software e experiência prática em planejamento, controle de processos e engenharia de automação industrial.
-            </p>
-            <p>
-              Entendemos a realidade do chão de fábrica, os desafios do PCP, a complexidade dos fluxos produtivos e a necessidade de integração entre setores. Mais do que desenvolver aplicações, projetamos soluções que organizam processos, reduzem retrabalho e aumentam a eficiência operacional.
-            </p>
-            <p>
-              Acreditamos que um software industrial deve ser simples, intencional e funcional. Simples para quem opera. Estruturado para quem gerencia. Escalável para quem cresce.
-            </p>
-          </div>
-        </div>
-        <div
-          ref={card2Ref}
-          className={`lg:col-span-5 rounded-xl p-6 md:p-8 min-h-[280px] flex flex-col justify-center ${cardStyle}`}
-        >
-          <h3 className="text-3xl md:text-4xl font-bold pb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Nossos valores
-          </h3>
-          <ul className="flex flex-col gap-3 text-gray-200">
-            {[
-              "Simplicidade com Propósito",
-              "Visão de Processo",
-              "Eficiência Operacional",
-              "Precisão Técnica",
-              "Compromisso com Resultado",
-            ].map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <span className="h-2 w-2 shrink-0 rounded-full bg-gray-500" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div className={`px-6 md:px-8 py-8 rounded-xl ${cardStyle}`}>
-        <div className="mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold">
-            Nossas conquistas e números
-          </h2>
-          <p className="mt-2 max-w-xl text-gray-400">
-            Transformamos estratégia, criatividade e propósito em resultados que fortalecem marcas e geram conexões reais.
+      <div className="au__inner">
+        {/* ── Header ── */}
+        <header className="au__header" data-au-reveal>
+          <p className="au__kicker">
+            <span className="au__kicker-mark">// 02</span> — Nossa história
           </p>
+          <h2 id="au-title" className="au__title">
+            <span className="au__title-line">Sobre</span>
+            <span className="au__title-line">
+              a <span className="au__title-accent">Elevate</span>
+            </span>
+          </h2>
+        </header>
+
+        {/* ── About + Values cards ── */}
+        <div className="au__main">
+          {/* About card */}
+          <article className="au__card" data-au-reveal aria-label="A Elevate">
+            <div className="au__chrome">
+              <span className="au__chrome-label">SYS://ABOUT.ERP</span>
+              <div className="au__chrome-dots" aria-hidden>
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="au__card-body">
+              <div className="au__about-text">
+                <p>
+                  Somos uma empresa especializada no desenvolvimento de sistemas
+                  sob medida para a indústria metal mecânica. Nosso trabalho nasce
+                  da união entre conhecimento técnico em desenvolvimento de software
+                  e experiência prática em planejamento, controle de processos e
+                  engenharia de automação industrial.
+                </p>
+                <p>
+                  Entendemos a realidade do chão de fábrica, os desafios do PCP, a
+                  complexidade dos fluxos produtivos e a necessidade de integração
+                  entre setores. Mais do que desenvolver aplicações, projetamos
+                  soluções que organizam processos, reduzem retrabalho e aumentam a
+                  eficiência operacional.
+                </p>
+                <p>
+                  Acreditamos que um software industrial deve ser simples,
+                  intencional e funcional. Simples para quem opera. Estruturado para
+                  quem gerencia. Escalável para quem cresce.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          {/* Values card */}
+          <article
+            className="au__card"
+            data-au-reveal
+            aria-label="Nossos valores"
+          >
+            <div className="au__chrome">
+              <span className="au__chrome-label">SYS://VALORES</span>
+              <div className="au__chrome-dots" aria-hidden>
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+            <div className="au__card-body">
+              <h3 className="au__values-heading">Nossos valores</h3>
+              <ul className="au__values-list">
+                {VALUES.map((v, i) => (
+                  <li key={v} className="au__value-item">
+                    <span className="au__value-num" aria-hidden>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="au__value-pip" aria-hidden />
+                    <span className="au__value-label">{v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
         </div>
-        <div className="flex flex-row flex-wrap gap-8 md:gap-12 justify-evenly md:justify-between py-6">
-          <div className="flex items-center flex-col gap-2">
-            <p className="text-sm text-[#ababab] opacity-70">
-              Usuários Impactados
-            </p>
-            <div className="flex text-2xl font-bold text-nowrap">
-              <p>+</p>
-              <h3 id="businessCounter">0</h3>
-            </div>
+
+        {/* ── Stats ── */}
+        <div className="au__stats" data-au-reveal>
+          <div className="au__stats-eyebrow">
+            <span className="au__stats-eyebrow-label">
+              Conquistas em números
+            </span>
+            <span className="au__stats-eyebrow-rule" aria-hidden />
           </div>
-          <div className="flex items-center flex-col gap-2 grow-0">
-            <p className="text-sm text-[#ababab] opacity-70">
-              Projetos Concluídos
-            </p>
-            <div className="flex text-2xl font-bold text-nowrap">
-              <p>+</p>
-              <h3 id="projectsCounter">0</h3>
-            </div>
-          </div>
-          <div className="flex items-center flex-col gap-2 grow-0">
-            <p className="text-sm text-[#ababab] opacity-70">
-              Sistemas Desenvolvidos
-            </p>
-            <div className="flex text-2xl font-bold text-nowrap">
-              <h3 id="clientsApprovalCounter">0</h3>
-            </div>
-          </div>
-          <div className="flex items-center flex-col gap-2 grow-0">
-            <p className="text-sm text-[#ababab] opacity-70">
-              Cidades com Sistemas
-            </p>
-            <div className="flex text-2xl font-bold text-nowrap">
-              <p>+</p>
-              <h3 id="otherCounter">0</h3>
-            </div>
+
+          <div className="au__stats-row">
+            {STATS.map((stat) => (
+              <article key={stat.id} className="au__stat">
+                <div className="au__stat-chrome">
+                  <span className="au__stat-chrome-label">
+                    SYS://{stat.sys}
+                  </span>
+                  <span className="au__stat-chrome-dot" aria-hidden />
+                </div>
+
+                <div className="au__stat-body">
+                  <div className="au__stat-num-row">
+                    {stat.prefix && (
+                      <span className="au__stat-prefix" aria-hidden>
+                        {stat.prefix}
+                      </span>
+                    )}
+                    <span
+                      className="au__stat-number"
+                      data-au-counter={stat.id}
+                      aria-label={`${stat.prefix}${stat.value} ${stat.label.replace("\n", " ")}`}
+                    >
+                      0
+                    </span>
+                  </div>
+                  <p className="au__stat-label">
+                    {stat.label.split("\n").map((line, i) => (
+                      <span key={i} style={{ display: "block" }}>
+                        {line}
+                      </span>
+                    ))}
+                  </p>
+                  <span className="au__stat-cursor" aria-hidden>
+                    _
+                  </span>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </div>
