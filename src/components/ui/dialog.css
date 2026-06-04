@@ -17,8 +17,8 @@
   --ed-surface-2: #fafafa;
   --ed-panel-line: #e5e5e5;
   --ed-bar: #bdfa3c;
-  --ed-border: #84cc16;
-  --ed-shadow: #3f6212;
+  --ed-border: #171717;
+  --ed-shadow: #0f172a;
   --ed-accent: #dfff00;
 
   position: fixed;
@@ -57,7 +57,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.94);
   padding: 1.5rem;
-  box-shadow: 0 24px 60px -28px rgba(223, 255, 0, 0.22);
+  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -76,8 +76,8 @@
   --ed-surface-2: #292524;
   --ed-panel-line: rgba(242, 240, 235, 0.12);
   --ed-bar: #dfff00;
-  --ed-border: color-mix(in srgb, #dfff00 55%, #e7e5e4);
-  --ed-shadow: color-mix(in srgb, #dfff00 70%, #000);
+  --ed-border: rgba(242, 240, 235, 0.12);
+  --ed-shadow: #0f172a;
 }
 
 .dark .elevate-dialog-content--retro {
@@ -119,7 +119,7 @@
     rgba(0, 0, 0, 0.06) 5px,
     rgba(0, 0, 0, 0.06) 6px
   );
-  border-bottom: 2px solid var(--ed-border);
+  border-bottom: 2px solid var(--ed-panel-line);
 }
 
 .elevate-dialog__chrome-title {
@@ -226,31 +226,6 @@
     var(--ed-surface) 42%
   );
   color: var(--ed-fg);
-}
-
-.elevate-dialog__scroll::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.018) 2px,
-    rgba(0, 0, 0, 0.018) 4px
-  );
-}
-
-.dark .elevate-dialog__scroll::after {
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(242, 240, 235, 0.04) 2px,
-    rgba(242, 240, 235, 0.04) 4px
-  );
 }
 
 .elevate-dialog-content--glass .elevate-dialog__scroll {
@@ -381,14 +356,14 @@
 }
 
 .dark .elevate-dialog__close--floating {
-  border-color: color-mix(in srgb, #dfff00 55%, #e7e5e4);
+  border-color: rgba(242, 240, 235, 0.2);
   background: #292524;
   color: #f2f0eb;
-  box-shadow: 4px 4px 0 color-mix(in srgb, #dfff00 70%, #000);
+  box-shadow: 4px 4px 0 #0f172a;
 }
 
 .dark .elevate-dialog__close--floating:hover {
-  box-shadow: 5px 5px 0 color-mix(in srgb, #dfff00 75%, #000);
+  box-shadow: 5px 5px 0 #0f172a;
 }
 
 .dark .elevate-dialog-overlay {
