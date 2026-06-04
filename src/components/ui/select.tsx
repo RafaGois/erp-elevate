@@ -2,14 +2,62 @@ import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
+import { cva, type VariantProps } from "class-variance-authority"
+
 import { cn } from "@/lib/utils"
 import "./select.css"
 import "./elevate-overlay.css"
 
+export type SelectVariant = "modern" | "retro"
+
+const SelectVariantContext = React.createContext<SelectVariant>("modern")
+
+function useSelectVariant(override?: SelectVariant) {
+  const ctx = React.useContext(SelectVariantContext)
+  return override ?? ctx
+}
+
+const selectTriggerVariants = cva(
+  "elevate-select-trigger w-full min-w-0 max-w-full *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        modern: "",
+        retro: "elevate-select-trigger--retro",
+      },
+    },
+    defaultVariants: {
+      variant: "modern",
+    },
+  },
+)
+
+const selectContentVariants = cva(
+  "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto outline-hidden",
+  {
+    variants: {
+      variant: {
+        modern: "elevate-overlay p-1",
+        retro: "elevate-overlay elevate-overlay--retro p-0",
+      },
+    },
+    defaultVariants: {
+      variant: "modern",
+    },
+  },
+)
+
 function Select({
+  variant = "modern",
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root>) {
-  return <SelectPrimitive.Root data-slot="select" {...props} />
+}: React.ComponentProps<typeof SelectPrimitive.Root> & {
+  variant?: SelectVariant
+}) {
+  return (
+    <SelectVariantContext.Provider value={variant}>
+      <SelectPrimitive.Root data-slot="select" data-variant={variant} {...props} />
+    </SelectVariantContext.Provider>
+  )
 }
 
 function SelectGroup({
@@ -27,19 +75,20 @@ function SelectValue({
 function SelectTrigger({
   className,
   size = "default",
+  variant,
   children,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
-  size?: "sm" | "default"
-}) {
+}: React.ComponentProps<typeof SelectPrimitive.Trigger> &
+  VariantProps<typeof selectTriggerVariants> & {
+    size?: "sm" | "default"
+  }) {
+  const resolvedVariant = useSelectVariant(variant ?? undefined)
+
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       data-size={size}
-      className={cn(
-        "elevate-select-trigger *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
-        className
-      )}
+      className={cn(selectTriggerVariants({ variant: resolvedVariant }), className)}
       {...props}
     >
       {children}
@@ -54,14 +103,18 @@ function SelectContent({
   className,
   children,
   position = "popper",
+  variant,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> &
+  VariantProps<typeof selectContentVariants>) {
+  const resolvedVariant = useSelectVariant(variant ?? undefined)
+
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "elevate-overlay p-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto outline-hidden",
+          selectContentVariants({ variant: resolvedVariant }),
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className

@@ -24,9 +24,13 @@ import { UseFormReturn } from "react-hook-form";
 export function DatePickerForm({
   form,
   label,
+  triggerVariant = "modern",
+  triggerClassName,
 }: {
   form: UseFormReturn;
   label?: string;
+  triggerVariant?: "modern" | "retro";
+  triggerClassName?: string;
 }) {
   return (
     <FormField
@@ -39,10 +43,13 @@ export function DatePickerForm({
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
-                  variant={"outline"}
+                  variant="outline"
+                  size="sm"
                   className={cn(
                     "min-w-0 max-w-full pl-3 text-left font-normal sm:w-[240px]",
-                    !field?.value?.start && "text-muted-foreground"
+                    triggerVariant === "retro" && "data-table-toolbar__date-trigger",
+                    !field?.value?.from && "text-muted-foreground",
+                    triggerClassName
                   )}
                 >
                   <CalendarIcon />

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import useAppData from "@/data/hooks/useAppData";
 import ModalAction from "@/lib/enums/modalAction";
+import DialogFormActions from "./DialogFormActions";
 
 interface ModalProps<T> {
   action?: ModalAction;
@@ -51,21 +51,15 @@ export default function Modal<T>(props: ModalProps<T>) {
           <DialogDescription>{props.description}</DialogDescription>
         </DialogHeader>
         
-        <div className="max-h-[calc(100vh-20rem)] overflow-y-auto scrollbar-hide">
+        <div className="elevate-dialog__scroll max-h-[calc(100vh-20rem)] scrollbar-hide">
           {props.children}
         </div>
         <DialogFooter>
-          <Button
-            disabled={reloading}
-            className="bg-card"
-            variant="outline"
-            onClick={handleClose}
-          >
-            Cancelar
-          </Button>
-          <Button disabled={reloading} onClick={props.onSubmit}>
-            Salvar
-          </Button>
+          <DialogFormActions
+            loading={reloading}
+            onCancel={handleClose}
+            onSubmit={props.onSubmit}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

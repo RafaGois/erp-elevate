@@ -180,11 +180,11 @@ export function TasksRegistersFilterDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[min(90vh,760px)] flex-col gap-0 p-0 sm:max-w-lg"
+        className="flex max-h-[min(90vh,760px)] flex-col sm:max-w-lg"
         showCloseButton
       >
-        <DialogHeader className="p-6 pb-2 pr-14">
-          <DialogTitle>Filtros da tabela de tarefas</DialogTitle>
+        <DialogHeader>
+          <DialogTitle>SYS://FILTROS.TASKS</DialogTitle>
           <DialogDescription>
             Prazo, status, prioridade, responsável e projeto. Afeta apenas a
             visualização em tabela; o Kanban mantém os próprios filtros.
@@ -192,7 +192,7 @@ export function TasksRegistersFilterDialog({
         </DialogHeader>
 
         <Form {...formRhf}>
-          <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 py-2">
+          <div className="elevate-dialog__scroll flex flex-1 flex-col gap-6">
             <div className="space-y-2">
               <Label className="text-sm font-medium">Prazo (deadline)</Label>
               <DatePickerForm form={formRhf} />
@@ -316,19 +316,21 @@ export function TasksRegistersFilterDialog({
             </FilterSection>
           </div>
 
-          <DialogFooter className="border-border bg-background shrink-0 gap-2 border-t p-4 sm:justify-between">
+          <DialogFooter className="shrink-0 sm:justify-between">
             <Button
               type="button"
               variant="outline"
+              size="default"
               onClick={handleClear}
-              className="w-full sm:w-auto"
+              className="elevate-dialog__footer-btn w-full sm:w-[11.5rem]"
             >
               Limpar filtros
             </Button>
             <Button
               type="button"
+              size="default"
               onClick={() => onOpenChange(false)}
-              className="w-full sm:w-auto"
+              className="elevate-dialog__footer-btn w-full sm:w-[11.5rem]"
             >
               Aplicar e fechar
             </Button>

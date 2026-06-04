@@ -63,10 +63,13 @@ export default function ConfirmDialog<T extends WithId>(
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-card">Cancelar</AlertDialogCancel>
+          <AlertDialogCancel className="elevate-dialog__footer-btn w-full sm:w-[8.75rem]">
+            Cancelar
+          </AlertDialogCancel>
           <AlertDialogAction
+            variant="destructive"
+            className="elevate-dialog__footer-btn w-full sm:w-[8.75rem]"
             onClick={handleClick}
-            className="bg-destructive hover:bg-destructive/70 text-white"
           >
             Excluir
           </AlertDialogAction>

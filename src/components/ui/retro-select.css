@@ -1,0 +1,30 @@
+/* RetroSelect — input-retro + overlay retro (design_system.html) */
+
+.retro-select {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.retro-select .elevate-select-trigger--retro[data-size="sm"] {
+  height: 2rem;
+  min-height: 2rem;
+}
+
+/* Toolbar / filtros de tabela */
+.retro-select--toolbar {
+  width: 100%;
+  min-width: 8.5rem;
+}
+
+.retro-select--toolbar .elevate-select-trigger--retro[data-size="sm"] {
+  width: 100%;
+  padding: 0 0.65rem;
+}
+
+/* Paginação — linhas por página */
+.retro-select--compact .elevate-select-trigger--retro[data-size="sm"] {
+  width: 4.5rem;
+  padding: 0 0.4rem;
+  justify-content: center;
+}

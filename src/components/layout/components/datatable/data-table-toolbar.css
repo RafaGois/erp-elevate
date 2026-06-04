@@ -1,0 +1,87 @@
+/* Barra de filtros acima das tabelas — input-retro (design_system.html) */
+
+.data-table-toolbar {
+  --dtb-accent: #dfff00;
+  --dtb-fg: #09090b;
+  --dtb-muted: #71717a;
+  --dtb-surface: #ffffff;
+  --dtb-shadow: #0f172a;
+}
+
+.dark .data-table-toolbar {
+  --dtb-fg: #f2f0eb;
+  --dtb-muted: #a8a29e;
+  --dtb-surface: #1c1917;
+  --dtb-shadow: #000;
+}
+
+.data-table-toolbar__controls .elevate-input--retro.elevate-input--sm {
+  height: 2rem;
+  padding: 0.35rem 0.65rem;
+}
+
+.data-table-toolbar__controls .data-table-toolbar__date-trigger.elevate-btn--outline {
+  border-radius: 0;
+  border-width: 3px;
+  background: var(--dtb-surface);
+  color: var(--dtb-fg);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.06);
+}
+
+.dark .data-table-toolbar__controls .data-table-toolbar__date-trigger.elevate-btn--outline {
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.data-table-toolbar__controls .data-table-toolbar__date-trigger.elevate-btn--outline:hover {
+  transform: none;
+  background: var(--dtb-surface);
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.06);
+}
+
+.dark
+  .data-table-toolbar__controls
+  .data-table-toolbar__date-trigger.elevate-btn--outline:hover {
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.data-table-toolbar__controls .data-table-toolbar__date-trigger.elevate-btn--outline:focus-visible {
+  border-color: var(--dtb-accent);
+  box-shadow: 4px 4px 0 var(--dtb-accent);
+  transform: none;
+}
+
+.data-table-toolbar__controls .elevate-btn--outline.elevate-btn--sm {
+  min-height: 2rem;
+}
+
+/* Outline na toolbar (Filtros, Limpar, Status…) — sem sombra dura, como Cancelar nos modais */
+.data-table-toolbar__controls
+  .elevate-btn--outline:not(.data-table-toolbar__date-trigger) {
+  box-shadow: none;
+  transform: none;
+}
+
+.data-table-toolbar__controls
+  .elevate-btn--outline:not(.data-table-toolbar__date-trigger):hover,
+.data-table-toolbar__controls
+  .elevate-btn--outline:not(.data-table-toolbar__date-trigger):active {
+  transform: none;
+  box-shadow: none;
+}
+
+.data-table-toolbar__controls
+  .elevate-btn--outline:not(.data-table-toolbar__date-trigger):focus-visible {
+  border-color: var(--dtb-accent);
+  box-shadow: 0 0 0 3px rgba(223, 255, 0, 0.25);
+  transform: none;
+}
+
+.dark
+  .data-table-toolbar__controls
+  .elevate-btn--outline:not(.data-table-toolbar__date-trigger):hover {
+  box-shadow: none;
+}

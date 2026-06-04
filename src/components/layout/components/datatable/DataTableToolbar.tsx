@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import "./data-table-toolbar.css";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -47,15 +48,17 @@ export function DataTableToolbar<TData>({
   onToggleResponsibleFilter,
 }: DataTableToolbarProps<TData>) {
   return (
-    <div className="flex flex-col md:flex-row md:justify-evenly gap-3 py-4 w-full ">
-      <div className="flex flex-1 flex-wrap items-center gap-2 w-full md:w-auto">
+    <div className="data-table-toolbar flex w-full flex-col gap-3 py-4 md:flex-row md:justify-evenly">
+      <div className="data-table-toolbar__controls flex w-full flex-1 flex-wrap items-center gap-2 md:w-auto">
         {toolbarStart}
         <Input
+          variant="retro"
+          inputSize="sm"
           placeholder="Filtro..."
           onChange={(event) => {
             return table.setGlobalFilter(event.target.value);
           }}
-          className="h-8 min-w-0 flex-1 basis-24 sm:basis-[150px] sm:flex-initial lg:w-[250px]"
+          className="min-w-0 flex-1 basis-24 sm:basis-[150px] sm:flex-initial lg:w-[250px]"
         />
         {form && (
           <Form {...form}>
@@ -63,12 +66,15 @@ export function DataTableToolbar<TData>({
               className="flex min-w-0 flex-wrap items-center gap-2"
               onSubmit={(e) => e.preventDefault()}
             >
-              <DatePickerForm form={form} />
+              <DatePickerForm form={form} triggerVariant="retro" />
               {options && (
                 <SelectForm
                   form={form}
                   name="select"
                   options={options ?? []}
+                  appearance="retro"
+                  layout="toolbar"
+                  triggerSize="sm"
                 />
               )}
               {statusFilterOptions && onToggleStatusFilter && (
