@@ -1,14 +1,16 @@
 "use client";
 
 import {
-  Card,
-  CardChrome,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowDownCircle, ArrowUpCircle, Wallet } from "lucide-react";
+  ArrowDownRight,
+  ArrowUpRight,
+  Bell,
+  ChartPie,
+  CircleDollarSign,
+  History,
+  LineChart,
+  ShieldAlert,
+  Wallet,
+} from "lucide-react";
 
 import {
   useAlerts,
@@ -20,6 +22,7 @@ import {
   useSummary,
 } from "./_hooks/useFinanceDashboard";
 import KpiCard from "./_components/KpiCard";
+import FinancePanelCard from "./_components/FinancePanelCard";
 import AlertsList from "./_components/AlertsList";
 import RecentMovimentations from "./_components/RecentMovimentations";
 import ChartState from "./_components/ChartState";
@@ -52,33 +55,30 @@ export default function FinanceDashboard() {
         </p>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-3">
+      {/* KPIs — mesmo grid e card da tela de movimentações */}
+      <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
         {summary.isLoading || !summary.data ? (
           <>
-            <Skeleton className="h-[140px] rounded-md" />
-            <Skeleton className="h-[140px] rounded-md" />
-            <Skeleton className="h-[140px] rounded-md" />
+            <Skeleton className="h-[132px] rounded-sm" />
+            <Skeleton className="h-[132px] rounded-sm" />
+            <Skeleton className="h-[132px] rounded-sm" />
           </>
         ) : (
           <>
             <KpiCard
-              label="SYS://ENTRADAS"
               title="Entradas"
               metric={summary.data.entradas}
-              icon={<ArrowUpCircle className="h-4 w-4" />}
+              icon={<ArrowUpRight />}
             />
             <KpiCard
-              label="SYS://SAIDAS"
               title="Saídas"
               metric={summary.data.saidas}
-              icon={<ArrowDownCircle className="h-4 w-4" />}
+              icon={<ArrowDownRight />}
             />
             <KpiCard
-              label="SYS://LUCRO"
               title="Lucro"
               metric={summary.data.lucro}
-              icon={<Wallet className="h-4 w-4" />}
+              icon={<Wallet />}
               highlight
             />
           </>
@@ -87,121 +87,104 @@ export default function FinanceDashboard() {
 
       {/* Série anual + cobertura de custos fixos */}
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-3">
-        <Card scanlines className="@5xl/main:col-span-2">
-          <CardChrome label="SYS://EVOLUCAO_12M" />
-          <CardHeader>
-            <CardTitle>Evolução dos últimos 12 meses</CardTitle>
-            <CardDescription>
-              Entradas, saídas e lucro mês a mês
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={profitByMonth.isLoading}
-              isError={profitByMonth.isError}
-              isEmpty={!profitByMonth.data?.data?.length}
-            >
-              {profitByMonth.data && (
-                <ProfitByMonthChart data={profitByMonth.data.data} />
-              )}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          className="@5xl/main:col-span-2"
+          chromeLabel="SYS://EVOLUCAO_12M"
+          title="Evolução dos últimos 12 meses"
+          description="Entradas, saídas e lucro mês a mês"
+          icon={<LineChart />}
+        >
+          <ChartState
+            isLoading={profitByMonth.isLoading}
+            isError={profitByMonth.isError}
+            isEmpty={!profitByMonth.data?.data?.length}
+          >
+            {profitByMonth.data && (
+              <ProfitByMonthChart data={profitByMonth.data.data} />
+            )}
+          </ChartState>
+        </FinancePanelCard>
 
-        <Card>
-          <CardChrome label="SYS://CUSTOS_FIXOS" />
-          <CardHeader>
-            <CardTitle>Cobertura de custos fixos</CardTitle>
-            <CardDescription>Lucro vs. meta de custos fixos</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={coverage.isLoading}
-              isError={coverage.isError}
-              height={300}
-            >
-              {coverage.data && <CoverageGauge coverage={coverage.data} />}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          chromeLabel="SYS://CUSTOS_FIXOS"
+          title="Cobertura de custos fixos"
+          description="Lucro vs. meta de custos fixos"
+          icon={<ShieldAlert />}
+        >
+          <ChartState
+            isLoading={coverage.isLoading}
+            isError={coverage.isError}
+            height={300}
+          >
+            {coverage.data && <CoverageGauge coverage={coverage.data} />}
+          </ChartState>
+        </FinancePanelCard>
       </div>
 
       {/* Distribuições por categoria */}
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-2">
-        <Card>
-          <CardChrome label="SYS://RECEITA_CAT" />
-          <CardHeader>
-            <CardTitle>Receita por categoria</CardTitle>
-            <CardDescription>
-              Distribuição das entradas do mês
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={revenue.isLoading}
-              isError={revenue.isError}
-              isEmpty={!revenue.data?.data?.length}
-            >
-              {revenue.data && <CategoryDonut data={revenue.data.data} />}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          chromeLabel="SYS://RECEITA_CAT"
+          title="Receita por categoria"
+          description="Distribuição das entradas do mês"
+          icon={<ChartPie />}
+        >
+          <ChartState
+            isLoading={revenue.isLoading}
+            isError={revenue.isError}
+            isEmpty={!revenue.data?.data?.length}
+          >
+            {revenue.data && <CategoryDonut data={revenue.data.data} />}
+          </ChartState>
+        </FinancePanelCard>
 
-        <Card>
-          <CardChrome label="SYS://CUSTO_CAT" />
-          <CardHeader>
-            <CardTitle>Custos por categoria</CardTitle>
-            <CardDescription>Distribuição das saídas do mês</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={cost.isLoading}
-              isError={cost.isError}
-              isEmpty={!cost.data?.data?.length}
-            >
-              {cost.data && <CategoryDonut data={cost.data.data} />}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          chromeLabel="SYS://CUSTO_CAT"
+          title="Custos por categoria"
+          description="Distribuição das saídas do mês"
+          icon={<CircleDollarSign />}
+        >
+          <ChartState
+            isLoading={cost.isLoading}
+            isError={cost.isError}
+            isEmpty={!cost.data?.data?.length}
+          >
+            {cost.data && <CategoryDonut data={cost.data.data} />}
+          </ChartState>
+        </FinancePanelCard>
       </div>
 
       {/* Alertas + movimentações recentes */}
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-2">
-        <Card>
-          <CardChrome label="SYS://ALERTAS" />
-          <CardHeader>
-            <CardTitle>Alertas</CardTitle>
-            <CardDescription>
-              Comparação com o mês anterior
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={alerts.isLoading}
-              isError={alerts.isError}
-              height={160}
-            >
-              {alerts.data && <AlertsList data={alerts.data.data} />}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          chromeLabel="SYS://ALERTAS"
+          title="Alertas"
+          description="Comparação com o mês anterior"
+          icon={<Bell />}
+        >
+          <ChartState
+            isLoading={alerts.isLoading}
+            isError={alerts.isError}
+            height={160}
+          >
+            {alerts.data && <AlertsList data={alerts.data.data} />}
+          </ChartState>
+        </FinancePanelCard>
 
-        <Card>
-          <CardChrome label="SYS://RECENTES" />
-          <CardHeader>
-            <CardTitle>Últimas movimentações</CardTitle>
-            <CardDescription>Registros mais recentes</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartState
-              isLoading={recent.isLoading}
-              isError={recent.isError}
-              height={160}
-            >
-              {recent.data && <RecentMovimentations data={recent.data.data} />}
-            </ChartState>
-          </CardContent>
-        </Card>
+        <FinancePanelCard
+          chromeLabel="SYS://RECENTES"
+          title="Últimas movimentações"
+          description="Registros mais recentes"
+          icon={<History />}
+        >
+          <ChartState
+            isLoading={recent.isLoading}
+            isError={recent.isError}
+            height={160}
+          >
+            {recent.data && <RecentMovimentations data={recent.data.data} />}
+          </ChartState>
+        </FinancePanelCard>
       </div>
     </div>
   );

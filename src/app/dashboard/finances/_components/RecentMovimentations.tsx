@@ -1,11 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { RecentMovimentationDatum } from "../_lib/types";
@@ -26,14 +19,6 @@ export default function RecentMovimentations({ data }: Props) {
 
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Descrição</TableHead>
-          <TableHead>Categoria</TableHead>
-          <TableHead>Data</TableHead>
-          <TableHead className="text-right">Valor</TableHead>
-        </TableRow>
-      </TableHeader>
       <TableBody>
         {data.map((mov) => {
           const isEntrada = mov.type === "ENTRADA";
@@ -48,28 +33,27 @@ export default function RecentMovimentations({ data }: Props) {
               <TableCell className="text-muted-foreground tabular-nums">
                 {formatDate(mov.date)}
               </TableCell>
-              <TableCell className="text-right">
-                <span className="flex items-center justify-end gap-2">
+              <TableCell>
+                <div className="flex items-center gap-2">
                   <Badge
                     variant="pill"
                     className={cn(
-                      isEntrada
-                        ? "text-emerald-600"
-                        : "text-red-600",
+                      "shrink-0 justify-self-start",
+                      isEntrada ? "text-emerald-600" : "text-red-600",
                     )}
                   >
                     {isEntrada ? "Entrada" : "Saída"}
                   </Badge>
                   <span
                     className={cn(
-                      "font-semibold tabular-nums",
+                      "ms-auto font-semibold tabular-nums",
                       isEntrada ? "text-emerald-600" : "text-red-600",
                     )}
                   >
                     {isEntrada ? "+" : "-"}
                     {formatBRL(mov.value)}
                   </span>
-                </span>
+                </div>
               </TableCell>
             </TableRow>
           );

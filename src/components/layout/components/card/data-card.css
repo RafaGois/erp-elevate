@@ -64,6 +64,53 @@
   color: color-mix(in srgb, var(--hero-accent, #dfff00) 65%, var(--ec-muted));
 }
 
+/* Painéis do dashboard (gráficos, listas) */
+.elevate-data-card__content--panel {
+  padding-top: 0 !important;
+}
+
+.elevate-data-card__desc {
+  margin: 0 0 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.625rem;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  color: var(--ec-muted);
+}
+
+/* Variação % nos KPIs do dashboard financeiro */
+.elevate-data-card__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-transform: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.02em;
+}
+
+.elevate-data-card__trend-icon {
+  height: 0.75rem;
+  width: 0.75rem;
+  flex-shrink: 0;
+}
+
+.elevate-data-card__trend--up {
+  color: #16a34a;
+}
+
+.elevate-data-card__trend--down {
+  color: #dc2626;
+}
+
+.dark .elevate-data-card__trend--up {
+  color: #4ade80;
+}
+
+.dark .elevate-data-card__trend--down {
+  color: #f87171;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .elevate-data-card__icon {
     transition: none;
