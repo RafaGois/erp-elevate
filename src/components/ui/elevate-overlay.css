@@ -78,3 +78,68 @@
   height: 1px;
   background: var(--eo-line);
 }
+
+/* ─── Retro (card-window / bento — design_system.html) ──────── */
+.elevate-overlay--retro {
+  --eo-shadow: #0f172a;
+
+  border-radius: 0;
+  border: 3px solid var(--eo-fg);
+  background: #ffffff;
+  box-shadow: 6px 6px 0 var(--eo-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.dark .elevate-overlay--retro {
+  --eo-shadow: #000;
+  background: #1c1917;
+  border-color: color-mix(in srgb, var(--eo-accent) 40%, var(--eo-fg));
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--eo-accent) 65%, var(--eo-shadow));
+}
+
+.elevate-overlay--retro .elevate-overlay__item {
+  border-radius: 0;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.8125rem;
+}
+
+.elevate-overlay--retro .elevate-overlay__item + .elevate-overlay__item {
+  border-top: 2px solid var(--eo-line);
+}
+
+.elevate-overlay--retro .elevate-overlay__item[data-highlighted],
+.elevate-overlay--retro .elevate-overlay__item[data-state="checked"],
+.elevate-overlay--retro .elevate-overlay__item:focus-visible {
+  background: var(--eo-accent);
+  color: #000;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.elevate-overlay--retro .elevate-overlay__item[data-highlighted] svg,
+.elevate-overlay--retro .elevate-overlay__item[data-state="checked"] svg {
+  color: #000;
+  opacity: 1;
+}
+
+.elevate-overlay--retro .elevate-overlay__label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.12em;
+}
+
+.elevate-overlay--retro .elevate-overlay__separator {
+  margin: 0;
+  height: 2px;
+  background: var(--eo-line);
+}
+
+.elevate-overlay--retro [data-slot="select-scroll-up-button"],
+.elevate-overlay--retro [data-slot="select-scroll-down-button"] {
+  color: var(--eo-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevate-overlay--retro {
+    transition: none;
+  }
+}
