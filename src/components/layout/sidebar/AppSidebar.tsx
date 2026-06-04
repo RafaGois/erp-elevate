@@ -137,8 +137,8 @@ export default function AppSidebar() {
 
   return (
     <Sidebar
-      variant="inset"
-      collapsible="offcanvas"
+      variant="sidebar"
+      collapsible="icon"
       className="relative overflow-hidden border-r-2 border-[rgba(223,255,0,0.12)]"
     >
       {/* Subtle scanlines overlay */}
