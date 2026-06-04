@@ -124,66 +124,65 @@ export function DataTable<TData, TValue>({
         hiddenResponsibleIds={hiddenResponsibleIds}
         onToggleResponsibleFilter={onToggleResponsibleFilter}
       />
-      <div className="rounded border">
-        <Table>
-          <TableHeader className="bg-muted/50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                data-clickable={rowTapOpensEdit ? "true" : undefined}
+                onClick={(event) => {
+                  if (!rowTapOpensEdit || !setAction || !setSelectedObject) return;
+                  if (isInteractiveTableCellTarget(event.target)) return;
+                  const original = row.original as { id?: unknown };
+                  const id = original?.id;
+                  if (id === undefined || id === null || String(id).trim() === "") return;
+                  setSelectedObject(row.original);
+                  setAction(ModalAction.Update);
+                }}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext(),
+                    )}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className={cn(rowTapOpensEdit && "cursor-pointer md:cursor-default")}
-                  onClick={(event) => {
-                    if (!rowTapOpensEdit || !setAction || !setSelectedObject) return;
-                    if (isInteractiveTableCellTarget(event.target)) return;
-                    const original = row.original as { id?: unknown };
-                    const id = original?.id;
-                    if (id === undefined || id === null || String(id).trim() === "") return;
-                    setSelectedObject(row.original);
-                    setAction(ModalAction.Update);
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Nenhum Resultado.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+            ))
+          ) : (
+            <TableRow className="elevate-table__empty">
+              <TableCell colSpan={columns.length}>
+                <div className="elevate-table__empty-inner">
+                  <span className="elevate-table__empty-prompt">
+                    Nenhum resultado encontrado
+                  </span>
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
       <DataTablePagination table={table} />
     </div>
   );

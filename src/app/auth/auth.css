@@ -1,0 +1,88 @@
+/* Painel lateral — vídeo do hero */
+
+.auth-panel {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  background: #050505;
+}
+
+.auth-panel__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  filter: grayscale(1) brightness(0.72);
+}
+
+.auth-panel__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(5, 5, 5, 0.25) 0%,
+    rgba(5, 5, 5, 0.55) 100%
+  );
+}
+
+/* Botão Voltar — pixel-btn outline (design_system.html) */
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 14px;
+  font-family: var(--font-auth-pixel, ui-monospace), monospace;
+  font-size: 9px;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #09090b;
+  background: #fafafa;
+  border: 2px solid #171717;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 #0f172a;
+  text-decoration: none;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.1s ease-out,
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.auth-back:hover {
+  transform: translate(-1px, -1px);
+  background: var(--hero-accent, #dfff00);
+  color: #000;
+  box-shadow: 5px 5px 0 #0f172a;
+}
+
+.auth-back:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #0f172a;
+}
+
+.auth-back:focus-visible {
+  outline: 3px solid #0ea5e9;
+  outline-offset: 3px;
+}
+
+.auth-back__icon {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-back {
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .auth-back:hover,
+  .auth-back:active {
+    transform: none;
+  }
+}

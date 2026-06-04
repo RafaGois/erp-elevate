@@ -1,8 +1,8 @@
 "use client";
 
+import { Press_Start_2P } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { Card, CardChrome, CardContent } from "@/components/ui/card";
-import Image from "next/image";
 
 import useAuth from "@/data/hooks/useAuth";
 import User from "@/lib/models/User";
@@ -10,6 +10,14 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { ArrowLeftIcon, Home } from "lucide-react";
 import Link from "next/link";
+import "./auth.css";
+
+const fontPixel = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-auth-pixel",
+  display: "swap",
+});
 import InputForm from "@/components/layout/components/inputs/InputForm";
 import { toast } from "sonner";
 import useAppData from "@/data/hooks/useAppData";
@@ -49,13 +57,13 @@ export default function Auth() {
   }, [loading]);
 
   return (
-    <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+    <div
+      className={`bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10 ${fontPixel.variable}`}
+    >
       <div className="absolute top-5 left-5 z-50">
-        <Link href="/">
-          <span className="flex items-center gap-2 text-sm font-medium">
-            <ArrowLeftIcon size={16} />
-            Voltar
-          </span>
+        <Link href="/" className="auth-back">
+          <ArrowLeftIcon className="auth-back__icon" strokeWidth={2.5} aria-hidden />
+          Voltar
         </Link>
       </div>
       <div className="w-full max-w-sm md:max-w-3xl">
@@ -69,9 +77,9 @@ export default function Auth() {
                   className="p-6 md:p-8"
                 >
                   <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center text-center">
-                      <h1 className="text-2xl font-bold">Bem vindo de volta</h1>
-                      <p className="text-muted-foreground text-balance">
+                    <div className="flex flex-col items-start text-left">
+                      <h1 className="text-4xl font-bold md:text-5xl">Bem vindo</h1>
+                      <p className="text-muted-foreground text-balance text-sm">
                         Informe os campos para acessar o sistema.
                       </p>
                     </div>
@@ -143,14 +151,19 @@ export default function Auth() {
                   </div>
                 </form>
               </Form>
-              <div className="bg-muted relative hidden md:block">
-                <Image
-                  src="https://res.cloudinary.com/dn454izoh/image/upload/v1756823349/img-5_svixxi.jpg"
-                  width={500}
-                  height={500}
-                  alt="img-auth"
-                  className="absolute inset-0 h-full w-full object-cover brightness-[0.8] grayscale"
-                />
+              <div className="auth-panel hidden md:block">
+                <video
+                  className="auth-panel__video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-hidden
+                >
+                  <source src="/videofundo3.mp4" type="video/mp4" />
+                </video>
+                <div className="auth-panel__scrim" aria-hidden />
               </div>
             </CardContent>
           </Card>
