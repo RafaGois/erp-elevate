@@ -144,7 +144,7 @@ export default function AppSidebar() {
       {/* Subtle scanlines overlay */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-50 opacity-[0.35]"
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.35]"
         style={{
           backgroundImage:
             "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(223,255,0,0.04) 2px, rgba(223,255,0,0.04) 3px)",

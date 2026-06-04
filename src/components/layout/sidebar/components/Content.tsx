@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 
 import {
@@ -46,7 +47,13 @@ interface ContentProps {
 }
 
 export default function Content(props: ContentProps) {
-  const { open, setOpen } = useSidebar();
+  const { state, setOpen, isMobile } = useSidebar();
+  const isIconCollapsed = state === "collapsed";
+  const [expandedNavId, setExpandedNavId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isIconCollapsed) setExpandedNavId(null);
+  }, [isIconCollapsed]);
 
   function toDomId(value: string) {
     return value
@@ -60,7 +67,7 @@ export default function Content(props: ContentProps) {
     <SidebarContent className="px-2 gap-0 scrollbar-hide">
       {props.items.map((item) => (
         <SidebarGroup key={item.title} className="px-0 py-2">
-          <SidebarGroupLabel className="px-2 mb-1 h-5 flex items-center gap-1.5 font-pixel text-[7px] uppercase tracking-[0.15em] text-muted-foreground/70">
+          <SidebarGroupLabel className="px-2 mb-1 h-5 flex items-center gap-1.5 font-pixel text-[7px] uppercase tracking-[0.15em] text-muted-foreground/70 group-data-[collapsible=icon]:hidden">
             <span className="text-[#dfff00] opacity-80">//</span>
             {item.title}
           </SidebarGroupLabel>
@@ -76,14 +83,25 @@ export default function Content(props: ContentProps) {
                   <Collapsible
                     key={navItem.url + "-" + navItem.title}
                     asChild
-                    open={navItem.isActive}
+                    open={!isIconCollapsed && expandedNavId === collapsibleContentId}
+                    onOpenChange={(open) => {
+                      if (isIconCollapsed) {
+                        if (open) setOpen(true);
+                        return;
+                      }
+                      setExpandedNavId(open ? collapsibleContentId : null);
+                    }}
                     className="group/collapsible"
                   >
-                    <SidebarMenuItem onClick={() => !open && setOpen(true)}>
+                    <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
                           tooltip={navItem.title}
                           aria-controls={collapsibleContentId}
+                          aria-expanded={
+                            !isIconCollapsed &&
+                            expandedNavId === collapsibleContentId
+                          }
                           className="rounded-none h-9 px-3 gap-2.5
                                      group-data-[state=open]/collapsible:bg-[rgba(223,255,0,0.08)]
                                      group-data-[state=open]/collapsible:text-[#dfff00]
@@ -113,7 +131,9 @@ export default function Content(props: ContentProps) {
                                 "-" +
                                 subItem.title
                               }
-                              onClick={() => setOpen(false)}
+                              onClick={() => {
+                                if (!isMobile) setOpen(false);
+                              }}
                             >
                               <SidebarMenuSubButton
                                 asChild
