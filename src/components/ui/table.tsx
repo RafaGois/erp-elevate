@@ -7,7 +7,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="elevate-table-shell"
     >
       <table
         data-slot="table"
@@ -20,13 +20,21 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
-    <thead data-slot="table-header" className={className} {...props} />
+    <thead
+      data-slot="table-header"
+      className={cn("elevate-table__header", className)}
+      {...props}
+    />
   );
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
-    <tbody data-slot="table-body" className={className} {...props} />
+    <tbody
+      data-slot="table-body"
+      className={cn("elevate-table__body", className)}
+      {...props}
+    />
   );
 }
 

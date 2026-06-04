@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap");
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
 
@@ -23,6 +24,8 @@
   --font-sans: "Google Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Google Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "CODE Bold", ui-monospace, monospace;
+  --font-display: "DotGothic16", monospace;
+  --font-pixel: "Press Start 2P", cursive;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -88,12 +91,12 @@
   --chart-5: oklch(0.45 0.15 250); /* Azul escuro - Receitas */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.145 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: #dfff00;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: rgba(0, 0, 0, 0.1);
+  --sidebar-ring: #dfff00;
 }
 
 .dark {
@@ -120,14 +123,14 @@
   --chart-3: oklch(0.65 0.08 220); /* Azul claro - Lucro (dark mode) */
   --chart-4: oklch(0.5 0.12 245); /* Azul médio - Receitas (dark mode) */
   --chart-5: oklch(0.4 0.12 250); /* Azul escuro - Receitas (dark mode) */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #f2f0eb;
+  --sidebar-primary: #dfff00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #dfff00;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: rgba(223, 255, 0, 0.12);
+  --sidebar-ring: #dfff00;
 }
 
 @layer base {
@@ -152,6 +155,15 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@utility animate-blink {
+  animation: blink 1s step-end infinite;
 }
 
 /* Oculta scrollbar mantendo a rolagem funcional */

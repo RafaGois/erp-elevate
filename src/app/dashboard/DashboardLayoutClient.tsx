@@ -14,10 +14,8 @@ export default function DashboardLayoutClient({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <main className="flex-col overflow-auto bg-background rounded-lg">
-          <Header />
-          <Content>{children}</Content>
-        </main>
+        <Header />
+        <Content>{children}</Content>
       </SidebarInset>
     </SidebarProvider>
   );

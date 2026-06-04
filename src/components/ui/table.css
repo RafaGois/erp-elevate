@@ -1,74 +1,285 @@
-/* Table — linhas com hover lime sutil */
+/*
+ * Table — ERP Elevate
+ * Shell  : card-window  — borda 2px hard, sombra 4px 4px 0
+ * Header : card-chrome  — #dfff00, listra diagonal, mono uppercase
+ * Body   : card-panel   — surface limpa, dividers visíveis, hover lime
+ * Ref    : public/references/design_system.html
+ */
 
-.elevate-table {
-  --etb-fg: #09090b;
-  --etb-muted: #71717a;
-  --etb-line: rgba(0, 0, 0, 0.1);
-  --etb-accent: #dfff00;
-  --etb-head: rgba(0, 0, 0, 0.03);
+/* ─── Tokens (light / dark) ──────────────────────────────────── */
+.elevate-table-shell {
+  --ets-accent:      #dfff00;
+  --ets-accent-dim:  #84cc16;
 
+  --ets-surface:     #ffffff;
+  --ets-surface-2:   #fafafa;
+
+  --ets-fg:          #09090b;
+  --ets-fg-2:        #3f3f46;
+  --ets-muted:       #71717a;
+
+  --ets-line:        #e4e4e7;        /* divisória de linha — visível */
+  --ets-col-line:    #f0f0f2;        /* divisória de coluna — quase invisível */
+  --ets-line-strong: #d1d1d6;        /* rodapé / separador forte */
+
+  --ets-border:      #171717;
+  --ets-shadow:      #0f172a;
+  --ets-scan:        rgba(0, 0, 0, 0.028);
+
+  position: relative;
+  border-radius: 0.125rem;
+  border: 2px solid var(--ets-border);
+  background: var(--ets-surface);
+  box-shadow: 4px 4px 0 var(--ets-shadow);
   width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.dark .elevate-table-shell {
+  --ets-surface:     #1c1917;
+  --ets-surface-2:   #292524;
+
+  --ets-fg:          #f2f0eb;
+  --ets-fg-2:        #d6d3d1;
+  --ets-muted:       #a8a29e;
+
+  --ets-line:        rgba(242, 240, 235, 0.12);
+  --ets-col-line:    rgba(242, 240, 235, 0.055);
+  --ets-line-strong: rgba(242, 240, 235, 0.2);
+
+  --ets-border:      rgba(242, 240, 235, 0.12);
+  --ets-shadow:      #0f172a;
+  --ets-accent-dim:  color-mix(in srgb, var(--ets-accent) 60%, #3f6212);
+  --ets-scan:        rgba(223, 255, 0, 0.03);
+}
+
+/* Scanlines — overlay no shell (não no tbody, onde não funciona em CSS tables) */
+.elevate-table-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    var(--ets-scan) 3px,
+    var(--ets-scan) 4px
+  );
+}
+
+/* ─── Tabela base ─────────────────────────────────────────────── */
+.elevate-table {
+  width: 100%;
+  border-collapse: collapse;
   caption-side: bottom;
+
+  font-family: var(--font-sans, "Google Sans", ui-sans-serif, system-ui, sans-serif);
   font-size: 0.875rem;
-  color: var(--etb-fg);
+  line-height: 1.5;
+  color: var(--ets-fg);
+  background: var(--ets-surface);
 }
 
-.dark .elevate-table {
-  --etb-fg: #f2f0eb;
-  --etb-muted: #a8a29e;
-  --etb-line: rgba(242, 240, 235, 0.12);
-  --etb-head: rgba(242, 240, 235, 0.05);
+/* ─── Cabeçalho (#dfff00 — card-chrome) ───────────────────────── */
+.elevate-table__header {
+  background-color: var(--ets-accent);
 }
 
-.elevate-table thead tr {
-  border-bottom: 1px solid var(--etb-line);
-}
-
-.elevate-table tbody tr {
-  border-bottom: 1px solid var(--etb-line);
-  transition: background-color 0.15s ease;
-}
-
-.elevate-table tbody tr:last-child {
-  border-bottom: 0;
-}
-
-.elevate-table tbody tr:hover {
-  background: color-mix(in srgb, var(--etb-accent) 8%, transparent);
-}
-
-.elevate-table tbody tr[data-state="selected"] {
-  background: color-mix(in srgb, var(--etb-accent) 14%, transparent);
+.elevate-table__header tr {
+  border-bottom: 2px solid var(--ets-accent-dim);
 }
 
 .elevate-table__head {
-  height: 2.5rem;
-  padding: 0 0.5rem;
+  height: 2.75rem;
+  padding: 0 0.875rem;
   text-align: left;
   vertical-align: middle;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  white-space: nowrap;
+  user-select: none;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--etb-muted);
-  white-space: nowrap;
-  background: var(--etb-head);
+  color: #000;
+
+  background-color: var(--ets-accent);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(0, 0, 0, 0.055) 5px,
+    rgba(0, 0, 0, 0.055) 6px
+  );
+
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid var(--ets-accent-dim);
 }
 
+.elevate-table__head:last-child {
+  border-right: 0;
+}
+
+/* Botão de ordenação dentro do header */
+.elevate-table__head button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.3rem;
+  margin: -0.2rem -0.3rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.elevate-table__head button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.elevate-table__head svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+/* ─── Corpo (card-panel) ──────────────────────────────────────── */
+
+/* Linha separadora entre header e body */
+.elevate-table__body {
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .elevate-table__body {
+  border-top: 2px solid rgba(242, 240, 235, 0.12);
+}
+
+/* Linha de dados */
+.elevate-table__body tr {
+  background: var(--ets-surface);
+  border-bottom: 1px solid var(--ets-line);
+  transition: background-color 0.12s ease;
+}
+
+.elevate-table__body tr:last-child {
+  border-bottom: 0;
+}
+
+/* Hover — wash de lime claro */
+.elevate-table__body tr:hover {
+  background: color-mix(in srgb, var(--ets-accent) 12%, var(--ets-surface));
+}
+
+/* Selecionada — acento lateral + tint */
+.elevate-table__body tr[data-state="selected"] {
+  background: color-mix(in srgb, var(--ets-accent) 20%, var(--ets-surface));
+  box-shadow: inset 3px 0 0 var(--ets-accent);
+}
+
+/* Linha clicável — cursor correto */
+.elevate-table__body tr[data-clickable="true"] {
+  cursor: pointer;
+}
+
+/* ─── Células ─────────────────────────────────────────────────── */
 .elevate-table__cell {
-  padding: 0.5rem;
+  padding: 0.75rem 0.875rem;
   vertical-align: middle;
+  color: var(--ets-fg);
+  border-right: 1px solid var(--ets-col-line);
+  /* truncate para não quebrar o layout */
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.elevate-table__footer {
-  border-top: 1px solid var(--etb-line);
-  background: var(--etb-head);
-  font-weight: 500;
+.elevate-table__cell:last-child {
+  border-right: 0;
 }
 
+/* Texto secundário */
+.elevate-table__cell .text-muted-foreground {
+  color: var(--ets-muted);
+  font-size: 0.75rem;
+}
+
+/* Valores numéricos — mono, alinhados */
+.elevate-table__cell [data-numeric],
+.elevate-table__cell .tabular-nums {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Estado vazio — prompt retro ────────────────────────────── */
+.elevate-table__empty {
+  background: var(--ets-surface-2) !important;
+}
+
+.elevate-table__empty td {
+  padding: 3.5rem 1rem !important;
+  text-align: center;
+  background: var(--ets-surface-2) !important;
+  border-right: 0 !important;
+  white-space: normal !important;
+}
+
+.elevate-table__empty-inner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.elevate-table__empty-prompt {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ets-muted);
+}
+
+.elevate-table__empty-prompt::before {
+  content: "> ";
+  color: var(--ets-accent);
+}
+
+/* ─── Rodapé ──────────────────────────────────────────────────── */
+.elevate-table__footer {
+  border-top: 2px solid var(--ets-line-strong);
+  background: var(--ets-surface-2);
+  font-weight: 600;
+}
+
+.elevate-table__footer td {
+  padding: 0.75rem 0.875rem;
+  color: var(--ets-fg);
+}
+
+/* ─── Caption ─────────────────────────────────────────────────── */
 .elevate-table__caption {
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  color: var(--etb-muted);
+  margin-top: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ets-muted);
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .elevate-table__body tr {
+    transition: none;
+  }
 }

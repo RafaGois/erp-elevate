@@ -136,7 +136,21 @@ export default function AppSidebar() {
   }, [user?.level]);
 
   return (
-    <Sidebar variant="inset" collapsible="offcanvas">
+    <Sidebar
+      variant="inset"
+      collapsible="offcanvas"
+      className="relative overflow-hidden border-r-2 border-[rgba(223,255,0,0.12)]"
+    >
+      {/* Subtle scanlines overlay */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-50 opacity-[0.35]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(223,255,0,0.04) 2px, rgba(223,255,0,0.04) 3px)",
+        }}
+      />
+
       <Header />
       <Content items={data} />
       <Footer />
