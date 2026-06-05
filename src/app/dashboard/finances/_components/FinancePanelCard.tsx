@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardAction,
-  CardChrome,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardChrome, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import "@/components/layout/components/card/data-card.css";
@@ -25,7 +18,6 @@ const fontPixel = Press_Start_2P({
 });
 
 interface FinancePanelCardProps {
-  chromeLabel: string;
   title: string;
   description?: string;
   icon?: React.ReactNode;
@@ -34,9 +26,8 @@ interface FinancePanelCardProps {
   children: React.ReactNode;
 }
 
-/** Card de seção do dashboard — mesmo visual do DataCard (movimentações). */
+/** Card de seção — título, descrição e ícone na barra chrome; corpo só com o gráfico. */
 export default function FinancePanelCard({
-  chromeLabel,
   title,
   description,
   icon,
@@ -55,14 +46,12 @@ export default function FinancePanelCard({
         className,
       )}
     >
-      <CardChrome label={chromeLabel} />
-
-      <CardHeader className="elevate-data-card__header">
-        <CardTitle className="elevate-data-card__title">{title}</CardTitle>
-        {icon ? (
-          <CardAction className="elevate-data-card__icon">{icon}</CardAction>
-        ) : null}
-      </CardHeader>
+      <CardChrome
+        label={title}
+        description={description}
+        showControls={false}
+        action={icon}
+      />
 
       <CardContent
         className={cn(
@@ -70,9 +59,6 @@ export default function FinancePanelCard({
           contentClassName,
         )}
       >
-        {description ? (
-          <p className="elevate-data-card__desc">{description}</p>
-        ) : null}
         {children}
       </CardContent>
     </Card>

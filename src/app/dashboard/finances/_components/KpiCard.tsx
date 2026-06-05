@@ -1,17 +1,9 @@
-import {
-  Card,
-  CardAction,
-  CardChrome,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardChrome, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
 import type { KpiMetric } from "../_lib/types";
 import { formatBRL, formatPercent } from "../_lib/format";
-import { toMetricSlug } from "../_lib/metricSlug";
 import "@/components/layout/components/card/data-card.css";
 
 const fontDisplay = DotGothic16({
@@ -32,7 +24,6 @@ interface Props {
   title: string;
   metric: KpiMetric;
   icon: React.ReactNode;
-  /** Destaque no valor (ex.: lucro). */
   highlight?: boolean;
 }
 
@@ -52,12 +43,7 @@ export default function KpiCard({ title, metric, icon, highlight }: Props) {
         fontPixel.variable,
       )}
     >
-      <CardChrome label={`SYS://${toMetricSlug(title)}`} />
-
-      <CardHeader className="elevate-data-card__header">
-        <CardTitle className="elevate-data-card__title">{title}</CardTitle>
-        <CardAction className="elevate-data-card__icon">{icon}</CardAction>
-      </CardHeader>
+      <CardChrome label={title} showControls={false} action={icon} />
 
       <CardContent className="elevate-data-card__content">
         <p

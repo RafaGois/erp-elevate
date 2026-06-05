@@ -59,9 +59,9 @@ export default function FinanceDashboard() {
       <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
         {summary.isLoading || !summary.data ? (
           <>
-            <Skeleton className="h-[132px] rounded-sm" />
-            <Skeleton className="h-[132px] rounded-sm" />
-            <Skeleton className="h-[132px] rounded-sm" />
+            <Skeleton className="h-[108px] rounded-sm" />
+            <Skeleton className="h-[108px] rounded-sm" />
+            <Skeleton className="h-[108px] rounded-sm" />
           </>
         ) : (
           <>
@@ -89,7 +89,6 @@ export default function FinanceDashboard() {
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-3">
         <FinancePanelCard
           className="@5xl/main:col-span-2"
-          chromeLabel="SYS://EVOLUCAO_12M"
           title="Evolução dos últimos 12 meses"
           description="Entradas, saídas e lucro mês a mês"
           icon={<LineChart />}
@@ -106,7 +105,6 @@ export default function FinanceDashboard() {
         </FinancePanelCard>
 
         <FinancePanelCard
-          chromeLabel="SYS://CUSTOS_FIXOS"
           title="Cobertura de custos fixos"
           description="Lucro vs. meta de custos fixos"
           icon={<ShieldAlert />}
@@ -124,7 +122,6 @@ export default function FinanceDashboard() {
       {/* Distribuições por categoria */}
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-2">
         <FinancePanelCard
-          chromeLabel="SYS://RECEITA_CAT"
           title="Receita por categoria"
           description="Distribuição das entradas do mês"
           icon={<ChartPie />}
@@ -139,7 +136,6 @@ export default function FinanceDashboard() {
         </FinancePanelCard>
 
         <FinancePanelCard
-          chromeLabel="SYS://CUSTO_CAT"
           title="Custos por categoria"
           description="Distribuição das saídas do mês"
           icon={<CircleDollarSign />}
@@ -157,7 +153,6 @@ export default function FinanceDashboard() {
       {/* Alertas + movimentações recentes */}
       <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-2">
         <FinancePanelCard
-          chromeLabel="SYS://ALERTAS"
           title="Alertas"
           description="Comparação com o mês anterior"
           icon={<Bell />}
@@ -172,7 +167,6 @@ export default function FinanceDashboard() {
         </FinancePanelCard>
 
         <FinancePanelCard
-          chromeLabel="SYS://RECENTES"
           title="Últimas movimentações"
           description="Registros mais recentes"
           icon={<History />}

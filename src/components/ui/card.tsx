@@ -63,25 +63,47 @@ function Card({
 function CardChrome({
   className,
   label = "SYS://ELEVATE",
+  description,
   showControls = true,
+  action,
   ...props
 }: React.ComponentProps<"div"> & {
   label?: string;
+  /** Subtítulo dentro da barra chrome, logo abaixo do título. */
+  description?: string;
   showControls?: boolean;
+  /** Substitui os três dots decorativos (ex.: ícone do card). */
+  action?: React.ReactNode;
 }) {
   return (
     <div
       data-slot="card-chrome"
-      className={cn("elevate-card__chrome", className)}
+      className={cn(
+        "elevate-card__chrome",
+        description && "elevate-card__chrome--stacked",
+        className,
+      )}
       {...props}
     >
-      <span className="elevate-card__chrome-label">{label}</span>
-      {showControls ? (
-        <div className="elevate-card__chrome-controls" aria-hidden>
-          <span className="elevate-card__chrome-dot" />
-          <span className="elevate-card__chrome-dot" />
-          <span className="elevate-card__chrome-dot elevate-card__chrome-dot--close" />
-        </div>
+      <div className="elevate-card__chrome-row">
+        <span className="elevate-card__chrome-label">{label}</span>
+        {action ? (
+          <div
+            className="elevate-card__chrome-action"
+            data-slot="card-chrome-action"
+          >
+            {action}
+          </div>
+        ) : showControls ? (
+          <div className="elevate-card__chrome-controls" aria-hidden>
+            <span className="elevate-card__chrome-dot" />
+            <span className="elevate-card__chrome-dot" />
+            <span className="elevate-card__chrome-dot elevate-card__chrome-dot--close" />
+          </div>
+        ) : null}
+      </div>
+      {description ? (
+        <p className="elevate-card__chrome-desc">{description}</p>
       ) : null}
     </div>
   );

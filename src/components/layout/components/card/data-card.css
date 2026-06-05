@@ -34,6 +34,30 @@
   stroke-width: 2.25;
 }
 
+/* Ícone na barra chrome (dashboard — no lugar dos três dots) */
+.elevate-card__chrome-action {
+  display: grid;
+  height: 1.35rem;
+  width: 1.35rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.125rem;
+  border: 2px solid #000;
+  background: var(--hero-accent, #dfff00);
+  color: #000;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.elevate-card__chrome-action svg {
+  height: 0.75rem;
+  width: 0.75rem;
+  stroke-width: 2.25;
+}
+
+.dark .elevate-card__chrome-action {
+  border-color: rgba(0, 0, 0, 0.45);
+}
+
 .elevate-data-card:hover .elevate-data-card__icon {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 #000;
@@ -66,16 +90,8 @@
 
 /* Painéis do dashboard (gráficos, listas) */
 .elevate-data-card__content--panel {
-  padding-top: 0 !important;
-}
-
-.elevate-data-card__desc {
-  margin: 0 0 0.85rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.625rem;
-  line-height: 1.45;
-  letter-spacing: 0.04em;
-  color: var(--ec-muted);
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
 }
 
 /* Variação % nos KPIs do dashboard financeiro */
