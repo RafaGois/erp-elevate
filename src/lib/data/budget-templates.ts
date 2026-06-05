@@ -20,7 +20,8 @@ function softwareTemplate(budget: Budget): BudgetContent {
           cliente: budget.client ?? "",
           projeto: budget.project ?? "",
           titulo: budget.name,
-          subtitulo: budget.description ?? "Solução sob medida para o seu negócio.",
+          subtitulo:
+            budget.description ?? "Solução sob medida para o seu negócio.",
           investimento: brl(budget.value),
           prazo: "A definir",
           entregas: "A definir",
@@ -48,9 +49,18 @@ function softwareTemplate(budget: Budget): BudgetContent {
           introducao:
             "Uma solução bem desenhada reduz atrito operacional, fortalece a confiança dos usuários e prepara o terreno para escalar sem retrabalho. Abaixo resumimos o valor estratégico que este trabalho entrega — do primeiro acesso ao crescimento contínuo.",
           estatisticas: [
-            { valor: "360°", legenda: "Visão completa do problema e da solução" },
-            { valor: "ROI", legenda: "Decisões guiadas por métricas e uso real" },
-            { valor: "UX", legenda: "Experiência pensada para conversão e retenção" },
+            {
+              valor: "360°",
+              legenda: "Visão completa do problema e da solução",
+            },
+            {
+              valor: "ROI",
+              legenda: "Decisões guiadas por métricas e uso real",
+            },
+            {
+              valor: "UX",
+              legenda: "Experiência pensada para conversão e retenção",
+            },
             { valor: "Dev", legenda: "Base técnica sustentável e evolutiva" },
           ],
           capitulos: [
@@ -91,7 +101,8 @@ function softwareTemplate(budget: Budget): BudgetContent {
         type: "portfolio",
         data: {
           titulo: "Projetos entregues",
-          subtitulo: "Conheça alguns dos produtos digitais que já desenvolvemos.",
+          subtitulo:
+            "Conheça alguns dos produtos digitais que já desenvolvemos.",
           itens: [
             {
               titulo: "Codinome Barbearia",
@@ -109,7 +120,13 @@ function softwareTemplate(budget: Budget): BudgetContent {
               url: "https://www.sistemaselevate.com/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457305/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.38_fxgvdt.png?q=80&w=800&auto=format",
-              tags: ["Next.js", "Financeiro", "Inventário", "Projetos", "Propostas"],
+              tags: [
+                "Next.js",
+                "Financeiro",
+                "Inventário",
+                "Projetos",
+                "Propostas",
+              ],
             },
             {
               titulo: "Pollis Pollen Intelligence",
@@ -145,9 +162,21 @@ function softwareTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Cronograma",
           etapas: [
-            { fase: "Planejamento", descricao: "Kickoff e definição do escopo.", duracao: "Semana 1" },
-            { fase: "Execução", descricao: "Implementação e revisões.", duracao: "Semanas 2-4" },
-            { fase: "Entrega", descricao: "Homologação e publicação.", duracao: "Semana 5" },
+            {
+              fase: "Planejamento",
+              descricao: "Kickoff e definição do escopo.",
+              duracao: "Semana 1",
+            },
+            {
+              fase: "Execução",
+              descricao: "Implementação e revisões.",
+              duracao: "Semanas 2-4",
+            },
+            {
+              fase: "Entrega",
+              descricao: "Homologação e publicação.",
+              duracao: "Semana 5",
+            },
           ],
         },
       },
@@ -172,7 +201,8 @@ function softwareTemplate(budget: Budget): BudgetContent {
             },
             {
               nome: "Site Institucional",
-              descricao: "Estrutura completa para apresentar empresa, serviços e diferenciais.",
+              descricao:
+                "Estrutura completa para apresentar empresa, serviços e diferenciais.",
               valor: 4000,
               parcelas: "ou 4x de R$ 1.000,00",
               inclui: [
@@ -187,7 +217,8 @@ function softwareTemplate(budget: Budget): BudgetContent {
             },
             {
               nome: "Site Institucional Completo",
-              descricao: "Versão robusta com mais páginas, performance e estratégia digital.",
+              descricao:
+                "Versão robusta com mais páginas, performance e estratégia digital.",
               valor: 6000,
               parcelas: "ou 6x de R$ 1.000,00",
               inclui: [
@@ -225,7 +256,8 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
           cliente: budget.client ?? "",
           projeto: budget.project ?? "",
           titulo: budget.name,
-          subtitulo: budget.description ?? "Produção audiovisual para elevar sua marca.",
+          subtitulo:
+            budget.description ?? "Produção audiovisual para elevar sua marca.",
           investimento: brl(budget.value),
           prazo: "A definir",
           entregas: "A definir",
@@ -241,8 +273,14 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
             "Um roteiro sólido e uma execução cuidadosa transformam mensagens genéricas em histórias que as pessoas lembram e compartilham. Esta proposta organiza cada etapa — da ideia à entrega final — para maximizar alcance, qualidade percebida e consistência com o posicionamento da empresa.",
           estatisticas: [
             { valor: "Vídeo", legenda: "Formato preferido em redes e sites" },
-            { valor: "Story", legenda: "Narrativa clara do problema à solução" },
-            { valor: "4K", legenda: "Captação com padrão broadcast quando aplicável" },
+            {
+              valor: "Story",
+              legenda: "Narrativa clara do problema à solução",
+            },
+            {
+              valor: "4K",
+              legenda: "Captação com padrão broadcast quando aplicável",
+            },
             { valor: "Prazo", legenda: "Cronograma transparente por fase" },
           ],
           capitulos: [
@@ -287,17 +325,20 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
           itens: [
             {
               titulo: "Institucional Elevate",
-              descricao: "Vídeo manifesto de 90s com captação em estúdio e locação externa.",
+              descricao:
+                "Vídeo manifesto de 90s com captação em estúdio e locação externa.",
               tags: ["Institucional", "4K", "Motion"],
             },
             {
               titulo: "Campanha Verão",
-              descricao: "Série de 6 vídeos curtos para redes sociais com ritmo dinâmico.",
+              descricao:
+                "Série de 6 vídeos curtos para redes sociais com ritmo dinâmico.",
               tags: ["Social Media", "Reels", "Edição"],
             },
             {
               titulo: "Depoimentos Clientes",
-              descricao: "Captação de depoimentos reais com direção de luz e roteiro guiado.",
+              descricao:
+                "Captação de depoimentos reais com direção de luz e roteiro guiado.",
               tags: ["Depoimento", "Storytelling"],
             },
           ],
@@ -308,9 +349,18 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Escopo inicial",
           itens: [
-            { titulo: "Pré-produção", descricao: "Roteiro, pauta e planejamento." },
-            { titulo: "Captação", descricao: "Gravação com equipe e equipamentos." },
-            { titulo: "Pós-produção", descricao: "Edição, finalização e versões." },
+            {
+              titulo: "Pré-produção",
+              descricao: "Roteiro, pauta e planejamento.",
+            },
+            {
+              titulo: "Captação",
+              descricao: "Gravação com equipe e equipamentos.",
+            },
+            {
+              titulo: "Pós-produção",
+              descricao: "Edição, finalização e versões.",
+            },
           ],
         },
       },
@@ -319,9 +369,21 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Cronograma",
           etapas: [
-            { fase: "Pré-produção", descricao: "Alinhamento criativo.", duracao: "Semana 1" },
-            { fase: "Captação", descricao: "Execução de gravações.", duracao: "Semana 2" },
-            { fase: "Pós-produção", descricao: "Edição e entrega final.", duracao: "Semana 3" },
+            {
+              fase: "Pré-produção",
+              descricao: "Alinhamento criativo.",
+              duracao: "Semana 1",
+            },
+            {
+              fase: "Captação",
+              descricao: "Execução de gravações.",
+              duracao: "Semana 2",
+            },
+            {
+              fase: "Pós-produção",
+              descricao: "Edição e entrega final.",
+              duracao: "Semana 3",
+            },
           ],
         },
       },
@@ -353,7 +415,7 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
 
 export function getBudgetTemplateByType(
   type: BudgetType | null | undefined,
-  budget: Budget
+  budget: Budget,
 ): BudgetContent | null {
   if (type === BudgetType.SOFTWARE) return softwareTemplate(budget);
   if (type === BudgetType.AUDIOVISUAL) return audiovisualTemplate(budget);
@@ -374,7 +436,7 @@ function normalizePortfolioTitulo(titulo: string): string {
  */
 export function enrichBudgetPortfolioImages(
   content: BudgetContent,
-  budget: Budget
+  budget: Budget,
 ): BudgetContent {
   const template = getBudgetTemplateByType(budget.type, budget);
   if (!template) return content;
@@ -384,7 +446,8 @@ export function enrichBudgetPortfolioImages(
     if (block.type !== "portfolio") continue;
     for (const it of block.data.itens ?? []) {
       const url = it.imagem?.trim();
-      if (url && it.titulo) imagemByTitulo.set(normalizePortfolioTitulo(it.titulo), url);
+      if (url && it.titulo)
+        imagemByTitulo.set(normalizePortfolioTitulo(it.titulo), url);
     }
   }
   if (imagemByTitulo.size === 0) return content;
@@ -393,7 +456,9 @@ export function enrichBudgetPortfolioImages(
     if (block.type !== "portfolio") return block;
     const itens = block.data.itens.map((item) => {
       if (item.imagem?.trim()) return item;
-      const fallback = imagemByTitulo.get(normalizePortfolioTitulo(item.titulo));
+      const fallback = imagemByTitulo.get(
+        normalizePortfolioTitulo(item.titulo),
+      );
       return fallback ? { ...item, imagem: fallback } : item;
     });
     return { ...block, data: { ...block.data, itens } };
