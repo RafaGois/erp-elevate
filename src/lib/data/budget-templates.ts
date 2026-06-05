@@ -1,6 +1,6 @@
-import BudgetType from "@/lib/enums/BudgetType";
-import type Budget from "@/lib/models/Budget";
-import type { BudgetContent } from "@/lib/types/budget-content";
+import BudgetType from "@/types/enums/BudgetType";
+import type Budget from "@/types/models/Budget";
+import type { BudgetContent } from "@/types/budget-content";
 
 function brl(value: number) {
   return new Intl.NumberFormat("pt-BR", {

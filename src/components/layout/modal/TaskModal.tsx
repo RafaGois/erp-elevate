@@ -1,6 +1,6 @@
-import Task from "@/lib/models/task/Task";
+import Task from "@/types/models/task/Task";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
@@ -8,19 +8,19 @@ import InputForm from "../components/inputs/InputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import SelectForm from "../components/inputs/SelectForm";
-import User from "@/lib/models/User";
+import User from "@/types/models/User";
 import { useQuery } from "@tanstack/react-query";
 
-import Project from "@/lib/models/Project";
+import Project from "@/types/models/Project";
 import {
   TASK_PRIORITIES_OPTIONS,
   TaskPriorities,
-} from "@/lib/enums/TaskPriorities";
+} from "@/types/enums/TaskPriorities";
 
-import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
+import { TASK_STATUS_OPTIONS, TaskStatus } from "@/types/enums/TaskStatus";
 import TextAreaForm from "../components/inputs/TextareaForm";
-import useAuth from "@/data/hooks/useAuth";
-import ModalAction from "@/lib/enums/modalAction";
+import useAuth from "@/hooks/use-auth";
+import ModalAction from "@/types/enums/modalAction";
 
 type TaskModalProps = BaseModalProps<Task>;
 

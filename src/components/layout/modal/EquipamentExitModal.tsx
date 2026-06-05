@@ -1,12 +1,12 @@
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { Equipament } from "@/lib/models/Equipament";
-import { EquipamentExit } from "@/lib/models/EquipamentExit";
+import { Equipament } from "@/types/models/Equipament";
+import { EquipamentExit } from "@/types/models/EquipamentExit";
 import { MultiSelectForm } from "../components/inputs/MultiSelectForm";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";

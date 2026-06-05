@@ -5,7 +5,7 @@ import type { Table } from "@tanstack/react-table";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import ModalAction from "@/lib/enums/modalAction";
+import ModalAction from "@/types/enums/modalAction";
 import { DatePickerForm } from "../inputs/DatePickerForm";
 import { UseFormReturn } from "react-hook-form";
 import { Form } from "@/components/ui/form";

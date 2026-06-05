@@ -1,13 +1,13 @@
-import Category from "@/lib/models/movimentations/Category";
+import Category from "@/types/models/movimentations/Category";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import SelectForm from "../components/inputs/SelectForm";
-import MovimentationType from "@/lib/enums/MovimentationType";
+import MovimentationType from "@/types/enums/MovimentationType";
 import { useEffect } from "react";
 
 const MOVIMENTATION_TYPE_OPTIONS = [

@@ -1,5 +1,5 @@
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
@@ -7,12 +7,12 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
-import Movimentation from "@/lib/models/movimentations/Motimentation";
-import User from "@/lib/models/User";
-import BankAccount from "@/lib/models/movimentations/BankAccount";
-import MovimentationCategory from "@/lib/models/movimentations/Category";
+import Movimentation from "@/types/models/movimentations/Movimentation";
+import User from "@/types/models/User";
+import BankAccount from "@/types/models/movimentations/BankAccount";
+import MovimentationCategory from "@/types/models/movimentations/Category";
 import { useMemo, useState } from "react";
-import MovimentationType from "@/lib/enums/MovimentationType";
+import MovimentationType from "@/types/enums/MovimentationType";
 import {
   FileAttachmentsPanel,
   FILE_ATTACHMENTS_CONFIG,

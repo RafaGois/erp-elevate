@@ -1,12 +1,12 @@
 "use client";
 
-import useAppData from "../../data/hooks/useAppData";
+import useAppData from "@/hooks/use-app-data";
 
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { Toaster } from "../ui/sonner";
 
-import useAuth from "../../data/hooks/useAuth";
+import useAuth from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import "./dashboard-content.css";
 

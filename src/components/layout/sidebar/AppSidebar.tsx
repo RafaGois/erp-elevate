@@ -7,8 +7,8 @@ import { Briefcase, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-
 import Header from "./components/Header";
 import Content from "./components/Content";
 import Footer from "./components/Footer";
-import useAuth from "@/data/hooks/useAuth";
-import { UserLevel } from "@/lib/enums/UserLevel";
+import useAuth from "@/hooks/use-auth";
+import { UserLevel } from "@/types/enums/UserLevel";
 
 export default function AppSidebar() {
   const { user } = useAuth();

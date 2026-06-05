@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { DataTableToolbar } from "./DataTableToolbar";
 import { DataTablePagination } from "./DataTablePagination";
-import ModalAction from "@/lib/enums/modalAction";
+import ModalAction from "@/types/enums/modalAction";
 import { UseFormReturn } from "react-hook-form";
 import { cn } from "@/lib/utils";
 

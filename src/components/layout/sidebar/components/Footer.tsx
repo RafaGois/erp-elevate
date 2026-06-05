@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import useAuth from "@/data/hooks/useAuth";
+import useAuth from "@/hooks/use-auth";
 import {
   ChevronsUpDown,
   LogOut,

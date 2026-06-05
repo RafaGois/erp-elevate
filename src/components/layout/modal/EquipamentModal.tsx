@@ -1,13 +1,13 @@
-import { Equipament } from "@/lib/models/Equipament";
+import { Equipament } from "@/types/models/Equipament";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
-import { EquipamentCategory } from "@/lib/models/EquipamentCategory";
+import { EquipamentCategory } from "@/types/models/EquipamentCategory";
 import SelectForm from "../components/inputs/SelectForm";
 
 type EquipamentModalProps = BaseModalProps<Equipament>;

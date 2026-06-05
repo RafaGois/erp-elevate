@@ -8,8 +8,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import useAppData from "@/data/hooks/useAppData";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import useAppData from "@/hooks/use-app-data";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { toast } from "sonner";
 
 interface WithId {

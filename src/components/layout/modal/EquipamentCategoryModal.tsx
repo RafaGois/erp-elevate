@@ -1,6 +1,6 @@
-import { EquipamentCategory } from "@/lib/models/EquipamentCategory";
+import { EquipamentCategory } from "@/types/models/EquipamentCategory";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";

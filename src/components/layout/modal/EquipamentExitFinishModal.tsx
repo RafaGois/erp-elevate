@@ -1,10 +1,10 @@
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 //import Checkbox from "../components/inputs/Checkbox";
 import api from "@/lib/api";
 import { toast } from "sonner";
-import { EquipamentExit } from "@/lib/models/EquipamentExit";
+import { EquipamentExit } from "@/types/models/EquipamentExit";
 
 type EquipamentExitModalProps = BaseModalProps<EquipamentExit>;
 

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import Budget from "@/lib/models/Budget";
+import Budget from "@/types/models/Budget";
 
 export type BudgetLookup =
   | { kind: "found"; budget: Budget }

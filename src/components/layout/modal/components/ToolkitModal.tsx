@@ -1,6 +1,6 @@
-import ModalAction from "@/lib/enums/modalAction";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
-import ExtraAttributes from "@/lib/interfaces/ExtraAttributesProps";
+import ModalAction from "@/types/enums/modalAction";
+import { BaseModalProps } from "@/types/BaseModalProps";
+import ExtraAttributes from "@/types/ExtraAttributesProps";
 import { UseQueryResult } from "@tanstack/react-query";
 import { cloneElement, isValidElement, ReactElement } from "react";
 

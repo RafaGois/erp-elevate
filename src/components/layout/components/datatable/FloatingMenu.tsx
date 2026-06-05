@@ -9,10 +9,10 @@ import {
 
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 import { CheckCheck, Copy, Edit2, ExternalLink, MoreHorizontal, Trash2 } from "lucide-react";
-import ModalAction from "@/lib/enums/modalAction";
+import ModalAction from "@/types/enums/modalAction";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { Equipament } from "@/lib/models/Equipament";
+import { Equipament } from "@/types/models/Equipament";
 
 interface WithId {
   id: string;

@@ -1,5 +1,5 @@
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
@@ -7,9 +7,9 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
-import FixedMovimentation from "@/lib/models/movimentations/FixedMovimentation";
-import MovimentationCategory from "@/lib/models/movimentations/Category";
-import MovimentationType from "@/lib/enums/MovimentationType";
+import FixedMovimentation from "@/types/models/movimentations/FixedMovimentation";
+import MovimentationCategory from "@/types/models/movimentations/Category";
+import MovimentationType from "@/types/enums/MovimentationType";
 
 const MOVIMENTATION_TYPE_OPTIONS = [
   { id: MovimentationType.ENTRADA, name: "Entrada" },

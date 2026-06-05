@@ -1,6 +1,6 @@
-import User from "@/lib/models/User";
+import User from "@/types/models/User";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
@@ -8,7 +8,7 @@ import SelectForm from "../components/inputs/SelectForm";
 import api from "@/lib/api";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { UserLevel } from "@/lib/enums/UserLevel";
+import { UserLevel } from "@/types/enums/UserLevel";
 
 const USER_LEVEL_OPTIONS = [
   { id: UserLevel.ADMIN, name: "Admin" },

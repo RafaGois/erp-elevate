@@ -1,6 +1,6 @@
-import BankAccount from "@/lib/models/BankAccount";
+import BankAccount from "@/types/models/BankAccount";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";
@@ -8,7 +8,7 @@ import api from "@/lib/api";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import SelectForm from "../components/inputs/SelectForm";
-import User from "@/lib/models/User";
+import User from "@/types/models/User";
 
 type BankAccountModalProps = BaseModalProps<BankAccount>;
 

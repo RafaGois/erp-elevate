@@ -1,9 +1,9 @@
 "use client";
 
-import Budget from "@/lib/models/Budget";
-import BudgetType from "@/lib/enums/BudgetType";
+import Budget from "@/types/models/Budget";
+import BudgetType from "@/types/enums/BudgetType";
 import Modal from "./components/Modal";
-import { BaseModalProps } from "@/lib/interfaces/BaseModalProps";
+import { BaseModalProps } from "@/types/BaseModalProps";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import InputForm from "../components/inputs/InputForm";

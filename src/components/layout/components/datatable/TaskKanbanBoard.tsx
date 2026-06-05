@@ -2,9 +2,9 @@
 
 import { CalendarDays, EyeOff, SlidersHorizontal, User2, Users } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import Task from "@/lib/models/task/Task";
-import { TASK_STATUS_OPTIONS, TaskStatus } from "@/lib/enums/TaskStatus";
-import { TaskPriorities } from "@/lib/enums/TaskPriorities";
+import Task from "@/types/models/task/Task";
+import { TASK_STATUS_OPTIONS, TaskStatus } from "@/types/enums/TaskStatus";
+import { TaskPriorities } from "@/types/enums/TaskPriorities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

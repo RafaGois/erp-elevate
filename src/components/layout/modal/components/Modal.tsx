@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useAppData from "@/data/hooks/useAppData";
-import ModalAction from "@/lib/enums/modalAction";
+import useAppData from "@/hooks/use-app-data";
+import ModalAction from "@/types/enums/modalAction";
 import DialogFormActions from "./DialogFormActions";
 
 interface ModalProps<T> {
