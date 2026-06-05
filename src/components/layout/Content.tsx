@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Toaster } from "../ui/sonner";
 
 import useAuth from "../../data/hooks/useAuth";
+import { cn } from "@/lib/utils";
+import "./dashboard-content.css";
 
 export default function Content(props: { children: React.ReactNode }) {
   const { reloading } = useAppData();
@@ -23,7 +25,7 @@ export default function Content(props: { children: React.ReactNode }) {
   }, [reloading, loadingAuth]);
 
   return (
-    <div className="flex flex-col p-4 @container/main">
+    <div className={cn("dashboard-content flex flex-col p-4 @container/main")}>
       {props.children}
       <Toaster />
     </div>

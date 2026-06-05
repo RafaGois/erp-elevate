@@ -1,15 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
-import * as d3 from "d3";
+import "./coverage-gauge.css";
 import type { FixedCostCoverageResponse } from "../../_lib/types";
 import { formatBRL } from "../../_lib/format";
 import { SERIES_COLORS } from "./chart-theme";
 import { useChartWidth } from "./useChartWidth";
 
-const HEIGHT = 220;
-const START_ANGLE = -Math.PI / 2;
-const END_ANGLE = Math.PI / 2;
+const CHART_HEIGHT = 88;
+const BAR_HEIGHT = 18;
+const BAR_RADIUS = 4;
+const HERO_PADDING_X = 32;
+/** Escala do medidor: 0% → 150% (meta 100% = 2/3 da barra). */
+const SCALE_MAX_PERCENT = 150;
 
 interface Props {
   coverage: FixedCostCoverageResponse;
@@ -20,101 +22,131 @@ export default function CoverageGauge({ coverage }: Props) {
 
   const { coveragePercent, fixedCostTarget, lucro } = coverage;
   const hasTarget = coveragePercent !== null;
-  // Limita o arco preenchido a 150% para manter a leitura do medidor.
-  const ratio = hasTarget ? Math.min(coveragePercent / 100, 1.5) / 1.5 : 0;
+  const fillRatio = hasTarget
+    ? Math.min(coveragePercent / 100, SCALE_MAX_PERCENT / 100) /
+      (SCALE_MAX_PERCENT / 100)
+    : 0;
   const covered = hasTarget && coveragePercent >= 100;
   const color = covered ? SERIES_COLORS.positive : SERIES_COLORS.negative;
-
-  const size = Math.min(width, 280);
-  const radius = size / 2;
-  const arcWidth = Math.max(14, radius * 0.16);
-
-  const { trackPath, valuePath, targetAngle } = useMemo(() => {
-    const arcGen = d3
-      .arc<{ start: number; end: number }>()
-      .innerRadius(radius - arcWidth)
-      .outerRadius(radius)
-      .cornerRadius(arcWidth / 2)
-      .startAngle((d) => d.start)
-      .endAngle((d) => d.end);
-
-    const trackPath = arcGen({ start: START_ANGLE, end: END_ANGLE }) ?? "";
-    const valueEnd = START_ANGLE + (END_ANGLE - START_ANGLE) * ratio;
-    const valuePath = arcGen({ start: START_ANGLE, end: valueEnd }) ?? "";
-    // 100% corresponde a 2/3 do arco (escala vai até 150%).
-    const targetAngle = START_ANGLE + (END_ANGLE - START_ANGLE) * (100 / 150);
-    return { trackPath, valuePath, targetAngle };
-  }, [radius, arcWidth, ratio]);
+  const metaRatio = 100 / SCALE_MAX_PERCENT;
+  const gapToMeta = hasTarget ? Math.max(0, fixedCostTarget - lucro) : null;
+  const metaReached = hasTarget && gapToMeta === 0;
 
   if (width === 0) {
-    return <div ref={ref} className="h-[220px] w-full" />;
+    return <div ref={ref} className="min-h-[280px] w-full" />;
   }
 
-  const tickLen = arcWidth + 6;
-  const tickInner = radius - arcWidth;
-  const tx1 = Math.cos(targetAngle - Math.PI / 2) * tickInner;
-  const ty1 = Math.sin(targetAngle - Math.PI / 2) * tickInner;
-  const tx2 = Math.cos(targetAngle - Math.PI / 2) * (tickInner + tickLen);
-  const ty2 = Math.sin(targetAngle - Math.PI / 2) * (tickInner + tickLen);
+  const barWidth = Math.max(width - HERO_PADDING_X - 2, 0);
+  const fillWidth = barWidth * fillRatio;
+  const metaX = barWidth * metaRatio;
+  const tickHalf = BAR_HEIGHT / 2 + 5;
 
   return (
-    <div ref={ref} className="flex w-full flex-col items-center">
-      <svg width={size} height={HEIGHT} role="img" aria-label="Cobertura de custos fixos">
-        <g transform={`translate(${size / 2},${radius + 12})`}>
-          <path d={trackPath} className="fill-muted" />
-          {hasTarget && <path d={valuePath} fill={color} />}
-          {/* marca da meta (100%) */}
+    <div
+      ref={ref}
+      className="flex min-h-[280px] w-full flex-col justify-end pt-8"
+    >
+      <div className="coverage-gauge__hero flex w-full flex-col gap-5 px-4 py-6">
+        <svg
+          width={barWidth}
+          height={CHART_HEIGHT}
+          role="img"
+          aria-label="Cobertura de custos fixos"
+          className="coverage-gauge__bar mx-auto block overflow-visible"
+        >
+          <rect
+            x={0}
+            y={(CHART_HEIGHT - BAR_HEIGHT) / 2}
+            width={barWidth}
+            height={BAR_HEIGHT}
+            rx={BAR_RADIUS}
+            className="fill-muted"
+          />
+          {hasTarget && fillWidth > 0 && (
+            <rect
+              x={0}
+              y={(CHART_HEIGHT - BAR_HEIGHT) / 2}
+              width={fillWidth}
+              height={BAR_HEIGHT}
+              rx={BAR_RADIUS}
+              fill={color}
+            />
+          )}
           <line
-            x1={tx1}
-            y1={ty1}
-            x2={tx2}
-            y2={ty2}
+            x1={metaX}
+            y1={CHART_HEIGHT / 2 - tickHalf}
+            x2={metaX}
+            y2={CHART_HEIGHT / 2 + tickHalf}
             className="stroke-foreground"
             strokeWidth={2}
           />
           <text
-            x={tx2}
-            y={ty2 + 14}
+            x={metaX}
+            y={CHART_HEIGHT / 2 + tickHalf + 14}
             textAnchor="middle"
             className="fill-muted-foreground text-[9px]"
           >
             meta
           </text>
+        </svg>
 
-          <text
-            textAnchor="middle"
-            dy="-0.1em"
-            className="text-2xl font-bold"
-            style={{ fill: hasTarget ? color : "var(--muted-foreground)" }}
+        <div className="text-center">
+          <p
+            className="coverage-gauge__value m-0 tabular-nums"
+            style={{ color: hasTarget ? color : "var(--muted-foreground)" }}
           >
             {hasTarget ? `${coveragePercent.toFixed(1)}%` : "—"}
-          </text>
-          <text
-            y={18}
-            textAnchor="middle"
-            className="fill-muted-foreground text-[10px]"
-          >
-            cobertura
-          </text>
-        </g>
-      </svg>
-
-      <div className="grid w-full grid-cols-2 gap-2 text-center">
-        <div className="rounded-md border border-border p-2">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-            Meta (fixos)
           </p>
-          <p className="text-sm font-semibold tabular-nums">
-            {formatBRL(fixedCostTarget)}
-          </p>
+          <p className="coverage-gauge__label m-0 mt-3">cobertura</p>
+          {hasTarget && (
+            <p className="mt-3 text-[11px] leading-snug text-muted-foreground">
+              {metaReached ? (
+                <span style={{ color: SERIES_COLORS.positive }}>
+                  Meta atingida
+                </span>
+              ) : (
+                <>
+                  Faltam{" "}
+                  <span className="font-semibold tabular-nums text-foreground">
+                    {formatBRL(gapToMeta)}
+                  </span>{" "}
+                  para a meta
+                </>
+              )}
+            </p>
+          )}
         </div>
-        <div className="rounded-md border border-border p-2">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-            Lucro do mês
-          </p>
-          <p className="text-sm font-semibold tabular-nums">
-            {formatBRL(lucro)}
-          </p>
+
+        <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="coverage-gauge__stat">
+            <p className="coverage-gauge__stat-label">Meta (fixos)</p>
+            <p className="coverage-gauge__stat-value">
+              {formatBRL(fixedCostTarget)}
+            </p>
+          </div>
+          <div className="coverage-gauge__stat">
+            <p className="coverage-gauge__stat-label">Lucro do mês</p>
+            <p className="coverage-gauge__stat-value">{formatBRL(lucro)}</p>
+          </div>
+          <div className="coverage-gauge__stat">
+            <p className="coverage-gauge__stat-label">Para a meta</p>
+            <p
+              className="coverage-gauge__stat-value"
+              style={{
+                color: !hasTarget
+                  ? undefined
+                  : metaReached
+                    ? SERIES_COLORS.positive
+                    : SERIES_COLORS.negative,
+              }}
+            >
+              {!hasTarget
+                ? "—"
+                : metaReached
+                  ? "Atingida"
+                  : formatBRL(gapToMeta)}
+            </p>
+          </div>
         </div>
       </div>
     </div>

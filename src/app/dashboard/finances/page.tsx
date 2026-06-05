@@ -45,10 +45,8 @@ export default function FinanceDashboard() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Dashboard Financeiro
-        </h1>
-        <p className="text-muted-foreground">
+        <h1 className="tracking-tight">Dashboard Financeiro</h1>
+        <p className="dashboard-content__subtitle text-muted-foreground">
           {period
             ? `Visão geral de ${period.currentMonth} · janela de 12 meses`
             : "Visão geral das finanças e desempenho financeiro"}

@@ -1,0 +1,50 @@
+/* Tipografia do painel principal — alinhada à sidebar e aos DataCards */
+
+.dashboard-content {
+  --font-elevate-display: var(--font-display);
+  --font-elevate-pixel: var(--font-pixel);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Títulos de página (substitui CODE Bold do base global) */
+.dashboard-content :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-display), ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-content h1 {
+  font-size: 1.875rem;
+  line-height: 1.15;
+}
+
+.dashboard-content h2 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.dashboard-content h3 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.dashboard-content .text-muted-foreground,
+.dashboard-content .dashboard-content__subtitle {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Cabeçalhos de seção / DataCard legado */
+.dashboard-content .elevate-data-card__title {
+  font-family: var(--font-elevate-pixel), var(--font-pixel), ui-monospace, monospace !important;
+  font-weight: 400 !important;
+}
+
+.dashboard-content .elevate-card__chrome-desc {
+  font-family: var(--font-elevate-pixel), var(--font-pixel), ui-monospace, monospace;
+}
+
+.dashboard-content .elevate-card--window .elevate-card__title,
+.dashboard-content .elevate-card--bento .elevate-card__title {
+  font-family: var(--font-elevate-display), var(--font-display), ui-monospace, monospace;
+  font-weight: 400;
+}
