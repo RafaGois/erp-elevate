@@ -100,6 +100,11 @@
 }
 
 .dark {
+  /* Barra SYS:// dos cards/janelas — oliva escuro (menos contraste que #dfff00) */
+  --chrome-bar: #3f5210;
+  --chrome-bar-dim: #2f3d0c;
+  --chrome-bar-foreground: #e8e6dc;
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

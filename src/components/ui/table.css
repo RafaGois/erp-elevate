@@ -37,6 +37,7 @@
 }
 
 .dark .elevate-table-shell {
+  --ets-accent:      var(--chrome-bar, #3f5210);
   --ets-surface:     #1c1917;
   --ets-surface-2:   #292524;
 
@@ -50,8 +51,20 @@
 
   --ets-border:      rgba(242, 240, 235, 0.12);
   --ets-shadow:      #0f172a;
-  --ets-accent-dim:  color-mix(in srgb, var(--ets-accent) 60%, #3f6212);
+  --ets-accent-dim:  var(--chrome-bar-dim, #2f3d0c);
   --ets-scan:        rgba(223, 255, 0, 0.03);
+}
+
+.dark .elevate-table__head {
+  color: var(--chrome-bar-foreground, #e8e6dc);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(255, 255, 255, 0.04) 5px,
+    rgba(255, 255, 255, 0.04) 6px
+  );
+  border-right-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Scanlines — overlay no shell (não no tbody, onde não funciona em CSS tables) */

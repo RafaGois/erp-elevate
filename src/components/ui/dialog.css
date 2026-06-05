@@ -75,9 +75,24 @@
   --ed-surface: #1c1917;
   --ed-surface-2: #292524;
   --ed-panel-line: rgba(242, 240, 235, 0.12);
-  --ed-bar: #dfff00;
+  --ed-bar: var(--chrome-bar, #3f5210);
   --ed-border: rgba(242, 240, 235, 0.12);
   --ed-shadow: #0f172a;
+}
+
+.dark .elevate-dialog__chrome {
+  color: var(--chrome-bar-foreground, #e8e6dc);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(255, 255, 255, 0.04) 5px,
+    rgba(255, 255, 255, 0.04) 6px
+  );
+}
+
+.dark .elevate-dialog__chrome-title {
+  color: var(--chrome-bar-foreground, #e8e6dc);
 }
 
 .dark .elevate-dialog-content--retro {
