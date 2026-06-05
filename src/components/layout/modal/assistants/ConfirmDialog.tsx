@@ -58,8 +58,7 @@ export default function ConfirmDialog<T extends WithId>(
           <AlertDialogTitle>{props.title ?? "Tem certeza?"}</AlertDialogTitle>
           <AlertDialogDescription>
             {props.message ??
-              `Esta ação não pode ser desfeita. Isso excluirá permanentemente o
-            registro, o removendo de nossos servidores.`}
+              "Esta ação não pode ser desfeita. Isso excluirá permanentemente o registro, removendo-o dos servidores."}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
