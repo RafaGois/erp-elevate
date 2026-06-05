@@ -1,0 +1,149 @@
+/* ─── Elevate Toasts — card-window retro style ───────────────────────────
+   Targets Sonner v2 [data-sonner-toast][data-styled=true] selectors.
+   Does NOT use all:unset (preserves Sonner's enter/exit animations).
+   Colored status stripe uses a thick border-top override.
+──────────────────────────────────────────────────────────────────────────── */
+
+/* ── CSS tokens ───────────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] {
+  /* light mode defaults */
+  --et-border: #171717;
+  --et-shadow: #0f172a;
+  --et-bg: #ffffff;
+  --et-fg: #09090b;
+  --et-muted: #71717a;
+  --et-bar: #dfff00;  /* default: lime accent */
+
+  /* override sonner's default card shape */
+  background: var(--et-bg) !important;
+  color: var(--et-fg) !important;
+  border: 2px solid var(--et-border) !important;
+  border-top: 5px solid var(--et-bar) !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 var(--et-shadow) !important;
+  padding: 14px 16px 16px !important;
+  gap: 0 !important;
+  align-items: flex-start !important;
+  font-size: 13px !important;
+}
+
+/* ── Status colour stripe (border-top override) ───────────────────────── */
+[data-sonner-toast][data-styled="true"][data-type="success"] {
+  --et-bar: #22c55e;
+}
+[data-sonner-toast][data-styled="true"][data-type="error"] {
+  --et-bar: #ef4444;
+}
+[data-sonner-toast][data-styled="true"][data-type="warning"] {
+  --et-bar: #fbbf24;
+}
+[data-sonner-toast][data-styled="true"][data-type="info"] {
+  --et-bar: #dfff00;
+}
+[data-sonner-toast][data-styled="true"][data-type="loading"] {
+  --et-bar: #67e8f9;
+}
+
+/* ── Icon — hide default Sonner icon; stripe carries the status ────────── */
+[data-sonner-toast][data-styled="true"] [data-icon] {
+  display: none !important;
+}
+
+/* ── Content wrapper ──────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] [data-content] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+/* ── Title ────────────────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] [data-title] {
+  font-family: "Press Start 2P", ui-monospace, monospace !important;
+  font-size: 8px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: var(--et-fg) !important;
+}
+
+/* ── Description ──────────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] [data-description] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+  color: var(--et-muted) !important;
+}
+
+/* ── Close button ─────────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] [data-close-button] {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 0.125rem !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.3) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+  transition: background 0.1s ease, border-color 0.1s ease !important;
+}
+
+[data-sonner-toast][data-styled="true"]:hover [data-close-button]:hover {
+  background: #f87171 !important;
+  border-color: #000 !important;
+  color: #000 !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+}
+
+/* ── Action button ────────────────────────────────────────────────────── */
+[data-sonner-toast][data-styled="true"] [data-button] {
+  font-family: ui-monospace, monospace !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  padding: 5px 10px !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  border: 2px solid #171717 !important;
+  background: var(--et-bar) !important;
+  color: #000 !important;
+  box-shadow: 2px 2px 0 #0f172a !important;
+  transition: transform 0.08s ease-out, box-shadow 0.08s ease-out !important;
+}
+[data-sonner-toast][data-styled="true"] [data-button]:hover {
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 #0f172a !important;
+}
+[data-sonner-toast][data-styled="true"] [data-cancel] {
+  background: #fafafa !important;
+  color: #09090b !important;
+}
+
+/* ── Dark mode ────────────────────────────────────────────────────────── */
+.dark [data-sonner-toast][data-styled="true"] {
+  --et-border: rgba(242, 240, 235, 0.2);
+  --et-shadow: #000000;
+  --et-bg: #1c1917;
+  --et-fg: #f2f0eb;
+  --et-muted: #a8a29e;
+}
+
+.dark [data-sonner-toast][data-styled="true"] [data-close-button] {
+  border-color: rgba(242, 240, 235, 0.22) !important;
+  background: #292524 !important;
+  color: rgba(242, 240, 235, 0.65) !important;
+  box-shadow: 1.5px 1.5px 0 #000 !important;
+}
+.dark [data-sonner-toast][data-styled="true"]:hover [data-close-button]:hover {
+  background: #ef4444 !important;
+  border-color: rgba(242, 240, 235, 0.4) !important;
+  color: #fff !important;
+}
+.dark [data-sonner-toast][data-styled="true"] [data-cancel] {
+  background: #292524 !important;
+  color: #f2f0eb !important;
+}
+.dark [data-sonner-toast][data-styled="true"] [data-button] {
+  border-color: rgba(242, 240, 235, 0.2) !important;
+}
