@@ -1,0 +1,362 @@
+---
+description: Estrutura e arquitetura padrão para projetos Next.js com App Router. Aplique esta rule sempre que criar, mover ou organizar arquivos no projeto.
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.css", "**/*.json"]
+alwaysApply: true
+---
+
+# Next.js Project Structure — Arquitetura Padrão
+
+> Baseado na documentação oficial Next.js (v15/16, App Router) e padrões consolidados da comunidade.
+> Referências: https://nextjs.org/docs/app/getting-started/project-structure
+
+---
+
+## 1. Visão Geral da Estrutura Raiz
+
+```
+/
+├── src/                        # Todo código-fonte da aplicação
+│   ├── app/                    # App Router — rotas, layouts, páginas
+│   ├── components/             # Componentes React compartilhados globalmente
+│   ├── hooks/                  # Custom React hooks globais
+│   ├── lib/                    # Utilitários, helpers, configurações de libs
+│   ├── services/               # Camada de serviço / integrações externas
+│   ├── stores/                 # Estado global (Zustand, Jotai, etc.)
+│   ├── types/                  # Tipos e interfaces TypeScript globais
+│   └── styles/                 # Estilos globais (globals.css, tokens)
+├── public/                     # Assets estáticos (imagens, fontes, ícones)
+├── .env                        # Variáveis de ambiente (não commitar)
+├── .env.local                  # Variáveis locais (não commitar)
+├── .env.example                # Template de variáveis (commitar)
+├── next.config.ts              # Configuração do Next.js
+├── tsconfig.json               # Configuração TypeScript
+├── eslint.config.mjs           # Configuração ESLint
+├── tailwind.config.ts          # Configuração Tailwind CSS (se usado)
+└── package.json
+```
+
+**Regra:** Arquivos de configuração ficam sempre na raiz. A pasta `public/` fica na raiz. Todo código da aplicação fica dentro de `src/`.
+
+---
+
+## 2. Estrutura do `src/app/` (App Router)
+
+```
+src/app/
+├── layout.tsx                  # Root layout — obrigatório, contém <html> e <body>
+├── page.tsx                    # Página raiz "/"
+├── loading.tsx                 # UI de loading global (Suspense boundary)
+├── error.tsx                   # UI de erro global (Error boundary)
+├── not-found.tsx               # Página 404 global
+├── global-error.tsx            # Erro crítico no root layout
+├── favicon.ico                 # Favicon
+├── sitemap.ts                  # Sitemap gerado dinamicamente
+├── robots.ts                   # robots.txt gerado dinamicamente
+│
+├── (public)/                   # Route Group — páginas públicas/marketing
+│   ├── layout.tsx              # Layout compartilhado das páginas públicas
+│   ├── about/
+│   │   └── page.tsx
+│   └── pricing/
+│       └── page.tsx
+│
+├── (auth)/                     # Route Group — fluxo de autenticação
+│   ├── layout.tsx              # Layout sem sidebar/navbar
+│   ├── login/
+│   │   └── page.tsx
+│   ├── register/
+│   │   └── page.tsx
+│   └── forgot-password/
+│       └── page.tsx
+│
+├── (dashboard)/                # Route Group — área autenticada/protegida
+│   ├── layout.tsx              # Layout com sidebar, navbar, auth guard
+│   ├── dashboard/
+│   │   ├── page.tsx
+│   │   ├── loading.tsx
+│   │   ├── _components/        # Componentes exclusivos desta rota
+│   │   │   ├── stats-card.tsx
+│   │   │   └── recent-activity.tsx
+│   │   └── _lib/               # Lógica exclusiva desta rota
+│   │       ├── dashboard.loader.ts    # Data fetching server-side
+│   │       ├── dashboard.actions.ts   # Server Actions
+│   │       └── dashboard.types.ts     # Tipos locais
+│   │
+│   └── settings/
+│       ├── layout.tsx
+│       ├── page.tsx
+│       ├── profile/
+│       │   └── page.tsx
+│       └── billing/
+│           └── page.tsx
+│
+└── api/                        # Route Handlers (API endpoints)
+    ├── auth/
+    │   └── [...nextauth]/
+    │       └── route.ts
+    ├── webhooks/
+    │   └── stripe/
+    │       └── route.ts
+    └── health/
+        └── route.ts
+```
+
+**Regras:**
+- `(nome)` — Route Groups organizam rotas sem afetar a URL.
+- `_components/` e `_lib/` — Pastas privadas colocadas junto à rota que as usa.
+- `page.tsx` é obrigatório para tornar uma rota pública.
+- `layout.tsx` envolve todas as rotas filhas do mesmo nível.
+- Rotas de API ficam em `src/app/api/` usando `route.ts`.
+
+---
+
+## 3. Arquivos Especiais do App Router
+
+| Arquivo            | Propósito                                         |
+|--------------------|---------------------------------------------------|
+| `layout.tsx`       | UI compartilhada; persiste entre navegações       |
+| `page.tsx`         | Conteúdo único da rota; torna a rota pública      |
+| `loading.tsx`      | Skeleton/spinner (envolve com React Suspense)     |
+| `error.tsx`        | Captura erros (deve ser Client Component)         |
+| `not-found.tsx`    | UI para `notFound()` ou URLs não encontradas      |
+| `route.ts`         | API endpoint (GET, POST, PUT, DELETE, etc.)       |
+| `template.tsx`     | Como layout, mas re-renderiza a cada navegação    |
+| `default.tsx`      | Fallback para Parallel Routes                     |
+| `global-error.tsx` | Captura erros no root layout                      |
+
+---
+
+## 4. Estrutura de Componentes (`src/components/`)
+
+```
+src/components/
+├── ui/                         # Componentes de UI primitivos (shadcn/ui, etc.)
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── dialog.tsx
+│   └── ...
+├── layout/                     # Componentes estruturais da aplicação
+│   ├── header.tsx
+│   ├── sidebar.tsx
+│   ├── footer.tsx
+│   └── navbar.tsx
+├── forms/                      # Componentes de formulário reutilizáveis
+│   ├── form-field.tsx
+│   └── form-error.tsx
+└── shared/                     # Componentes compartilhados entre features
+    ├── avatar.tsx
+    ├── empty-state.tsx
+    └── loading-spinner.tsx
+```
+
+**Regra:** Se um componente é usado em apenas UMA rota, ele vai em `_components/` dentro dessa rota. Se é usado em DUAS ou mais rotas, vai em `src/components/`.
+
+---
+
+## 5. Estrutura de `src/lib/`
+
+```
+src/lib/
+├── utils.ts                    # Funções utilitárias genéricas (cn(), formatDate(), etc.)
+├── constants.ts                # Constantes globais da aplicação
+├── validations/                # Schemas de validação (Zod)
+│   ├── auth.schema.ts
+│   ├── user.schema.ts
+│   └── common.schema.ts
+├── auth/                       # Configuração de autenticação (NextAuth, Lucia, etc.)
+│   ├── config.ts
+│   └── helpers.ts
+├── db/                         # Cliente de banco de dados e queries base
+│   ├── client.ts               # Instância do Prisma/Drizzle
+│   └── schema.ts               # Schema do banco (se Drizzle)
+└── email/                      # Templates e configuração de email
+    ├── client.ts
+    └── templates/
+```
+
+---
+
+## 6. Estrutura de `src/services/`
+
+```
+src/services/
+├── user.service.ts             # Lógica de negócio relacionada a usuários
+├── auth.service.ts             # Lógica de autenticação
+├── payment.service.ts          # Integração com Stripe, etc.
+└── notification.service.ts     # Emails transacionais, push, etc.
+```
+
+**Regra:** Services contêm lógica de negócio reutilizável e testável. Não devem depender de contextos React. Server Actions chamam services, não o contrário.
+
+---
+
+## 7. Server vs. Client Components
+
+### Quando usar Server Component (padrão)
+- Busca de dados direto no banco/API
+- Acesso a variáveis de ambiente secretas
+- Renderização de conteúdo estático ou semi-estático
+- Redução de JavaScript enviado ao cliente
+
+### Quando usar `"use client"`
+- Usa `useState`, `useEffect`, `useRef`, `useContext`
+- Precisa de event handlers (`onClick`, `onChange`, etc.)
+- Usa APIs do browser (`window`, `document`, `localStorage`)
+- Usa bibliotecas que dependem do browser
+
+**Regra de ouro:** Mantenha o topo da árvore de componentes no servidor. Empurre Client Components para as "folhas" da árvore — o mais profundo possível.
+
+```tsx
+// ✅ CORRETO — Client Component apenas onde necessário
+// src/app/(dashboard)/dashboard/page.tsx — SERVER
+import { StatsCard } from './_components/stats-card'  // SERVER
+import { InteractiveChart } from './_components/interactive-chart'  // CLIENT
+
+export default async function DashboardPage() {
+  const data = await fetchDashboardData()  // fetch direto no servidor
+  return (
+    <div>
+      <StatsCard data={data.stats} />       {/* sem JS no cliente */}
+      <InteractiveChart data={data.chart} /> {/* "use client" dentro */}
+    </div>
+  )
+}
+```
+
+---
+
+## 8. Padrão para Data Fetching (Loaders)
+
+```
+src/app/(dashboard)/projects/
+├── page.tsx                    # Server Component — usa o loader
+└── _lib/
+    ├── projects.loader.ts      # Data fetching com cache()
+    ├── projects.actions.ts     # Mutations com "use server"
+    └── projects.schema.ts      # Validação Zod dos inputs
+```
+
+```ts
+// _lib/projects.loader.ts
+import { cache } from 'react'
+
+export const getProjects = cache(async (userId: string) => {
+  // Acesso direto ao banco — apenas em Server Components
+  return db.project.findMany({ where: { userId } })
+})
+```
+
+```ts
+// _lib/projects.actions.ts
+'use server'
+import { revalidatePath } from 'next/cache'
+import { createProjectSchema } from './projects.schema'
+
+export async function createProjectAction(formData: FormData) {
+  const input = createProjectSchema.parse(Object.fromEntries(formData))
+  await projectService.create(input)
+  revalidatePath('/projects')
+}
+```
+
+---
+
+## 9. Convenções de Nomenclatura
+
+| Tipo                     | Convenção               | Exemplo                        |
+|--------------------------|-------------------------|--------------------------------|
+| Componentes React        | PascalCase              | `UserCard.tsx`                 |
+| Arquivos de utilitário   | kebab-case              | `format-date.ts`               |
+| Hooks                    | camelCase com `use`     | `useAuth.ts`                   |
+| Server Actions           | camelCase com `Action`  | `createUserAction.ts`          |
+| Loaders                  | camelCase com `Loader`  | `dashboard.loader.ts`          |
+| Schemas Zod              | camelCase com `Schema`  | `user.schema.ts`               |
+| Services                 | camelCase com `Service` | `user.service.ts`              |
+| Tipos/Interfaces         | PascalCase              | `UserProfile`, `ApiResponse`   |
+| Pastas de rota           | kebab-case              | `user-settings/`               |
+| Pastas privadas          | underscore prefix       | `_components/`, `_lib/`        |
+| Route Groups             | parentheses             | `(auth)/`, `(dashboard)/`      |
+
+---
+
+## 10. Variáveis de Ambiente
+
+```bash
+# Prefixo NEXT_PUBLIC_ — exposto ao browser
+NEXT_PUBLIC_APP_URL=https://example.com
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_...
+
+# Sem prefixo — apenas servidor
+DATABASE_URL=postgresql://...
+STRIPE_SECRET_KEY=sk_...
+NEXTAUTH_SECRET=...
+```
+
+**Regra:** Nunca expor segredos com `NEXT_PUBLIC_`. Validar todas as env vars na inicialização usando Zod em `src/lib/env.ts`.
+
+---
+
+## 11. Caminhos de Import (Path Aliases)
+
+Configure no `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+**Use sempre `@/` em vez de caminhos relativos longos:**
+
+```ts
+// ✅ Correto
+import { Button } from '@/components/ui/button'
+import { getProjects } from '@/services/project.service'
+
+// ❌ Evitar
+import { Button } from '../../../components/ui/button'
+```
+
+---
+
+## 12. O Que Não Fazer
+
+- ❌ Nunca colocar lógica de negócio diretamente em `page.tsx` — extraia para `_lib/` ou `services/`
+- ❌ Nunca usar `"use client"` no root layout ou em layouts de nível alto
+- ❌ Nunca importar código de servidor (db, fs, segredos) dentro de Client Components
+- ❌ Nunca criar componentes gigantes — prefira composição de componentes menores
+- ❌ Nunca misturar responsabilidades: um arquivo = uma responsabilidade
+- ❌ Nunca colocar arquivos de configuração dentro de `src/`
+- ❌ Nunca criar uma pasta `pages/` se usar App Router (conflito)
+- ❌ Nunca fazer fetch de dados dentro de Client Components quando pode ser feito no servidor
+
+---
+
+## 13. Resumo: Onde Fica Cada Coisa
+
+| O que é                          | Onde fica                                          |
+|----------------------------------|----------------------------------------------------|
+| Página/rota                      | `src/app/(grupo)/rota/page.tsx`                    |
+| Layout compartilhado             | `src/app/(grupo)/layout.tsx`                       |
+| API endpoint                     | `src/app/api/recurso/route.ts`                     |
+| Componente exclusivo de uma rota | `src/app/.../rota/_components/`                    |
+| Lógica exclusiva de uma rota     | `src/app/.../rota/_lib/`                           |
+| Componente usado em 2+ rotas     | `src/components/`                                  |
+| Hook customizado                 | `src/hooks/use-nome.ts`                            |
+| Lógica de negócio reutilizável   | `src/services/nome.service.ts`                     |
+| Utilitários e helpers            | `src/lib/utils.ts` ou `src/lib/nome/`              |
+| Schemas de validação             | `src/lib/validations/` ou junto à rota (`_lib/`)   |
+| Estado global                    | `src/stores/`                                      |
+| Tipos globais                    | `src/types/`                                       |
+| Configuração de libs externas    | `src/lib/nome-da-lib/`                             |
+| Assets estáticos                 | `public/`                                          |
+| Variáveis de ambiente            | `.env.local` (raiz)                                |
+| Configurações do framework       | Raiz do projeto (`next.config.ts`, `tsconfig.json`)|
+
+---
+
+*Fontes: [Next.js Docs — Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) · [Next.js Docs — Colocation](https://nextjs.org/docs/14/app/building-your-application/routing/colocation) · Makerkit Production Patterns · Vercel Best Practices 2025*
