@@ -146,14 +146,11 @@
 
 .elevate-card__chrome-row {
   display: flex;
+  width: 100%;
   min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-}
-
-.elevate-card__chrome--stacked .elevate-card__chrome-row {
-  width: 100%;
 }
 
 .elevate-card__chrome-label {

@@ -38,7 +38,7 @@ export default function KpiCard({ title, metric, icon, highlight }: Props) {
       variant="window"
       scanlines
       className={cn(
-        "elevate-data-card group",
+        "elevate-data-card elevate-data-card--kpi group",
         fontDisplay.variable,
         fontPixel.variable,
       )}

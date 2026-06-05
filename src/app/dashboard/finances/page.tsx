@@ -59,9 +59,9 @@ export default function FinanceDashboard() {
       <div className="grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
         {summary.isLoading || !summary.data ? (
           <>
-            <Skeleton className="h-[108px] rounded-sm" />
-            <Skeleton className="h-[108px] rounded-sm" />
-            <Skeleton className="h-[108px] rounded-sm" />
+            <Skeleton className="h-[120px] rounded-sm" />
+            <Skeleton className="h-[120px] rounded-sm" />
+            <Skeleton className="h-[120px] rounded-sm" />
           </>
         ) : (
           <>
