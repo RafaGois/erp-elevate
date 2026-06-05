@@ -33,7 +33,12 @@ export default function Categories() {
       gsap.registerPlugin(ScrollTrigger);
       const lenis = new Lenis();
       lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => lenis.raf(time * 1000));
+
+      const onTick = (time: number) => {
+        lenis.raf(time * 1000);
+      };
+
+      gsap.ticker.add(onTick);
       gsap.ticker.lagSmoothing(0);
 
       // Remover criação dinâmica de elementos
@@ -86,8 +91,12 @@ export default function Categories() {
           2 * (1 - t) * t * arcControlPointY +
           t * t * arcEndY;
         return { x, y };
-      }      
+      }
 
+      return () => {
+        gsap.ticker.remove(onTick);
+        lenis.destroy();
+      };
     },
     { scope: container }
   );

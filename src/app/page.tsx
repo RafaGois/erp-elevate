@@ -26,13 +26,17 @@ export default function Home() {
       const lenis = new Lenis();
       lenis.on("scroll", ScrollTrigger.update);
 
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000); // Convert time from seconds to milliseconds
-      });
+      const onTick = (time: number) => {
+        lenis.raf(time * 1000);
+      };
 
-      // Disable lag smoothing in GSAP to prevent any delay in scroll animations
+      gsap.ticker.add(onTick);
       gsap.ticker.lagSmoothing(0);
 
+      return () => {
+        gsap.ticker.remove(onTick);
+        lenis.destroy();
+      };
     },
     { scope: container }
   );

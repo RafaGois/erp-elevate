@@ -1,6 +1,7 @@
 "use client";
 
 import Content from "@/components/layout/Content";
+import DashboardScrollArea from "@/components/layout/DashboardScrollArea";
 import Header from "@/components/layout/Header";
 import AppSidebar from "@/components/layout/sidebar/AppSidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -13,9 +14,11 @@ export default function DashboardLayoutClient({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="!overflow-hidden">
         <Header />
-        <Content>{children}</Content>
+        <DashboardScrollArea>
+          <Content>{children}</Content>
+        </DashboardScrollArea>
       </SidebarInset>
     </SidebarProvider>
   );

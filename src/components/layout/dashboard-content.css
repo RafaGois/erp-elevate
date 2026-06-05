@@ -1,5 +1,10 @@
 /* Tipografia do painel principal — alinhada à sidebar e aos DataCards */
 
+.dashboard-scroll-area {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
 .dashboard-content {
   --font-elevate-display: var(--font-display);
   --font-elevate-pixel: var(--font-pixel);
