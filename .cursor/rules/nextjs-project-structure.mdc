@@ -7,7 +7,8 @@ alwaysApply: true
 # Next.js Project Structure — Arquitetura Padrão
 
 > Baseado na documentação oficial Next.js (v15/16, App Router) e padrões consolidados da comunidade.
-> Referências: https://nextjs.org/docs/app/getting-started/project-structure
+> Atualizado para Next.js 16 com Turbopack estável, `use cache`, `proxy.ts` e React 19.2.
+> Referências: https://nextjs.org/docs/app/getting-started/project-structure · https://nextjs.org/blog/next-16
 
 ---
 
@@ -18,6 +19,7 @@ alwaysApply: true
 ├── src/                        # Todo código-fonte da aplicação
 │   ├── app/                    # App Router — rotas, layouts, páginas
 │   ├── components/             # Componentes React compartilhados globalmente
+│   ├── features/               # Módulos de feature (ver seção 4)
 │   ├── hooks/                  # Custom React hooks globais
 │   ├── lib/                    # Utilitários, helpers, configurações de libs
 │   ├── services/               # Camada de serviço / integrações externas
@@ -29,6 +31,7 @@ alwaysApply: true
 ├── .env.local                  # Variáveis locais (não commitar)
 ├── .env.example                # Template de variáveis (commitar)
 ├── next.config.ts              # Configuração do Next.js
+├── proxy.ts                    # ⚠️ Next.js 16: substitui middleware.ts para lógica de rede
 ├── tsconfig.json               # Configuração TypeScript
 ├── eslint.config.mjs           # Configuração ESLint
 ├── tailwind.config.ts          # Configuração Tailwind CSS (se usado)
@@ -36,6 +39,8 @@ alwaysApply: true
 ```
 
 **Regra:** Arquivos de configuração ficam sempre na raiz. A pasta `public/` fica na raiz. Todo código da aplicação fica dentro de `src/`.
+
+> **⚠️ Next.js 16:** `middleware.ts` foi substituído por `proxy.ts`, que clarifica a fronteira de rede. Use `proxy.ts` para redirects, rewrites e lógica de request antes de chegar às rotas.
 
 ---
 
@@ -54,7 +59,7 @@ src/app/
 ├── robots.ts                   # robots.txt gerado dinamicamente
 │
 ├── (public)/                   # Route Group — páginas públicas/marketing
-│   ├── layout.tsx              # Layout compartilhado das páginas públicas
+│   ├── layout.tsx
 │   ├── about/
 │   │   └── page.tsx
 │   └── pricing/
@@ -123,10 +128,43 @@ src/app/
 | `template.tsx`     | Como layout, mas re-renderiza a cada navegação    |
 | `default.tsx`      | Fallback para Parallel Routes                     |
 | `global-error.tsx` | Captura erros no root layout                      |
+| `proxy.ts`         | ⚠️ **Next.js 16** — substitui `middleware.ts`    |
 
 ---
 
-## 4. Estrutura de Componentes (`src/components/`)
+## 4. Feature-based Structure (para apps médios/grandes)
+
+Para aplicações que crescem além de 5–6 features, adote organização por domínio dentro de `src/features/`:
+
+```
+src/features/
+├── auth/
+│   ├── components/             # Componentes exclusivos de auth
+│   │   ├── login-form.tsx
+│   │   └── oauth-buttons.tsx
+│   ├── hooks/                  # Hooks exclusivos de auth
+│   │   └── use-session.ts
+│   ├── actions/                # Server Actions de auth
+│   │   └── auth.actions.ts
+│   ├── services/               # Lógica de negócio de auth
+│   │   └── auth.service.ts
+│   ├── types/
+│   │   └── auth.types.ts
+│   └── index.ts                # Barrel export — só exporta o que é público
+│
+└── billing/
+    ├── components/
+    ├── hooks/
+    ├── actions/
+    ├── services/
+    └── index.ts
+```
+
+**Regra:** `src/features/` é para lógica de domínio reutilizável entre rotas. `_components/` e `_lib/` dentro da rota continuam sendo usados para lógica exclusiva daquela rota específica.
+
+---
+
+## 5. Estrutura de Componentes (`src/components/`)
 
 ```
 src/components/
@@ -149,16 +187,17 @@ src/components/
     └── loading-spinner.tsx
 ```
 
-**Regra:** Se um componente é usado em apenas UMA rota, ele vai em `_components/` dentro dessa rota. Se é usado em DUAS ou mais rotas, vai em `src/components/`.
+**Regra:** Se um componente é usado em apenas UMA rota, ele vai em `_components/` dentro dessa rota. Se é usado em DUAS ou mais rotas, vai em `src/components/` ou `src/features/<domínio>/components/`.
 
 ---
 
-## 5. Estrutura de `src/lib/`
+## 6. Estrutura de `src/lib/`
 
 ```
 src/lib/
 ├── utils.ts                    # Funções utilitárias genéricas (cn(), formatDate(), etc.)
 ├── constants.ts                # Constantes globais da aplicação
+├── env.ts                      # Validação de variáveis de ambiente com Zod
 ├── validations/                # Schemas de validação (Zod)
 │   ├── auth.schema.ts
 │   ├── user.schema.ts
@@ -176,20 +215,6 @@ src/lib/
 
 ---
 
-## 6. Estrutura de `src/services/`
-
-```
-src/services/
-├── user.service.ts             # Lógica de negócio relacionada a usuários
-├── auth.service.ts             # Lógica de autenticação
-├── payment.service.ts          # Integração com Stripe, etc.
-└── notification.service.ts     # Emails transacionais, push, etc.
-```
-
-**Regra:** Services contêm lógica de negócio reutilizável e testável. Não devem depender de contextos React. Server Actions chamam services, não o contrário.
-
----
-
 ## 7. Server vs. Client Components
 
 ### Quando usar Server Component (padrão)
@@ -199,25 +224,30 @@ src/services/
 - Redução de JavaScript enviado ao cliente
 
 ### Quando usar `"use client"`
-- Usa `useState`, `useEffect`, `useRef`, `useContext`
+- Usa `useState`, `useEffect`, `useRef`, `useContext`, `use()`
 - Precisa de event handlers (`onClick`, `onChange`, etc.)
 - Usa APIs do browser (`window`, `document`, `localStorage`)
 - Usa bibliotecas que dependem do browser
+
+### Quando usar `"use server"` (Server Actions)
+- Mutations e formulários (substituem endpoints REST para operações simples)
+- Chamadas que precisam de acesso a segredos do servidor
+- Operações pós-submit que revalidam o cache
 
 **Regra de ouro:** Mantenha o topo da árvore de componentes no servidor. Empurre Client Components para as "folhas" da árvore — o mais profundo possível.
 
 ```tsx
 // ✅ CORRETO — Client Component apenas onde necessário
 // src/app/(dashboard)/dashboard/page.tsx — SERVER
-import { StatsCard } from './_components/stats-card'  // SERVER
-import { InteractiveChart } from './_components/interactive-chart'  // CLIENT
+import { StatsCard } from './_components/stats-card'     // SERVER
+import { InteractiveChart } from './_components/interactive-chart' // CLIENT
 
 export default async function DashboardPage() {
-  const data = await fetchDashboardData()  // fetch direto no servidor
+  const data = await fetchDashboardData()
   return (
     <div>
-      <StatsCard data={data.stats} />       {/* sem JS no cliente */}
-      <InteractiveChart data={data.chart} /> {/* "use client" dentro */}
+      <StatsCard data={data.stats} />
+      <InteractiveChart data={data.chart} />
     </div>
   )
 }
@@ -225,43 +255,159 @@ export default async function DashboardPage() {
 
 ---
 
-## 8. Padrão para Data Fetching (Loaders)
+## 8. ⚠️ Caching — Mudanças Críticas (Next.js 15 e 16)
+
+> Esta é a área com mais mudanças em relação a versões anteriores. Não use padrões do Next.js 13/14 aqui.
+
+### Evolução do caching
+
+| Versão | Comportamento padrão do `fetch` |
+|--------|----------------------------------|
+| Next.js 14 | Cacheado por padrão (`force-cache`) |
+| Next.js 15 | **Não cacheado por padrão** (`no-store`) |
+| Next.js 16 | Dinâmico por padrão; cache totalmente opt-in via `"use cache"` |
+
+### Next.js 15 — Opt-in explícito no fetch
+
+```ts
+// ❌ NÃO mais cacheado automaticamente (Next.js 15+)
+const res = await fetch('https://api.example.com/products')
+
+// ✅ Cache explícito com tags para revalidação
+const res = await fetch('https://api.example.com/products', {
+  next: { tags: ['products'], revalidate: 3600 }
+})
+```
+
+### Next.js 16 — Diretiva `"use cache"` (Cache Components)
+
+Com `cacheComponents: true` em `next.config.ts`, todo código é dinâmico por padrão. Cache deve ser declarado explicitamente:
+
+```ts
+// next.config.ts
+const nextConfig = {
+  experimental: {
+    cacheComponents: true,  // habilita o novo modelo de cache
+  }
+}
+```
+
+```tsx
+// Cachear um Server Component inteiro
+'use cache'
+import { cacheLife, cacheTag } from 'next/cache'
+
+export default async function ProductList() {
+  cacheLife('hours')          // perfil de duração: seconds | minutes | hours | days | weeks
+  cacheTag('products')        // tag para revalidação via revalidateTag()
+  const products = await db.product.findMany()
+  return <ul>{products.map(p => <li key={p.id}>{p.name}</li>)}</ul>
+}
+```
+
+```ts
+// Cachear uma função de data fetching (substitui react/cache + unstable_cache)
+'use cache'
+import { cacheTag } from 'next/cache'
+
+export async function getProducts() {
+  cacheTag('products')
+  return db.product.findMany()
+}
+```
+
+```ts
+// Revalidar pelo tag (em Server Action ou Route Handler)
+import { revalidateTag } from 'next/cache'
+
+export async function updateProductAction() {
+  await db.product.update(...)
+  revalidateTag('products')       // invalida tudo com tag 'products'
+}
+```
+
+### Quando usar cada API de cache
+
+| Situação | API recomendada |
+|----------|-----------------|
+| Cache Components habilitado (`cacheComponents: true`) | `"use cache"` + `cacheTag()` + `cacheLife()` |
+| Cache Components **não** habilitado | `unstable_cache` (ainda suportado) |
+| Cache de fetch HTTP | `fetch(..., { next: { tags, revalidate } })` |
+| Dados que mudam a cada request | Nada — busque diretamente no componente |
+
+> **Nota:** `react/cache` ainda é útil para deduplicar requests dentro de um render cycle, mas não substitui cache persistente entre requests.
+
+---
+
+## 9. Padrão para Data Fetching (Loaders)
 
 ```
 src/app/(dashboard)/projects/
 ├── page.tsx                    # Server Component — usa o loader
 └── _lib/
-    ├── projects.loader.ts      # Data fetching com cache()
+    ├── projects.loader.ts      # Data fetching com "use cache" ou unstable_cache
     ├── projects.actions.ts     # Mutations com "use server"
     └── projects.schema.ts      # Validação Zod dos inputs
 ```
 
 ```ts
-// _lib/projects.loader.ts
-import { cache } from 'react'
+// _lib/projects.loader.ts — com Cache Components habilitado (Next.js 16)
+'use cache'
+import { cacheTag, cacheLife } from 'next/cache'
 
-export const getProjects = cache(async (userId: string) => {
-  // Acesso direto ao banco — apenas em Server Components
+export async function getProjects(userId: string) {
+  cacheTag(`projects-${userId}`)
+  cacheLife('minutes')
   return db.project.findMany({ where: { userId } })
-})
+}
+```
+
+```ts
+// _lib/projects.loader.ts — sem Cache Components (Next.js 15)
+import { unstable_cache } from 'next/cache'
+
+export const getProjects = unstable_cache(
+  async (userId: string) => db.project.findMany({ where: { userId } }),
+  ['projects'],
+  { tags: ['projects'], revalidate: 300 }
+)
 ```
 
 ```ts
 // _lib/projects.actions.ts
 'use server'
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import { createProjectSchema } from './projects.schema'
 
 export async function createProjectAction(formData: FormData) {
   const input = createProjectSchema.parse(Object.fromEntries(formData))
   await projectService.create(input)
-  revalidatePath('/projects')
+  revalidateTag('projects')
 }
 ```
 
 ---
 
-## 9. Convenções de Nomenclatura
+## 10. Turbopack (Padrão no Next.js 16)
+
+> Turbopack é agora o bundler padrão. Não é necessário nenhuma flag — ele é ativado automaticamente.
+
+```ts
+// next.config.ts — configurações opcionais do Turbopack
+const nextConfig = {
+  experimental: {
+    turbopackFileSystemCacheForDev: true, // cache de disco entre restarts (beta)
+  }
+}
+```
+
+- Webpack ainda é suportado, mas requer configuração explícita.
+- Se você tiver configurações customizadas de Webpack, migre gradualmente — consulte o guia de migração em `nextjs.org/docs/app/api-reference/config/next-config-js/turbopack`.
+- **Não adicione** `--turbo` ao script `dev` — é desnecessário e foi removido como flag.
+
+---
+
+## 11. Convenções de Nomenclatura
 
 | Tipo                     | Convenção               | Exemplo                        |
 |--------------------------|-------------------------|--------------------------------|
@@ -276,10 +422,11 @@ export async function createProjectAction(formData: FormData) {
 | Pastas de rota           | kebab-case              | `user-settings/`               |
 | Pastas privadas          | underscore prefix       | `_components/`, `_lib/`        |
 | Route Groups             | parentheses             | `(auth)/`, `(dashboard)/`      |
+| Feature modules          | kebab-case              | `features/user-profile/`       |
 
 ---
 
-## 10. Variáveis de Ambiente
+## 12. Variáveis de Ambiente
 
 ```bash
 # Prefixo NEXT_PUBLIC_ — exposto ao browser
@@ -292,11 +439,24 @@ STRIPE_SECRET_KEY=sk_...
 NEXTAUTH_SECRET=...
 ```
 
-**Regra:** Nunca expor segredos com `NEXT_PUBLIC_`. Validar todas as env vars na inicialização usando Zod em `src/lib/env.ts`.
+**Regra:** Nunca expor segredos com `NEXT_PUBLIC_`. Validar todas as env vars na inicialização com Zod em `src/lib/env.ts`:
+
+```ts
+// src/lib/env.ts
+import { z } from 'zod'
+
+const envSchema = z.object({
+  DATABASE_URL: z.string().url(),
+  STRIPE_SECRET_KEY: z.string().min(1),
+  NEXT_PUBLIC_APP_URL: z.string().url(),
+})
+
+export const env = envSchema.parse(process.env)
+```
 
 ---
 
-## 11. Caminhos de Import (Path Aliases)
+## 13. Caminhos de Import (Path Aliases)
 
 Configure no `tsconfig.json`:
 
@@ -315,7 +475,8 @@ Configure no `tsconfig.json`:
 ```ts
 // ✅ Correto
 import { Button } from '@/components/ui/button'
-import { getProjects } from '@/services/project.service'
+import { getProjects } from '@/features/projects'
+import { env } from '@/lib/env'
 
 // ❌ Evitar
 import { Button } from '../../../components/ui/button'
@@ -323,8 +484,42 @@ import { Button } from '../../../components/ui/button'
 
 ---
 
-## 12. O Que Não Fazer
+## 14. React 19 — Novidades Relevantes
 
+> Next.js 16 requer React 19.2+. Conheça as APIs que mudam padrões comuns.
+
+```tsx
+// hook use() — lê Promises e Context diretamente
+import { use } from 'react'
+
+function UserName({ userPromise }: { userPromise: Promise<User> }) {
+  const user = use(userPromise) // suspende automaticamente
+  return <span>{user.name}</span>
+}
+
+// View Transitions — animações nativas entre navegações
+import { unstable_ViewTransition as ViewTransition } from 'react'
+
+<ViewTransition>
+  <PageContent />
+</ViewTransition>
+
+// <Activity /> — mantém estado de componentes "ocultos" (tabs, modais)
+import { unstable_Activity as Activity } from 'react'
+
+<Activity mode={isVisible ? 'visible' : 'hidden'}>
+  <HeavyComponent />
+</Activity>
+```
+
+---
+
+## 15. O Que Não Fazer
+
+- ❌ Nunca usar o comportamento de cache automático do Next.js 14 (não existe mais no 15/16)
+- ❌ Nunca usar `react/cache` como substituto de cache persistente entre requests
+- ❌ Nunca colocar `"use cache"` em Client Components — funciona apenas em Server Components e funções de servidor
+- ❌ Nunca criar `middleware.ts` em Next.js 16 — use `proxy.ts` no lugar
 - ❌ Nunca colocar lógica de negócio diretamente em `page.tsx` — extraia para `_lib/` ou `services/`
 - ❌ Nunca usar `"use client"` no root layout ou em layouts de nível alto
 - ❌ Nunca importar código de servidor (db, fs, segredos) dentro de Client Components
@@ -333,10 +528,11 @@ import { Button } from '../../../components/ui/button'
 - ❌ Nunca colocar arquivos de configuração dentro de `src/`
 - ❌ Nunca criar uma pasta `pages/` se usar App Router (conflito)
 - ❌ Nunca fazer fetch de dados dentro de Client Components quando pode ser feito no servidor
+- ❌ Nunca adicionar flag `--turbo` ao script dev no Next.js 16 — é desnecessário
 
 ---
 
-## 13. Resumo: Onde Fica Cada Coisa
+## 16. Resumo: Onde Fica Cada Coisa
 
 | O que é                          | Onde fica                                          |
 |----------------------------------|----------------------------------------------------|
@@ -345,18 +541,21 @@ import { Button } from '../../../components/ui/button'
 | API endpoint                     | `src/app/api/recurso/route.ts`                     |
 | Componente exclusivo de uma rota | `src/app/.../rota/_components/`                    |
 | Lógica exclusiva de uma rota     | `src/app/.../rota/_lib/`                           |
-| Componente usado em 2+ rotas     | `src/components/`                                  |
-| Hook customizado                 | `src/hooks/use-nome.ts`                            |
+| Componente usado em 2+ rotas     | `src/components/` ou `src/features/<dom>/components/` |
+| Lógica de domínio reutilizável   | `src/features/<domínio>/`                          |
+| Hook customizado global          | `src/hooks/use-nome.ts`                            |
 | Lógica de negócio reutilizável   | `src/services/nome.service.ts`                     |
 | Utilitários e helpers            | `src/lib/utils.ts` ou `src/lib/nome/`              |
 | Schemas de validação             | `src/lib/validations/` ou junto à rota (`_lib/`)   |
+| Validação de env vars            | `src/lib/env.ts`                                   |
 | Estado global                    | `src/stores/`                                      |
 | Tipos globais                    | `src/types/`                                       |
 | Configuração de libs externas    | `src/lib/nome-da-lib/`                             |
 | Assets estáticos                 | `public/`                                          |
 | Variáveis de ambiente            | `.env.local` (raiz)                                |
 | Configurações do framework       | Raiz do projeto (`next.config.ts`, `tsconfig.json`)|
+| Lógica de proxy/rede (Next.js 16)| `proxy.ts` (raiz)                                  |
 
 ---
 
-*Fontes: [Next.js Docs — Project Structure](https://nextjs.org/docs/app/getting-started/project-structure) · [Next.js Docs — Colocation](https://nextjs.org/docs/14/app/building-your-application/routing/colocation) · Makerkit Production Patterns · Vercel Best Practices 2025*
+*Fontes: [Next.js Docs](https://nextjs.org/docs/app/getting-started/project-structure) · [Next.js 16 Release](https://nextjs.org/blog/next-16) · [Caching Guide](https://nextjs.org/docs/app/guides/caching-without-cache-components) · [unstable_cache API](https://nextjs.org/docs/app/api-reference/functions/unstable_cache)*
