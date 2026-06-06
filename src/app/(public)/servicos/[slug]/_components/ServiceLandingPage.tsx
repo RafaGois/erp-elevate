@@ -60,6 +60,18 @@ const PAIN_ICONS = [ScanSearch, Layers, AlertTriangle] as const;
 const BENEFIT_ICONS = [Sparkles, Workflow, LayoutDashboard, TrendingUp] as const;
 const CAP_ICONS = [Globe, Lock, Monitor, Link2, ShieldCheck, Zap] as const;
 
+function TrustMarqueeGroup({ items }: { items: string[] }) {
+  return (
+    <div className="slp-trust__group" aria-hidden>
+      {items.map((item, index) => (
+        <span key={`${item}-${index}`}>
+          <span className="slp-trust__star">★</span> {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function WhatsappButton({
   children,
   size,
@@ -204,16 +216,12 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 02 Trust bar */}
+      {/* 02 Trust bar — marquee infinito */}
       <div className="slp-trust" data-slp-reveal>
-        <ul className="slp-trust__list">
-          {data.trustBar.map((item) => (
-            <li key={item} className="slp-trust__item">
-              <Check className="size-3.5" aria-hidden />
-              {item}
-            </li>
-          ))}
-        </ul>
+        <div className="slp-trust__track">
+          <TrustMarqueeGroup items={data.trustBar} />
+          <TrustMarqueeGroup items={data.trustBar} />
+        </div>
       </div>
 
       {/* 03 Problema */}
