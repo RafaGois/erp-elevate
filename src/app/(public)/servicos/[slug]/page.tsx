@@ -3,6 +3,11 @@ import {
   getServiceBySlug,
   type ServiceSection,
 } from "@/lib/data/services";
+import {
+  getAllServiceLandingSlugs,
+  getServiceLandingBySlug,
+} from "@/lib/data/service-landings";
+import ServiceLandingPage from "./_components/ServiceLandingPage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -10,11 +15,22 @@ import { ArrowLeft } from "lucide-react";
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getAllServiceSlugs().map((slug) => ({ slug }));
+  const slugs = new Set([
+    ...getAllServiceSlugs(),
+    ...getAllServiceLandingSlugs(),
+  ]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
+  const landing = getServiceLandingBySlug(slug);
+  if (landing) {
+    return {
+      title: landing.meta.title,
+      description: landing.meta.description,
+    };
+  }
   const service = getServiceBySlug(slug);
   if (!service) return { title: "Serviço não encontrado" };
   return {
@@ -56,8 +72,7 @@ function SectionBlock({ section }: { section: ServiceSection }) {
   return null;
 }
 
-export default async function ServicePage({ params }: Props) {
-  const { slug } = await params;
+function LegacyServicePage({ slug }: { slug: string }) {
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
@@ -101,4 +116,15 @@ export default async function ServicePage({ params }: Props) {
       </div>
     </div>
   );
+}
+
+export default async function ServicePage({ params }: Props) {
+  const { slug } = await params;
+  const landing = getServiceLandingBySlug(slug);
+
+  if (landing) {
+    return <ServiceLandingPage data={landing} />;
+  }
+
+  return <LegacyServicePage slug={slug} />;
 }

@@ -1,13 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Menu as MenuIcon, X } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Menu as MenuIcon, X } from "lucide-react";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
-import MenuItem from "./MenuItem";
-import "./menu.css";
+import MenuItem from "@/components/landing/hero/MenuItem";
+import "@/components/landing/hero/menu.css";
+import "./service-landing-menu.css";
 
 const fontDisplay = DotGothic16({
   weight: "400",
@@ -23,15 +23,13 @@ const fontPixel = Press_Start_2P({
   display: "swap",
 });
 
-const COMPANY_LOGO =
-  "https://res.cloudinary.com/dn454izoh/image/upload/v1755007271/IMG_0854_zii4ia.png";
-
-const menuLinks = [
-  { key: "about-us", label: "Sobre nós", href: "#about-us" },
-  { key: "services", label: "Serviços", href: "#services" },
-  { key: "problemas", label: "Problemas", href: "#problemas" },
-  { key: "clients", label: "Clientes", href: "#clients" },
-  { key: "contact", label: "Contato", href: "#contact" },
+const SERVICE_NAV_LINKS = [
+  { key: "problema", label: "Problema", href: "#problema" },
+  { key: "solucao", label: "Solução", href: "#solucao" },
+  { key: "como-funciona", label: "Processo", href: "#como-funciona" },
+  { key: "cases", label: "Cases", href: "#cases" },
+  { key: "faq", label: "FAQ", href: "#faq" },
+  { key: "contato", label: "Contato", href: "#contato" },
 ] as const;
 
 const socialLinks = [
@@ -47,19 +45,18 @@ function scrollToSection(id: string) {
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** Duração da animação de saída do overlay (menu.css) */
 const MENU_CLOSE_MS = 400;
-
 const SCROLL_HIDE_THRESHOLD = 48;
 const SCROLL_DELTA_MIN = 8;
 
-type MenuProps = {
-  /** Prefixo para links de âncora em subpáginas (ex. "/" → "/#services"). */
-  homePrefix?: string;
+type Props = {
+  /** Título exibido no centro da pill em mobile */
+  title?: string;
 };
 
-export default function Menu({ homePrefix = "" }: MenuProps) {
-  const isSubpage = homePrefix.length > 0;
+export default function ServiceLandingMenu({
+  title = "Presença Digital",
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
@@ -84,24 +81,15 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
     else openMenu();
   }, [isOpen, closeMenu, openMenu]);
 
-  const resolveHref = useCallback(
-    (href: string) => `${homePrefix}${href}`,
-    [homePrefix],
-  );
-
   const navigateTo = useCallback(
-    (link: (typeof menuLinks)[number]) => {
+    (link: (typeof SERVICE_NAV_LINKS)[number]) => {
       closeMenu();
       window.setTimeout(() => {
-        if (isSubpage) {
-          window.location.assign(resolveHref(link.href));
-          return;
-        }
         scrollToSection(link.key);
         window.history.replaceState(null, "", link.href);
       }, MENU_CLOSE_MS);
     },
-    [closeMenu, isSubpage, resolveHref],
+    [closeMenu],
   );
 
   useEffect(() => {
@@ -181,64 +169,45 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
 
   return (
     <header
-      className={`landing-menu ${fontDisplay.variable} ${fontPixel.variable}`}
+      className={`landing-menu slp-menu ${fontDisplay.variable} ${fontPixel.variable}`}
     >
       <div
         className={`landing-menu__header ${headerHidden ? "is-hidden" : ""}`}
       >
-        <nav className="landing-menu__pill" aria-label="Navegação principal">
-          <Link
-            href={isSubpage ? "/" : "#hero"}
-            className="landing-menu__logo"
-          >
-            <Image
-              src={COMPANY_LOGO}
-              alt="Elevate"
-              width={120}
-              height={36}
-              className="landing-menu__logo-img"
-              priority
-            />
+        <nav
+          className="landing-menu__pill slp-menu__pill"
+          aria-label="Navegação da página de serviço"
+        >
+          <Link href="/#services" className="slp-menu__back">
+            <ArrowLeft size={16} aria-hidden />
+            <span>Voltar</span>
           </Link>
 
-          <div className="landing-menu__links">
-            {menuLinks.map((link) =>
-              isSubpage ? (
-                <Link
-                  key={link.key}
-                  href={resolveHref(link.href)}
-                  className="landing-menu__link"
-                >
-                  {link.label}
-                </Link>
-              ) : (
-                <a
-                  key={link.key}
-                  href={link.href}
-                  className="landing-menu__link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.key);
-                    window.history.replaceState(null, "", link.href);
-                  }}
-                >
-                  {link.label}
-                </a>
-              ),
-            )}
+          <div className="landing-menu__links slp-menu__links">
+            {SERVICE_NAV_LINKS.map((link) => (
+              <a
+                key={link.key}
+                href={link.href}
+                className="landing-menu__link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.key);
+                  window.history.replaceState(null, "", link.href);
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
 
-          <p className="landing-menu__center">Sistemas Elevate</p>
+          <p className="landing-menu__center">{title}</p>
 
-          <div className="landing-menu__end">
-            <Link href="/auth" className="landing-menu__cta">
-              Entrar
-            </Link>
+          <div className="slp-menu__end">
             <button
               type="button"
               className="landing-menu__toggle"
               aria-expanded={overlayActive}
-              aria-controls="landing-menu-overlay"
+              aria-controls="slp-menu-overlay"
               aria-label={overlayActive ? "Fechar menu" : "Abrir menu"}
               onClick={toggleMenu}
             >
@@ -249,7 +218,7 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
       </div>
 
       <div
-        id="landing-menu-overlay"
+        id="slp-menu-overlay"
         className={`landing-menu__overlay ${isOpen ? "is-open" : ""} ${isClosing ? "is-closing" : ""}`}
         aria-hidden={!overlayActive}
       >
@@ -267,7 +236,7 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
         </div>
 
         <nav className="landing-menu__overlay-nav" aria-label="Menu mobile">
-          {menuLinks.map((link, i) => (
+          {SERVICE_NAV_LINKS.map((link, i) => (
             <MenuItem
               key={link.key}
               link={link}
@@ -278,7 +247,15 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
         </nav>
 
         <div className="landing-menu__overlay-footer">
-          <div className="landing-menu__footer-actions">
+          <div className="landing-menu__footer-actions slp-menu__footer">
+            <Link
+              href="/#services"
+              className="landing-menu__social-link"
+              onClick={closeMenu}
+            >
+              Voltar aos serviços
+              <ArrowUpRight size={12} aria-hidden />
+            </Link>
             <div className="landing-menu__social">
               {socialLinks.map((item) => (
                 <Link
@@ -287,19 +264,13 @@ export default function Menu({ homePrefix = "" }: MenuProps) {
                   className="landing-menu__social-link"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={closeMenu}
                 >
                   {item.label}
                   <ArrowUpRight size={12} aria-hidden />
                 </Link>
               ))}
             </div>
-            <Link
-              href="/auth"
-              className="landing-menu__overlay-cta"
-              onClick={closeMenu}
-            >
-              Entrar
-            </Link>
           </div>
         </div>
       </div>

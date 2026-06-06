@@ -1,0 +1,82 @@
+/* Menu da LP de serviço — pill da landing + voltar + nav interna */
+
+.slp-menu__pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-block: 0.9rem;
+  padding-inline: 1.15rem;
+}
+
+@media (min-width: 768px) {
+  .slp-menu__pill {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+
+  .slp-menu__back {
+    grid-column: 1;
+  }
+
+  .slp-menu__links {
+    grid-column: 2;
+  }
+
+  .slp-menu__end {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+
+.slp-menu__back {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--menu-muted, #a8a29e);
+  transition: color 0.2s;
+}
+
+.slp-menu__back:hover {
+  color: var(--menu-accent, #dfff00);
+}
+
+.slp-menu__back span {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .slp-menu__back span {
+    display: inline;
+  }
+}
+
+.slp-menu__links {
+  gap: clamp(0.75rem, 2vw, 1.35rem) !important;
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .slp-menu__links .landing-menu__link {
+    font-size: 0.62rem;
+    letter-spacing: 0.12rem;
+  }
+}
+
+.slp-menu__end {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.slp-menu__footer {
+  flex-wrap: wrap;
+  justify-content: flex-start !important;
+  gap: 0.75rem !important;
+}

@@ -51,7 +51,12 @@ function MarqueeGroup() {
   );
 }
 
-export default function Footer() {
+type FooterProps = {
+  /** Prefixo para os links de âncora. Use "/" em subpáginas para resolver na home. */
+  homePrefix?: string;
+};
+
+export default function Footer({ homePrefix = "" }: FooterProps) {
   return (
     <footer
       id="contact"
@@ -64,7 +69,7 @@ export default function Footer() {
         <div className="ft__main">
           {/* Brand */}
           <div className="ft__brand">
-            <Link href="#hero" className="ft__logo">
+            <Link href={`${homePrefix}#hero`} className="ft__logo">
               <Image
                 src={COMPANY_LOGO}
                 alt="Sistemas Elevate"
@@ -95,7 +100,7 @@ export default function Footer() {
             <ul className="ft__nav-list">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="ft__nav-link">
+                  <Link href={`${homePrefix}${link.href}`} className="ft__nav-link">
                     {link.label}
                   </Link>
                 </li>
