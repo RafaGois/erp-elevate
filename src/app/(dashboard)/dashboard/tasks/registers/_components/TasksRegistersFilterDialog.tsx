@@ -26,7 +26,7 @@ import {
 import { DatePickerForm } from "@/components/layout/components/inputs/DatePickerForm";
 import { TASK_STATUS_OPTIONS, TaskStatus } from "@/types/enums/TaskStatus";
 import { TASK_PRIORITIES_OPTIONS, TaskPriorities } from "@/types/enums/TaskPriorities";
-import type { TasksRegistersFilterValues } from "./tasks-registers-filter-types";
+import type { TasksRegistersFilterValues } from "../_lib/tasks-registers-filter-types";
 
 function ToggleRow({
   id,

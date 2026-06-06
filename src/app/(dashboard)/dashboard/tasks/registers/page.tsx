@@ -28,12 +28,12 @@ import { TasksRegistersFilterDialog } from "./_components/TasksRegistersFilterDi
 import {
   getDefaultTasksRegistersFilters,
   type TasksRegistersFilterValues,
-} from "./_components/tasks-registers-filter-types";
+} from "./_lib/tasks-registers-filter-types";
 import {
   TASKS_REGISTERS_FILTERS_STORAGE_KEY,
   loadTasksRegistersFiltersInitial,
   serializeTasksRegistersFilters,
-} from "./_components/tasks-registers-filter-storage";
+} from "./_lib/tasks-registers-filter-storage";
 
 const viewModeStorageKey = "tasks-registers-view-mode";
 const unassignedResponsibleId = "__unassigned__";

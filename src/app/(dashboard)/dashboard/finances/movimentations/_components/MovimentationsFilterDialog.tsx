@@ -21,7 +21,7 @@ import MovimentationType from "@/types/enums/MovimentationType";
 import type User from "@/types/models/User";
 import type BankAccount from "@/types/models/movimentations/BankAccount";
 import type MovimentationCategory from "@/types/models/movimentations/Category";
-import type { MovimentationsFilterValues } from "./movimentations-filter-types";
+import type { MovimentationsFilterValues } from "../_lib/movimentations-filter-types";
 
 const TYPE_OPTIONS: { id: MovimentationType; label: string }[] = [
   { id: MovimentationType.ENTRADA, label: "Entrada" },

@@ -8,7 +8,7 @@ import { Toaster } from "../ui/sonner";
 
 import useAuth from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import "./dashboard-content.css";
+import "@/styles/dashboard-content.css";
 
 export default function Content(props: { children: React.ReactNode }) {
   const { reloading } = useAppData();

@@ -30,12 +30,12 @@ import User from "@/types/models/User";
 import BankAccount from "@/types/models/movimentations/BankAccount";
 import MovimentationCategory from "@/types/models/movimentations/Category";
 import { MovimentationsFilterDialog } from "./_components/MovimentationsFilterDialog";
-import type { MovimentationsFilterValues } from "./_components/movimentations-filter-types";
+import type { MovimentationsFilterValues } from "./_lib/movimentations-filter-types";
 import {
   MOVIMENTATIONS_FILTERS_STORAGE_KEY,
   parseMovimentationsFiltersFromStorage,
   serializeMovimentationsFilters,
-} from "./_components/movimentations-filter-storage";
+} from "./_lib/movimentations-filter-storage";
 
 function getDefaultMovimentationFilters(): MovimentationsFilterValues {
   return {

@@ -1,4 +1,4 @@
-import DashboardLayoutClient from "./DashboardLayoutClient";
+import DashboardLayoutClient from "./dashboard/_components/DashboardLayoutClient";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

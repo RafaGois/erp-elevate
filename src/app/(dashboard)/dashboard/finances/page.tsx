@@ -20,7 +20,7 @@ import {
   useRecent,
   useRevenueByCategory,
   useSummary,
-} from "./_hooks/useFinanceDashboard";
+} from "./_lib/use-finance-dashboard";
 import KpiCard from "./_components/KpiCard";
 import FinancePanelCard from "./_components/FinancePanelCard";
 import AlertsList from "./_components/AlertsList";
