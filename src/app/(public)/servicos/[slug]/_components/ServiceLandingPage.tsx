@@ -4,6 +4,7 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ServiceLandingMenu from "./ServiceLandingMenu";
+import HeroBackgroundVideo from "./HeroBackgroundVideo";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -171,7 +172,7 @@ export default function ServiceLandingPage({ data }: Props) {
         "slp",
         fontDisplay.variable,
         fontPixel.variable,
-        data.hero.backgroundImage && "slp--hero-image",
+        (data.hero.backgroundVideo || data.hero.backgroundImage) && "slp--hero-image",
       )}
     >
       <div className="slp__scanlines" aria-hidden />
@@ -186,10 +187,11 @@ export default function ServiceLandingPage({ data }: Props) {
         id="inicio"
         className={cn(
           "slp-section slp-hero",
-          data.hero.backgroundImage && "slp-hero--image",
+          (data.hero.backgroundVideo || data.hero.backgroundImage) && "slp-hero--media",
+          data.hero.backgroundVideo && "slp-hero--video",
         )}
         style={
-          data.hero.backgroundImage
+          data.hero.backgroundImage && !data.hero.backgroundVideo
             ? ({
                 "--slp-hero-bg": `url("${data.hero.backgroundImage}")`,
               } as CSSProperties)
@@ -197,6 +199,12 @@ export default function ServiceLandingPage({ data }: Props) {
         }
         aria-labelledby="slp-hero-title"
       >
+        {data.hero.backgroundVideo ? (
+          <HeroBackgroundVideo
+            src={data.hero.backgroundVideo}
+            poster={data.hero.backgroundImage}
+          />
+        ) : null}
         <div className="slp-wrap slp-hero__content">
           <div className="slp-hero__inner" data-slp-reveal>
             <span className="slp-hero__badge">{data.hero.badge}</span>

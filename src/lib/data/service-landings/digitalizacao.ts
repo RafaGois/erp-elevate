@@ -23,6 +23,7 @@ export const digitalizacaoLanding: ServiceLandingPage = {
     primaryCta: "Falar no WhatsApp",
     secondaryCta: "Ver como funciona",
     backgroundImage: "/fundo.jpeg",
+    backgroundVideo: "/ASCII_vegetation_growing_digitally_202606062000.mp4",
     terminalLabel: "PRESENCE.STATUS",
     terminalLines: [
       "$ patrimonio_digital ........ em construção",

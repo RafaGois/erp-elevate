@@ -20,8 +20,10 @@ export type ServiceLandingPage = {
     secondaryCta: string;
     terminalLabel: string;
     terminalLines: string[];
-    /** Caminho público da imagem de fundo do hero (ex. /fundo.jpeg) */
+    /** Caminho público da imagem de fundo ou poster do vídeo (ex. /fundo.jpeg) */
     backgroundImage?: string;
+    /** Caminho público do vídeo de fundo do hero (ex. /video.mp4) */
+    backgroundVideo?: string;
   };
   trustBar: string[];
   problem: {
