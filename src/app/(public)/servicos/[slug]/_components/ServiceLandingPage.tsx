@@ -668,11 +668,11 @@ export default function ServiceLandingPage({ data }: Props) {
                         i === featuredCompareCol && "slp-compare__col--featured",
                       )}
                     >
+                      {i === featuredCompareCol ? (
+                        <span className="slp-compare__col-tag">★ recomendado</span>
+                      ) : null}
                       <span className="slp-compare__col-head">
                         <span className="slp-compare__col-name">{col}</span>
-                        {i === featuredCompareCol ? (
-                          <span className="slp-compare__col-tag">★ recomendado</span>
-                        ) : null}
                       </span>
                     </th>
                   ))}
