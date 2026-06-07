@@ -139,8 +139,26 @@ type Props = {
   data: ServiceLandingPage;
 };
 
+function getFeaturedCompareColumnIndex(columns: string[]) {
+  const idx = columns.findIndex((col) => /elevate/i.test(col));
+  return idx >= 0 ? idx : columns.length - 1;
+}
+
+function splitCtaHeadline(headline: string) {
+  const breakAt = headline.search(/[.!?]\s+/);
+  if (breakAt === -1) {
+    return { lead: headline, accent: null as string | null };
+  }
+  return {
+    lead: headline.slice(0, breakAt + 1),
+    accent: headline.slice(breakAt + 2).trim(),
+  };
+}
+
 export default function ServiceLandingPage({ data }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const featuredCompareCol = getFeaturedCompareColumnIndex(data.comparison.columns);
+  const ctaHeadline = splitCtaHeadline(data.finalCta.headline);
 
   useGSAP(
     () => {
@@ -474,10 +492,30 @@ export default function ServiceLandingPage({ data }: Props) {
       {/* 09 Para quem é */}
       <section
         id="para-quem"
-        className="slp-section slp-tx"
+        className="slp-section slp-tx slp-tx--transform"
         aria-labelledby="slp-audience-title"
       >
         <div className="slp-tx__bg" aria-hidden />
+        <div className="slp-tx__grid" aria-hidden />
+        <div className="slp-tx__scanlines" aria-hidden />
+        <div className="slp-tx__glow slp-tx__glow--red" aria-hidden />
+        <div className="slp-tx__glow slp-tx__glow--green" aria-hidden />
+        <div className="slp-tx__rule slp-tx__rule--top" aria-hidden />
+        <div className="slp-tx__rule slp-tx__rule--bottom" aria-hidden />
+        <span className="slp-tx__watermark slp-tx__watermark--before" aria-hidden>
+          NAO
+        </span>
+        <span className="slp-tx__watermark slp-tx__watermark--after" aria-hidden>
+          SIM
+        </span>
+        <span className="slp-tx__corner slp-tx__corner--bl" aria-hidden />
+        <span className="slp-tx__corner slp-tx__corner--tr" aria-hidden />
+        <span className="slp-tx__tag slp-tx__tag--left" aria-hidden>
+          NOT_FOR
+        </span>
+        <span className="slp-tx__tag slp-tx__tag--right" aria-hidden>
+          FOR_YOU
+        </span>
         <div className="slp-wrap slp-tx__wrap">
           <div className="slp-head slp-head--center slp-tx__head" data-slp-reveal>
             <span className="slp-kicker">{data.audience.kicker}</span>
@@ -587,8 +625,29 @@ export default function ServiceLandingPage({ data }: Props) {
       </section>
 
       {/* 11 Comparativo */}
-      <section className="slp-section" aria-labelledby="slp-compare-title">
-        <div className="slp-wrap">
+      <section
+        className="slp-section slp-compare-fold"
+        aria-labelledby="slp-compare-title"
+      >
+        <div className="slp-compare-fold__bg" aria-hidden />
+        <div className="slp-compare-fold__grid" aria-hidden />
+        <div className="slp-compare-fold__scanlines" aria-hidden />
+        <div className="slp-compare-fold__glow slp-compare-fold__glow--muted" aria-hidden />
+        <div className="slp-compare-fold__glow slp-compare-fold__glow--lime" aria-hidden />
+        <div className="slp-compare-fold__rule slp-compare-fold__rule--top" aria-hidden />
+        <div className="slp-compare-fold__rule slp-compare-fold__rule--bottom" aria-hidden />
+        <span className="slp-compare-fold__watermark" aria-hidden>
+          VS
+        </span>
+        <span className="slp-compare-fold__corner slp-compare-fold__corner--tl" aria-hidden />
+        <span className="slp-compare-fold__corner slp-compare-fold__corner--br" aria-hidden />
+        <span className="slp-compare-fold__tag slp-compare-fold__tag--left" aria-hidden>
+          ALT_OPTS
+        </span>
+        <span className="slp-compare-fold__tag slp-compare-fold__tag--right" aria-hidden>
+          BEST_PICK
+        </span>
+        <div className="slp-wrap slp-compare-fold__wrap">
           <div className="slp-head slp-head--center" data-slp-reveal>
             <span className="slp-kicker">{data.comparison.kicker}</span>
             <h2 id="slp-compare-title" className="slp-title">
@@ -601,9 +660,20 @@ export default function ServiceLandingPage({ data }: Props) {
               <thead>
                 <tr>
                   <th scope="col">Critério</th>
-                  {data.comparison.columns.map((col) => (
-                    <th key={col} scope="col">
-                      {col}
+                  {data.comparison.columns.map((col, i) => (
+                    <th
+                      key={col}
+                      scope="col"
+                      className={cn(
+                        i === featuredCompareCol && "slp-compare__col--featured",
+                      )}
+                    >
+                      <span className="slp-compare__col-head">
+                        <span className="slp-compare__col-name">{col}</span>
+                        {i === featuredCompareCol ? (
+                          <span className="slp-compare__col-tag">★ recomendado</span>
+                        ) : null}
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -613,7 +683,12 @@ export default function ServiceLandingPage({ data }: Props) {
                   <tr key={row.label}>
                     <td>{row.label}</td>
                     {row.values.map((val, i) => (
-                      <td key={`${row.label}-${i}`}>
+                      <td
+                        key={`${row.label}-${i}`}
+                        className={cn(
+                          i === featuredCompareCol && "slp-compare__col--featured",
+                        )}
+                      >
                         <ComparisonCell value={val} />
                       </td>
                     ))}
@@ -626,8 +701,30 @@ export default function ServiceLandingPage({ data }: Props) {
       </section>
 
       {/* 12 FAQ */}
-      <section id="faq" className="slp-section" aria-labelledby="slp-faq-title">
-        <div className="slp-wrap">
+      <section
+        id="faq"
+        className="slp-section slp-faq-fold"
+        aria-labelledby="slp-faq-title"
+      >
+        <div className="slp-faq-fold__bg" aria-hidden />
+        <div className="slp-faq-fold__grid" aria-hidden />
+        <div className="slp-faq-fold__scanlines" aria-hidden />
+        <div className="slp-faq-fold__glow slp-faq-fold__glow--lime" aria-hidden />
+        <div className="slp-faq-fold__glow slp-faq-fold__glow--em" aria-hidden />
+        <div className="slp-faq-fold__rule slp-faq-fold__rule--top" aria-hidden />
+        <div className="slp-faq-fold__rule slp-faq-fold__rule--bottom" aria-hidden />
+        <span className="slp-faq-fold__watermark" aria-hidden>
+          FAQ
+        </span>
+        <span className="slp-faq-fold__corner slp-faq-fold__corner--tl" aria-hidden />
+        <span className="slp-faq-fold__corner slp-faq-fold__corner--br" aria-hidden />
+        <span className="slp-faq-fold__tag slp-faq-fold__tag--left" aria-hidden>
+          HELP_SYS
+        </span>
+        <span className="slp-faq-fold__tag slp-faq-fold__tag--right" aria-hidden>
+          ANSWERS
+        </span>
+        <div className="slp-wrap slp-faq-fold__wrap">
           <div className="slp-head slp-head--center" data-slp-reveal>
             <span className="slp-kicker">{data.faq.kicker}</span>
             <h2 id="slp-faq-title" className="slp-title">
@@ -673,22 +770,73 @@ export default function ServiceLandingPage({ data }: Props) {
       {/* 13 CTA final */}
       <section
         id="contato"
-        className="slp-section slp-final"
+        className="slp-section slp-final-fold"
         aria-labelledby="slp-final-title"
       >
-        <div className="slp-wrap" data-slp-reveal>
-          <span className="slp-kicker">{data.finalCta.kicker}</span>
-          <h2 id="slp-final-title" className="slp-title">
-            {data.finalCta.headline}
-          </h2>
-          <p className="slp-subtitle">{data.finalCta.subheadline}</p>
-          <div
-            className="slp-hero__actions"
-            style={{ justifyContent: "center", marginTop: "2rem" }}
-          >
-            <WhatsappButton size="lg">{data.finalCta.cta}</WhatsappButton>
+        <div className="slp-final-fold__bg" aria-hidden />
+        <div className="slp-final-fold__grid" aria-hidden />
+        <div className="slp-final-fold__scanlines" aria-hidden />
+        <div className="slp-final-fold__glow slp-final-fold__glow--lime" aria-hidden />
+        <div className="slp-final-fold__glow slp-final-fold__glow--em" aria-hidden />
+        <div className="slp-final-fold__rule slp-final-fold__rule--top" aria-hidden />
+        <div className="slp-final-fold__rule slp-final-fold__rule--bottom" aria-hidden />
+        <span className="slp-final-fold__watermark" aria-hidden>
+          GO
+        </span>
+        <span className="slp-final-fold__corner slp-final-fold__corner--tl" aria-hidden />
+        <span className="slp-final-fold__corner slp-final-fold__corner--tr" aria-hidden />
+        <span className="slp-final-fold__corner slp-final-fold__corner--bl" aria-hidden />
+        <span className="slp-final-fold__corner slp-final-fold__corner--br" aria-hidden />
+        <span className="slp-final-fold__tag slp-final-fold__tag--left" aria-hidden>
+          NEXT_STEP
+        </span>
+        <span className="slp-final-fold__tag slp-final-fold__tag--right" aria-hidden>
+          CONTACT
+        </span>
+
+        <div className="slp-wrap slp-final-fold__wrap">
+          <div className="slp-final-fold__gate" data-slp-reveal>
+            <svg
+              className="slp-final-fold__sonar"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="xMidYMid slice"
+              aria-hidden
+            >
+              {[0, 1, 2].map((i) => (
+                <circle
+                  key={i}
+                  className="slp-final-fold__sonar-ring"
+                  cx="50"
+                  cy="50"
+                  r="0"
+                />
+              ))}
+            </svg>
+
+            <div className="slp-final-fold__inner">
+              <span className="slp-final-fold__kicker">{data.finalCta.kicker}</span>
+
+              <h2 id="slp-final-title" className="slp-final-fold__title">
+                <span className="slp-final-fold__title-lead">{ctaHeadline.lead}</span>
+                {ctaHeadline.accent ? (
+                  <span className="slp-final-fold__title-accent">{ctaHeadline.accent}</span>
+                ) : null}
+              </h2>
+
+              <hr className="slp-final-fold__divider" aria-hidden />
+
+              <p className="slp-final-fold__subtitle">{data.finalCta.subheadline}</p>
+
+              <div className="slp-final-fold__actions">
+                <WhatsappButton size="lg">{data.finalCta.cta}</WhatsappButton>
+              </div>
+
+              <p className="slp-final-fold__trust">
+                <span className="slp-final-fold__trust-dot" aria-hidden />
+                {data.finalCta.riskReversal}
+              </p>
+            </div>
           </div>
-          <p className="slp-final__risk">{data.finalCta.riskReversal}</p>
         </div>
       </section>
 
