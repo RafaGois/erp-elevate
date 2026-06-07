@@ -26,7 +26,7 @@ const fontPixel = Press_Start_2P({
 const SERVICE_NAV_LINKS = [
   { key: "problema", label: "Problema", href: "#problema" },
   { key: "solucao", label: "Solução", href: "#solucao" },
-  { key: "como-funciona", label: "Processo", href: "#como-funciona" },
+  { key: "entregaveis", label: "Entregáveis", href: "#entregaveis" },
   { key: "cases", label: "Cases", href: "#cases" },
   { key: "faq", label: "FAQ", href: "#faq" },
   { key: "contato", label: "Contato", href: "#contato" },

@@ -6,7 +6,6 @@ import Link from "next/link";
 import ServiceLandingMenu from "./ServiceLandingMenu";
 import HeroBackgroundVideo from "./HeroBackgroundVideo";
 import DeliverablesSection from "./DeliverablesSection";
-import HowItWorksSection from "./HowItWorksSection";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -217,7 +216,7 @@ export default function ServiceLandingPage({ data }: Props) {
             <p className="slp-hero__proof">{data.hero.microProof}</p>
             <div className="slp-hero__actions">
               <WhatsappButton size="lg">{data.hero.primaryCta}</WhatsappButton>
-              <a href="#como-funciona" className="slp-btn slp-btn--lg slp-btn--outline">
+              <a href="#entregaveis" className="slp-btn slp-btn--lg slp-btn--outline">
                 {data.hero.secondaryCta}
                 <ArrowRight className="size-3.5" aria-hidden />
               </a>
@@ -354,10 +353,7 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 06 Como funciona */}
-      <HowItWorksSection howItWorks={data.howItWorks} />
-
-      {/* 07 Entregáveis — timeline scroll */}
+      {/* 06 Entregáveis — timeline scroll */}
       <DeliverablesSection deliverables={data.deliverables} />
 
       {/* 08 Capacidades */}
