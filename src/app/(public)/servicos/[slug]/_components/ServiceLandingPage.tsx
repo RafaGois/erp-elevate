@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ServiceLandingMenu from "./ServiceLandingMenu";
 import HeroBackgroundVideo from "./HeroBackgroundVideo";
-import Timeline2 from "@/components/ui/8bit-timeline2";
+import DeliverablesSection from "./DeliverablesSection";
+import HowItWorksSection from "./HowItWorksSection";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -13,7 +14,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AlertTriangle,
   ArrowRight,
-  Camera,
   Check,
   ChevronDown,
   Globe,
@@ -24,14 +24,10 @@ import {
   MessageCircle,
   Minus,
   Monitor,
-  PackageCheck,
-  Presentation,
   ScanSearch,
   ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   TrendingUp,
-  Users,
   Workflow,
   X,
   Zap,
@@ -43,10 +39,11 @@ import type {
 import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
 import Footer from "@/components/landing/footer/Footer";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion-01";
 import "./service-landing.css";
 
 const fontDisplay = DotGothic16({
@@ -66,15 +63,6 @@ const fontPixel = Press_Start_2P({
 const PAIN_ICONS = [ScanSearch, Layers, AlertTriangle] as const;
 const BENEFIT_ICONS = [Sparkles, Workflow, LayoutDashboard, TrendingUp] as const;
 const CAP_ICONS = [Globe, Lock, Monitor, Link2, ShieldCheck, Zap] as const;
-const DELIVERABLE_ICONS = [
-  Users,
-  Camera,
-  Monitor,
-  Presentation,
-  SlidersHorizontal,
-  PackageCheck,
-] as const;
-
 function TrustMarqueeGroup({ items }: { items: string[] }) {
   return (
     <div className="slp-trust__group" aria-hidden>
@@ -367,64 +355,10 @@ export default function ServiceLandingPage({ data }: Props) {
       </section>
 
       {/* 06 Como funciona */}
-      <section
-        id="como-funciona"
-        className="slp-section"
-        aria-labelledby="slp-how-title"
-      >
-        <div className="slp-wrap">
-          <div className="slp-head slp-head--center" data-slp-reveal>
-            <span className="slp-kicker">{data.howItWorks.kicker}</span>
-            <h2 id="slp-how-title" className="slp-title">
-              {data.howItWorks.title}
-            </h2>
-            <p className="slp-subtitle">{data.howItWorks.subtitle}</p>
-          </div>
-          <div className="slp-steps">
-            {data.howItWorks.steps.map((step) => (
-              <Window key={step.step} label={`STEP_${step.step}`} data-slp-reveal>
-                <p className="slp-step__num">{step.step}</p>
-                <h3 className="slp-step__title">{step.title}</h3>
-                <p className="slp-step__desc">{step.description}</p>
-              </Window>
-            ))}
-          </div>
-          <div className="slp-mid-cta" data-slp-reveal>
-            <WhatsappButton size="lg">{data.howItWorks.cta}</WhatsappButton>
-          </div>
-        </div>
-      </section>
+      <HowItWorksSection howItWorks={data.howItWorks} />
 
-      {/* 07 Entregáveis — timeline */}
-      <section
-        id="entregaveis"
-        className="slp-section"
-        aria-labelledby="slp-deliver-title"
-      >
-        <div className="slp-wrap">
-          <div className="slp-head" data-slp-reveal>
-            <span className="slp-kicker">{data.deliverables.kicker}</span>
-            <h2 id="slp-deliver-title" className="slp-title">
-              {data.deliverables.title}
-            </h2>
-            <p className="slp-subtitle">{data.deliverables.subtitle}</p>
-          </div>
-          <div data-slp-reveal>
-            <Timeline2
-              showHeader={false}
-              steps={data.deliverables.items.map((item, index) => {
-                const Icon = DELIVERABLE_ICONS[index] ?? Layers;
-                return {
-                  icon: <Icon className="size-5" aria-hidden />,
-                  title: item.title,
-                  description: item.description,
-                };
-              })}
-              className="slp-deliver-timeline2"
-            />
-          </div>
-        </div>
-      </section>
+      {/* 07 Entregáveis — timeline scroll */}
+      <DeliverablesSection deliverables={data.deliverables} />
 
       {/* 08 Capacidades */}
       <section className="slp-section" aria-labelledby="slp-cap-title">
@@ -598,23 +532,38 @@ export default function ServiceLandingPage({ data }: Props) {
             </h2>
             <p className="slp-subtitle">{data.faq.subtitle}</p>
           </div>
-          <div className="slp-faq">
-            {data.faq.items.map((item) => (
-              <Collapsible
-                key={item.question}
-                className="slp-faq__item"
-                data-slp-reveal
-              >
-                <CollapsibleTrigger className="slp-faq__trigger">
-                  {item.question}
-                  <ChevronDown className="size-4" aria-hidden />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="slp-faq__content">
-                  <p className="slp-faq__answer">{item.answer}</p>
-                </CollapsibleContent>
-              </Collapsible>
-            ))}
-          </div>
+          <Window
+            label="FAQ_SYS.exe"
+            className="slp-faq-win"
+            bodyClassName="slp-faq-win__body"
+            data-slp-reveal
+          >
+            <Accordion
+              type="single"
+              collapsible
+              className="slp-faq-accordion"
+            >
+              {data.faq.items.map((item, index) => (
+                <AccordionItem
+                  key={item.question}
+                  value={`faq-${index}`}
+                  className="slp-faq-accordion__item"
+                >
+                  <AccordionTrigger className="slp-faq-accordion__trigger">
+                    <span className="slp-faq-accordion__q">
+                      <span className="slp-faq-accordion__num" aria-hidden>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {item.question}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="slp-faq-accordion__content">
+                    <p className="slp-faq-accordion__answer">{item.answer}</p>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Window>
         </div>
       </section>
 
