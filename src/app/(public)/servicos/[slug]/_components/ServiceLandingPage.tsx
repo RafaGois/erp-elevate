@@ -280,44 +280,63 @@ export default function ServiceLandingPage({ data }: Props) {
       </section>
 
       {/* 04 Transformação */}
-      <section className="slp-section" aria-labelledby="slp-transform-title">
-        <div className="slp-wrap">
-          <div className="slp-head slp-head--center" data-slp-reveal>
+      <section
+        id="transformacao"
+        className="slp-section slp-tx"
+        aria-labelledby="slp-transform-title"
+      >
+        <div className="slp-tx__bg" aria-hidden />
+        <div className="slp-wrap slp-tx__wrap">
+
+          {/* cabeçalho */}
+          <div className="slp-head slp-head--center slp-tx__head" data-slp-reveal>
             <span className="slp-kicker">{data.transformation.kicker}</span>
             <h2 id="slp-transform-title" className="slp-title">
               {data.transformation.title}
             </h2>
           </div>
-          <div className="slp-transform">
-            <Window
-              label={data.transformation.beforeLabel}
-              className="slp-transform__col--before"
-              data-slp-reveal
-            >
-              <ul className="slp-transform__list">
-                {data.transformation.before.map((item) => (
-                  <li key={item}>
-                    <X className="size-4 text-red-400" aria-hidden />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Window>
-            <Window
-              label={data.transformation.afterLabel}
-              className="slp-transform__col--after"
-              data-slp-reveal
-            >
-              <ul className="slp-transform__list">
-                {data.transformation.after.map((item) => (
-                  <li key={item}>
-                    <Check className="size-4 text-[#dfff00]" aria-hidden />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Window>
+
+          {/* labels de coluna */}
+          <div className="slp-tx__labels" aria-hidden data-slp-reveal>
+            <span className="slp-tx__label slp-tx__label--before">
+              <X className="size-3" />
+              {data.transformation.beforeLabel}
+            </span>
+            <div className="slp-tx__divider-label" />
+            <span className="slp-tx__label slp-tx__label--after">
+              <Check className="size-3" />
+              {data.transformation.afterLabel}
+            </span>
           </div>
+
+          {/* linhas de comparação */}
+          <div className="slp-tx__rows">
+            {data.transformation.before.map((beforeItem, i) => {
+              const afterItem = data.transformation.after[i];
+              return (
+                <div key={beforeItem} className="slp-tx__row" data-slp-reveal>
+                  <div className="slp-tx__cell slp-tx__cell--before">
+                    <span className="slp-tx__cell-icon" aria-hidden>
+                      <X className="size-3.5" />
+                    </span>
+                    <span className="slp-tx__cell-text">{beforeItem}</span>
+                  </div>
+
+                  <div className="slp-tx__divider" aria-hidden>
+                    <span className="slp-tx__arrow" aria-hidden>→</span>
+                  </div>
+
+                  <div className="slp-tx__cell slp-tx__cell--after">
+                    <span className="slp-tx__cell-icon" aria-hidden>
+                      <Check className="size-3.5" />
+                    </span>
+                    <span className="slp-tx__cell-text">{afterItem}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
         </div>
       </section>
 
