@@ -299,10 +299,30 @@ export default function ServiceLandingPage({ data }: Props) {
       {/* 04 Transformação */}
       <section
         id="transformacao"
-        className="slp-section slp-tx"
+        className="slp-section slp-tx slp-tx--transform"
         aria-labelledby="slp-transform-title"
       >
         <div className="slp-tx__bg" aria-hidden />
+        <div className="slp-tx__grid" aria-hidden />
+        <div className="slp-tx__scanlines" aria-hidden />
+        <div className="slp-tx__glow slp-tx__glow--red" aria-hidden />
+        <div className="slp-tx__glow slp-tx__glow--green" aria-hidden />
+        <div className="slp-tx__rule slp-tx__rule--top" aria-hidden />
+        <div className="slp-tx__rule slp-tx__rule--bottom" aria-hidden />
+        <span className="slp-tx__watermark slp-tx__watermark--before" aria-hidden>
+          ANTES
+        </span>
+        <span className="slp-tx__watermark slp-tx__watermark--after" aria-hidden>
+          DEPOIS
+        </span>
+        <span className="slp-tx__corner slp-tx__corner--bl" aria-hidden />
+        <span className="slp-tx__corner slp-tx__corner--tr" aria-hidden />
+        <span className="slp-tx__tag slp-tx__tag--left" aria-hidden>
+          PRE_STATE
+        </span>
+        <span className="slp-tx__tag slp-tx__tag--right" aria-hidden>
+          POST_STATE
+        </span>
         <div className="slp-wrap slp-tx__wrap">
 
           {/* cabeçalho */}
@@ -357,35 +377,69 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 05 Benefícios */}
+      {/* 05 Benefícios — expanding cards */}
       <section
         id="solucao"
-        className="slp-section"
+        className="slp-section slp-benefits-exp"
         aria-labelledby="slp-benefits-title"
       >
         <div className="slp-wrap">
-          <div className="slp-head" data-slp-reveal>
+          <div className="slp-head slp-head--center" data-slp-reveal>
             <span className="slp-kicker">{data.benefits.kicker}</span>
             <h2 id="slp-benefits-title" className="slp-title">
               {data.benefits.title}
             </h2>
             <p className="slp-subtitle">{data.benefits.subtitle}</p>
           </div>
-          <div className="slp-grid slp-grid--4">
-            {data.benefits.items.map((item, i) => {
-              const Icon = BENEFIT_ICONS[i] ?? Sparkles;
-              return (
-                <Window key={item.title} label={`GANHO_0${i + 1}`} data-slp-reveal>
-                  <Icon className="slp-benefit__icon size-5" aria-hidden />
-                  <h3 className="slp-pain__title">{item.title}</h3>
-                  <p className="slp-card__desc">{item.description}</p>
-                  {item.metric ? (
-                    <span className="slp-benefit__metric">{item.metric}</span>
-                  ) : null}
-                </Window>
-              );
-            })}
-          </div>
+        </div>
+
+        <div className="slp-exp" data-slp-reveal>
+          {data.benefits.items.map((item, i) => {
+            const Icon = BENEFIT_ICONS[i] ?? Sparkles;
+            const idx = String(i + 1).padStart(2, "0");
+            return (
+              <article
+                key={item.title}
+                className="slp-exp__card"
+                tabIndex={0}
+                aria-label={item.title}
+              >
+                {/* fundo com glow — ativo no hover */}
+                <div className="slp-exp__glow" aria-hidden />
+                {/* linha accent no topo */}
+                <div className="slp-exp__accent" aria-hidden />
+
+                {/* estado colapsado — decorativo */}
+                <div className="slp-exp__collapsed" aria-hidden>
+                  <span className="slp-exp__idx">{idx}</span>
+                  <div className="slp-exp__icon-box">
+                    <Icon className="size-5" />
+                  </div>
+                  <p className="slp-exp__vtitle">{item.title}</p>
+                </div>
+
+                {/* estado expandido — conteúdo acessível */}
+                <div className="slp-exp__body">
+                  <div className="slp-exp__body-top">
+                    <div className="slp-exp__icon-box slp-exp__icon-box--lg">
+                      <Icon className="size-6" />
+                    </div>
+                    <span className="slp-exp__tag" aria-hidden>
+                      GANHO_{idx}
+                    </span>
+                  </div>
+                  <div className="slp-exp__body-bottom">
+                    <span className="slp-exp__watermark" aria-hidden>{idx}</span>
+                    <h3 className="slp-exp__title">{item.title}</h3>
+                    <p className="slp-exp__desc">{item.description}</p>
+                    {item.metric ? (
+                      <span className="slp-exp__metric">{item.metric}</span>
+                    ) : null}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 

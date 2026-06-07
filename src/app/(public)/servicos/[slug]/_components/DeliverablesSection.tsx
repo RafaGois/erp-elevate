@@ -199,6 +199,24 @@ export default function DeliverablesSection({ deliverables }: Props) {
       aria-labelledby="slp-deliver-title"
     >
       <div className="slp-deliver__bg" aria-hidden />
+      <div className="slp-deliver__grid" aria-hidden />
+      <div className="slp-deliver__scanlines" aria-hidden />
+      <div className="slp-deliver__glow slp-deliver__glow--lime" aria-hidden />
+      <div className="slp-deliver__glow slp-deliver__glow--em" aria-hidden />
+      <div className="slp-deliver__rule slp-deliver__rule--top" aria-hidden />
+      <div className="slp-deliver__rule slp-deliver__rule--bottom" aria-hidden />
+      <span className="slp-deliver__watermark" aria-hidden>
+        06
+      </span>
+      <span className="slp-deliver__corner slp-deliver__corner--tl" aria-hidden />
+      <span className="slp-deliver__corner slp-deliver__corner--br" aria-hidden />
+      <span className="slp-deliver__tag slp-deliver__tag--left" aria-hidden>
+        PIPELINE
+      </span>
+      <span className="slp-deliver__tag slp-deliver__tag--right" aria-hidden>
+        DELIVER
+      </span>
+      <div className="slp-deliver__rail" aria-hidden />
 
       <div ref={pinRef} className="slp-deliver__pin">
         <div className="slp-wrap slp-deliver__wrap">
