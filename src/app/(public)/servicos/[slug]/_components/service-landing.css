@@ -5,6 +5,34 @@
 ═══════════════════════════════════════════════════════════════ */
 
 .slp {
+  --slp-bg: #f8f7f4;
+  --slp-alt: #ffffff;
+  --slp-surface: #f0eeea;
+  --slp-fg: #1c1917;
+  --slp-muted: #78716c;
+  --slp-accent: #b8d600;
+  --slp-emerald: #16a34a;
+  --slp-red: #dc2626;
+  --slp-amber: #ca8a04;
+  --slp-line: rgba(28, 25, 23, 0.1);
+  --slp-line-md: rgba(28, 25, 23, 0.18);
+  --slp-grid: rgba(28, 25, 23, 0.05);
+  --slp-scan: rgba(223, 255, 0, 0.03);
+  --slp-glow-lime: rgba(223, 255, 0, 0.1);
+  --slp-glow-em: rgba(34, 197, 94, 0.08);
+  --slp-border: #d6d3d1;
+  --slp-shadow: rgba(28, 25, 23, 0.18);
+  --slp-max: 80rem;
+
+  position: relative;
+  background: var(--slp-bg);
+  color: var(--slp-fg);
+  font-family: "Geist", "Inter", sans-serif;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark .slp {
   --slp-bg: #050505;
   --slp-alt: #0a0a0a;
   --slp-surface: #1c1917;
@@ -22,14 +50,6 @@
   --slp-glow-em: rgba(34, 197, 94, 0.1);
   --slp-border: #171717;
   --slp-shadow: #000;
-  --slp-max: 80rem;
-
-  position: relative;
-  background: var(--slp-bg);
-  color: var(--slp-fg);
-  font-family: "Geist", "Inter", sans-serif;
-  overflow-x: clip;
-  -webkit-font-smoothing: antialiased;
 }
 
 .slp ::selection {
@@ -616,25 +636,198 @@
   position: relative;
   overflow: hidden;
   background: var(--slp-alt);
+  --slp-problem-glow-red: rgba(239, 68, 68, 0.1);
+  --slp-problem-glow-lime: rgba(223, 255, 0, 0.12);
+  --slp-problem-deco: rgba(28, 25, 23, 0.08);
+}
+
+.dark .slp-problem {
+  --slp-problem-glow-red: rgba(239, 68, 68, 0.14);
+  --slp-problem-glow-lime: rgba(223, 255, 0, 0.16);
+  --slp-problem-deco: rgba(242, 240, 235, 0.1);
 }
 
 .slp-problem__bg {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
   background:
     radial-gradient(ellipse 60% 55% at 15% 50%, rgba(223, 255, 0, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 45% at 85% 30%, rgba(239, 68, 68, 0.04) 0%, transparent 70%);
+    radial-gradient(ellipse 50% 45% at 85% 30%, rgba(239, 68, 68, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 40% at 50% 100%, rgba(223, 255, 0, 0.04) 0%, transparent 65%);
+}
+
+.slp-problem__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, var(--slp-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--slp-grid) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 95% 85% at 50% 45%, #000 15%, transparent 78%);
+}
+
+.slp-problem__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.22;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--slp-scan) 2px,
+    var(--slp-scan) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.dark .slp-problem__scanlines {
+  opacity: 0.28;
+  mix-blend-mode: screen;
+}
+
+.slp-problem__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+}
+
+.slp-problem__glow--red {
+  right: -6%;
+  top: 8%;
+  width: min(58vw, 500px);
+  height: min(58vw, 500px);
+  background: radial-gradient(circle, var(--slp-problem-glow-red) 0%, transparent 68%);
+}
+
+.slp-problem__glow--lime {
+  left: -8%;
+  bottom: 6%;
+  width: min(48vw, 400px);
+  height: min(48vw, 400px);
+  background: radial-gradient(circle, var(--slp-problem-glow-lime) 0%, transparent 68%);
+}
+
+.slp-problem__rule {
+  position: absolute;
+  left: clamp(1rem, 4vw, 3rem);
+  right: clamp(1rem, 4vw, 3rem);
+  height: 1px;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to right,
+    var(--slp-problem-deco) 0,
+    var(--slp-problem-deco) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.slp-problem__rule--top {
+  top: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.slp-problem__rule--bottom {
+  bottom: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.slp-problem__watermark {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: clamp(3.5rem, 14vw, 9rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--slp-fg);
+  opacity: 0.035;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.dark .slp-problem__watermark {
+  opacity: 0.045;
+}
+
+.slp-problem__corner {
+  position: absolute;
+  width: clamp(1.5rem, 3vw, 2.25rem);
+  height: clamp(1.5rem, 3vw, 2.25rem);
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--slp-accent) 40%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slp-problem__corner--tl {
+  top: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  border-width: 2px 0 0 2px;
+}
+
+.slp-problem__corner--br {
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  border-width: 0 2px 2px 0;
+}
+
+.slp-problem__tag {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.38rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--slp-muted);
+  opacity: 0.28;
+  pointer-events: none;
+  user-select: none;
+  writing-mode: vertical-rl;
+  z-index: 1;
+}
+
+.slp-problem__tag--left {
+  left: clamp(0.35rem, 1.5vw, 0.85rem);
+}
+
+.slp-problem__tag--right {
+  right: clamp(0.35rem, 1.5vw, 0.85rem);
+}
+
+@media (max-width: 719px) {
+  .slp-problem__tag,
+  .slp-problem__rule {
+    display: none;
+  }
+
+  .slp-problem__watermark {
+    font-size: clamp(2.5rem, 18vw, 4.5rem);
+    top: 62%;
+  }
 }
 
 .slp-problem__wrap {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 .slp-problem__head {
   margin-bottom: clamp(2.5rem, 5vw, 4rem);
   max-width: 38rem;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .slp-problem__title {
@@ -648,6 +841,7 @@
 .slp-problem__subtitle {
   margin-top: 1.1rem;
   max-width: 50ch;
+  margin-inline: auto;
   font-size: clamp(1rem, 2vw, 1.1rem);
   line-height: 1.68;
   color: var(--slp-muted);
@@ -1192,52 +1386,7 @@
   color: var(--slp-muted);
 }
 
-/* ═══ 09 Para quem é ═════════════════════════════════════════ */
-.slp-audience {
-  display: grid;
-  gap: 1.25rem;
-}
-
-@media (min-width: 768px) {
-  .slp-audience {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.slp-audience__col--for {
-  border-color: rgba(34, 197, 94, 0.35);
-}
-
-.slp-audience__col--for .slp-win__chrome {
-  background: var(--slp-emerald);
-}
-
-.slp-audience__col--not .slp-win__chrome {
-  background: #44403c;
-}
-
-.slp-audience__col--not .slp-win__label {
-  color: var(--slp-fg);
-}
-
-.slp-audience__list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.slp-audience__list li {
-  display: flex;
-  gap: 0.6rem;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--slp-muted);
-}
-
-.slp-audience__list li svg {
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-}
+/* ═══ 09 Para quem é — reutiliza .slp-tx (ver §04) ═══════════ */
 
 /* ═══ 10 Prova social ════════════════════════════════════════ */
 .slp-case__title {

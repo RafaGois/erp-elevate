@@ -72,10 +72,11 @@ export type ServiceLandingPage = {
   audience: {
     kicker: string;
     title: string;
-    forTitle: string;
-    forItems: string[];
-    notForTitle: string;
-    notForItems: string[];
+    subtitle?: string;
+    notLabel: string;
+    forLabel: string;
+    notFor: string[];
+    for: string[];
   };
   socialProof: {
     kicker: string;

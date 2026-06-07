@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowUpRight, Menu as MenuIcon, X } from "lucide-react";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
 import MenuItem from "@/components/landing/hero/MenuItem";
+import ThemeToggle from "@/components/ui/theme-toggle";
 import "@/components/landing/hero/menu.css";
 import "./service-landing-menu.css";
 
@@ -203,6 +204,7 @@ export default function ServiceLandingMenu({
           <p className="landing-menu__center">{title}</p>
 
           <div className="slp-menu__end">
+            <ThemeToggle />
             <button
               type="button"
               className="landing-menu__toggle"

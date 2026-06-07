@@ -240,6 +240,23 @@ export default function ServiceLandingPage({ data }: Props) {
         aria-labelledby="slp-problem-title"
       >
         <div className="slp-problem__bg" aria-hidden />
+        <div className="slp-problem__grid" aria-hidden />
+        <div className="slp-problem__scanlines" aria-hidden />
+        <div className="slp-problem__glow slp-problem__glow--red" aria-hidden />
+        <div className="slp-problem__glow slp-problem__glow--lime" aria-hidden />
+        <div className="slp-problem__rule slp-problem__rule--top" aria-hidden />
+        <div className="slp-problem__rule slp-problem__rule--bottom" aria-hidden />
+        <span className="slp-problem__watermark" aria-hidden>
+          PROBLEMA
+        </span>
+        <span className="slp-problem__corner slp-problem__corner--tl" aria-hidden />
+        <span className="slp-problem__corner slp-problem__corner--br" aria-hidden />
+        <span className="slp-problem__tag slp-problem__tag--left" aria-hidden>
+          SYS.DIAG
+        </span>
+        <span className="slp-problem__tag slp-problem__tag--right" aria-hidden>
+          ERR_LOG
+        </span>
         <div className="slp-wrap slp-problem__wrap">
 
           {/* cabeçalho */}
@@ -401,43 +418,60 @@ export default function ServiceLandingPage({ data }: Props) {
       </section>
 
       {/* 09 Para quem é */}
-      <section className="slp-section" aria-labelledby="slp-audience-title">
-        <div className="slp-wrap">
-          <div className="slp-head slp-head--center" data-slp-reveal>
+      <section
+        id="para-quem"
+        className="slp-section slp-tx"
+        aria-labelledby="slp-audience-title"
+      >
+        <div className="slp-tx__bg" aria-hidden />
+        <div className="slp-wrap slp-tx__wrap">
+          <div className="slp-head slp-head--center slp-tx__head" data-slp-reveal>
             <span className="slp-kicker">{data.audience.kicker}</span>
             <h2 id="slp-audience-title" className="slp-title">
               {data.audience.title}
             </h2>
+            {data.audience.subtitle ? (
+              <p className="slp-subtitle">{data.audience.subtitle}</p>
+            ) : null}
           </div>
-          <div className="slp-audience">
-            <Window
-              label={data.audience.forTitle}
-              className="slp-audience__col--for"
-              data-slp-reveal
-            >
-              <ul className="slp-audience__list">
-                {data.audience.forItems.map((item) => (
-                  <li key={item}>
-                    <Check className="size-4 text-emerald-400" aria-hidden />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Window>
-            <Window
-              label={data.audience.notForTitle}
-              className="slp-audience__col--not"
-              data-slp-reveal
-            >
-              <ul className="slp-audience__list">
-                {data.audience.notForItems.map((item) => (
-                  <li key={item}>
-                    <X className="size-4 text-red-400" aria-hidden />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Window>
+
+          <div className="slp-tx__labels" aria-hidden data-slp-reveal>
+            <span className="slp-tx__label slp-tx__label--before">
+              <X className="size-3" />
+              {data.audience.notLabel}
+            </span>
+            <div className="slp-tx__divider-label" />
+            <span className="slp-tx__label slp-tx__label--after">
+              <Check className="size-3" />
+              {data.audience.forLabel}
+            </span>
+          </div>
+
+          <div className="slp-tx__rows">
+            {data.audience.notFor.map((notItem, i) => {
+              const forItem = data.audience.for[i];
+              return (
+                <div key={notItem} className="slp-tx__row" data-slp-reveal>
+                  <div className="slp-tx__cell slp-tx__cell--before">
+                    <span className="slp-tx__cell-icon" aria-hidden>
+                      <X className="size-3.5" />
+                    </span>
+                    <span className="slp-tx__cell-text">{notItem}</span>
+                  </div>
+
+                  <div className="slp-tx__divider" aria-hidden>
+                    <span className="slp-tx__arrow" aria-hidden>→</span>
+                  </div>
+
+                  <div className="slp-tx__cell slp-tx__cell--after">
+                    <span className="slp-tx__cell-icon" aria-hidden>
+                      <Check className="size-3.5" />
+                    </span>
+                    <span className="slp-tx__cell-text">{forItem}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

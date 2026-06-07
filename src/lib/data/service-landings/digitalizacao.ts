@@ -189,59 +189,62 @@ export const digitalizacaoLanding: ServiceLandingPage = {
   },
   capabilities: {
     kicker: "// capacidades",
-    title: "Tudo na mesma casa, do site ao sistema.",
+    title: "O que compõe uma presença digital corporativa de verdade.",
     subtitle:
-      "Para quem precisa entender a fundo antes de decidir o escopo.",
+      "Não é só trocar o site. É montar cada peça que faz sua empresa parecer séria antes da primeira conversa.",
     items: [
       {
-        title: "Sites institucionais",
+        title: "Site institucional sob medida",
         description:
-          "Páginas que convertem, com SEO, performance e formulários ligados ao seu fluxo comercial. Mais que vitrine.",
+          "Layout, textos e navegação pensados para o seu mercado. Página rápida, clara e com cara de empresa que entrega o que promete.",
       },
       {
-        title: "Portais e áreas com login",
+        title: "Identidade visual no digital",
         description:
-          "Espaços para cliente, fornecedor ou equipe, com permissão, histórico e rastreabilidade.",
+          "Logo, cores, tipografia e tom aplicados de forma coerente no site, redes e materiais online. Uma marca só, em todo ponto de contato.",
       },
       {
-        title: "Sistemas web sob medida",
+        title: "Estrutura para busca e performance",
         description:
-          "Cadastro, pedidos, aprovações e acompanhamento desenhados para o jeito da sua empresa trabalhar.",
+          "SEO técnico, velocidade e organização de conteúdo para aparecer quando alguém procura o que você vende. Digital que trabalha por você.",
       },
       {
-        title: "Integração de dados",
+        title: "Fluxo de contato e captação",
         description:
-          "APIs e sincronização com ERP, planilhas e ferramentas que já fazem parte do seu dia.",
+          "Formulários, WhatsApp e caminhos de lead definidos para o interesse chegar organizado ao seu comercial, sem se perder no caminho.",
       },
       {
-        title: "Identidade digital unificada",
+        title: "Páginas que explicam o que você faz",
         description:
-          "Mesma linguagem visual do site público até as telas internas. Marca coerente em todo ponto de contato.",
+          "Serviços, sobre a empresa, cases e provas pensadas para quem pesquisa antes de comprar. Menos genérico, mais credibilidade real.",
       },
       {
-        title: "Base que escala com a marca",
+        title: "Base pronta para crescer",
         description:
-          "Estrutura pronta para crescer com novos canais, páginas e integrações conforme a empresa evolui.",
+          "Estrutura técnica preparada para novas páginas, integrações e evoluções futuras conforme a empresa e a demanda avançam.",
       },
     ],
   },
   audience: {
     kicker: "// para quem é",
     title: "Honestidade antes de você gastar seu tempo.",
-    forTitle: "Faz muito sentido se",
-    forItems: [
-      "Sua empresa precisa parecer tão séria online quanto é na prática",
-      "Sua empresa cresceu, mas o site e a presença online ficaram para trás",
-      "Você quer um patrimônio digital que evolua junto com a marca",
-      "Você já tem site, mas ele não representa o tamanho real do negócio",
-      "Você precisa ser encontrado e parecer sério antes mesmo da primeira conversa",
+    subtitle:
+      "Cada linha é uma situação real. Veja em qual lado você está.",
+    notLabel: "Talvez não seja a hora",
+    forLabel: "Faz muito sentido",
+    notFor: [
+      "Você quer só um modelo pronto, sem ajuste à sua marca",
+      "A equipe não tem tempo para validar etapas e participar do briefing",
+      "O plano é só anúncio pago, sem estrutura para atender quem chega",
+      "A expectativa é transformar tudo de uma vez em poucas semanas",
+      "O site atual já representa bem o tamanho da empresa",
     ],
-    notForTitle: "Talvez não seja a hora se",
-    notForItems: [
-      "Você quer só um modelo pronto, sem ajuste nem integração",
-      "A equipe não tem tempo para validar fluxos e participar do diagnóstico",
-      "O foco é apenas anúncio pago, sem estrutura para atender o que chega",
-      "A expectativa é trocar toda a operação em poucas semanas, de uma vez",
+    for: [
+      "Sua empresa precisa parecer tão séria online quanto é na prática",
+      "O negócio cresceu, mas site e presença online ficaram para trás",
+      "Você precisa ser encontrado e parecer sério antes da primeira conversa",
+      "Você quer um patrimônio digital que evolua junto com a marca",
+      "Você já tem site, mas ele não mostra o que vocês entregam de verdade",
     ],
   },
   socialProof: {
