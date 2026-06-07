@@ -1714,6 +1714,452 @@
   .slp-exp__accent { transform: scaleX(0.5); }
 }
 
+/* ═══ 05-NEW Benefits Fold — grid de cards simultâneos ═════ */
+.slp-bnf-fold {
+  position: relative;
+  overflow: hidden;
+  background: var(--slp-alt);
+  --slp-bnf-glow-lime: rgba(223, 255, 0, 0.11);
+  --slp-bnf-glow-em: rgba(34, 197, 94, 0.07);
+  --slp-bnf-deco: rgba(28, 25, 23, 0.08);
+}
+
+.dark .slp-bnf-fold {
+  --slp-bnf-glow-lime: rgba(223, 255, 0, 0.16);
+  --slp-bnf-glow-em: rgba(34, 197, 94, 0.1);
+  --slp-bnf-deco: rgba(242, 240, 235, 0.1);
+}
+
+.slp-bnf-fold__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 65% 58% at 80% 35%, var(--slp-bnf-glow-lime) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 50% at 14% 72%, var(--slp-bnf-glow-em) 0%, transparent 66%),
+    radial-gradient(ellipse 40% 36% at 50% 100%, rgba(223, 255, 0, 0.04) 0%, transparent 72%);
+}
+
+.slp-bnf-fold__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, var(--slp-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--slp-grid) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 100% 92% at 50% 50%, #000 16%, transparent 78%);
+}
+
+.slp-bnf-fold__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.15;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    var(--slp-scan) 2px, var(--slp-scan) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.dark .slp-bnf-fold__scanlines {
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+.slp-bnf-fold__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+}
+
+.slp-bnf-fold__glow--lime {
+  right: -5%;
+  top: 8%;
+  width: min(52vw, 460px);
+  height: min(52vw, 460px);
+  background: radial-gradient(circle, var(--slp-bnf-glow-lime) 0%, transparent 68%);
+}
+
+.slp-bnf-fold__glow--em {
+  left: -8%;
+  bottom: 4%;
+  width: min(46vw, 400px);
+  height: min(46vw, 400px);
+  background: radial-gradient(circle, var(--slp-bnf-glow-em) 0%, transparent 68%);
+}
+
+.slp-bnf-fold__rule {
+  position: absolute;
+  left: clamp(1rem, 4vw, 3rem);
+  right: clamp(1rem, 4vw, 3rem);
+  height: 1px;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--slp-accent) 22%, var(--slp-bnf-deco)) 0,
+    color-mix(in srgb, var(--slp-accent) 22%, var(--slp-bnf-deco)) 6px,
+    transparent 6px, transparent 12px
+  );
+}
+
+.slp-bnf-fold__rule--top  { top: clamp(1.5rem, 4vw, 2.75rem); }
+.slp-bnf-fold__rule--bottom { bottom: clamp(1.5rem, 4vw, 2.75rem); }
+
+.slp-bnf-fold__watermark {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: clamp(4rem, 18vw, 12rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--slp-fg);
+  opacity: 0.028;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.dark .slp-bnf-fold__watermark { opacity: 0.04; }
+
+.slp-bnf-fold__corner {
+  position: absolute;
+  width: clamp(1.5rem, 3vw, 2.25rem);
+  height: clamp(1.5rem, 3vw, 2.25rem);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slp-bnf-fold__corner--tl {
+  top: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  border-width: 2px 0 0 2px;
+  border-color: color-mix(in srgb, var(--slp-accent) 40%, transparent);
+}
+
+.slp-bnf-fold__corner--br {
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  border-width: 0 2px 2px 0;
+  border-color: color-mix(in srgb, var(--slp-accent) 35%, transparent);
+}
+
+.slp-bnf-fold__tag {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.38rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  writing-mode: vertical-rl;
+  z-index: 1;
+}
+
+.slp-bnf-fold__tag--left {
+  left: clamp(0.35rem, 1.5vw, 0.85rem);
+  color: var(--slp-accent);
+  opacity: 0.22;
+}
+
+.slp-bnf-fold__tag--right {
+  right: clamp(0.35rem, 1.5vw, 0.85rem);
+  color: var(--slp-emerald);
+  opacity: 0.2;
+}
+
+@media (max-width: 719px) {
+  .slp-bnf-fold__tag,
+  .slp-bnf-fold__rule,
+  .slp-bnf-fold__watermark { display: none; }
+}
+
+.slp-bnf-fold__wrap {
+  position: relative;
+  z-index: 3;
+}
+
+/* ── grid de cards ─────────────────────────────────────── */
+.slp-bnf__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--slp-line);
+  border: 1px solid var(--slp-line);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 640px) {
+  .slp-bnf__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── card base ─────────────────────────────────────────── */
+.slp-bnf__card {
+  position: relative;
+  background: var(--slp-bg);
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  transition: background 0.28s ease;
+}
+
+/* accent line topo — escala do left ao right no hover */
+.slp-bnf__card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--slp-accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
+.slp-bnf__card:hover .slp-bnf__card-accent {
+  transform: scaleX(1);
+}
+
+/* glow radial — aparece no hover */
+.slp-bnf__card-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 110%, rgba(223, 255, 0, 0.08) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 45% at 100% 0%, rgba(223, 255, 0, 0.05) 0%, transparent 65%);
+  transition: opacity 0.4s ease;
+}
+
+.slp-bnf__card:hover .slp-bnf__card-glow {
+  opacity: 1;
+}
+
+/* número watermark gigante */
+.slp-bnf__card-num {
+  position: absolute;
+  right: clamp(0.5rem, 2.5vw, 1.25rem);
+  bottom: clamp(0.25rem, 1.5vw, 0.5rem);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: clamp(4.5rem, 10vw, 7.5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--slp-fg);
+  opacity: 0.04;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dark .slp-bnf__card-num { opacity: 0.055; }
+
+.slp-bnf__card:hover .slp-bnf__card-num {
+  opacity: 0.07;
+}
+
+.dark .slp-bnf__card:hover .slp-bnf__card-num {
+  opacity: 0.09;
+}
+
+/* stripes diagonais — somem no hover */
+.slp-bnf__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 24px,
+    rgba(223, 255, 0, 0.014) 24px, rgba(223, 255, 0, 0.014) 25px
+  );
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.slp-bnf__card:hover::before {
+  opacity: 0;
+}
+
+/* background lift no hover */
+.slp-bnf__card:hover {
+  background: color-mix(in srgb, var(--slp-bg) 92%, var(--slp-accent));
+}
+
+/* ── conteúdo interno ──────────────────────────────────── */
+.slp-bnf__card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.slp-bnf__card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+
+/* ícone */
+.slp-bnf__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid var(--slp-line-md);
+  background: rgba(223, 255, 0, 0.05);
+  color: var(--slp-accent);
+  flex-shrink: 0;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.slp-bnf__card:hover .slp-bnf__card-icon {
+  border-color: color-mix(in srgb, var(--slp-accent) 50%, transparent);
+  background: rgba(223, 255, 0, 0.1);
+  box-shadow:
+    0 0 0 4px rgba(223, 255, 0, 0.05),
+    0 0 20px rgba(223, 255, 0, 0.15);
+  transform: scale(1.06);
+}
+
+/* label GANHO_0X */
+.slp-bnf__card-label {
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.38rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slp-muted);
+  opacity: 0.45;
+  text-align: right;
+  margin-top: 0.2rem;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.slp-bnf__card:hover .slp-bnf__card-label {
+  color: var(--slp-accent);
+  opacity: 0.7;
+}
+
+/* título */
+.slp-bnf__card-title {
+  font-family: var(--font-slp-display), "DotGothic16", monospace;
+  font-size: clamp(1.05rem, 2.2vw, 1.32rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--slp-fg);
+  margin-bottom: 0.85rem;
+  transition: color 0.22s ease;
+}
+
+/* divider */
+.slp-bnf__card-divider {
+  width: 2.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--slp-accent), transparent);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  transform-origin: left center;
+  transform: scaleX(0.4);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.05s, opacity 0.3s ease;
+  opacity: 0.55;
+}
+
+.slp-bnf__card:hover .slp-bnf__card-divider {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* descrição */
+.slp-bnf__card-desc {
+  font-size: clamp(0.875rem, 1.65vw, 0.96rem);
+  line-height: 1.7;
+  color: var(--slp-muted);
+  flex: 1;
+  margin-bottom: 1.25rem;
+  transition: color 0.22s ease;
+}
+
+/* metric pill */
+.slp-bnf__card-metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  align-self: flex-start;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(223, 255, 0, 0.22);
+  background: rgba(223, 255, 0, 0.04);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.42rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--slp-accent);
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.slp-bnf__card-metric::before {
+  content: "";
+  display: block;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--slp-accent);
+  box-shadow: 0 0 5px var(--slp-accent);
+  flex-shrink: 0;
+  animation: slp-bnf-pulse 2.2s ease-in-out infinite;
+}
+
+.slp-bnf__card:hover .slp-bnf__card-metric {
+  border-color: rgba(223, 255, 0, 0.45);
+  background: rgba(223, 255, 0, 0.08);
+  box-shadow: 0 0 12px rgba(223, 255, 0, 0.1);
+}
+
+@keyframes slp-bnf-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--slp-accent); }
+  50% { opacity: 0.3; box-shadow: none; }
+}
+
+/* ── reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .slp-bnf__card-accent { transition: none; transform: scaleX(1); }
+  .slp-bnf__card-glow { opacity: 0.5; transition: none; }
+  .slp-bnf__card-icon { transition: none; }
+  .slp-bnf__card-divider { transform: scaleX(1); opacity: 1; transition: none; }
+  .slp-bnf__card-metric::before { animation: none; }
+}
+
 /* ═══ 06 Entregáveis — timeline scroll pin ═══════════════════ */
 .slp-deliver {
   position: relative;
@@ -2162,22 +2608,426 @@
   }
 }
 
-/* ═══ 08 Capacidades ═════════════════════════════════════════ */
-.slp-cap__icon {
+/* ═══ 08 Capacidades — module grid fold ═════════════════════ */
+.slp-cap-fold {
+  position: relative;
+  overflow: hidden;
+  background: var(--slp-bg);
+  --slp-cap-glow-lime: rgba(223, 255, 0, 0.1);
+  --slp-cap-glow-em: rgba(34, 197, 94, 0.07);
+  --slp-cap-deco: rgba(28, 25, 23, 0.08);
+}
+
+.dark .slp-cap-fold {
+  --slp-cap-glow-lime: rgba(223, 255, 0, 0.14);
+  --slp-cap-glow-em: rgba(34, 197, 94, 0.09);
+  --slp-cap-deco: rgba(242, 240, 235, 0.1);
+}
+
+.slp-cap-fold__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 12% 38%, var(--slp-cap-glow-em) 0%, transparent 68%),
+    radial-gradient(ellipse 55% 50% at 88% 65%, var(--slp-cap-glow-lime) 0%, transparent 66%),
+    radial-gradient(ellipse 42% 38% at 50% 100%, rgba(223, 255, 0, 0.035) 0%, transparent 72%);
+}
+
+.slp-cap-fold__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, var(--slp-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--slp-grid) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 100% 92% at 50% 50%, #000 16%, transparent 80%);
+}
+
+.slp-cap-fold__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.14;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    var(--slp-scan) 2px, var(--slp-scan) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.dark .slp-cap-fold__scanlines {
+  opacity: 0.2;
+  mix-blend-mode: screen;
+}
+
+.slp-cap-fold__glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(100px);
+}
+
+.slp-cap-fold__glow--lime {
+  right: -5%;
+  bottom: 10%;
+  width: min(50vw, 440px);
+  height: min(50vw, 440px);
+  background: radial-gradient(circle, var(--slp-cap-glow-lime) 0%, transparent 68%);
+}
+
+.slp-cap-fold__glow--em {
+  left: -6%;
+  top: 12%;
+  width: min(46vw, 400px);
+  height: min(46vw, 400px);
+  background: radial-gradient(circle, var(--slp-cap-glow-em) 0%, transparent 68%);
+}
+
+.slp-cap-fold__rule {
+  position: absolute;
+  left: clamp(1rem, 4vw, 3rem);
+  right: clamp(1rem, 4vw, 3rem);
+  height: 1px;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--slp-emerald) 18%, var(--slp-cap-deco)) 0,
+    color-mix(in srgb, var(--slp-emerald) 18%, var(--slp-cap-deco)) 6px,
+    transparent 6px, transparent 12px
+  );
+}
+
+.slp-cap-fold__rule--top  { top: clamp(1.5rem, 4vw, 2.75rem); }
+.slp-cap-fold__rule--bottom { bottom: clamp(1.5rem, 4vw, 2.75rem); }
+
+.slp-cap-fold__watermark {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: clamp(5rem, 20vw, 14rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--slp-fg);
+  opacity: 0.028;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.dark .slp-cap-fold__watermark { opacity: 0.04; }
+
+.slp-cap-fold__corner {
+  position: absolute;
+  width: clamp(1.5rem, 3vw, 2.25rem);
+  height: clamp(1.5rem, 3vw, 2.25rem);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slp-cap-fold__corner--tl {
+  top: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  border-width: 2px 0 0 2px;
+  border-color: color-mix(in srgb, var(--slp-emerald) 38%, transparent);
+}
+
+.slp-cap-fold__corner--br {
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  border-width: 0 2px 2px 0;
+  border-color: color-mix(in srgb, var(--slp-accent) 35%, transparent);
+}
+
+.slp-cap-fold__tag {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.38rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: none;
+  user-select: none;
+  writing-mode: vertical-rl;
+  z-index: 1;
+}
+
+.slp-cap-fold__tag--left {
+  left: clamp(0.35rem, 1.5vw, 0.85rem);
+  color: var(--slp-emerald);
+  opacity: 0.22;
+}
+
+.slp-cap-fold__tag--right {
+  right: clamp(0.35rem, 1.5vw, 0.85rem);
   color: var(--slp-accent);
-  margin-bottom: 0.7rem;
+  opacity: 0.2;
 }
 
-.slp-cap__title {
-  font-family: var(--font-slp-display), "DotGothic16", monospace;
-  font-size: 1rem;
-  margin-bottom: 0.45rem;
+@media (max-width: 719px) {
+  .slp-cap-fold__tag,
+  .slp-cap-fold__rule,
+  .slp-cap-fold__watermark { display: none; }
 }
 
-.slp-cap__desc {
-  font-size: 0.86rem;
-  line-height: 1.55;
+.slp-cap-fold__wrap {
+  position: relative;
+  z-index: 3;
+}
+
+/* ── grid de módulos ────────────────────────────────────── */
+.slp-cap__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--slp-line);
+  border: 1px solid var(--slp-line);
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+@media (min-width: 600px) {
+  .slp-cap__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 960px) {
+  .slp-cap__grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── card base ─────────────────────────────────────────── */
+.slp-cap__card {
+  position: relative;
+  background: var(--slp-alt);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s ease;
+}
+
+/* stripes diagonais — somem no hover */
+.slp-cap__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent, transparent 22px,
+    rgba(223, 255, 0, 0.013) 22px, rgba(223, 255, 0, 0.013) 23px
+  );
+  opacity: 1;
+  transition: opacity 0.28s ease;
+}
+
+.slp-cap__card:hover::before { opacity: 0; }
+
+.slp-cap__card:hover {
+  background: color-mix(in srgb, var(--slp-alt) 91%, var(--slp-accent));
+}
+
+/* accent bar top — scaleX 0→1 on hover */
+.slp-cap__card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--slp-accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 3;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slp-cap__card:hover .slp-cap__card-accent { transform: scaleX(1); }
+
+/* radial glow */
+.slp-cap__card-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 115%, rgba(223, 255, 0, 0.08) 0%, transparent 68%),
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(34, 197, 94, 0.05) 0%, transparent 65%);
+  transition: opacity 0.38s ease;
+}
+
+.slp-cap__card:hover .slp-cap__card-glow { opacity: 1; }
+
+/* watermark number */
+.slp-cap__card-wm {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.25rem;
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--slp-fg);
+  opacity: 0.038;
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.28s ease;
+}
+
+.dark .slp-cap__card-wm { opacity: 0.055; }
+.slp-cap__card:hover .slp-cap__card-wm { opacity: 0.07; }
+.dark .slp-cap__card:hover .slp-cap__card-wm { opacity: 0.09; }
+
+/* ── conteúdo ──────────────────────────────────────────── */
+/* meta row */
+.slp-cap__card-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+}
+
+.slp-cap__card-modlabel {
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.44rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--slp-muted);
+  opacity: 0.65;
+  transition: color 0.22s ease, opacity 0.22s ease;
+}
+
+.slp-cap__card:hover .slp-cap__card-modlabel {
+  color: var(--slp-accent);
+  opacity: 1;
+}
+
+.slp-cap__card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-slp-pixel), "Press Start 2P", cursive;
+  font-size: 0.38rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slp-emerald);
+  opacity: 0.7;
+  transition: opacity 0.22s ease;
+}
+
+.slp-cap__card:hover .slp-cap__card-status { opacity: 1; }
+
+/* pulsing green dot */
+.slp-cap__card-dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--slp-emerald);
+  box-shadow: 0 0 5px var(--slp-emerald);
+  flex-shrink: 0;
+  animation: slp-cap-dot-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes slp-cap-dot-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--slp-emerald); }
+  50% { opacity: 0.3; box-shadow: none; }
+}
+
+/* icon box */
+.slp-cap__card-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid var(--slp-line-md);
+  background: rgba(223, 255, 0, 0.04);
+  color: var(--slp-accent);
+  margin-bottom: 1.3rem;
+  flex-shrink: 0;
+  transition:
+    border-color 0.28s ease,
+    background 0.28s ease,
+    box-shadow 0.28s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.slp-cap__card:hover .slp-cap__card-icon {
+  border-color: color-mix(in srgb, var(--slp-accent) 45%, transparent);
+  background: rgba(223, 255, 0, 0.09);
+  box-shadow:
+    0 0 0 4px rgba(223, 255, 0, 0.05),
+    0 0 18px rgba(223, 255, 0, 0.14);
+  transform: scale(1.06);
+}
+
+/* title */
+.slp-cap__card-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-slp-display), "DotGothic16", monospace;
+  font-size: clamp(0.98rem, 2vw, 1.12rem);
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+  color: var(--slp-fg);
+  margin-bottom: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+/* divider */
+.slp-cap__card-divider {
+  position: relative;
+  z-index: 1;
+  width: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--slp-accent), transparent);
+  margin-bottom: 0.9rem;
+  flex-shrink: 0;
+  transform-origin: left center;
+  transform: scaleX(0.35);
+  opacity: 0.5;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.04s, opacity 0.28s ease;
+}
+
+.slp-cap__card:hover .slp-cap__card-divider {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* description */
+.slp-cap__card-desc {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(0.85rem, 1.6vw, 0.93rem);
+  line-height: 1.68;
+  color: var(--slp-muted);
+  flex: 1;
+  transition: color 0.22s ease;
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slp-cap__card-accent { transition: none; transform: scaleX(1); }
+  .slp-cap__card-glow { opacity: 0.5; transition: none; }
+  .slp-cap__card-icon { transition: none; }
+  .slp-cap__card-divider { transform: scaleX(1); opacity: 1; transition: none; }
+  .slp-cap__card-dot { animation: none; }
 }
 
 /* ═══ 09 Para quem é — reutiliza .slp-tx (ver §04) ═══════════ */

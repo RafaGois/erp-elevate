@@ -6,6 +6,7 @@ import Link from "next/link";
 import ServiceLandingMenu from "./ServiceLandingMenu";
 import HeroBackgroundVideo from "./HeroBackgroundVideo";
 import DeliverablesSection from "./DeliverablesSection";
+import BenefitsSection from "./BenefitsSection";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -18,16 +19,12 @@ import {
   Globe,
   Layers,
   Link2,
-  LayoutDashboard,
   Lock,
   MessageCircle,
   Minus,
   Monitor,
   ScanSearch,
   ShieldCheck,
-  Sparkles,
-  TrendingUp,
-  Workflow,
   X,
   Zap,
 } from "lucide-react";
@@ -60,7 +57,6 @@ const fontPixel = Press_Start_2P({
 });
 
 const PAIN_ICONS = [ScanSearch, Layers, AlertTriangle] as const;
-const BENEFIT_ICONS = [Sparkles, Workflow, LayoutDashboard, TrendingUp] as const;
 const CAP_ICONS = [Globe, Lock, Monitor, Link2, ShieldCheck, Zap] as const;
 function TrustMarqueeGroup({ items }: { items: string[] }) {
   return (
@@ -395,78 +391,34 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 05 Benefícios — expanding cards */}
-      <section
-        id="solucao"
-        className="slp-section slp-benefits-exp"
-        aria-labelledby="slp-benefits-title"
-      >
-        <div className="slp-wrap">
-          <div className="slp-head slp-head--center" data-slp-reveal>
-            <span className="slp-kicker">{data.benefits.kicker}</span>
-            <h2 id="slp-benefits-title" className="slp-title">
-              {data.benefits.title}
-            </h2>
-            <p className="slp-subtitle">{data.benefits.subtitle}</p>
-          </div>
-        </div>
-
-        <div className="slp-exp" data-slp-reveal>
-          {data.benefits.items.map((item, i) => {
-            const Icon = BENEFIT_ICONS[i] ?? Sparkles;
-            const idx = String(i + 1).padStart(2, "0");
-            return (
-              <article
-                key={item.title}
-                className="slp-exp__card"
-                tabIndex={0}
-                aria-label={item.title}
-              >
-                {/* fundo com glow — ativo no hover */}
-                <div className="slp-exp__glow" aria-hidden />
-                {/* linha accent no topo */}
-                <div className="slp-exp__accent" aria-hidden />
-
-                {/* estado colapsado — decorativo */}
-                <div className="slp-exp__collapsed" aria-hidden>
-                  <span className="slp-exp__idx">{idx}</span>
-                  <div className="slp-exp__icon-box">
-                    <Icon className="size-5" />
-                  </div>
-                  <p className="slp-exp__vtitle">{item.title}</p>
-                </div>
-
-                {/* estado expandido — conteúdo acessível */}
-                <div className="slp-exp__body">
-                  <div className="slp-exp__body-top">
-                    <div className="slp-exp__icon-box slp-exp__icon-box--lg">
-                      <Icon className="size-6" />
-                    </div>
-                    <span className="slp-exp__tag" aria-hidden>
-                      GANHO_{idx}
-                    </span>
-                  </div>
-                  <div className="slp-exp__body-bottom">
-                    <span className="slp-exp__watermark" aria-hidden>{idx}</span>
-                    <h3 className="slp-exp__title">{item.title}</h3>
-                    <p className="slp-exp__desc">{item.description}</p>
-                    {item.metric ? (
-                      <span className="slp-exp__metric">{item.metric}</span>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      {/* 05 Benefícios — interactive split-panel showcase */}
+      <BenefitsSection
+        kicker={data.benefits.kicker}
+        title={data.benefits.title}
+        subtitle={data.benefits.subtitle}
+        items={data.benefits.items}
+      />
 
       {/* 06 Entregáveis — timeline scroll */}
       <DeliverablesSection deliverables={data.deliverables} />
 
       {/* 08 Capacidades */}
-      <section className="slp-section" aria-labelledby="slp-cap-title">
-        <div className="slp-wrap">
+      <section className="slp-section slp-cap-fold" aria-labelledby="slp-cap-title">
+        {/* decoration */}
+        <div className="slp-cap-fold__bg" aria-hidden />
+        <div className="slp-cap-fold__grid" aria-hidden />
+        <div className="slp-cap-fold__scanlines" aria-hidden />
+        <div className="slp-cap-fold__glow slp-cap-fold__glow--lime" aria-hidden />
+        <div className="slp-cap-fold__glow slp-cap-fold__glow--em" aria-hidden />
+        <div className="slp-cap-fold__rule slp-cap-fold__rule--top" aria-hidden />
+        <div className="slp-cap-fold__rule slp-cap-fold__rule--bottom" aria-hidden />
+        <span className="slp-cap-fold__watermark" aria-hidden>CAP</span>
+        <span className="slp-cap-fold__corner slp-cap-fold__corner--tl" aria-hidden />
+        <span className="slp-cap-fold__corner slp-cap-fold__corner--br" aria-hidden />
+        <span className="slp-cap-fold__tag slp-cap-fold__tag--left" aria-hidden>MODULES</span>
+        <span className="slp-cap-fold__tag slp-cap-fold__tag--right" aria-hidden>ACTIVE</span>
+
+        <div className="slp-wrap slp-cap-fold__wrap">
           <div className="slp-head" data-slp-reveal>
             <span className="slp-kicker">{data.capabilities.kicker}</span>
             <h2 id="slp-cap-title" className="slp-title">
@@ -474,15 +426,43 @@ export default function ServiceLandingPage({ data }: Props) {
             </h2>
             <p className="slp-subtitle">{data.capabilities.subtitle}</p>
           </div>
-          <div className="slp-grid slp-grid--3">
+
+          <div className="slp-cap__grid">
             {data.capabilities.items.map((cap, i) => {
               const Icon = CAP_ICONS[i] ?? Layers;
+              const num = String(i + 1).padStart(2, "0");
               return (
-                <Window key={cap.title} label={`MOD_0${i + 1}`} data-slp-reveal>
-                  <Icon className="slp-cap__icon size-4" aria-hidden />
-                  <h3 className="slp-cap__title">{cap.title}</h3>
-                  <p className="slp-cap__desc">{cap.description}</p>
-                </Window>
+                <article key={cap.title} className="slp-cap__card" data-slp-reveal>
+                  {/* accent line top */}
+                  <div className="slp-cap__card-accent" aria-hidden />
+                  {/* radial glow on hover */}
+                  <div className="slp-cap__card-glow" aria-hidden />
+                  {/* big watermark number */}
+                  <span className="slp-cap__card-wm" aria-hidden>{num}</span>
+
+                  {/* meta row: module id + status */}
+                  <div className="slp-cap__card-meta">
+                    <span className="slp-cap__card-modlabel">MOD_{num}</span>
+                    <span className="slp-cap__card-status" aria-label="Módulo ativo">
+                      <span className="slp-cap__card-dot" aria-hidden />
+                      ATIVO
+                    </span>
+                  </div>
+
+                  {/* icon */}
+                  <div className="slp-cap__card-icon" aria-hidden>
+                    <Icon className="size-5" />
+                  </div>
+
+                  {/* title */}
+                  <h3 className="slp-cap__card-title">{cap.title}</h3>
+
+                  {/* divider */}
+                  <div className="slp-cap__card-divider" aria-hidden />
+
+                  {/* description */}
+                  <p className="slp-cap__card-desc">{cap.description}</p>
+                </article>
               );
             })}
           </div>
@@ -870,7 +850,7 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      <Footer homePrefix="/" />
+      <Footer />
     </div>
   );
 }
