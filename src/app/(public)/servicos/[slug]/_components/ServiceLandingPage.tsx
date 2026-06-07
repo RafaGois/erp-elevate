@@ -14,6 +14,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AlertTriangle,
   ArrowRight,
+  BarChart3,
   Check,
   ChevronDown,
   Globe,
@@ -28,6 +29,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type {
   ComparisonValue,
   ServiceLandingPage,
@@ -58,6 +60,13 @@ const fontPixel = Press_Start_2P({
 
 const PAIN_ICONS = [ScanSearch, Layers, AlertTriangle] as const;
 const CAP_ICONS = [Globe, Lock, Monitor, Link2, ShieldCheck, Zap] as const;
+const RELATED_ICONS: Record<string, LucideIcon> = {
+  digitalizacao: Globe,
+  pcp: Layers,
+  dashboards: BarChart3,
+  "sistemas-sob-medida": Monitor,
+  "integracao-automacao": Link2,
+};
 function TrustMarqueeGroup({ items }: { items: string[] }) {
   return (
     <div className="slp-trust__group" aria-hidden>
@@ -820,32 +829,88 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 14 Relacionados */}
-      <section className="slp-section slp-related" aria-labelledby="slp-related-title">
-        <div className="slp-wrap">
+      {/* 14 Relacionados — explore fold */}
+      <section className="slp-section slp-exp-fold" aria-labelledby="slp-related-title">
+        <div className="slp-exp-fold__bg" aria-hidden />
+        <div className="slp-exp-fold__grid" aria-hidden />
+        <div className="slp-exp-fold__scanlines" aria-hidden />
+        <div className="slp-exp-fold__glow slp-exp-fold__glow--lime" aria-hidden />
+        <div className="slp-exp-fold__glow slp-exp-fold__glow--em" aria-hidden />
+        <div className="slp-exp-fold__rule slp-exp-fold__rule--top" aria-hidden />
+        <div className="slp-exp-fold__rule slp-exp-fold__rule--bottom" aria-hidden />
+        <span className="slp-exp-fold__watermark" aria-hidden>
+          EXP
+        </span>
+        <span className="slp-exp-fold__corner slp-exp-fold__corner--tl" aria-hidden />
+        <span className="slp-exp-fold__corner slp-exp-fold__corner--br" aria-hidden />
+        <span className="slp-exp-fold__tag slp-exp-fold__tag--left" aria-hidden>
+          SERVICES
+        </span>
+        <span className="slp-exp-fold__tag slp-exp-fold__tag--right" aria-hidden>
+          OPEN
+        </span>
+
+        <div className="slp-wrap slp-exp-fold__wrap">
           <div className="slp-head" data-slp-reveal>
             <span className="slp-kicker">// explore</span>
             <h2 id="slp-related-title" className="slp-title">
               Serviços que combinam com esse
             </h2>
+            <p className="slp-subtitle">
+              Clique em uma solução complementar para ver como ela se encaixa na
+              sua operação.
+            </p>
           </div>
-          <div className="slp-grid slp-grid--3">
-            {data.relatedServices.map((svc) => (
-              <Link
-                key={svc.slug}
-                href={`/servicos/${svc.slug}`}
-                data-slp-reveal
-              >
-                <Window label={svc.label} bodyClassName="flex flex-col h-full">
-                  <h3 className="slp-related__name">{svc.name}</h3>
-                  <p className="slp-related__teaser">{svc.teaser}</p>
-                  <span className="slp-related__link">
-                    Ver solução
-                    <ArrowRight className="size-3" aria-hidden />
-                  </span>
-                </Window>
-              </Link>
-            ))}
+
+          <div className="slp-exp__grid">
+            {data.relatedServices.map((svc, i) => {
+              const Icon = RELATED_ICONS[svc.slug] ?? Layers;
+              const num = String(i + 1).padStart(2, "0");
+
+              return (
+                <Link
+                  key={svc.slug}
+                  href={`/servicos/${svc.slug}`}
+                  className="slp-exp__link"
+                  data-slp-reveal
+                  aria-label={`Explorar ${svc.name}: ${svc.teaser}`}
+                >
+                  <article className="slp-exp__card">
+                    <div className="slp-exp__card-accent" aria-hidden />
+                    <div className="slp-exp__card-glow" aria-hidden />
+                    <span className="slp-exp__card-wm" aria-hidden>
+                      {num}
+                    </span>
+                    <span className="slp-exp__card-corner" aria-hidden>
+                      <ArrowRight className="size-3" />
+                    </span>
+
+                    <div className="slp-exp__card-meta">
+                      <span className="slp-exp__card-syslabel">{svc.label}</span>
+                      <span className="slp-exp__card-status">
+                        <span className="slp-exp__card-dot" aria-hidden />
+                        ABRIR
+                      </span>
+                    </div>
+
+                    <div className="slp-exp__card-icon" aria-hidden>
+                      <Icon className="size-5" />
+                    </div>
+
+                    <h3 className="slp-exp__card-title">{svc.name}</h3>
+                    <div className="slp-exp__card-divider" aria-hidden />
+                    <p className="slp-exp__card-teaser">{svc.teaser}</p>
+
+                    <div className="slp-exp__card-foot">
+                      <span className="slp-exp__card-cta">Ver solução</span>
+                      <span className="slp-exp__card-arrow" aria-hidden>
+                        <ArrowRight className="size-4" />
+                      </span>
+                    </div>
+                  </article>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
