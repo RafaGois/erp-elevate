@@ -57,7 +57,11 @@ export type ServiceLandingPage = {
     kicker: string;
     title: string;
     subtitle: string;
-    items: string[];
+    items: {
+      step: string;
+      title: string;
+      description: string;
+    }[];
   };
   capabilities: {
     kicker: string;

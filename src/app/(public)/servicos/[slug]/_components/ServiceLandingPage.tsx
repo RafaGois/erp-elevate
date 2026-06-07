@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ServiceLandingMenu from "./ServiceLandingMenu";
 import HeroBackgroundVideo from "./HeroBackgroundVideo";
+import Timeline2 from "@/components/ui/8bit-timeline2";
 import { DotGothic16, Press_Start_2P } from "next/font/google";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -12,6 +13,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AlertTriangle,
   ArrowRight,
+  Camera,
   Check,
   ChevronDown,
   Globe,
@@ -22,10 +24,14 @@ import {
   MessageCircle,
   Minus,
   Monitor,
+  PackageCheck,
+  Presentation,
   ScanSearch,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   TrendingUp,
+  Users,
   Workflow,
   X,
   Zap,
@@ -60,6 +66,14 @@ const fontPixel = Press_Start_2P({
 const PAIN_ICONS = [ScanSearch, Layers, AlertTriangle] as const;
 const BENEFIT_ICONS = [Sparkles, Workflow, LayoutDashboard, TrendingUp] as const;
 const CAP_ICONS = [Globe, Lock, Monitor, Link2, ShieldCheck, Zap] as const;
+const DELIVERABLE_ICONS = [
+  Users,
+  Camera,
+  Monitor,
+  Presentation,
+  SlidersHorizontal,
+  PackageCheck,
+] as const;
 
 function TrustMarqueeGroup({ items }: { items: string[] }) {
   return (
@@ -235,35 +249,46 @@ export default function ServiceLandingPage({ data }: Props) {
       {/* 03 Problema */}
       <section
         id="problema"
-        className="slp-section"
+        className="slp-section slp-problem"
         aria-labelledby="slp-problem-title"
       >
-        <div className="slp-wrap">
-          <div className="slp-head" data-slp-reveal>
+        <div className="slp-problem__bg" aria-hidden />
+        <div className="slp-wrap slp-problem__wrap">
+
+          {/* cabeçalho */}
+          <div className="slp-problem__head" data-slp-reveal>
             <span className="slp-kicker">{data.problem.kicker}</span>
-            <h2 id="slp-problem-title" className="slp-title">
+            <h2 id="slp-problem-title" className="slp-problem__title">
               {data.problem.title}
             </h2>
-            <p className="slp-subtitle">{data.problem.subtitle}</p>
+            <p className="slp-problem__subtitle">{data.problem.subtitle}</p>
           </div>
-          <div className="slp-grid slp-grid--3">
+
+          {/* cards de dor */}
+          <div className="slp-problem__cards">
             {data.problem.pains.map((pain, i) => {
               const Icon = PAIN_ICONS[i] ?? AlertTriangle;
               return (
-                <Window
+                <article
                   key={pain.title}
-                  label={`ALERTA_0${i + 1}`}
+                  className="slp-problem__card"
                   data-slp-reveal
                 >
-                  <span className="slp-pain__icon">
-                    <Icon className="size-5" aria-hidden />
-                  </span>
-                  <h3 className="slp-pain__title">{pain.title}</h3>
-                  <p className="slp-card__desc">{pain.description}</p>
-                </Window>
+                  <div className="slp-problem__card-num" aria-hidden>
+                    0{i + 1}
+                  </div>
+                  <div className="slp-problem__card-body">
+                    <div className="slp-problem__card-icon" aria-hidden>
+                      <Icon className="size-5" />
+                    </div>
+                    <h3 className="slp-problem__card-title">{pain.title}</h3>
+                    <p className="slp-problem__card-desc">{pain.description}</p>
+                  </div>
+                </article>
               );
             })}
           </div>
+
         </div>
       </section>
 
@@ -370,8 +395,12 @@ export default function ServiceLandingPage({ data }: Props) {
         </div>
       </section>
 
-      {/* 07 Entregáveis */}
-      <section className="slp-section" aria-labelledby="slp-deliver-title">
+      {/* 07 Entregáveis — timeline */}
+      <section
+        id="entregaveis"
+        className="slp-section"
+        aria-labelledby="slp-deliver-title"
+      >
         <div className="slp-wrap">
           <div className="slp-head" data-slp-reveal>
             <span className="slp-kicker">{data.deliverables.kicker}</span>
@@ -380,13 +409,19 @@ export default function ServiceLandingPage({ data }: Props) {
             </h2>
             <p className="slp-subtitle">{data.deliverables.subtitle}</p>
           </div>
-          <div className="slp-deliver">
-            {data.deliverables.items.map((item) => (
-              <div key={item} className="slp-deliver__item" data-slp-reveal>
-                <Check className="size-4" aria-hidden />
-                {item}
-              </div>
-            ))}
+          <div data-slp-reveal>
+            <Timeline2
+              showHeader={false}
+              steps={data.deliverables.items.map((item, index) => {
+                const Icon = DELIVERABLE_ICONS[index] ?? Layers;
+                return {
+                  icon: <Icon className="size-5" aria-hidden />,
+                  title: item.title,
+                  description: item.description,
+                };
+              })}
+              className="slp-deliver-timeline2"
+            />
           </div>
         </div>
       </section>

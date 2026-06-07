@@ -1,0 +1,164 @@
+/* 8bit Timeline2 — checkpoints retro (Press Start 2P + DotGothic16) */
+
+.bit-timeline2__inner {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+}
+
+.bit-timeline2__header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.bit-timeline2__title {
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display), "DotGothic16", monospace;
+  font-size: clamp(1.7rem, 4vw, 2.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+
+.bit-timeline2__subtitle {
+  max-width: 42rem;
+  margin-inline: auto;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+
+.bit-timeline2__track {
+  position: relative;
+}
+
+.bit-timeline2__line {
+  position: absolute;
+  pointer-events: none;
+  border-color: color-mix(in srgb, var(--hero-accent, #dfff00) 45%, var(--border));
+}
+
+.bit-timeline2__line--h {
+  top: 1.75rem;
+  right: 0;
+  left: 0;
+  display: none;
+  height: 0;
+  border-top: 2px dashed;
+}
+
+.bit-timeline2__line--v {
+  top: 1.75rem;
+  bottom: 0;
+  left: 1.75rem;
+  display: block;
+  width: 0;
+  border-left: 2px dashed;
+}
+
+.bit-timeline2__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.bit-timeline2__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 0.85rem 1rem;
+  align-items: start;
+  padding-left: 0.25rem;
+}
+
+.bit-timeline2__checkpoint {
+  position: relative;
+  z-index: 1;
+  grid-row: span 2;
+  display: flex;
+  width: 3.5rem;
+  height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #171717;
+  background: var(--background);
+  color: var(--hero-accent, #dfff00);
+  box-shadow: 3px 3px 0 #000;
+}
+
+.bit-timeline2__step-title {
+  font-family: var(--font-display), "DotGothic16", monospace;
+  font-size: clamp(0.95rem, 2vw, 1.08rem);
+  line-height: 1.35;
+}
+
+.bit-timeline2__step-desc {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* Desktop: horizontal quest line */
+@media (min-width: 900px) {
+  .bit-timeline2__line--h {
+    display: block;
+  }
+
+  .bit-timeline2__line--v {
+    display: none;
+  }
+
+  .bit-timeline2__steps {
+    flex-direction: row;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+
+  .bit-timeline2__step {
+    flex: 1 0 11.5rem;
+    min-width: 11.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    grid-template-columns: unset;
+    gap: 0;
+    padding: 0 0.65rem;
+    scroll-snap-align: start;
+  }
+
+  .bit-timeline2__checkpoint {
+    grid-row: auto;
+    margin-bottom: 1rem;
+  }
+
+  .bit-timeline2__step-title {
+    margin-bottom: 0.45rem;
+  }
+
+  .bit-timeline2__step-desc {
+    max-width: 11rem;
+    margin-inline: auto;
+    font-size: 0.78rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .bit-timeline2__steps {
+    overflow-x: visible;
+  }
+
+  .bit-timeline2__step {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .bit-timeline2__step-desc {
+    max-width: 13rem;
+  }
+}

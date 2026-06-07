@@ -145,19 +145,46 @@ export const digitalizacaoLanding: ServiceLandingPage = {
   },
   deliverables: {
     kicker: "// o que está incluído",
-    title: "Escopo claro desde o começo.",
+    title: "Do briefing à entrega, em etapas claras.",
     subtitle:
-      "Você sabe exatamente o que recebe. Sem surpresa na entrega e sem letra miúda na proposta.",
+      "O projeto segue um fluxo simples de acompanhar, validar e publicar. Você sabe o que vem em cada fase.",
     items: [
-      "Levantamento dos processos e canais digitais atuais",
-      "Arquitetura da solução entre site, sistema e integrações",
-      "Design alinhado à sua marca e ao seu público",
-      "Desenvolvimento responsivo com performance e SEO técnico",
-      "Integração com ERP, planilhas, APIs e ferramentas que já existem",
-      "Ambiente de teste para validar antes de ir para o ar",
-      "Documentação funcional e técnica para o time interno",
-      "Treinamento da equipe e implantação acompanhada",
-      "Suporte depois da entrega e plano de evolução por fases",
+      {
+        step: "01",
+        title: "Reunião de alinhamento e briefing",
+        description:
+          "Entendemos sua empresa, seu público e o que a presença digital precisa comunicar antes de começar.",
+      },
+      {
+        step: "02",
+        title: "Captação de imagens",
+        description:
+          "Coletamos ou orientamos o material visual que vai sustentar o site com a cara da sua marca.",
+      },
+      {
+        step: "03",
+        title: "Desenvolvimento",
+        description:
+          "Construímos site, páginas e integrações com performance, SEO e a identidade definida no briefing.",
+      },
+      {
+        step: "04",
+        title: "Reunião de apresentação",
+        description:
+          "Mostramos o resultado em ambiente de revisão para você ver tudo funcionando antes de ir ao ar.",
+      },
+      {
+        step: "05",
+        title: "Ajustes",
+        description:
+          "Refinamos textos, layout e detalhes com base no seu feedback até ficar do jeito certo.",
+      },
+      {
+        step: "06",
+        title: "Entrega",
+        description:
+          "Publicamos, passamos o que foi feito e deixamos sua presença digital pronta para gerar resultado.",
+      },
     ],
   },
   capabilities: {
