@@ -11,12 +11,8 @@ import Movimentation from "@/types/models/movimentations/Movimentation";
 import User from "@/types/models/User";
 import BankAccount from "@/types/models/movimentations/BankAccount";
 import MovimentationCategory from "@/types/models/movimentations/Category";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import MovimentationType from "@/types/enums/MovimentationType";
-import {
-  FileAttachmentsPanel,
-  FILE_ATTACHMENTS_CONFIG,
-} from "./components/FileAttachmentsPanel";
 
 const MOVIMENTATION_TYPE_OPTIONS = [
   { id: MovimentationType.ENTRADA, name: "Entrada" },
@@ -27,9 +23,6 @@ const MOVIMENTATION_TYPE_OPTIONS = [
 type MovimentationModalProps = BaseModalProps<Movimentation>;
 
 export default function MovimentationModal(props: MovimentationModalProps) {
-  const movimentationId = props.selectedObject?.id;
-  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
-
   const form = useForm<Movimentation>({
     defaultValues: {
       description: props.selectedObject?.description,
@@ -39,15 +32,16 @@ export default function MovimentationModal(props: MovimentationModalProps) {
       Type: (props.selectedObject?.Type as MovimentationType) ?? MovimentationType.ENTRADA,
       bankAccountId: props.selectedObject?.bankAccountId,
       categoryId: props.selectedObject?.categoryId,
+      installments: props.selectedObject?.installments ?? 1,
     },
   });
 
   function returnCorrctDate(date: Date) {
     if(!date) return new Date();
 
-    let dateLocal = new Date(date);
+    const dateLocal = new Date(date);
     dateLocal.setDate(dateLocal.getDate() - 1);
-    return dateLocal;
+    return dateLocal; 
   }
 
   async function handleSubmit(data: Movimentation) {
@@ -56,12 +50,12 @@ export default function MovimentationModal(props: MovimentationModalProps) {
       if (props.selectedObject?.id) {
        
         await update(data);
-        toast.success("Categoria de equipamento atualizada com sucesso.");
+        toast.success("Movimentação atualizada com sucesso.");
       } else {
         console.log(data);
         
         await create(data);
-        toast.success("Categoria de equipamento criada com sucesso.");
+        toast.success("Movimentação criada com sucesso.");
       }
 
       handleClose();
@@ -74,25 +68,18 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     }
   }
 
-  async function create(data: Movimentation) {
+  function normalizePayload(data: Movimentation) {
     data.date = new Date(data.date?.toString() ?? "");
-    
-    const res = await api.post<Movimentation>("/movimentations", data);
-    const newId = res.data.id;
-    const config = FILE_ATTACHMENTS_CONFIG.movimentation;
-    if (pendingFiles.length > 0) {
-      for (const file of pendingFiles) {
-        const formData = new FormData();
-        formData.append("file", file);
-        Object.entries(config.getUploadExtraFields(newId)).forEach(
-          ([k, v]) => formData.append(k, v)
-        );
-        await api.post("/files", formData);
-      }
-    }
+    data.installments = Math.max(1, Math.floor(Number(data.installments) || 1));
+  }
+
+  async function create(data: Movimentation) {
+    normalizePayload(data);
+    await api.post<Movimentation>("/movimentations", data);
   }
 
   async function update(data: Movimentation) {
+    normalizePayload(data);
     await api.put(
       `/movimentations/${props.selectedObject?.id}`,
       data
@@ -134,7 +121,6 @@ export default function MovimentationModal(props: MovimentationModalProps) {
     if (props?.setAction) props.setAction(null);
     if (props?.setSelectedObject) props.setSelectedObject(null);
     form.reset();
-    setPendingFiles([]);
     if (props?.refetch) props.refetch();
   }
 
@@ -171,14 +157,23 @@ export default function MovimentationModal(props: MovimentationModalProps) {
               required
               form={form}
             />
-            <InputForm
-              name="value"
-              label="Valor"
-              placeholder="Valor"
-              type="number"
-              required
-              form={form}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">
+              <InputForm
+                name="value"
+                label="Valor"
+                placeholder="Valor da parcela "
+                type="number"
+                required
+                form={form}
+              />
+              <InputForm
+                name="installments"
+                label="Parcelas"
+                placeholder="1"
+                type="number"
+                form={form}
+              />
+            </div>
             <InputForm
               name="date"
               label="Data"
@@ -219,16 +214,6 @@ export default function MovimentationModal(props: MovimentationModalProps) {
                 form={form}
               />
             </div>
-
-            <FileAttachmentsPanel
-              ownerId={movimentationId}
-              ownerType="movimentation"
-              pendingFiles={pendingFiles}
-              onPendingFilesChange={setPendingFiles}
-              label="Anexos"
-              createDescription="Os arquivos serão enviados após salvar a movimentação (opcional)"
-              editDescription="Documentos, imagens ou PDFs da movimentação (opcional)"
-            />
           </div>
         </form>
       </Form>

@@ -20,7 +20,10 @@ interface Props {
 export default function CoverageGauge({ coverage }: Props) {
   const { ref, width } = useChartWidth();
 
-  const { coveragePercent, fixedCostTarget, lucro } = coverage;
+  console.log(coverage);
+  
+
+  const { coveragePercent, meta, lucro } = coverage;
   const hasTarget = coveragePercent !== null;
   const fillRatio = hasTarget
     ? Math.min(coveragePercent / 100, SCALE_MAX_PERCENT / 100) /
@@ -29,7 +32,7 @@ export default function CoverageGauge({ coverage }: Props) {
   const covered = hasTarget && coveragePercent >= 100;
   const color = covered ? SERIES_COLORS.positive : SERIES_COLORS.negative;
   const metaRatio = 100 / SCALE_MAX_PERCENT;
-  const gapToMeta = hasTarget ? Math.max(0, fixedCostTarget - lucro) : null;
+  const gapToMeta = hasTarget ? Math.max(0, meta - lucro) : null;
   const metaReached = hasTarget && gapToMeta === 0;
 
   if (width === 0) {
@@ -121,7 +124,7 @@ export default function CoverageGauge({ coverage }: Props) {
           <div className="coverage-gauge__stat">
             <p className="coverage-gauge__stat-label">Meta (fixos)</p>
             <p className="coverage-gauge__stat-value">
-              {formatBRL(fixedCostTarget)}
+              {formatBRL(meta)}
             </p>
           </div>
           <div className="coverage-gauge__stat">

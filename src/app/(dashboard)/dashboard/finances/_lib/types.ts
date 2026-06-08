@@ -46,7 +46,7 @@ export interface ProfitByMonthResponse {
 
 export interface FixedCostCoverageResponse {
   period: Period;
-  fixedCostTarget: number;
+  meta: number;
   lucro: number;
   coveragePercent: number | null;
 }

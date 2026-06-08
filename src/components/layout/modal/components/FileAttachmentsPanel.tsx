@@ -13,7 +13,7 @@ export interface AttachedFile {
   size?: number;
 }
 
-export type FileOwnerType = "budget" | "movimentation";
+export type FileOwnerType = "budget";
 
 export interface FileAttachmentsConfig {
   getFetchUrl: (ownerId: string) => string;
@@ -27,10 +27,6 @@ export const FILE_ATTACHMENTS_CONFIG: Record<
   budget: {
     getFetchUrl: (id) => `/files/budget/${id}`,
     getUploadExtraFields: (id) => ({ budgetId: id }),
-  },
-  movimentation: {
-    getFetchUrl: (id) => `/files/movimentation/${id}`,
-    getUploadExtraFields: (id) => ({ ownerId: id, ownerType: "MOVIMENTATION" }),
   },
 };
 

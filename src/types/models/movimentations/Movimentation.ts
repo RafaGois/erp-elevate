@@ -15,6 +15,7 @@ export default class Movimentation {
   private _bankAccountId: string;
   private _Category: MovimentationCategory;
   private _categoryId: string;
+  private _installments: number;
 
   constructor(
     id: string,
@@ -28,6 +29,7 @@ export default class Movimentation {
     bankAccountId: string,
     Category: MovimentationCategory,
     categoryId: string,
+    installments = 1,
   ) {
     this._id = id;
     this._description = description;
@@ -40,6 +42,7 @@ export default class Movimentation {
     this._bankAccountId = bankAccountId;
     this._Category = Category;
     this._categoryId = categoryId;
+    this._installments = installments;
   }
 
   get id() {
@@ -88,5 +91,13 @@ export default class Movimentation {
 
   get Category() {
     return this._Category;
+  }
+
+  get installments() {
+    return this._installments;
+  }
+
+  set installments(installments: number) {
+    this._installments = installments;
   }
 }
