@@ -51,12 +51,7 @@ function MarqueeGroup() {
   );
 }
 
-type FooterProps = {
-  /** Prefixo para os links de âncora. Use "/" em subpáginas para resolver na home. */
-  homePrefix?: string;
-};
-
-export default function Footer({ homePrefix = "" }: FooterProps) {
+export default function Footer() {
   return (
     <footer
       id="contact"
@@ -69,7 +64,7 @@ export default function Footer({ homePrefix = "" }: FooterProps) {
         <div className="ft__main">
           {/* Brand */}
           <div className="ft__brand">
-            <Link href={`${homePrefix}#hero`} className="ft__logo">
+            <Link href="#hero" className="ft__logo">
               <Image
                 src={COMPANY_LOGO}
                 alt="Sistemas Elevate"
@@ -96,11 +91,11 @@ export default function Footer({ homePrefix = "" }: FooterProps) {
 
           {/* Navigation */}
           <nav aria-label="Navegação do rodapé">
-            <p className="ft__col-kicker">// Navegação</p>
+            <p className="ft__col-kicker">{"// Navegação"}</p>
             <ul className="ft__nav-list">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={`${homePrefix}${link.href}`} className="ft__nav-link">
+                  <Link href={link.href} className="ft__nav-link">
                     {link.label}
                   </Link>
                 </li>
@@ -110,7 +105,7 @@ export default function Footer({ homePrefix = "" }: FooterProps) {
 
           {/* Contact */}
           <div>
-            <p className="ft__col-kicker">// Contato</p>
+            <p className="ft__col-kicker">{"// Contato"}</p>
             <div className="ft__social">
               <a
                 href="https://www.instagram.com/elevatepromediaoficial/"
