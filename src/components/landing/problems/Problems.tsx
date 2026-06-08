@@ -11,6 +11,8 @@ import {
   ScanSearch,
   RadioTower,
   Blocks,
+  Globe,
+  BarChart3,
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
@@ -60,10 +62,36 @@ const PROBLEMS: ProblemEntry[] = [
     severityLabel: "Alerta",
     tags: ["Alta recorrência", "Fonte de retrabalho"],
     ghost: "PLAN",
-    causeLabel: "sem dados confiáveis, o planejamento fica no escuro",
+    causeLabel: "sem base confiável, tudo downstream desanda",
   },
   {
     code: "ERR::002",
+    sys: "WEB",
+    icon: Globe,
+    title: "Marca invisível para quem pesquisa",
+    description:
+      "O cliente acha sua empresa no Google e encontra site fraco, desatualizado ou ausência digital. A reputação que você construiu na prática não aparece na tela — e o pedido vai para quem parece maior online.",
+    severity: "critical",
+    severityLabel: "Crítico",
+    tags: ["Perda de credibilidade", "Lead que não chega"],
+    ghost: "WEB",
+    causeLabel: "sem presença digital, o mercado decide antes da conversa",
+  },
+  {
+    code: "ERR::003",
+    sys: "DATA",
+    icon: BarChart3,
+    title: "Indicador montado na véspera da reunião",
+    description:
+      "ERP, produção e qualidade geram dado, mas o painel nasce na planilha na noite anterior. A gestão decide com número defasado — e descobre o desvio quando já perdeu prazo ou margem.",
+    severity: "warn",
+    severityLabel: "Alerta",
+    tags: ["Decisão tardia", "Dado que não vira ação"],
+    ghost: "DATA",
+    causeLabel: "sem visão em tempo real, o problema aparece tarde demais",
+  },
+  {
+    code: "ERR::004",
     sys: "CTRL",
     icon: ClipboardList,
     title: "Produção controlada no papel",
@@ -73,25 +101,25 @@ const PROBLEMS: ProblemEntry[] = [
     severityLabel: "Alerta",
     tags: ["Impacto direto em prazos", "Retrabalho de dados"],
     ghost: "CTRL",
-    causeLabel: "sem rastreamento, nenhuma ordem tem histórico",
+    causeLabel: "sem rastreamento, nenhuma ordem tem histórico confiável",
   },
   {
-    code: "ERR::003",
-    sys: "TRACE",
-    icon: ScanSearch,
-    title: "Rastreabilidade inexistente",
+    code: "ERR::005",
+    sys: "MACH",
+    icon: RadioTower,
+    title: "Máquina gera dado que ninguém usa",
     description:
-      "Onde está a ordem 4812? Em qual etapa? Quem tocou por último? A resposta exige ligar para três pessoas, abrir duas planilhas e ainda assim não ter certeza.",
+      "PLC e sensor registram ciclo, parada e status, mas a informação não chega à gestão. Automação existe na planta — e a produção continua sendo caixa preta para quem decide.",
     severity: "critical",
     severityLabel: "Crítico",
-    tags: ["Visibilidade zero", "Decisão às cegas"],
-    ghost: "TRACE",
-    causeLabel: "setores operam com dados diferentes do mesmo processo",
+    tags: ["Parada invisível", "IIoT sem valor"],
+    ghost: "MACH",
+    causeLabel: "sem captura de evento, alerta só chega tarde",
   },
   {
-    code: "ERR::004",
+    code: "ERR::006",
     sys: "SYNC",
-    icon: RadioTower,
+    icon: ScanSearch,
     title: "Setores que falam línguas diferentes",
     description:
       "Comercial prometeu prazo com base em dados que a produção não conhecia. PCP planejou sem saber do estoque real. O resultado é sempre o mesmo: atraso, conflito e cliente insatisfeito.",
@@ -102,7 +130,7 @@ const PROBLEMS: ProblemEntry[] = [
     causeLabel: "quando os setores falham, o sistema inteiro trava",
   },
   {
-    code: "ERR::005",
+    code: "ERR::007",
     sys: "LOCK",
     icon: Blocks,
     title: "Ferramentas que aprisionam o processo",
@@ -256,8 +284,9 @@ export default function Problems() {
           </h2>
 
           <p className="pb__subtitle">
-            Não são falhas isoladas — são sintomas de um sistema que cresceu
-            além das ferramentas que usava. E cada um alimenta o próximo.
+            Não são falhas isoladas — são sintomas de uma empresa que cresceu
+            além das ferramentas que usava. Da internet ao chão de fábrica,
+            cada um alimenta o próximo.
           </p>
         </header>
 
@@ -350,7 +379,7 @@ export default function Problems() {
 
           <div className="pb__footer-tally" aria-hidden>
             <div className="pb__tally-item">
-              <span className="pb__tally-val">5</span>
+              <span className="pb__tally-val">{PROBLEMS.length}</span>
               <span className="pb__tally-label">Falhas<br />detectadas</span>
             </div>
             <div className="pb__tally-item">

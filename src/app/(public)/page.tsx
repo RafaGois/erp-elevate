@@ -9,21 +9,22 @@ import Services from "@/components/landing/services/Services";
 import Problems from "@/components/landing/problems/Problems";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef, useEffect } from "react";
-import Clients from "@/components/landing/clients/Clients";
 import CallToAction from "@/components/landing/CTA/CallToAction";
 import LandingCustomCursor from "@/components/landing/cursor/LandingCustomCursor";
 import Lenis from "lenis";
 
+const ANCHOR_SCROLL_OFFSET = -72;
+
 export default function Home() {
   const container = useRef<HTMLDivElement | null>(null);
-  const smootherRef = useRef<ScrollSmoother | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useGSAP(
     () => {
       const lenis = new Lenis();
+      lenisRef.current = lenis;
       lenis.on("scroll", ScrollTrigger.update);
 
       const onTick = (time: number) => {
@@ -35,41 +36,38 @@ export default function Home() {
 
       return () => {
         gsap.ticker.remove(onTick);
+        lenisRef.current = null;
         lenis.destroy();
       };
     },
     { scope: container }
   );
 
-  // Função para navegação suave com ScrollSmoother
-  const scrollToSection = (sectionId: string) => {
-    if (!smootherRef.current) return;
-
-    const targetElement = document.getElementById(sectionId);
-    if (targetElement) {
-      // Usar ScrollSmoother para navegação suave
-      const targetPosition = targetElement.offsetTop;
-      smootherRef.current.scrollTo(targetPosition, true);
-    }
-  };
-
-  // Interceptar cliques em links com âncoras
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const link = target.closest('a[href^="#"]');
+      const link = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (!link) return;
 
-      if (link) {
-        e.preventDefault();
-        const href = link.getAttribute("href");
-        if (href && href.startsWith("#")) {
-          const sectionId = href.substring(1);
-          scrollToSection(sectionId);
-        }
+      const href = link.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const sectionId = href.slice(1);
+      if (!sectionId) return;
+
+      const targetElement = document.getElementById(sectionId);
+      if (!targetElement) return;
+
+      e.preventDefault();
+
+      const lenis = lenisRef.current;
+      if (lenis) {
+        lenis.scrollTo(targetElement, { offset: ANCHOR_SCROLL_OFFSET });
+        return;
       }
+
+      targetElement.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
-    // Adicionar listener para todos os cliques
     document.addEventListener("click", handleAnchorClick);
 
     return () => {
