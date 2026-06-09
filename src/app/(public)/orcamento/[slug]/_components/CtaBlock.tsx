@@ -7,6 +7,16 @@ import { useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { CtaBlockData } from "@/types/budget-content";
 import EditableField from "./EditableField";
+import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
+
+function resolveCtaHref(data: CtaBlockData): string {
+  if (data.botaoUrl) return data.botaoUrl;
+  if (data.whatsapp) {
+    return `https://wa.me/${data.whatsapp.replace(/\D/g, "")}`;
+  }
+  if (data.email) return `mailto:${data.email}`;
+  return ELEVATE_WHATSAPP_URL;
+}
 
 interface Props {
   data: CtaBlockData;
@@ -180,13 +190,8 @@ export default function CtaBlock({ data, isAdmin = false, onChange }: Props) {
     { scope: container }
   );
 
-  const ctaHref =
-    data.botaoUrl ??
-    (data.whatsapp
-      ? `https://wa.me/${data.whatsapp.replace(/\D/g, "")}`
-      : data.email
-        ? `mailto:${data.email}`
-        : "#");
+  const ctaHref = resolveCtaHref(data);
+  const isWhatsAppLink = ctaHref.includes("wa.me");
 
   return (
     <section
@@ -277,14 +282,14 @@ export default function CtaBlock({ data, isAdmin = false, onChange }: Props) {
           <ArrowUpRight className="h-4 w-4" />
         </a>
 
-        {(data.email || data.whatsapp) && (
+        {(data.email || isWhatsAppLink) && (
           <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-black/50">
             {data.email && (
               <a href={`mailto:${data.email}`} className="hover:text-black transition-colors">
                 {data.email}
               </a>
             )}
-            {data.whatsapp && (
+            {isWhatsAppLink && (
               <a href={ctaHref} className="hover:text-black transition-colors">
                 WhatsApp
               </a>

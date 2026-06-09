@@ -1,6 +1,7 @@
 import BudgetType from "@/types/enums/BudgetType";
 import type Budget from "@/types/models/Budget";
 import type { BudgetContent } from "@/types/budget-content";
+import { ELEVATE_WHATSAPP_NUMBER } from "@/lib/data/contact-links";
 
 function brl(value: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -11,6 +12,8 @@ function brl(value: number) {
 }
 
 function softwareTemplate(budget: Budget): BudgetContent {
+  const clientName = budget.client?.trim() || "seu negócio";
+
   return {
     blocks: [
       {
@@ -21,10 +24,11 @@ function softwareTemplate(budget: Budget): BudgetContent {
           projeto: budget.project ?? "",
           titulo: budget.name,
           subtitulo:
-            budget.description ?? "Solução sob medida para o seu negócio.",
+            budget.description ??
+            "Uma presença digital que reflete a excelência da sua marca.",
           investimento: brl(budget.value),
-          prazo: "A definir",
-          entregas: "A definir",
+          prazo: "7 semanas",
+          entregas: "6 entregas",
         },
       },
       {
@@ -32,11 +36,12 @@ function softwareTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Quem somos",
           descricao:
-            "Somos especialistas em desenvolvimento de software com foco em performance, previsibilidade e resultado de negócio.",
+            "Somos a Elevate, uma agência especializada em desenvolvimento de produtos digitais de alta performance. Unimos design estratégico, tecnologia de ponta e experiência do usuário para transformar marcas em experiências memoráveis. Nosso time é formado por designers, desenvolvedores e estrategistas apaixonados por resultados.",
           destaques: [
-            "Arquitetura escalável",
-            "Processo transparente",
-            "Entrega incremental",
+            "Mais de 5 anos de mercado",
+            "80+ projetos entregues",
+            "Equipe multidisciplinar certificada",
+            "Suporte dedicado pós-lançamento",
           ],
         },
       },
@@ -45,53 +50,53 @@ function softwareTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Por que este projeto importa",
           descricao:
-            "Alinhamos tecnologia aos objetivos do negócio para que cada investimento em produto digital gere retorno mensurável.",
-          introducao:
-            "Uma solução bem desenhada reduz atrito operacional, fortalece a confiança dos usuários e prepara o terreno para escalar sem retrabalho. Abaixo resumimos o valor estratégico que este trabalho entrega — do primeiro acesso ao crescimento contínuo.",
+            "O site é o ponto em que marca, oferta e confiança se encontram — antes mesmo do primeiro contato humano.",
+          introducao: `Hoje a maioria das decisões de compra começa online. Um site institucional bem estruturado não é apenas “presença na internet”: é a base para ser encontrado, compreendido e escolhido. Abaixo detalhamos por que esse investimento é estratégico para ${clientName} e como cada entrega desta proposta reforça credibilidade, clareza e resultados.`,
           estatisticas: [
-            {
-              valor: "360°",
-              legenda: "Visão completa do problema e da solução",
-            },
-            {
-              valor: "ROI",
-              legenda: "Decisões guiadas por métricas e uso real",
-            },
-            {
-              valor: "UX",
-              legenda: "Experiência pensada para conversão e retenção",
-            },
-            { valor: "Dev", legenda: "Base técnica sustentável e evolutiva" },
+            { valor: "24/7", legenda: "Sua marca disponível a qualquer hora" },
+            { valor: "1º", legenda: "Contato muitas vezes acontece no site" },
+            { valor: "SEO", legenda: "Ser encontrado no momento certo" },
+            { valor: "100%", legenda: "Experiência alinhada à identidade" },
           ],
           capitulos: [
             {
-              titulo: "Clareza para quem decide",
+              titulo: "Credibilidade antes da conversa",
               corpo:
-                "Propostas comerciais fortes não começam pelo código: começam por uma narrativa que conecta dor, oportunidade e entrega. Este projeto estrutura essa narrativa em interfaces e fluxos que o time pode apresentar com segurança a stakeholders e clientes.",
+                "Clientes e parceiros pesquisam a empresa antes de ligar ou visitar. Um site profissional transmite solidez, organização e cuidado com a imagem — sinais que reduzem o risco percebido e aceleram a confiança.",
               pontos: [
-                "Menos idas e vindas por escopo mal definido",
-                "Demonstração visual do valor antes do investimento total",
-                "Alinhamento entre negócio, produto e tecnologia",
+                "Primeira impressão alinhada ao posicionamento da marca",
+                "Conteúdo claro sobre história, valores e diferenciais",
+                "Canais de contato e informações institucionais sempre atualizadas",
               ],
             },
             {
-              titulo: "Operação e crescimento",
+              titulo: "Clareza na oferta",
               corpo:
-                "Soluções enxutas e bem arquitetadas custam menos para manter e evoluir. Priorizamos padrões que permitem novas funcionalidades sem reescrever o que já funciona — essencial para roadmap vivo.",
+                "Produtos e serviços bem apresentados geram menos dúvidas e mais pedidos qualificados. Estruturamos navegação, hierarquia visual e textos para que o visitante entenda rapidamente o que vocês fazem e para quem.",
               pontos: [
-                "Redução de débito técnico em decisões conscientes",
-                "Entregas incrementais com validação contínua",
-                "Segurança e boas práticas desde o primeiro sprint",
+                "Páginas pensadas para escaneabilidade e conversão",
+                "Suporte a campanhas e materiais de divulgação",
+                "Base para futuras expansões (blog, catálogo, área logada)",
               ],
             },
             {
-              titulo: "Confiança e profissionalismo",
+              titulo: "Performance e descoberta",
               corpo:
-                "Em mercados competitivos, a percepção de seriedade e qualidade influencia conversão e parcerias. Um produto polido transmite maturidade e reduz o risco percebido na compra.",
+                "Velocidade e boas práticas de SEO técnico ajudam o Google a indexar bem o site e mantêm a experiência agradável em celular — onde a maior parte do tráfego acontece.",
               pontos: [
-                "Identidade visual e interação coerentes com a marca",
-                "Performance e acessibilidade como padrão, não extra",
-                "Documentação e handoff que facilitam o time interno",
+                "Carregamento rápido e layout responsivo",
+                "Metadados, sitemap e estrutura amigável a buscadores",
+                "Integração com analytics para medir o que importa",
+              ],
+            },
+            {
+              titulo: "Um ativo que acompanha o negócio",
+              corpo:
+                "O projeto foi pensado para evoluir: arquitetura moderna facilita ajustes de conteúdo, novas seções e integrações sem recomeçar do zero a cada mudança de estratégia.",
+              pontos: [
+                "Stack atual (Next.js) com foco em manutenção e escala",
+                "Documentação e handoff para o time interno",
+                "Suporte pós-lançamento para estabilizar o go-live",
               ],
             },
           ],
@@ -100,9 +105,9 @@ function softwareTemplate(budget: Budget): BudgetContent {
       {
         type: "portfolio",
         data: {
-          titulo: "Projetos entregues",
+          titulo: "Sites que já entregamos",
           subtitulo:
-            "Conheça alguns dos produtos digitais que já desenvolvemos.",
+            "Navegue por alguns dos projetos que desenvolvemos — cada um pensado sob medida para o negócio do cliente.",
           itens: [
             {
               titulo: "Codinome Barbearia",
@@ -160,22 +165,37 @@ function softwareTemplate(budget: Budget): BudgetContent {
       {
         type: "timeline",
         data: {
-          titulo: "Cronograma",
+          titulo: "Como vai funcionar",
           etapas: [
             {
-              fase: "Planejamento",
-              descricao: "Kickoff e definição do escopo.",
+              fase: "Kickoff e alinhamento",
+              descricao:
+                "Reunião de início para entender a fundo a marca, objetivos e referências visuais. Definimos o escopo final e as entregas esperadas.",
               duracao: "Semana 1",
             },
             {
-              fase: "Execução",
-              descricao: "Implementação e revisões.",
-              duracao: "Semanas 2-4",
+              fase: "Design e prototipação",
+              descricao:
+                "Criação dos wireframes e design de alta fidelidade no Figma. Você aprova tudo antes de começarmos a desenvolver.",
+              duracao: "Semanas 2–3",
             },
             {
-              fase: "Entrega",
-              descricao: "Homologação e publicação.",
-              duracao: "Semana 5",
+              fase: "Desenvolvimento",
+              descricao:
+                "Implementação do site com Next.js, integrando todos os componentes aprovados no design. Ambiente de staging para revisão.",
+              duracao: "Semanas 4–5",
+            },
+            {
+              fase: "Testes e revisões",
+              descricao:
+                "Rodada de testes em diferentes dispositivos e navegadores. Ajustes finais com base no seu feedback.",
+              duracao: "Semana 6",
+            },
+            {
+              fase: "Lançamento",
+              descricao:
+                "Deploy em produção, configuração de domínio, HTTPS e monitoramento inicial. Entrega das credenciais e documentação.",
+              duracao: "Semana 7",
             },
           ],
         },
@@ -238,8 +258,10 @@ function softwareTemplate(budget: Budget): BudgetContent {
         type: "cta",
         data: {
           titulo: "Vamos começar?",
-          subtitulo: "Podemos iniciar assim que aprovar esta proposta.",
+          subtitulo:
+            "Estamos prontos para transformar a presença digital do seu negócio. Entre em contato agora e tire suas dúvidas.",
           botaoTexto: "Aprovar proposta",
+          whatsapp: ELEVATE_WHATSAPP_NUMBER,
         },
       },
     ],
@@ -407,6 +429,7 @@ function audiovisualTemplate(budget: Budget): BudgetContent {
           titulo: "Vamos produzir?",
           subtitulo: "Após aprovação, iniciamos o planejamento detalhado.",
           botaoTexto: "Aprovar proposta",
+          whatsapp: ELEVATE_WHATSAPP_NUMBER,
         },
       },
     ],
