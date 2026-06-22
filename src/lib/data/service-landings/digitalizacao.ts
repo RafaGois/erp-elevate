@@ -14,12 +14,12 @@ export const digitalizacaoLanding: ServiceLandingPage = {
       "Sua empresa já tem peso no mercado. Construímos o patrimônio digital à altura. Site, identidade online e presença corporativa que transmitem a seriedade da sua marca.",
   },
   hero: {
-    badge: "SYS//PRESENCE",
+    badge: "PRESENÇA DIGITAL",
     headline: "Você construiu uma empresa séria. A internet ainda não mostra isso.",
     subheadline:
       "Mostramos sua empresa na internet de um jeito que agrega valor, valoriza sua marca e transmite a seriedade que você já construiu no mercado.",
     microProof:
-      "Serviços · Varejo · Indústria · Tecnologia · Saúde",
+      "Empresas de serviços · Indústria · Varejo · Tecnologia · Saúde",
     primaryCta: "Falar no WhatsApp",
     secondaryCta: "Ver como funciona",
     backgroundImage: "/fundo.jpeg",
@@ -36,8 +36,8 @@ export const digitalizacaoLanding: ServiceLandingPage = {
   },
   trustBar: [
     "Desenvolvimento sob medida",
-    "Site e sistema na mesma base",
-    "Integração com seu ERP",
+    "Site institucional com identidade da marca",
+    "Estrutura para captação e crescimento",
     "Entregas validadas por etapa",
     "Suporte depois da entrega",
   ],
@@ -105,11 +105,11 @@ export const digitalizacaoLanding: ServiceLandingPage = {
       {
         title: "Visibilidade onde o cliente procura",
         description:
-          "SEO, performance e estrutura pensados para aparecer quando alguém busca o que você vende. Seu digital trabalha por você 24 horas.",
+          "SEO, performance e estrutura pensados para aparecer quando alguém busca o que você vende. O digital trabalhando para a sua empresa, 24 horas.",
         metric: "Encontrável no momento certo",
       },
       {
-        title: "Escala com plano, não com susto",
+        title: "Crescimento com planejamento, sem sustos",
         description:
           "Um caminho em fases que começa pela presença online e cresce até integrações e automações, no ritmo da sua empresa.",
         metric: "Evolução contínua e previsível",
@@ -141,7 +141,7 @@ export const digitalizacaoLanding: ServiceLandingPage = {
           "Publicação, treinamento e acompanhamento. Você fica com documentação e uma base pronta para crescer quando fizer sentido.",
       },
     ],
-    cta: "Quero meu diagnóstico inicial",
+    cta: "Quero um diagnóstico inicial",
   },
   deliverables: {
     kicker: "// o que está incluído",
@@ -206,7 +206,7 @@ export const digitalizacaoLanding: ServiceLandingPage = {
       {
         title: "Estrutura para busca e performance",
         description:
-          "SEO técnico, velocidade e organização de conteúdo para aparecer quando alguém procura o que você vende. Digital que trabalha por você.",
+          "SEO técnico, velocidade e organização de conteúdo para aparecer quando alguém procura o que você vende. O digital trabalhando para a sua empresa.",
       },
       {
         title: "Fluxo de contato e captação",
@@ -227,7 +227,7 @@ export const digitalizacaoLanding: ServiceLandingPage = {
   },
   audience: {
     kicker: "// para quem é",
-    title: "Honestidade antes de você gastar seu tempo.",
+    title: "Honestidade antes de investir o seu tempo.",
     subtitle:
       "Cada linha é uma situação real. Veja em qual lado você está.",
     notLabel: "Talvez não seja a hora",
@@ -297,7 +297,7 @@ export const digitalizacaoLanding: ServiceLandingPage = {
     kicker: "// comparativo",
     title: "Por que não resolver com modelo pronto ou agência genérica.",
     subtitle:
-      "Cada atalho resolve um pedaço. A Elevate conecta marca, processo e dado num lugar só.",
+      "Cada atalho resolve um pedaço. A Elevate constrói presença digital completa e consistente.",
     columns: [
       "Modelo pronto",
       "Agência só de marketing",
@@ -351,11 +351,11 @@ export const digitalizacaoLanding: ServiceLandingPage = {
   },
   finalCta: {
     kicker: "// próximo passo",
-    headline: "Sua marca já é grande. Está na hora da internet saber disso.",
+    headline: "Sua empresa já é séria. A internet ainda não mostra isso.",
     subheadline:
-      "Conte como sua empresa aparece hoje na internet e a gente monta a presença digital que finalmente mostra o tamanho real da sua marca.",
-    cta: "Falar no WhatsApp",
-    riskReversal: "Diagnóstico inicial sem compromisso · resposta em até 24h",
+      "Conte como a sua marca aparece hoje. Vamos construir a presença que transmite o tamanho real do que você entrega.",
+    cta: "Conversar sobre a presença da minha empresa",
+    riskReversal: "Conversamos sem compromisso · resposta em até 24h",
   },
   relatedServices: [
     {

@@ -85,7 +85,7 @@ export default function Footer() {
                 strokeWidth={2}
                 aria-hidden
               />
-              Começar projeto
+              Conversar sobre sua operação
             </a>
           </div>
 

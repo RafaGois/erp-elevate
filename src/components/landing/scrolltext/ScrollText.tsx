@@ -26,13 +26,13 @@ const fontPixel = Press_Start_2P({
 });
 
 const COPY = {
-  title: "Desenvolvimento de software com mentalidade industrial",
+  title: "Desenvolvimento de software com mentalidade de quem já esteve no chão de fábrica",
   subtitle:
-    "Planejamento, produção, automação e gestão industrial sob medida — flexível e focado no seu processo.",
-  stackHeading: "Três frentes, um sistema",
-  stackFootLead: "Um único sistema conecta",
+    "Pensamos em planejamento, produção, automação e gestão ao mesmo tempo, porque a equipe já viveu os dois lados.",
+  stackHeading: "Tudo conectado",
+  stackFootLead: "Um sistema que une",
   stackFootFlow: "planejamento → produção → automação → gestão",
-  stackFootTail: " — sem planilhas paralelas.",
+  stackFootTail: ", sem cada área vivendo em planilha separada.",
 } as const;
 
 type StepItem = {
@@ -50,7 +50,7 @@ const STEPS: StepItem[] = [
     chrome: "PLANEJAR",
     title: "Da ordem ao chão de fábrica",
     description:
-      "Programação, filas e apontamentos no mesmo lugar — quem opera e quem planeja enxergam a mesma prioridade.",
+      "Programação, filas e apontamentos no mesmo lugar. Quem opera e quem planeja enxergam a mesma prioridade.",
     outcome: "Capacidade sob controle",
     icon: ClipboardList,
   },
@@ -68,7 +68,7 @@ const STEPS: StepItem[] = [
     chrome: "GERIR",
     title: "Gestão no ritmo da fábrica",
     description:
-      "Painéis e indicadores moldados na sua operação — não adaptação forçada a um ERP genérico de prateleira.",
+      "Painéis e indicadores moldados na sua operação, não adaptação forçada a um ERP genérico de prateleira.",
     outcome: "Dado certo, na hora",
     icon: Layers,
   },
@@ -268,7 +268,7 @@ export default function ScrollText() {
       <div className="industrial-fold__inner">
         <header className="industrial-fold__header" data-industrial-reveal>
           <p className="industrial-fold__kicker">
-            <span className="industrial-fold__kicker-accent">// 01</span> — Mentalidade industrial
+            <span className="industrial-fold__kicker-accent">// 01</span> Como pensamos a operação
           </p>
         </header>
 

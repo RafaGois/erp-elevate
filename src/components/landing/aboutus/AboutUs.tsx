@@ -42,8 +42,8 @@ const STATS = [
     id: "au-stat-2",
     value: 50,
     prefix: "",
-    label: "Sistemas\nDesenvolvidos",
-    sys: "SYS",
+    label: "Sistemas\nem produção",
+    sys: "LIVE",
     snap: 1,
   },
   {
@@ -132,7 +132,7 @@ export default function AboutUs() {
         {/* ── Header ── */}
         <header className="au__header" data-au-reveal>
           <p className="au__kicker">
-            <span className="au__kicker-mark">// 02</span> — Nossa história
+            <span className="au__kicker-mark">// 02</span> Quem está por trás
           </p>
           <h2 id="au-title" className="au__title">
             <span className="au__title-line">Sobre</span>
@@ -157,23 +157,21 @@ export default function AboutUs() {
             <div className="au__card-body">
               <div className="au__about-text">
                 <p>
-                  Somos uma empresa especializada no desenvolvimento de sistemas
-                  sob medida para a indústria metal mecânica. Nosso trabalho nasce
-                  da união entre conhecimento técnico em desenvolvimento de software
-                  e experiência prática em planejamento, controle de processos e
-                  engenharia de automação industrial.
+                  Desenvolvemos sistemas sob medida para indústria há anos. Nosso
+                  trabalho une desenvolvimento de software com experiência prática
+                  em planejamento e controle de produção e em engenharia de automação.
                 </p>
                 <p>
-                  Entendemos a realidade do chão de fábrica, os desafios do PCP, a
-                  complexidade dos fluxos produtivos e a necessidade de integração
-                  entre setores. Mais do que desenvolver aplicações, projetamos
-                  soluções que organizam processos, reduzem retrabalho e aumentam a
-                  eficiência operacional.
+                  A equipe já passou por chão de fábrica, sequenciamento de ordens,
+                  definição de capacidade e integração entre sistemas e máquinas.
+                  Por isso construímos soluções que não ficam só no papel. Muitos
+                  dos sistemas que entregamos ainda estão em produção, sendo usados
+                  todo dia.
                 </p>
                 <p>
-                  Acreditamos que um software industrial deve ser simples,
-                  intencional e funcional. Simples para quem opera. Estruturado para
-                  quem gerencia. Escalável para quem cresce.
+                  Não entregamos só código. Entregamos controle real: visibilidade
+                  do que está acontecendo, previsibilidade de prazos e menos
+                  retrabalho entre áreas.
                 </p>
               </div>
             </div>
@@ -214,7 +212,7 @@ export default function AboutUs() {
         <div className="au__stats" data-au-reveal>
           <div className="au__stats-eyebrow">
             <span className="au__stats-eyebrow-label">
-              Conquistas em números
+              Resultados que continuam entregando
             </span>
             <span className="au__stats-eyebrow-rule" aria-hidden />
           </div>

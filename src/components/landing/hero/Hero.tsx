@@ -187,18 +187,18 @@ export default function Hero() {
         <div className="landing-hero__rise landing-hero__rise--1 mb-6 flex justify-center">
           <span className="landing-hero__badge">
             <span className="landing-hero__badge-dot" />
-            Fábrica de software · Usuário em primeiro lugar
+            Planejamento · Automação · Software que roda de verdade
           </span>
         </div>
 
         <h1 className="landing-hero__title landing-hero__rise landing-hero__rise--2">
-          Construímos seu <span className="landing-hero__title-accent">futuro</span> digital
+          Sistemas que controlam <span className="landing-hero__title-accent">produção de verdade</span>
           <span className="landing-hero__cursor">_</span>
         </h1>
 
         <p className="landing-hero__rise landing-hero__rise--3 mx-auto mt-6 max-w-xl text-base leading-relaxed text-[var(--hero-muted)] md:text-lg">
-          Digitalização de empresas, Sistemas de Controle Industrial com adaptabilidade e
-           <span className="landing-hero__arcade">personalização</span> para o seu problema e negócio.
+          Com experiência em planejamento, controle de processos e engenharia de automação,
+          desenvolvemos soluções de digitalização industrial que já funcionam há anos em fábricas reais.
         </p>
 
         <div className="landing-hero__actions landing-hero__rise landing-hero__rise--4 mt-9">
@@ -209,13 +209,13 @@ export default function Hero() {
             rel="noopener noreferrer"
           >
             <Gamepad2 size={14} strokeWidth={2.5} aria-hidden />
-            Iniciar projeto
+            Me conta sua operação
           </Link>
           <Link
-            href="#services"
+            href="#mentalidade-industrial"
             className="landing-hero__pixel-btn landing-hero__pixel-btn--secondary"
           >
-            Ver serviços
+            Ver como trabalhamos
             <ArrowRight size={14} strokeWidth={2.5} aria-hidden />
           </Link>
         </div>

@@ -50,13 +50,13 @@ const SERVICES: ServiceItem[] = [
     index: "01",
     sys: "PRESENCE",
     name: "Presença Digital Corporativa",
-    teaser: "Do papel à tela — presença online integrada",
+    teaser: "Site e presença online à altura da sua empresa",
     description:
-      "Estruturamos sua presença digital de ponta a ponta: sistemas web alinhados à identidade da empresa, integração entre canais e processos, e uma base tecnológica que cresce junto com a operação.",
+      "Desenvolvemos a presença digital corporativa completa: sites institucionais, identidade online e estrutura para captação que transmitem a seriedade da sua marca.",
     features: [
-      "Sistemas web alinhados à sua marca e processo",
-      "Integração entre canais digitais e operação interna",
-      "Base escalável — do site ao ERP corporativo",
+      "Site institucional alinhado à identidade e ao posicionamento",
+      "Presença nos canais digitais com foco em credibilidade",
+      "Base preparada para crescer com a empresa",
     ],
     icon: Globe,
   },
@@ -67,7 +67,7 @@ const SERVICES: ServiceItem[] = [
     name: "Sistemas de Controle de Produção",
     teaser: "PCP, MES e chão de fábrica em um único sistema",
     description:
-      "Plataformas para gestão de ordens, planejamento de capacidade e acompanhamento em tempo real do chão de fábrica — com indicadores de OEE, prazos e produtividade integrados.",
+      "Plataformas para gestão de ordens, planejamento de capacidade e acompanhamento em tempo real do chão de fábrica, com indicadores de OEE, prazos e produtividade integrados.",
     features: [
       "Ordens de produção, capacidade e sequenciamento",
       "Acompanhamento em tempo real do chão de fábrica",
@@ -82,7 +82,7 @@ const SERVICES: ServiceItem[] = [
     name: "BI Industrial e Análise de Dados",
     teaser: "Dados brutos → decisão em tempo real",
     description:
-      "Painéis estratégicos que transformam dados de múltiplas fontes em visão clara para decisão: operacional, gerencial e executiva — com alertas automáticos e atualização contínua.",
+      "Painéis estratégicos que transformam dados de múltiplas fontes em visão clara para decisão: operacional, gerencial e executiva, com alertas automáticos e atualização contínua.",
     features: [
       "Dashboards operacionais e gerenciais unificados",
       "OEE, qualidade e eficiência por máquina ou célula",
@@ -97,7 +97,7 @@ const SERVICES: ServiceItem[] = [
     name: "Integração com Automação Industrial",
     teaser: "Sistemas, máquinas e ERPs em um único fluxo",
     description:
-      "Conectamos sistemas, PLCs, ERPs e fontes de dados para eliminar retrabalho e falhas de comunicação — automação de rotinas, ETL e fluxos que reduzem intervenção manual.",
+      "Conectamos sistemas, PLCs, ERPs e fontes de dados para eliminar retrabalho e falhas de comunicação. Automação de rotinas, ETL e fluxos que reduzem intervenção manual.",
     features: [
       "APIs, ETL e sincronização entre sistemas e máquinas",
       "Automação de rotinas e fluxos manuais repetitivos",
@@ -112,7 +112,7 @@ const SERVICES: ServiceItem[] = [
     name: "Desenvolvimento Sob Medida",
     teaser: "Nenhum software pronto resolve? Criamos o seu",
     description:
-      "Softwares exclusivos para necessidades que soluções prontas não atendem — desde módulos complementares até aplicações completas, com arquitetura documentada e ciclo iterativo com sua equipe.",
+      "Softwares exclusivos para necessidades que soluções prontas não atendem. Desde módulos complementares até aplicações completas, com arquitetura documentada e ciclo iterativo com sua equipe.",
     features: [
       "Arquitetura escalável e documentada para evolução",
       "Interface desenhada para quem opera no dia a dia",
@@ -297,7 +297,7 @@ export default function Services() {
         {/* header */}
         <header data-svc-header className="svc__header">
           <p className="svc__kicker">
-            <span className="svc__kicker-mark">// </span>03 — Serviços
+            <span className="svc__kicker-mark">// </span>O que entregamos na prática
           </p>
           <h2 id="svc-title" className="svc__title">
             O que fazemos
@@ -306,8 +306,8 @@ export default function Services() {
             </span>
           </h2>
           <p className="svc__subtitle">
-            Soluções sob medida para cada frente da sua operação — escolha a
-            que faz sentido para você.
+            O que entregamos para indústrias que precisam parar de depender de
+            planilha e WhatsApp para controlar o que realmente importa.
           </p>
         </header>
 

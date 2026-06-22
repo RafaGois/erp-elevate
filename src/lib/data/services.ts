@@ -66,7 +66,7 @@ export const servicesData: ServicePage[] = [
       { type: "subtitle", text: "Digitalização e Indústria 4.0" },
       {
         type: "paragraph",
-        text: "A transformação digital na manufatura dialoga com conceitos da Indústria 4.0: uso de dados em tempo real, conectividade entre processos e, quando faz sentido, tecnologias como IoT industrial (IIoT), análise de dados e automação. Não se trata de adotar tudo de uma vez, e sim de evoluir a maturidade digital da empresa com passos que gerem valor — maior eficiência operacional, melhor qualidade, redução de custos e capacidade de responder mais rápido às mudanças do mercado.",
+        text: "A transformação digital na manufatura dialoga com conceitos da Indústria 4.0: uso de dados em tempo real, conectividade entre processos e, quando faz sentido, tecnologias como IoT industrial (IIoT), análise de dados e automação. Não se trata de adotar tudo de uma vez, e sim de evoluir a maturidade digital da empresa com passos que gerem valor, maior eficiência operacional, melhor qualidade, redução de custos e capacidade de responder mais rápido às mudanças do mercado.",
       },
       { type: "subtitle", text: "Desafios que ajudamos a superar" },
       {
@@ -136,7 +136,7 @@ export const servicesData: ServicePage[] = [
       { type: "subtitle", text: "PCP, PPCP e MES" },
       {
         type: "paragraph",
-        text: "O PCP faz parte do PPCP (Planejamento, Programação e Controle da Produção). Quando a operação exige visão em tempo real do chão de fábrica, coleta automática de dados de máquinas e indicadores como OEE (Overall Equipment Effectiveness), entramos no território do MES (Manufacturing Execution System) — a camada que conecta o planejamento (ERP) à execução. Desenhamos soluções que podem ir do PCP mais enxuto até um MES integrado, conforme a necessidade e a maturidade da fábrica.",
+        text: "O PCP faz parte do PPCP (Planejamento, Programação e Controle da Produção). Quando a operação exige visão em tempo real do chão de fábrica, coleta automática de dados de máquinas e indicadores como OEE (Overall Equipment Effectiveness), entramos no território do MES (Manufacturing Execution System), a camada que conecta o planejamento (ERP) à execução. Desenhamos soluções que podem ir do PCP mais enxuto até um MES integrado, conforme a necessidade e a maturidade da fábrica.",
       },
       { type: "subtitle", text: "Impactos esperados" },
       {
@@ -166,7 +166,7 @@ export const servicesData: ServicePage[] = [
       },
       {
         type: "paragraph",
-        text: "Cada sistema é concebido a partir do seu contexto: fluxos reais, vocabulário da empresa, integrações com o que você já usa e espaço para evoluir sem quebrar o que já está no ar. O resultado é uma ferramenta que parece feita para a sua operação — porque é.",
+        text: "Cada sistema é concebido a partir do seu contexto: fluxos reais, vocabulário da empresa, integrações com o que você já usa e espaço para evoluir sem quebrar o que já está no ar. O resultado é uma ferramenta que parece feita para a sua operação, porque é.",
       },
       { type: "subtitle", text: "Cada sistema é projetado com" },
       {
@@ -228,7 +228,7 @@ export const servicesData: ServicePage[] = [
       },
       {
         type: "paragraph",
-        text: "Trabalhamos a partir das fontes de dados que você já tem — ERPs, planilhas, bancos de dados, sistemas de produção — e desenhamos visualizações que destacam o que importa: tendências, desvios, metas e comparações. Tudo com atualização automática, para que a decisão seja baseada no cenário atual, não em relatórios defasados.",
+        text: "Trabalhamos a partir das fontes de dados que você já tem: ERPs, planilhas, bancos de dados, sistemas de produção, e desenhamos visualizações que destacam o que importa: tendências, desvios, metas e comparações. Tudo com atualização automática, para que a decisão seja baseada no cenário atual, não em relatórios defasados.",
       },
       { type: "subtitle", text: "Indicadores como" },
       {
@@ -324,7 +324,7 @@ export const servicesData: ServicePage[] = [
       { type: "subtitle", text: "APIs e ETL na prática" },
       {
         type: "paragraph",
-        text: "A integração via API (Application Programming Interface) permite que sistemas diferentes troquem dados de forma padronizada e segura, sem expor código-fonte. Quando os dados vêm de várias fontes — ERPs, bancos de dados, planilhas, APIs de terceiros — utilizamos abordagens ETL (Extract, Transform, Load): extrair os dados das origens, transformá-los (limpeza, regras de negócio, formato único) e carregá-los no destino desejado (data warehouse, outro sistema, painéis). Assim, pedidos, estoques, status de produção e cadastros permanecem sincronizados sem retrabalho manual.",
+        text: "A integração via API (Application Programming Interface) permite que sistemas diferentes troquem dados de forma padronizada e segura, sem expor código-fonte. Quando os dados vêm de várias fontes (ERPs, bancos de dados, planilhas, APIs de terceiros) utilizamos abordagens ETL (Extract, Transform, Load): extrair os dados das origens, transformá-los (limpeza, regras de negócio, formato único) e carregá-los no destino desejado (data warehouse, outro sistema, painéis). Assim, pedidos, estoques, status de produção e cadastros permanecem sincronizados sem retrabalho manual.",
       },
       {
         type: "paragraph",

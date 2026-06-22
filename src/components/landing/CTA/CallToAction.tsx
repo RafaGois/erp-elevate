@@ -250,8 +250,8 @@ export default function CallToAction() {
           <hr className="cta__rule" data-cta-reveal aria-hidden />
 
           <p className="cta__subtitle" data-cta-reveal>
-            A solução do seu problema está a um clique de distância… Vamos
-            construir juntos.
+            Me conta como está a operação hoje. Vamos ver juntos se faz sentido
+            trazer mais controle pra sua fábrica.
           </p>
 
           <div className="cta__actions" data-cta-reveal>
@@ -266,11 +266,11 @@ export default function CallToAction() {
                 strokeWidth={2}
                 aria-hidden
               />
-              Falar com a equipe
+              Quero conversar sobre minha operação
             </a>
 
             <Link href="#services" className="cta__btn-secondary">
-              Ver o que fazemos
+              Ver o que entregamos
               <ArrowRight
                 style={{ width: "0.75rem", height: "0.75rem" }}
                 strokeWidth={2}
@@ -281,7 +281,7 @@ export default function CallToAction() {
 
           <p className="cta__tag" data-cta-reveal aria-hidden>
             <span className="cta__tag-dot" />
-            Resposta em até 24h · sem compromisso
+            Resposta em até 24h · sem pressão
           </p>
 
         </div>

@@ -57,7 +57,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: FileSpreadsheet,
     title: "Planilhas como sistema de gestão",
     description:
-      "Seis abas, três versões do mesmo arquivo, ninguém sabe qual é o atual. Cada setor mantém sua própria 'verdade' — e as decisões são tomadas com dados que já nasceram errados.",
+      "Seis abas, três versões do mesmo arquivo. Ninguém sabe qual é o atual. Cada área vive com sua própria verdade e as decisões são tomadas com números que já nasceram errados.",
     severity: "warn",
     severityLabel: "Alerta",
     tags: ["Alta recorrência", "Fonte de retrabalho"],
@@ -70,7 +70,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: Globe,
     title: "Marca invisível para quem pesquisa",
     description:
-      "O cliente acha sua empresa no Google e encontra site fraco, desatualizado ou ausência digital. A reputação que você construiu na prática não aparece na tela — e o pedido vai para quem parece maior online.",
+      "O cliente acha sua empresa no Google e encontra site fraco, desatualizado ou ausência digital. A reputação que você construiu na prática não aparece na tela, e o pedido vai para quem parece maior online.",
     severity: "critical",
     severityLabel: "Crítico",
     tags: ["Perda de credibilidade", "Lead que não chega"],
@@ -83,7 +83,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: BarChart3,
     title: "Indicador montado na véspera da reunião",
     description:
-      "ERP, produção e qualidade geram dado, mas o painel nasce na planilha na noite anterior. A gestão decide com número defasado — e descobre o desvio quando já perdeu prazo ou margem.",
+      "ERP, produção e qualidade geram dado, mas o painel nasce na planilha na noite anterior. A gestão decide com número defasado, e descobre o desvio quando já perdeu prazo ou margem.",
     severity: "warn",
     severityLabel: "Alerta",
     tags: ["Decisão tardia", "Dado que não vira ação"],
@@ -96,7 +96,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: ClipboardList,
     title: "Produção controlada no papel",
     description:
-      "Apontamentos em folhas que somem, chegam atrasados ou têm letra ilegível. O planejamento vive um passo atrás do chão de fábrica — e a fábrica trabalha sem saber o que o planejamento precisa.",
+      "Apontamento em papel que some, atrasa ou ninguém consegue ler direito. O planejamento sempre está um passo atrás da fábrica, e a fábrica não sabe o que o planejamento está esperando.",
     severity: "warn",
     severityLabel: "Alerta",
     tags: ["Impacto direto em prazos", "Retrabalho de dados"],
@@ -109,7 +109,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: RadioTower,
     title: "Máquina gera dado que ninguém usa",
     description:
-      "PLC e sensor registram ciclo, parada e status, mas a informação não chega à gestão. Automação existe na planta — e a produção continua sendo caixa preta para quem decide.",
+      "PLC e sensor registram ciclo, parada e status, mas a informação não chega à gestão. Automação existe na planta, e a produção continua sendo caixa preta para quem decide.",
     severity: "critical",
     severityLabel: "Crítico",
     tags: ["Parada invisível", "IIoT sem valor"],
@@ -135,7 +135,7 @@ const PROBLEMS: ProblemEntry[] = [
     icon: Blocks,
     title: "Ferramentas que aprisionam o processo",
     description:
-      "O ERP foi configurado há dez anos para um processo diferente. Mudar é caro, o fornecedor demora meses, e a operação foi se adaptando à ferramenta — quando deveria ser o contrário.",
+      "O ERP foi configurado há dez anos para um processo diferente. Mudar é caro, o fornecedor demora meses, e a operação foi se adaptando à ferramenta, quando deveria ser o contrário.",
     severity: "critical",
     severityLabel: "Crítico",
     tags: ["Rigidez sistêmica", "Alto custo de mudança"],
@@ -269,24 +269,22 @@ export default function Problems() {
         <header data-pb-header className="pb__header">
           <div className="pb__header-top">
             <p className="pb__kicker">
-              <span className="pb__kicker-mark">// </span>SYS — Diagnóstico
-              operacional
+              <span className="pb__kicker-mark">// </span>Diagnóstico da operação
             </p>
             <span className="pb__status-badge">
               <span className="pb__status-dot" aria-hidden />
-              Sistema em estado crítico
+              Você provavelmente já viu isso
             </span>
           </div>
 
           <h2 id="pb-title" className="pb__title">
-            Reconhece
-            <span className="pb__title-break"> esses sintomas?</span>
+            Parece familiar?
           </h2>
 
           <p className="pb__subtitle">
-            Não são falhas isoladas — são sintomas de uma empresa que cresceu
-            além das ferramentas que usava. Da internet ao chão de fábrica,
-            cada um alimenta o próximo.
+            Não é falta de esforço. É que a empresa cresceu e as ferramentas
+            não acompanharam. Quando a informação não flui, tudo começa a dar
+            errado ao mesmo tempo.
           </p>
         </header>
 
@@ -367,13 +365,13 @@ export default function Problems() {
         {/* ── Footer resolution ──────────────────────────────── */}
         <footer data-pb-footer className="pb__footer">
           <div className="pb__footer-text">
-            <p className="pb__footer-kicker">// resolução disponível</p>
+            <p className="pb__footer-kicker">// tem solução</p>
             <p className="pb__footer-lead">
-              Cada linha desse log tem solução.
+              Cada um desses problemas já resolvemos de verdade.
             </p>
             <p className="pb__footer-sub">
-              É o que fazemos — sistemas que eliminam esses erros de vez, na
-              medida do seu processo.
+              Não com slide. Com sistemas que estão sendo usados no dia a dia
+              da fábrica.
             </p>
           </div>
 

@@ -204,7 +204,17 @@ export default function ServiceLandingPage({ data }: Props) {
       <div className="slp__glow slp__glow--lime" aria-hidden />
       <div className="slp__glow slp__glow--em" aria-hidden />
 
-      <ServiceLandingMenu title="Presença Digital" />
+      <ServiceLandingMenu
+        title={
+          data.hero.badge
+            .replace(/^SYS\/\//, "")
+            .replace("PRESENÇA DIGITAL", "Presença Digital")
+            .replace("PROD", "Produção")
+            .replace("BI_DATA", "BI Industrial")
+            .replace("INTEGR", "Integração")
+            .replace("CUSTOM", "Sob Medida")
+        }
+      />
 
       {/* 01 Hero */}
       <section

@@ -261,8 +261,8 @@ export const sistemasSobMedidaLanding: ServiceLandingPage = {
         solution:
           "Sistema completo em Next.js com financeiro, inventário, projetos, propostas e fluxos integrados ao dia a dia da fábrica de software.",
         result:
-          "Produto em produção que é vitrine, ferramenta de trabalho e prova de entrega sob medida.",
-        tags: ["Next.js", "Sistema completo", "B2B"],
+          "Um sistema que a própria equipe usa todo dia há anos, e serve de vitrine ao mesmo tempo.",
+        tags: ["Next.js", "Em produção", "B2B"],
       },
       {
         label: "CASE_02",

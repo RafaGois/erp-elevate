@@ -272,8 +272,8 @@ export const pcpLanding: ServiceLandingPage = {
         solution:
           "PCP sob medida com ordens centralizadas, apontamento por etapa e painel de prazo para gestão e chão de fábrica.",
         result:
-          "Visibilidade da produção em tempo real e prazo prometido com base na capacidade real.",
-        tags: ["PCP", "Chão de fábrica", "Prazo"],
+          "Visibilidade em tempo real. O sistema ainda está em uso três anos depois.",
+        tags: ["PCP", "Chão de fábrica", "Em produção"],
       },
       {
         label: "CASE_03",
@@ -351,11 +351,11 @@ export const pcpLanding: ServiceLandingPage = {
   },
   finalCta: {
     kicker: "// próximo passo",
-    headline: "Sua fábrica já produz. Está na hora de enxergar o que está acontecendo.",
+    headline: "Sua fábrica já produz. Está na hora de parar de adivinhar o que está acontecendo.",
     subheadline:
-      "Conte como vocês controlam a produção hoje e montamos o PCP que conecta chão de fábrica, prazo e indicador num só lugar.",
-    cta: "Falar no WhatsApp",
-    riskReversal: "Diagnóstico inicial sem compromisso · resposta em até 24h",
+      "Me conta como vocês controlam produção hoje. Vamos ver juntos um PCP que realmente funciona no chão de fábrica.",
+    cta: "Conversar sobre meu PCP",
+    riskReversal: "Conversamos sem compromisso · resposta em até 24h",
   },
   relatedServices: [
     {
