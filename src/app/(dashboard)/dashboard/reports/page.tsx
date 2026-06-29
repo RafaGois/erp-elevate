@@ -127,6 +127,8 @@ export default function ReportsPage() {
             setSelectedObject={setSelectedObject}
             setAction={setAction}
             viewUrl={item.slug ? `/relatorio/${item.slug}` : undefined}
+            viewLabel="Ver relatório"
+            showFinish={false}
           />
         );
       },

@@ -25,12 +25,18 @@ interface FloatingMenuProps<T> {
   setAction: (newAction: ModalAction) => void;
   /** When provided, shows a "Ver" item that opens the URL in a new tab */
   viewUrl?: string;
+  /** Label exibido no item "Ver". Default: "Ver proposta" */
+  viewLabel?: string;
+  /** Exibe a opção "Finalizar". Default: true */
+  showFinish?: boolean;
 }
 
 export default function FloatingMenu<T extends WithId>(
   props: FloatingMenuProps<T>
 ) {
   const hasEquipaments = props.selectedObject?.equipaments?.length ?? 0;
+  const viewLabel = props.viewLabel ?? "Ver proposta";
+  const showFinish = props.showFinish ?? true;
 
   return (
     <DropdownMenu>
@@ -58,22 +64,23 @@ export default function FloatingMenu<T extends WithId>(
             <DropdownMenuItem asChild>
               <a href={props.viewUrl} target="_blank" rel="noopener noreferrer">
                 <ExternalLink />
-                <DropdownMenuLabel>Ver proposta</DropdownMenuLabel>
+                <DropdownMenuLabel>{viewLabel}</DropdownMenuLabel>
               </a>
             </DropdownMenuItem>
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className={cn(hasEquipaments < 1 && "hidden")}
-          onClick={() => {
-            props.setSelectedObject(props.selectedObject);
-            props.setAction(ModalAction.Finish);
-          }}
-        >
-          <CheckCheck strokeWidth={3} />
-          <DropdownMenuLabel>Finalizar</DropdownMenuLabel>
-        </DropdownMenuItem>
+        {showFinish && hasEquipaments > 0 && (
+          <DropdownMenuItem
+            onClick={() => {
+              props.setSelectedObject(props.selectedObject);
+              props.setAction(ModalAction.Finish);
+            }}
+          >
+            <CheckCheck strokeWidth={3} />
+            <DropdownMenuLabel>Finalizar</DropdownMenuLabel>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem
           onClick={() => {
             props.setSelectedObject(props.selectedObject);

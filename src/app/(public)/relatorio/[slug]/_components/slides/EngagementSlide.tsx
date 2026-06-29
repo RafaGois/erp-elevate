@@ -44,7 +44,7 @@ export default function EngagementSlide() {
         <CountUp
           value={totalInteracoes}
           format={formatNumber}
-          className="text-[clamp(3rem,12vw,8rem)] font-extrabold leading-none tracking-tight text-white"
+          className="rep-display text-[clamp(3rem,12vw,8rem)] leading-none tracking-tight text-white"
         />
       </Item>
 
@@ -54,14 +54,14 @@ export default function EngagementSlide() {
 
       <Item variants={itemVariants} className="mt-[clamp(1.5rem,4vh,2.5rem)] grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
         {items.map(({ key, label, value, path, Icon, color }) => (
-          <div key={key} className="flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-5 backdrop-blur">
+          <div key={key} className="rep-card flex flex-col items-center gap-2 px-4 py-5">
             <Icon className="report-bob size-6" style={{ color }} strokeWidth={2.2} />
             <EditableStat
               value={value}
               path={path}
               format={formatNumber}
               duration={1.4}
-              className="text-[clamp(1.1rem,2.4vw,1.6rem)] font-bold text-white"
+              className="rep-display text-[clamp(1.1rem,2.4vw,1.6rem)] text-white"
             />
             <p className="font-mono text-[0.5rem] uppercase tracking-[0.18em] text-white/40">{label}</p>
           </div>
@@ -69,13 +69,13 @@ export default function EngagementSlide() {
       </Item>
 
       {(isAdmin || (e.taxaEngajamento ?? 0) !== 0) && (
-        <Item variants={itemVariants} className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#bdfa3c]/30 bg-[#bdfa3c]/10 px-5 py-2">
+        <Item variants={itemVariants} className="mt-5 inline-flex items-center gap-2 border-2 border-[#bdfa3c]/40 bg-[#bdfa3c]/10 px-5 py-2" style={{ boxShadow: "3px 3px 0 rgba(0,0,0,0.45)" }}>
           <EditableStat
             value={e.taxaEngajamento ?? 0}
             path="engajamento.taxaEngajamento"
             format={formatPercent}
             countUp={false}
-            className="text-[clamp(1rem,2vw,1.3rem)] font-bold text-[#bdfa3c]"
+            className="rep-display text-[clamp(1rem,2vw,1.3rem)] text-[#bdfa3c]"
           />
           <span className="font-mono text-[0.55rem] uppercase tracking-[0.2em] text-white/50">taxa de engajamento</span>
         </Item>

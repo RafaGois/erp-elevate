@@ -15,7 +15,8 @@ export async function getReportServerLookup(slug: string): Promise<ReportLookup>
     "Content-Type": "application/json",
   };
   if (token) {
-    headers["token"] = token.replace(/^Bearer\s+/i, "") || token;
+    const rawToken = token.replace(/^Bearer\s+/i, "") || token;
+    headers["Authorization"] = `Bearer ${rawToken}`;
   }
 
   try {

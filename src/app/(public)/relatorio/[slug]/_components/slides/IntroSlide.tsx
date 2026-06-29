@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Report from "@/types/models/Report";
 import SlideShell, { Item, itemVariants } from "../SlideShell";
+import AuroraJoyBackdrop from "../backdrops/AuroraJoyBackdrop";
 import { monthName } from "../format";
 
 export default function IntroSlide({ report }: { report: Report }) {
@@ -10,43 +11,8 @@ export default function IntroSlide({ report }: { report: Report }) {
   const mes = monthName(report.competencia) || "o mês";
 
   const backdrop = (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg
-        viewBox="0 0 600 600"
-        className="h-[120vmin] w-[120vmin] opacity-90"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Raios girando */}
-        <g className="report-spin-slow" style={{ transformOrigin: "300px 300px" }}>
-          {Array.from({ length: 24 }).map((_, i) => (
-            <rect
-              key={i}
-              x="298"
-              y="40"
-              width="4"
-              height="120"
-              rx="2"
-              fill="#bdfa3c"
-              opacity={i % 2 === 0 ? 0.16 : 0.07}
-              transform={`rotate(${(360 / 24) * i} 300 300)`}
-            />
-          ))}
-        </g>
-        {/* Anéis pulsando */}
-        <circle cx="300" cy="300" r="120" fill="none" stroke="#22c55e" strokeWidth="1.5" opacity="0.25" />
-        <circle cx="300" cy="300" r="170" fill="none" stroke="#bdfa3c" strokeWidth="1" opacity="0.15" />
-        {/* Estrelinhas */}
-        {[
-          [120, 140], [480, 160], [150, 460], [470, 440], [300, 90], [90, 300], [510, 300], [300, 510],
-        ].map(([cx, cy], i) => (
-          <g key={i} className="report-twinkle" style={{ animationDelay: `${i * 0.4}s`, transformOrigin: `${cx}px ${cy}px` }}>
-            <path
-              d={`M${cx} ${cy - 9} L${cx + 2.4} ${cy - 2.4} L${cx + 9} ${cy} L${cx + 2.4} ${cy + 2.4} L${cx} ${cy + 9} L${cx - 2.4} ${cy + 2.4} L${cx - 9} ${cy} L${cx - 2.4} ${cy - 2.4} Z`}
-              fill="#ffffff"
-            />
-          </g>
-        ))}
-      </svg>
+    <div className="absolute inset-0">
+      <AuroraJoyBackdrop className="absolute inset-0 h-full w-full" />
     </div>
   );
 
@@ -58,7 +24,7 @@ export default function IntroSlide({ report }: { report: Report }) {
 
       <Item
         variants={itemVariants}
-        className="text-[clamp(2.4rem,9vw,6rem)] font-extrabold leading-[0.95] tracking-tight"
+        className="rep-display text-[clamp(2.4rem,9vw,6rem)] leading-[0.95] tracking-tight"
       >
         Esse foi o seu
         <br />

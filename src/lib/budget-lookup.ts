@@ -13,7 +13,8 @@ export async function getBudgetServerLookup(slug: string): Promise<BudgetLookup>
     "Content-Type": "application/json",
   };
   if (token) {
-    headers["token"] = token.replace(/^Bearer\s+/i, "") || token;
+    const rawToken = token.replace(/^Bearer\s+/i, "") || token;
+    headers["Authorization"] = `Bearer ${rawToken}`;
   }
 
   try {

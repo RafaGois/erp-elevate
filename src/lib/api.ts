@@ -12,9 +12,10 @@ api.interceptors.request.use(
     const token = Cookies.get("elevate-token");
     if (token) {
       config.headers = config.headers || ({} as AxiosRequestHeaders);
-      // Header "token" com o valor do bearer token (apenas o valor, sem prefixo "Bearer ")
+      // A API valida via "Authorization: Bearer <token>".
+      // Normaliza removendo qualquer prefixo já existente antes de reaplicar.
       const rawToken = token.replace(/^Bearer\s+/i, "") || token;
-      config.headers.token = rawToken;
+      config.headers.Authorization = `Bearer ${rawToken}`;
     }
     return config;
   },

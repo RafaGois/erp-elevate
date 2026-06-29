@@ -6,6 +6,7 @@ import confetti from "canvas-confetti";
 import Report from "@/types/models/Report";
 import SlideShell, { Item, itemVariants } from "../SlideShell";
 import EditableText from "../EditableText";
+import HeartsBackdrop from "../backdrops/HeartsBackdrop";
 import { useReportEdit } from "../report-edit-context";
 import { ELEVATE_WHATSAPP_URL } from "@/lib/data/contact-links";
 import { monthName } from "../format";
@@ -35,21 +36,8 @@ export default function OutroSlide({ report }: { report: Report }) {
   }, []);
 
   const backdrop = (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <svg viewBox="0 0 600 600" className="h-[110vmin] w-[110vmin] opacity-80" xmlns="http://www.w3.org/2000/svg">
-        <g className="report-spin-slow" style={{ transformOrigin: "300px 300px" }}>
-          {Array.from({ length: 16 }).map((_, i) => (
-            <path
-              key={i}
-              d="M300 120 L312 290 L300 300 L288 290 Z"
-              fill="#bdfa3c"
-              opacity={i % 2 === 0 ? 0.12 : 0.05}
-              transform={`rotate(${(360 / 16) * i} 300 300)`}
-            />
-          ))}
-        </g>
-        <circle cx="300" cy="300" r="150" fill="none" stroke="#22c55e" strokeWidth="1.5" opacity="0.2" />
-      </svg>
+    <div className="absolute inset-0">
+      <HeartsBackdrop className="absolute inset-0 h-full w-full opacity-90" />
     </div>
   );
 
@@ -66,7 +54,7 @@ export default function OutroSlide({ report }: { report: Report }) {
 
       <Item
         variants={itemVariants}
-        className="text-[clamp(2rem,7vw,4.5rem)] font-extrabold leading-[0.95] tracking-tight"
+        className="rep-display text-[clamp(2rem,7vw,4.5rem)] leading-[0.95] tracking-tight"
       >
         Que mês,{" "}
         <span className="report-shimmer-text">{cliente || "incrível"}</span>!
@@ -75,7 +63,7 @@ export default function OutroSlide({ report }: { report: Report }) {
       {(isAdmin || mensagem) && (
         <Item
           variants={itemVariants}
-          className="mt-[clamp(1.5rem,4vh,2.5rem)] max-w-2xl rounded-3xl border border-white/10 bg-white/[0.04] px-7 py-6 text-[clamp(0.95rem,1.8vw,1.25rem)] italic leading-relaxed text-white/80 backdrop-blur"
+          className="rep-card mt-[clamp(1.5rem,4vh,2.5rem)] max-w-2xl px-7 py-6 text-[clamp(0.95rem,1.8vw,1.25rem)] italic leading-relaxed text-white/80"
         >
           <EditableText
             value={mensagem}
@@ -94,16 +82,16 @@ export default function OutroSlide({ report }: { report: Report }) {
         Obrigado por construir essa história com a gente. Bora pro próximo? 🚀
       </Item>
 
-      <Item variants={itemVariants} className="mt-7 flex flex-col items-center gap-4">
+      <Item variants={itemVariants} className="mt-8 flex flex-col items-center gap-4">
         <a
           href={ELEVATE_WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 rounded-full bg-[#bdfa3c] px-8 py-4 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-black transition-transform hover:scale-105"
+          className="rep-btn rep-btn--primary px-8 py-4 text-[0.6rem] tracking-[0.12em]"
         >
           Falar com a Elevate
         </a>
-        <span className="font-mono text-[0.55rem] uppercase tracking-[0.3em] text-white/35">
+        <span className="rep-pixel text-[0.5rem] uppercase tracking-[0.15em] text-white/35">
           elevate · social media
         </span>
       </Item>

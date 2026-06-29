@@ -216,6 +216,7 @@ export default function ReportStory({ report }: Props) {
                 "radial-gradient(ellipse 90% 60% at 50% 0%, rgba(34,197,94,0.16) 0%, transparent 55%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(189,250,60,0.08) 0%, transparent 55%)",
             }}
           />
+          <div className="rep-grid absolute inset-0 opacity-90" />
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -226,9 +227,10 @@ export default function ReportStory({ report }: Props) {
         </div>
 
         {/* Barra de progresso */}
-        <div className="absolute left-0 right-0 top-0 z-30 h-[3px] bg-white/10">
+        <div className="absolute left-0 right-0 top-0 z-30 h-1 bg-black/40">
           <motion.div
             className="h-full bg-[#bdfa3c]"
+            style={{ boxShadow: "0 0 12px rgba(189,250,60,0.6)" }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           />
@@ -236,14 +238,22 @@ export default function ReportStory({ report }: Props) {
 
         {/* Cabeçalho */}
         <div className="absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-[clamp(1.25rem,4vw,3rem)] pt-[clamp(1.25rem,3vh,2rem)]">
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-white/50">elevate</span>
+          <span className="flex items-center gap-2">
+            <span
+              className="grid size-6 place-items-center text-[10px] font-bold text-black"
+              style={{ background: "#bdfa3c", boxShadow: "2px 2px 0 #000" }}
+            >
+              E
+            </span>
+            <span className="rep-pixel text-[0.55rem] uppercase tracking-[0.25em] text-white/70">elevate</span>
+          </span>
           {isAdmin ? (
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#bdfa3c]/30 bg-[#bdfa3c]/10 px-3 py-1 font-mono text-[0.55rem] uppercase tracking-[0.18em] text-[#bdfa3c]">
+            <span className="inline-flex items-center gap-2 border-2 border-[#bdfa3c]/40 bg-[#bdfa3c]/10 px-3 py-1.5 rep-pixel text-[0.5rem] uppercase tracking-[0.12em] text-[#bdfa3c]">
               <span className="size-1.5 animate-pulse rounded-full bg-[#bdfa3c]" />
-              Modo edição · clique nos valores
+              Modo edição
             </span>
           ) : (
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/40">
+            <span className="rep-pixel text-[0.5rem] uppercase tracking-[0.12em] text-white/45">
               {monthLabel(report.competencia)}
             </span>
           )}
@@ -272,10 +282,12 @@ export default function ReportStory({ report }: Props) {
               key={s.key}
               aria-label={`Ir para o slide ${i + 1}`}
               onClick={() => goTo(i)}
-              className="h-1.5 rounded-full transition-all duration-300"
+              className="h-2 transition-all duration-300"
               style={{
-                width: i === safeIndex ? 26 : 8,
-                backgroundColor: i === safeIndex ? "#bdfa3c" : "rgba(255,255,255,0.25)",
+                width: i === safeIndex ? 24 : 8,
+                backgroundColor: i === safeIndex ? "#bdfa3c" : "rgba(255,255,255,0.22)",
+                border: i === safeIndex ? "1px solid #04130b" : "none",
+                boxShadow: i === safeIndex ? "2px 2px 0 rgba(0,0,0,0.5)" : "none",
               }}
             />
           ))}
@@ -287,18 +299,18 @@ export default function ReportStory({ report }: Props) {
             onClick={() => paginate(-1)}
             disabled={isFirst}
             aria-label="Anterior"
-            className="flex size-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 backdrop-blur transition-all hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-25"
+            className="rep-btn rep-btn--ghost size-11"
           >
             <ArrowLeft className="size-4" />
           </button>
-          <span className="font-mono text-[0.65rem] tabular-nums tracking-[0.2em] text-white/50">
+          <span className="rep-pixel text-[0.55rem] tabular-nums tracking-[0.15em] text-white/55">
             {String(safeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
           <button
             onClick={() => paginate(1)}
             disabled={isLast}
             aria-label="Próximo"
-            className="flex size-11 items-center justify-center rounded-full border border-[#bdfa3c]/30 bg-[#bdfa3c]/15 text-[#bdfa3c] backdrop-blur transition-all hover:bg-[#bdfa3c]/25 disabled:cursor-not-allowed disabled:opacity-25"
+            className="rep-btn rep-btn--primary size-11"
           >
             <ArrowRight className="size-4" />
           </button>
@@ -312,9 +324,9 @@ export default function ReportStory({ report }: Props) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 1.4 }}
-              className="absolute bottom-[clamp(5rem,11vh,7rem)] left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1 text-white/40"
+              className="absolute bottom-[clamp(5rem,11vh,7rem)] left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white/40"
             >
-              <span className="font-mono text-[0.55rem] uppercase tracking-[0.2em]">Role ou use as setas</span>
+              <span className="rep-pixel text-[0.5rem] uppercase tracking-[0.15em]">Role ou use as setas</span>
               <ChevronDown className="report-bob size-4" />
             </motion.div>
           )}
@@ -330,10 +342,10 @@ export default function ReportStory({ report }: Props) {
               transition={{ type: "spring", stiffness: 260, damping: 24 }}
               className="fixed bottom-[clamp(1.25rem,4vh,2.5rem)] right-[clamp(1.25rem,4vw,2.5rem)] z-50"
             >
-              <div className="flex items-center gap-4 rounded-full border border-white/10 bg-black/80 px-6 py-3 shadow-2xl backdrop-blur">
+              <div className="rep-window flex items-center gap-4 px-6 py-3">
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-white/50 transition-colors hover:text-white/90"
+                  className="flex items-center gap-2 rep-pixel text-[0.5rem] uppercase tracking-[0.1em] text-white/50 transition-colors hover:text-white/90"
                 >
                   <RotateCcw size={12} />
                   Descartar
@@ -342,7 +354,7 @@ export default function ReportStory({ report }: Props) {
                 <button
                   onClick={handleSave}
                   disabled={isPending}
-                  className="flex items-center gap-2 font-mono text-[0.6rem] uppercase tracking-[0.15em] text-[#bdfa3c] transition-colors hover:text-white disabled:opacity-50"
+                  className="flex items-center gap-2 rep-pixel text-[0.5rem] uppercase tracking-[0.1em] text-[#bdfa3c] transition-colors hover:text-white disabled:opacity-50"
                 >
                   {isPending ? (
                     <Loader2 size={12} className="animate-spin" />

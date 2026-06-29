@@ -31,7 +31,7 @@ export default function ContentSlide() {
         <EditableStat
           value={total}
           path="conteudo.totalPublicacoes"
-          className="text-[clamp(3rem,12vw,8rem)] font-extrabold leading-none tracking-tight text-white"
+          className="rep-display text-[clamp(3rem,12vw,8rem)] leading-none tracking-tight text-white"
         />
         <span className="text-[clamp(1rem,2.4vw,1.6rem)] font-medium text-white/50">
           {total === 1 ? "publicação" : "publicações"}
@@ -49,12 +49,12 @@ export default function ContentSlide() {
                 value={b.value}
                 path={`conteudo.porTipo.${b.key}`}
                 countUp={false}
-                className="text-[clamp(1rem,2.2vw,1.5rem)] font-bold text-white"
+                className="rep-display text-[clamp(1rem,2.2vw,1.5rem)] text-white"
               />
               <div className="flex h-[clamp(8rem,22vh,14rem)] w-full items-end justify-center">
                 <motion.div
-                  className="w-full max-w-[5rem] rounded-t-xl"
-                  style={{ backgroundColor: b.color }}
+                  className="w-full max-w-[5rem] border-2 border-b-0 border-black/50"
+                  style={{ backgroundColor: b.color, boxShadow: "4px 0 0 rgba(0,0,0,0.25)" }}
                   initial={{ height: 0 }}
                   animate={{ height: `${(b.value / max) * 100}%` }}
                   transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 + i * 0.12 }}

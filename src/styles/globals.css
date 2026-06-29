@@ -3,6 +3,10 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
 
+/* Não escaneie a pasta de referências de design (HTML estático com JS minificado
+   gera utilitários inválidos e quebra a compilação do CSS). */
+@source not "../../public/references";
+
 @font-face {
   font-family: "Fira Code";
   src: url("/FiraCode-VariableFont_wght.ttf") format("truetype");

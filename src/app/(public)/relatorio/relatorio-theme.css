@@ -1,4 +1,5 @@
-/* Tema da apresentação de relatório mensal — clima de palco/comemoração. */
+/* Tema da apresentação de relatório mensal — tech-retro brutalista
+   (linguagem do design system Elevate aplicada ao deck de redes sociais). */
 
 @keyframes report-float {
   0%, 100% { transform: translateY(0); }
@@ -8,11 +9,6 @@
 @keyframes report-float-slow {
   0%, 100% { transform: translateY(0) translateX(0); }
   50% { transform: translateY(-22px) translateX(8px); }
-}
-
-@keyframes report-spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 @keyframes report-pulse-ring {
@@ -37,7 +33,6 @@
 
 .report-float { animation: report-float 6s ease-in-out infinite; }
 .report-float-slow { animation: report-float-slow 9s ease-in-out infinite; }
-.report-spin-slow { animation: report-spin-slow 40s linear infinite; }
 .report-twinkle { animation: report-twinkle 3s ease-in-out infinite; }
 .report-bob { animation: report-bob 2.4s ease-in-out infinite; }
 
@@ -61,13 +56,139 @@
 .report-deck::-webkit-scrollbar { display: none; }
 .report-deck { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* ───────────────────────────────────────────────────────────────
+   LINGUAGEM BRUTALISTA — tipografia, janelas, cards, botões, badges
+   Reaproveita as fontes globais (DotGothic16 / Press Start 2P).
+─────────────────────────────────────────────────────────────── */
+.rep-display { font-family: var(--font-display), "DotGothic16", monospace; }
+.rep-pixel { font-family: var(--font-pixel), "Press Start 2P", monospace; }
+
+/* Grade hairline de fundo (igual ao grid-overlay do design system) */
+.rep-grid {
+  background-image:
+    linear-gradient(to right, rgba(189, 250, 60, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(189, 250, 60, 0.06) 1px, transparent 1px);
+  background-size: 3.25rem 3.25rem;
+  -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 45%, #000 25%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 45%, #000 25%, transparent 100%);
+}
+
+/* Eyebrow pixel (chip de etiqueta) */
+.rep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-pixel), "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  padding: 8px 12px;
+  color: #04130b;
+  background: #bdfa3c;
+  border: 2px solid #04130b;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+.rep-badge--ghost {
+  color: #d7ffa6;
+  background: rgba(189, 250, 60, 0.08);
+  border-color: rgba(189, 250, 60, 0.4);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Card brutalista — borda 2px + hard-shadow */
+.rep-card {
+  position: relative;
+  background: rgba(189, 250, 60, 0.04);
+  border: 2px solid rgba(189, 250, 60, 0.22);
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  transition: transform 0.14s ease-out, box-shadow 0.14s ease-out, border-color 0.14s;
+}
+.rep-card:hover {
+  transform: translate(-1px, -1px);
+  border-color: rgba(189, 250, 60, 0.5);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Janela de sistema (terminal chrome) */
+.rep-window {
+  border: 2px solid rgba(189, 250, 60, 0.3);
+  border-radius: 4px;
+  background: rgba(4, 19, 11, 0.55);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+.rep-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.7rem;
+  background: #bdfa3c;
+  color: #04130b;
+}
+.rep-chrome-dots { display: flex; gap: 0.25rem; }
+.rep-chrome-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  background: rgba(4, 19, 11, 0.25);
+}
+
+/* Botões pixel (navegação / CTA) */
+.rep-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-pixel), "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, filter 0.1s;
+}
+.rep-btn--primary {
+  background: #bdfa3c;
+  color: #04130b;
+  border: 2px solid #04130b;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+}
+.rep-btn--ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e9ffd2;
+  border: 2px solid rgba(189, 250, 60, 0.32);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.45);
+}
+.rep-btn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  filter: brightness(1.04);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.55);
+}
+.rep-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+.rep-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.rep-btn:focus-visible { outline: 3px solid #67e8f9; outline-offset: 3px; }
+
 @media (prefers-reduced-motion: reduce) {
   .report-float,
   .report-float-slow,
-  .report-spin-slow,
   .report-twinkle,
   .report-bob,
   .report-shimmer-text {
     animation: none !important;
+  }
+  .rep-btn:hover,
+  .rep-btn:active,
+  .rep-card:hover {
+    transform: none;
   }
 }

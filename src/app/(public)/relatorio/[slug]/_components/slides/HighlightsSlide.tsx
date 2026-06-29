@@ -29,7 +29,7 @@ export default function HighlightsSlide() {
 
   return (
     <SlideShell glow="rgba(189,250,60,0.16)" eyebrow="Destaques do mês">
-      <Item variants={itemVariants} className="text-[clamp(1.6rem,5vw,3rem)] font-extrabold tracking-tight">
+      <Item variants={itemVariants} className="rep-display text-[clamp(1.6rem,5vw,3rem)] tracking-tight">
         Os queridinhos ⭐
       </Item>
       <Item variants={itemVariants} className="mt-2 max-w-lg text-[clamp(0.85rem,1.5vw,1.05rem)] text-white/55">
@@ -47,7 +47,7 @@ export default function HighlightsSlide() {
             initial={{ opacity: 0, y: 30, rotate: i % 2 === 0 ? -2 : 2 }}
             animate={{ opacity: 1, y: 0, rotate: 0 }}
             transition={{ delay: 0.4 + i * 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] text-left backdrop-blur"
+            className="rep-card relative overflow-hidden text-left"
           >
             {isAdmin && (
               <button
@@ -120,10 +120,10 @@ export default function HighlightsSlide() {
         {isAdmin && destaques.length < 4 && (
           <button
             onClick={() => addDestaque()}
-            className="flex min-h-[14rem] flex-col items-center justify-center gap-2 rounded-3xl border border-dashed border-white/20 text-white/50 transition-colors hover:border-[#bdfa3c]/50 hover:text-[#bdfa3c]"
+            className="flex min-h-[14rem] flex-col items-center justify-center gap-2 rounded border-2 border-dashed border-white/20 text-white/50 transition-colors hover:border-[#bdfa3c]/60 hover:text-[#bdfa3c]"
           >
             <Plus className="size-7" />
-            <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em]">Adicionar destaque</span>
+            <span className="rep-pixel text-[0.5rem] uppercase tracking-[0.12em]">Adicionar destaque</span>
           </button>
         )}
       </Item>

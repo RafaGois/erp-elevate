@@ -45,7 +45,7 @@ export default function ReachSlide() {
           value={a.visualizacoesMensais ?? 0}
           path="alcanceEVisualizacoes.visualizacoesMensais"
           format={formatNumber}
-          className="text-[clamp(3.2rem,14vw,9.5rem)] font-extrabold leading-none tracking-tight text-white"
+          className="rep-display text-[clamp(3.2rem,14vw,9.5rem)] leading-none tracking-tight text-white"
         />
       </Item>
 
@@ -56,13 +56,13 @@ export default function ReachSlide() {
       {secondary.length > 0 && (
         <Item variants={itemVariants} className="mt-[clamp(2rem,5vh,3rem)] grid grid-cols-2 gap-3 sm:grid-cols-4">
           {secondary.map((s) => (
-            <div key={s.path} className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 backdrop-blur">
+            <div key={s.path} className="rep-card px-5 py-4">
               <EditableStat
                 value={s.value}
                 path={s.path}
                 format={formatNumber}
                 duration={1.4}
-                className="text-[clamp(1.2rem,2.4vw,1.7rem)] font-bold text-white"
+                className="rep-display text-[clamp(1.2rem,2.4vw,1.7rem)] text-white"
               />
               <p className="mt-1 font-mono text-[0.5rem] uppercase tracking-[0.18em] text-white/40">{s.label}</p>
             </div>

@@ -58,11 +58,8 @@ export default function SlideShell({ backdrop, eyebrow, glow = "rgba(189,250,60,
         className="relative z-10 flex w-full max-w-5xl flex-col items-center text-center"
       >
         {eyebrow && (
-          <motion.div
-            variants={itemVariants}
-            className="mb-[clamp(1.5rem,4vh,2.5rem)] inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.25em] text-white/70 backdrop-blur"
-          >
-            {eyebrow}
+          <motion.div variants={itemVariants} className="mb-[clamp(1.5rem,4vh,2.5rem)]">
+            <span className="rep-badge">{eyebrow}</span>
           </motion.div>
         )}
         {children}

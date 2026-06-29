@@ -74,7 +74,7 @@ export default function FollowersSlide() {
           value={novos}
           path="perfil.novosSeguidores"
           format={signedNumber}
-          className="text-[clamp(3.5rem,15vw,10rem)] font-extrabold leading-none tracking-tight text-white"
+          className="rep-display text-[clamp(3.5rem,15vw,10rem)] leading-none tracking-tight text-white"
         />
       </Item>
 
@@ -114,13 +114,13 @@ function Stat({
   highlight?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-4 backdrop-blur">
+    <div className="rep-card px-6 py-4">
       <EditableStat
         value={value}
         path={path}
         format={format}
         countUp={false}
-        className={`text-[clamp(1.4rem,3vw,2rem)] font-bold ${highlight ? "text-[#bdfa3c]" : "text-white"}`}
+        className={`rep-display text-[clamp(1.4rem,3vw,2rem)] ${highlight ? "text-[#bdfa3c]" : "text-white"}`}
       />
       <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.2em] text-white/40">{label}</p>
     </div>
