@@ -57,11 +57,11 @@ const STATS = [
 ] as const;
 
 const VALUES = [
-  "Simplicidade com Propósito",
-  "Visão de Processo",
-  "Eficiência Operacional",
-  "Precisão Técnica",
-  "Compromisso com Resultado",
+  "Simplicidade que funciona na prática",
+  "Entender o processo antes de codar",
+  "Eficiência que o chão de fábrica sente",
+  "Precisão sem complicar a vida de quem usa",
+  "Resultado que continua entregando",
 ] as const;
 
 export default function AboutUs() {
@@ -157,21 +157,23 @@ export default function AboutUs() {
             <div className="au__card-body">
               <div className="au__about-text">
                 <p>
-                  Desenvolvemos sistemas sob medida para indústria há anos. Nosso
-                  trabalho une desenvolvimento de software com experiência prática
-                  em planejamento e controle de produção e em engenharia de automação.
+                  Desenvolvemos sistemas sob medida para indústrias. O que a gente
+                  faz vem da mistura entre desenvolvimento de software e bastante
+                  tempo trabalhando com planejamento e controle de produção, além
+                  de engenharia de automação.
                 </p>
                 <p>
-                  A equipe já passou por chão de fábrica, sequenciamento de ordens,
-                  definição de capacidade e integração entre sistemas e máquinas.
-                  Por isso construímos soluções que não ficam só no papel. Muitos
-                  dos sistemas que entregamos ainda estão em produção, sendo usados
-                  todo dia.
+                  A equipe já esteve dentro da operação. Já lidou com sequenciamento
+                  de ordens, com a dificuldade de saber a capacidade real da fábrica
+                  e com a dor de tentar integrar sistemas com o que acontece no
+                  chão de produção. É por causa disso que priorizamos ferramentas
+                  que as pessoas de fato usam no dia a dia. Vários sistemas que
+                  entregamos estão rodando até hoje.
                 </p>
                 <p>
-                  Não entregamos só código. Entregamos controle real: visibilidade
-                  do que está acontecendo, previsibilidade de prazos e menos
-                  retrabalho entre áreas.
+                  Não é só entregar um software. É ajudar a operação a ter clareza
+                  do que está acontecendo, planejar prazos com mais confiança e
+                  reduzir o tempo perdido quando as áreas não conversam entre si.
                 </p>
               </div>
             </div>
@@ -192,7 +194,7 @@ export default function AboutUs() {
               </div>
             </div>
             <div className="au__card-body">
-              <h3 className="au__values-heading">Nossos valores</h3>
+              <h3 className="au__values-heading">O que a gente valoriza</h3>
               <ul className="au__values-list">
                 {VALUES.map((v, i) => (
                   <li key={v} className="au__value-item">

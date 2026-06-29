@@ -1,0 +1,73 @@
+/* Tema da apresentação de relatório mensal — clima de palco/comemoração. */
+
+@keyframes report-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes report-float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-22px) translateX(8px); }
+}
+
+@keyframes report-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes report-pulse-ring {
+  0% { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes report-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes report-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes report-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.report-float { animation: report-float 6s ease-in-out infinite; }
+.report-float-slow { animation: report-float-slow 9s ease-in-out infinite; }
+.report-spin-slow { animation: report-spin-slow 40s linear infinite; }
+.report-twinkle { animation: report-twinkle 3s ease-in-out infinite; }
+.report-bob { animation: report-bob 2.4s ease-in-out infinite; }
+
+.report-shimmer-text {
+  background: linear-gradient(
+    100deg,
+    #bdfa3c 0%,
+    #ffffff 25%,
+    #bdfa3c 45%,
+    #22c55e 60%,
+    #bdfa3c 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: report-shimmer 5s linear infinite;
+}
+
+/* Esconde a scrollbar do deck (navegação é por slide). */
+.report-deck::-webkit-scrollbar { display: none; }
+.report-deck { -ms-overflow-style: none; scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .report-float,
+  .report-float-slow,
+  .report-spin-slow,
+  .report-twinkle,
+  .report-bob,
+  .report-shimmer-text {
+    animation: none !important;
+  }
+}

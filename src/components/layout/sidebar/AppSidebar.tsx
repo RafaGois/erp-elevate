@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Sidebar } from "../../ui/sidebar";
-import { Briefcase, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-react";
+import { BarChart3, Briefcase, DollarSign, ListChecks, Tag, User, Warehouse } from "lucide-react";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
@@ -90,6 +90,17 @@ export default function AppSidebar() {
             {
               title: "Orçamentos",
               url: "/budgets",
+            },
+          ],
+        },
+        {
+          title: "Relatórios",
+          icon: BarChart3,
+          url: "/dashboard/reports",
+          items: [
+            {
+              title: "Relatórios mensais",
+              url: "/",
             },
           ],
         },
