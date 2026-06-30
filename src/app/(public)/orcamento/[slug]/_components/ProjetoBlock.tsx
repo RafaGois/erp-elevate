@@ -93,19 +93,23 @@ const COL_SPAN: Record<number, string> = {
   6: "lg:col-span-6",
 };
 
+// Distribui os cards em linhas de 6 colunas (grid lg). Cada linha sempre soma 6,
+// então nunca sobra espaço em branco ao lado de um card. Cards ficam em pares
+// (largura alternada por linha) e só um card sozinho ocupa a linha inteira.
 function chapterSpans(count: number): number[] {
-  const pattern = [2, 4, 3, 3, 3, 3];
   const spans: number[] = [];
-  let pi = 0;
   let left = count;
+  let row = 0;
   while (left > 0) {
     if (left === 1) {
       spans.push(6);
       left = 0;
     } else {
-      spans.push(pattern[pi % pattern.length]);
-      pi++;
-      left--;
+      // Linhas pares: 2 + 4 (assimétrico). Linhas ímpares: 3 + 3 (simétrico).
+      if (row % 2 === 0) spans.push(2, 4);
+      else spans.push(3, 3);
+      left -= 2;
+      row++;
     }
   }
   return spans;
@@ -414,10 +418,7 @@ export default function ProjetoBlock({ data, isAdmin = false, onChange }: Props)
                   <div
                     key={`c${i}`}
                     data-bento
-                    className={cn(
-                      spans[i] === 3 ? "col-span-1" : "col-span-2",
-                      COL_SPAN[spans[i]] ?? "lg:col-span-3"
-                    )}
+                    className={cn("col-span-2", COL_SPAN[spans[i]] ?? "lg:col-span-3")}
                   >
                     <RetroWindow
                       title={`C:\\BENEFICIO_${num}`}
