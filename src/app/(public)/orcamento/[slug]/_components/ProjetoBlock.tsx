@@ -94,7 +94,7 @@ const COL_SPAN: Record<number, string> = {
 };
 
 function chapterSpans(count: number): number[] {
-  const pattern = [2, 4, 4, 2, 3, 3];
+  const pattern = [2, 4, 3, 3, 3, 3];
   const spans: number[] = [];
   let pi = 0;
   let left = count;
@@ -414,7 +414,10 @@ export default function ProjetoBlock({ data, isAdmin = false, onChange }: Props)
                   <div
                     key={`c${i}`}
                     data-bento
-                    className={cn("col-span-2", COL_SPAN[spans[i]] ?? "lg:col-span-3")}
+                    className={cn(
+                      spans[i] === 3 ? "col-span-1" : "col-span-2",
+                      COL_SPAN[spans[i]] ?? "lg:col-span-3"
+                    )}
                   >
                     <RetroWindow
                       title={`C:\\BENEFICIO_${num}`}

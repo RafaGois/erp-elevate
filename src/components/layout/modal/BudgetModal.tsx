@@ -45,11 +45,19 @@ export default function BudgetModal(props: BudgetModalProps) {
     }
   }
 
+  function buildSlug(value: string | null | undefined): string {
+    return (value ?? "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
   async function create(data: Partial<Budget>) {
-    data.slug = data.client?.toLowerCase().replace(/ /g, "-");
-    data.slug += "-" + data.project?.toLowerCase().replace(/ /g, "-");
-    data.slug += "-" + new Date().getTime().toString();
-    console.log(data.slug);
+    const clientSlug = buildSlug(data.client);
+    const projectSlug = buildSlug(data.project);
+    data.slug = `${clientSlug}-${projectSlug}-${Date.now()}`;
     await api.post<Budget>("/budgets", data);
   }
 

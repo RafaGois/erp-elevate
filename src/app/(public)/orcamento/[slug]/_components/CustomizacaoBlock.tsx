@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import type { CustomizacaoBlockData } from "@/types/budget-content";
 import EditableField from "./EditableField";
 
@@ -1097,17 +1097,27 @@ function LaptopMockup({ t }: { t: Theme }) {
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
 
-function StepIndicator({ active, themes }: { active: number; themes: Theme[] }) {
+function StepIndicator({
+  active,
+  themes,
+  onSelect,
+}: {
+  active: number;
+  themes: Theme[];
+  onSelect?: (i: number) => void;
+}) {
   return (
     <div className="flex items-center gap-2">
       {themes.map((t, i) => (
         <div
           key={t.key}
+          onClick={() => onSelect?.(i)}
           className="rounded-full transition-all duration-500"
           style={{
             width: i === active ? "24px" : "6px",
             height: "6px",
             background: i === active ? t.accentColor : "rgba(0,0,0,0.15)",
+            cursor: onSelect ? "pointer" : "default",
           }}
         />
       ))}
@@ -1131,6 +1141,9 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
   const deviceRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null]);
   const currentStepRef = useRef(-1);
   const [activeStep, setActiveStep] = useState(0);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
 
   const updateTextContent = useCallback((step: number) => {
     const th = THEMES[step];
@@ -1139,9 +1152,39 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
     if (textTagRef.current) textTagRef.current.textContent = th.tag;
   }, []);
 
+  // Detect mobile/desktop on resize
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Auto-rotate themes on mobile (3 s per theme)
+  useEffect(() => {
+    if (!isMobile) return;
+    const id = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % THEMES.length);
+    }, 3000);
+    return () => clearInterval(id);
+  }, [isMobile]);
+
+  // Apply CSS-only device switching on mobile (no GSAP pin)
+  useEffect(() => {
+    if (!isMobile) return;
+    deviceRefs.current.forEach((el, i) => {
+      if (!el) return;
+      el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+      el.style.opacity = i === activeStep ? "1" : "0";
+      el.style.transform = i === activeStep ? "scale(1)" : "scale(0.95)";
+      el.style.pointerEvents = i === activeStep ? "auto" : "none";
+    });
+    updateTextContent(activeStep);
+  }, [activeStep, isMobile, updateTextContent]);
+
   useGSAP(
     () => {
-      if (!sectionRef.current) return;
+      // Skip scroll-pin animation entirely on mobile to avoid viewport clipping
+      if (!sectionRef.current || isMobile) return;
       gsap.registerPlugin(ScrollTrigger);
 
       ScrollTrigger.getById("customizacao-pin")?.kill();
@@ -1182,7 +1225,6 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
             currentStepRef.current = step;
             setActiveStep(step);
 
-            // Text: fade out → update → fade in
             const textEls = [
               textLabelRef.current,
               textDescRef.current,
@@ -1194,7 +1236,6 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
               .call(() => { updateTextContent(step); })
               .to(textEls, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" });
 
-            // Device: slide out previous → slide in next
             const prevEl = deviceRefs.current[prevStep];
             const nextEl = deviceRefs.current[step];
 
@@ -1238,7 +1279,7 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
         ScrollTrigger.getById("customizacao-pin")?.kill();
       };
     },
-    { scope: sectionRef, dependencies: [] }
+    { scope: sectionRef, dependencies: [isMobile] }
   );
 
   const currentTheme = THEMES[activeStep];
@@ -1281,7 +1322,11 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
           {/* Left: morphing text */}
           <div className="flex flex-col gap-5 lg:order-1">
-            <StepIndicator active={activeStep} themes={THEMES} />
+            <StepIndicator
+              active={activeStep}
+              themes={THEMES}
+              onSelect={isMobile ? setActiveStep : undefined}
+            />
 
             <div className="space-y-2">
               <div
@@ -1318,26 +1363,39 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
               <span className="text-[11px] font-semibold">{currentTheme.deviceLabel}</span>
             </div>
 
-            {/* Scroll hint */}
-            <div className="flex select-none items-center gap-2 text-[11px] text-neutral-400">
-              <svg
-                className="animate-bounce"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M8 3v10M4 9l4 4 4-4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span>Role para explorar os estilos</span>
-            </div>
+            {/* Interaction hint */}
+            {isMobile ? (
+              <div className="flex select-none items-center gap-2 text-[11px] text-neutral-400">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 2a2 2 0 011.995 1.85L10 4v4.5l1.5-1.5a1 1 0 011.32-.083l.094.083a1 1 0 01.083 1.32l-.083.094-3 3a1 1 0 01-.638.29L9 11.5H6a1 1 0 01-.894-.553L4 9V6a1 1 0 01.883-.993L5 5h.5V4a2 2 0 012-2z"
+                    fill="currentColor"
+                    opacity={0.5}
+                  />
+                </svg>
+                <span>Toque nos pontos para explorar os estilos</span>
+              </div>
+            ) : (
+              <div className="flex select-none items-center gap-2 text-[11px] text-neutral-400">
+                <svg
+                  className="animate-bounce"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 3v10M4 9l4 4 4-4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>Role para explorar os estilos</span>
+              </div>
+            )}
 
             {/* Counter */}
             <div className="font-mono text-[11px] tabular-nums text-neutral-400">
@@ -1356,24 +1414,27 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
               }}
             />
 
-            {/* Device switcher container — height must accommodate tallest device (~414px for mobile) */}
-            <div className="relative" style={{ height: "450px" }}>
+            {/* Device switcher container */}
+            <div className="relative" style={{ height: isMobile ? "320px" : "450px" }}>
               {THEMES.map((th, i) => (
                 <div
                   key={th.key}
                   ref={(el) => {
                     deviceRefs.current[i] = el;
                   }}
-                  className="absolute inset-0 flex items-center justify-center"
+                  className="absolute inset-0 flex items-center justify-center px-2"
                   style={{ opacity: i === 0 ? 1 : 0, pointerEvents: i === 0 ? "auto" : "none" }}
                 >
-                  {th.device === "desktop" && <DesktopMockup t={th} />}
-                  {th.device === "mobile" && <MobileMockup t={th} />}
-                  {th.device === "tablet" && <TabletMockup t={th} />}
-                  {th.device === "laptop" && <LaptopMockup t={th} />}
+                  <div className={isMobile ? "w-full max-w-[320px]" : "w-full"}>
+                    {th.device === "desktop" && <DesktopMockup t={th} />}
+                    {th.device === "mobile" && <MobileMockup t={th} />}
+                    {th.device === "tablet" && <TabletMockup t={th} />}
+                    {th.device === "laptop" && <LaptopMockup t={th} />}
+                  </div>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
 
