@@ -1125,6 +1125,106 @@ function StepIndicator({
   );
 }
 
+// ─── Burst FX ─────────────────────────────────────────────────────────────────
+// Dispara um "estouro" no centro do palco de devices: anel de energia que se
+// expande, um flash radial e estilhaços (quadrados, círculos e linhas) que voam
+// para fora. Cada partícula se auto-remove ao fim da animação. A cor acompanha o
+// tema ativo, reforçando a ideia de transformação/flexibilidade.
+function fireDeviceBurst(container: HTMLElement, accent: string, intensity = 1) {
+  // Anel de energia
+  const ring = document.createElement("div");
+  ring.style.cssText =
+    `position:absolute;left:0;top:0;width:96px;height:96px;margin:-48px 0 0 -48px;` +
+    `border-radius:9999px;border:2px solid ${accent};will-change:transform,opacity;`;
+  container.appendChild(ring);
+  gsap.fromTo(
+    ring,
+    { scale: 0.25, opacity: 0.75 },
+    {
+      scale: 3.4 * intensity,
+      opacity: 0,
+      duration: 0.85,
+      ease: "power3.out",
+      onComplete: () => ring.remove(),
+    }
+  );
+
+  // Segundo anel, mais fino e atrasado (profundidade)
+  const ring2 = document.createElement("div");
+  ring2.style.cssText =
+    `position:absolute;left:0;top:0;width:70px;height:70px;margin:-35px 0 0 -35px;` +
+    `border-radius:9999px;border:1px solid ${accent};will-change:transform,opacity;`;
+  container.appendChild(ring2);
+  gsap.fromTo(
+    ring2,
+    { scale: 0.2, opacity: 0.55 },
+    {
+      scale: 2.4 * intensity,
+      opacity: 0,
+      duration: 0.7,
+      ease: "power2.out",
+      delay: 0.08,
+      onComplete: () => ring2.remove(),
+    }
+  );
+
+  // Flash radial central
+  const flash = document.createElement("div");
+  flash.style.cssText =
+    `position:absolute;left:0;top:0;width:240px;height:240px;margin:-120px 0 0 -120px;` +
+    `border-radius:9999px;background:radial-gradient(circle, ${accent}66 0%, ${accent}22 35%, transparent 62%);` +
+    `will-change:transform,opacity;`;
+  container.appendChild(flash);
+  gsap.fromTo(
+    flash,
+    { scale: 0.35, opacity: 0.9 },
+    {
+      scale: 1.7,
+      opacity: 0,
+      duration: 0.6,
+      ease: "power2.out",
+      onComplete: () => flash.remove(),
+    }
+  );
+
+  // Estilhaços
+  const COUNT = Math.round(18 * intensity);
+  for (let i = 0; i < COUNT; i++) {
+    const shard = document.createElement("div");
+    const isLine = i % 4 === 0;
+    const round = i % 2 === 0;
+    const s = 4 + Math.random() * 7;
+    if (isLine) {
+      shard.style.cssText =
+        `position:absolute;left:0;top:0;width:${11 + Math.random() * 13}px;height:2px;` +
+        `background:${accent};border-radius:2px;will-change:transform,opacity;`;
+    } else {
+      shard.style.cssText =
+        `position:absolute;left:0;top:0;width:${s}px;height:${s}px;` +
+        `background:${accent};border-radius:${round ? "9999px" : "2px"};` +
+        `will-change:transform,opacity;`;
+    }
+    container.appendChild(shard);
+
+    const angle = (Math.PI * 2 * i) / COUNT + (Math.random() - 0.5) * 0.6;
+    const dist = (90 + Math.random() * 130) * intensity;
+    gsap.fromTo(
+      shard,
+      { x: 0, y: 0, opacity: 1, scale: 1, rotation: Math.random() * 180 },
+      {
+        x: Math.cos(angle) * dist,
+        y: Math.sin(angle) * dist,
+        opacity: 0,
+        scale: 0.15,
+        rotation: `+=${(Math.random() - 0.5) * 420}`,
+        duration: 0.65 + Math.random() * 0.45,
+        ease: "power3.out",
+        onComplete: () => shard.remove(),
+      }
+    );
+  }
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 interface Props {
@@ -1139,7 +1239,9 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
   const textDescRef = useRef<HTMLDivElement>(null);
   const textTagRef = useRef<HTMLDivElement>(null);
   const deviceRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null]);
+  const burstRef = useRef<HTMLDivElement>(null);
   const currentStepRef = useRef(-1);
+  const mobilePrevStepRef = useRef(0);
   const [activeStep, setActiveStep] = useState(0);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < 768 : false
@@ -1168,17 +1270,26 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
     return () => clearInterval(id);
   }, [isMobile]);
 
-  // Apply CSS-only device switching on mobile (no GSAP pin)
+  // Device switching on mobile (no GSAP pin) — CSS transition + burst FX
   useEffect(() => {
     if (!isMobile) return;
     deviceRefs.current.forEach((el, i) => {
       if (!el) return;
-      el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-      el.style.opacity = i === activeStep ? "1" : "0";
-      el.style.transform = i === activeStep ? "scale(1)" : "scale(0.95)";
-      el.style.pointerEvents = i === activeStep ? "auto" : "none";
+      const isActive = i === activeStep;
+      el.style.transition =
+        "opacity 0.55s ease, transform 0.6s cubic-bezier(0.34,1.56,0.64,1), filter 0.55s ease";
+      el.style.opacity = isActive ? "1" : "0";
+      el.style.transform = isActive ? "scale(1)" : "scale(0.82)";
+      el.style.filter = isActive ? "blur(0px)" : "blur(6px)";
+      el.style.pointerEvents = isActive ? "auto" : "none";
     });
     updateTextContent(activeStep);
+
+    // Burst só nas trocas reais (não no mount inicial)
+    if (mobilePrevStepRef.current !== activeStep && burstRef.current) {
+      fireDeviceBurst(burstRef.current, THEMES[activeStep].accentColor, 0.7);
+    }
+    mobilePrevStepRef.current = activeStep;
   }, [activeStep, isMobile, updateTextContent]);
 
   useGSAP(
@@ -1196,6 +1307,10 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
             opacity: i === 0 ? 1 : 0,
             scale: i === 0 ? 1 : 0.96,
             y: 0,
+            rotateY: 0,
+            z: 0,
+            filter: "blur(0px)",
+            transformPerspective: 1200,
             pointerEvents: i === 0 ? "auto" : "none",
           });
         }
@@ -1239,27 +1354,48 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
             const prevEl = deviceRefs.current[prevStep];
             const nextEl = deviceRefs.current[step];
 
+            // Estouro de partículas no centro do palco (cor do novo tema)
+            if (burstRef.current) {
+              fireDeviceBurst(burstRef.current, THEMES[step].accentColor, 1);
+            }
+
+            // Device que sai: "desintegra" — cresce, gira em 3D, desfoca e some
             if (prevEl) {
               prevEl.style.pointerEvents = "none";
               gsap.to(prevEl, {
                 opacity: 0,
-                scale: 0.91,
-                y: 16,
-                duration: 0.32,
-                ease: "power2.in",
+                scale: 1.18,
+                y: -10,
+                rotateY: -16,
+                z: -140,
+                filter: "blur(10px)",
+                duration: 0.42,
+                ease: "power3.in",
               });
             }
+            // Device que entra: "remonta" — surge pequeno e desfocado, gira para
+            // a frente e estabiliza com um leve overshoot (back.out)
             if (nextEl) {
               gsap.fromTo(
                 nextEl,
-                { opacity: 0, scale: 1.05, y: -18 },
+                {
+                  opacity: 0,
+                  scale: 0.6,
+                  y: 12,
+                  rotateY: 24,
+                  z: -180,
+                  filter: "blur(13px)",
+                },
                 {
                   opacity: 1,
                   scale: 1,
                   y: 0,
-                  duration: 0.52,
-                  ease: "power2.out",
-                  delay: 0.2,
+                  rotateY: 0,
+                  z: 0,
+                  filter: "blur(0px)",
+                  duration: 0.72,
+                  ease: "back.out(1.5)",
+                  delay: 0.16,
                   onStart: () => {
                     nextEl.style.pointerEvents = "auto";
                   },
@@ -1414,8 +1550,14 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
               }}
             />
 
-            {/* Device switcher container */}
-            <div className="relative" style={{ height: isMobile ? "320px" : "450px" }}>
+            {/* Device switcher container — perspective dá profundidade ao giro 3D */}
+            <div
+              className="relative"
+              style={{
+                height: isMobile ? "320px" : "450px",
+                perspective: "1400px",
+              }}
+            >
               {THEMES.map((th, i) => (
                 <div
                   key={th.key}
@@ -1423,7 +1565,12 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
                     deviceRefs.current[i] = el;
                   }}
                   className="absolute inset-0 flex items-center justify-center px-2"
-                  style={{ opacity: i === 0 ? 1 : 0, pointerEvents: i === 0 ? "auto" : "none" }}
+                  style={{
+                    opacity: i === 0 ? 1 : 0,
+                    pointerEvents: i === 0 ? "auto" : "none",
+                    transformStyle: "preserve-3d",
+                    backfaceVisibility: "hidden",
+                  }}
                 >
                   <div className={isMobile ? "w-full max-w-[320px]" : "w-full"}>
                     {th.device === "desktop" && <DesktopMockup t={th} />}
@@ -1433,6 +1580,13 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
                   </div>
                 </div>
               ))}
+
+              {/* Camada de partículas do "estouro" — centralizada no palco */}
+              <div
+                ref={burstRef}
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 z-30"
+              />
             </div>
 
           </div>
