@@ -38,6 +38,57 @@ function getTopicShort(text: string, maxWords = 8) {
   return words.slice(0, maxWords).join(" ") + "…";
 }
 
+// Cursor decorativo que "clica" no card quando ele entra na viewport.
+// Os elementos começam ocultos; a animação é orquestrada via GSAP (data-attrs).
+function ClickCursor({ posClassName }: { posClassName: string }) {
+  return (
+    <div
+      data-card-cursor-wrap
+      className={`pointer-events-none absolute z-20 ${posClassName}`}
+      style={{ opacity: 0 }}
+      aria-hidden
+    >
+      {/* Anel de clique */}
+      <div
+        data-card-ring
+        className="absolute left-0 top-0 h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border-[2.5px] border-black bg-lime-300/30"
+      />
+      {/* Etiqueta "click" */}
+      <div
+        data-card-label
+        className="absolute left-[1.4rem] top-0 -translate-y-1/2 border-2 border-black bg-lime-300 px-1.5 py-1 text-[7px] font-bold uppercase tracking-[0.14em] text-black md:text-[8px]"
+      >
+        click
+      </div>
+      {/* Ponteiro */}
+      <div data-card-cursor className="absolute left-0 top-0">
+        <svg
+          width="28"
+          height="36"
+          viewBox="0 0 22 28"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden
+        >
+          <path
+            d="M3 3v18.5l5.2-4.8 3.2 6.8 2.4-1.6-3-6.2 7.4-3.6z"
+            fill="#000"
+            transform="translate(2.25 2.25)"
+          />
+          <path
+            d="M3 3v18.5l5.2-4.8 3.2 6.8 2.4-1.6-3-6.2 7.4-3.6z"
+            fill="#bdfa3c"
+            stroke="#000"
+            strokeWidth="1.25"
+            strokeLinejoin="miter"
+          />
+          <path d="M4.5 5.5v9l4-2.2v-4.2z" fill="#fff" opacity="0.42" />
+          <rect x="2.25" y="2.25" width="2.5" height="2.5" fill="#fff" stroke="#000" strokeWidth="0.75" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 function TimelineCard({
   etapa,
   index,
@@ -54,6 +105,9 @@ function TimelineCard({
   onRemove: () => void;
 }) {
   const sysLabel = toSysSlug(etapa.fase, index);
+  // Alterna o ponto onde o cursor "clica" para não ficar repetitivo.
+  const cursorPos =
+    index % 2 === 0 ? "left-[2.6rem] top-[3.1rem]" : "left-[3.2rem] bottom-[2.6rem]";
   return (
     <div
       data-timeline-card
@@ -63,6 +117,7 @@ function TimelineCard({
         boxShadow: `6px 6px 0 ${variant.shadow}`,
       }}
     >
+      <ClickCursor posClassName={cursorPos} />
       <div
         className="flex items-center justify-between gap-2 px-3 py-2 rounded-t-[2px]"
         style={{ backgroundColor: variant.bar }}
@@ -278,6 +333,45 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
           },
         });
       });
+
+      // Cursor "clicando" em cada card conforme ele aparece no scroll.
+      if (!reduceMotion) {
+        cards.forEach((card) => {
+          const wrap = card.querySelector<HTMLElement>("[data-card-cursor-wrap]");
+          const cur = card.querySelector<HTMLElement>("[data-card-cursor]");
+          const ring = card.querySelector<HTMLElement>("[data-card-ring]");
+          const label = card.querySelector<HTMLElement>("[data-card-label]");
+          if (!wrap || !cur || !ring || !label) return;
+
+          gsap.set(wrap, { opacity: 0 });
+          gsap.set(cur, { x: -24, y: -20, scale: 1.18, rotate: -6 });
+          gsap.set(ring, { opacity: 0, scale: 0.5 });
+          gsap.set(label, { opacity: 0, y: 6 });
+
+          const clickTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: card,
+              start: "top 72%",
+              // Reproduz ao entrar; reseta ao sair por cima para tocar de novo na volta.
+              toggleActions: "play none none reset",
+            },
+          });
+
+          clickTl
+            // Cursor entra deslizando até o card
+            .to(wrap, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0)
+            .to(cur, { x: 0, y: 0, scale: 1, rotate: 0, duration: 0.34, ease: "power2.out" }, 0)
+            // Pressiona (click)
+            .to(cur, { scale: 0.76, duration: 0.08, ease: "power2.in" }, 0.36)
+            .to(ring, { opacity: 1, scale: 1.18, duration: 0.18, ease: "power2.out" }, 0.36)
+            .to(label, { opacity: 1, y: 0, duration: 0.18, ease: "back.out(2)" }, 0.38)
+            // Solta com leve overshoot
+            .to(cur, { scale: 1, duration: 0.16, ease: "back.out(2.4)" }, 0.46)
+            // Some suavemente para não poluir o card
+            .to([ring, label], { opacity: 0, duration: 0.26, ease: "power2.out" }, 0.74)
+            .to(wrap, { opacity: 0, duration: 0.3, ease: "power1.out" }, 1.0);
+        });
+      }
 
       const infoLeft = timelineRef.current.querySelectorAll('[data-timeline-info-side="left"]');
       gsap.set(infoLeft, { opacity: 0, x: -56, y: 24, scale: 0.94 });
