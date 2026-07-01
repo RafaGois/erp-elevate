@@ -6,8 +6,8 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import SplitText from "gsap-trial/SplitText";
 
-const TITULO = "Seja bem-vindo à nossa proposta comercial";
-const SUBTITULO = "Ela foi desenvolvida especialmente para você";
+const TITULO = "Esta proposta foi feita para você";
+const SUBTITULO = "Queremos que fique claro o que entregamos e por que faz sentido para o seu negócio";
 
 const EXIT_DURATION_S = 1.1;
 const EXIT_EASE = [0.25, 0.46, 0.45, 0.94] as const;

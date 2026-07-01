@@ -122,7 +122,7 @@ export default function DepoimentosBlock({ data, isAdmin = false, onChange }: Pr
             />
           </h2>
           <p className="mt-2 max-w-xl text-[#7D6B58]">
-            Depoimentos de quem já confiou no nosso trabalho.
+            O que empresas que já passaram por isso estão dizendo.
           </p>
         </header>
 

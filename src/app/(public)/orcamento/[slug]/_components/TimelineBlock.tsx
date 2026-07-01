@@ -484,7 +484,7 @@ export default function TimelineBlock({ data, isAdmin = false, onChange }: Props
             />
           </h2>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-[#7D6B58]">
-            Da primeira reunião ao lançamento — cada etapa planejada para você.
+            Da primeira conversa até o site no ar. Cada etapa pensada para você acompanhar.
           </p>
         </header>
 

@@ -361,7 +361,7 @@ function ServiceDetail({ item, index }: { item?: ServicoItem; index: number }) {
   return (
     <div className="space-y-4">
       <span className="text-xs font-medium uppercase tracking-wider text-[#bdfa3c]">
-        Serviço {index + 1} — Incluso
+        Serviço {index + 1} incluso
       </span>
       <h3 className="text-2xl font-bold text-black md:text-3xl">
         {item.titulo ?? item.nome}

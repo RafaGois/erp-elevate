@@ -182,7 +182,7 @@ const THEMES: Theme[] = [
   {
     key: "moderno",
     label: "Modernidade minimalista",
-    description: "Clareza e foco: o essencial, com design que encanta.",
+    description: "Clareza e foco. O essencial, com design que encanta.",
     tag: "Limpo · Contemporâneo",
     device: "laptop",
     deviceLabel: "Laptop",
@@ -1444,7 +1444,7 @@ export default function CustomizacaoBlock({ data, isAdmin = false, onChange }: P
             <EditableField
               value={
                 data.subtitulo ??
-                "Cada projeto é construído do zero — seguindo a história, os gostos e o posicionamento de cada cliente."
+                "Fazemos cada projeto do zero. Seguimos a história, o estilo e o posicionamento de quem vai usar."
               }
               onChange={(v) => onChange?.({ ...data, subtitulo: v })}
               isAdmin={isAdmin}

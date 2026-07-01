@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ELEVATEPRO MEDIA — Apresentação de Serviços</title>
+  <meta name="description" content="Apresentação interativa dos serviços da ElevatePro Media — social media, identidade visual, audiovisual, captação, cobertura de eventos e sites institucionais." />
+
+  <!-- Fonts (mesma estratégia do design system) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Geist:wght@300;400;500;600;700&family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: ["selector", '[data-theme="dark"]'],
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"DotGothic16"', "monospace"],
+            body: ['"Geist"', "Inter", "sans-serif"],
+            pixel: ['"Press Start 2P"', "cursive"],
+          },
+          colors: {
+            accent: "#DFFF00",
+            ink: "var(--bg)",
+            alt: "var(--alt)",
+            surface: "var(--surface)",
+            fg: "var(--fg)",
+            muted: "var(--muted)",
+          },
+          borderColor: { line: "var(--line)" },
+        },
+      },
+    };
+  </script>
+
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       TOKENS (herdados do design_system.html)
+    ───────────────────────────────────────────────────────────── */
+    :root,
+    [data-theme="light"] {
+      --bg: #ffffff; --alt: #f4f4f5; --surface: #ffffff; --surface-2: #fafafa;
+      --fg: #09090b; --muted: #71717a;
+      --line: rgba(0,0,0,0.10); --line-strong: rgba(0,0,0,0.18);
+      --grid: rgba(0,0,0,0.045); --scan: rgba(0,0,0,0.05);
+      --glass: rgba(255,255,255,0.6); --pixel-shadow: #000;
+    }
+    [data-theme="dark"] {
+      --bg: #050505; --alt: #0a0a0a; --surface: #1c1917; --surface-2: #292524;
+      --fg: #f2f0eb; --muted: #a8a29e;
+      --line: rgba(242,240,235,0.12); --line-strong: rgba(242,240,235,0.25);
+      --grid: rgba(242,240,235,0.06); --scan: rgba(223,255,0,0.05);
+      --glass: rgba(28,25,23,0.5); --pixel-shadow: #000;
+    }
+
+    html, body { height: 100%; }
+    body {
+      background: var(--bg); color: var(--fg);
+      font-family: "Geist","Inter",sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden; /* deck horizontal controla o scroll */
+      transition: background-color .5s ease, color .5s ease;
+    }
+    ::selection { background:#dfff00; color:#000; }
+    .font-display { font-family:"DotGothic16",monospace; }
+    .font-pixel { font-family:"Press Start 2P",cursive; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    /* Overlays globais */
+    .scanlines-global {
+      position: fixed; inset: 0; pointer-events: none; z-index: 80; opacity: .5;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scan) 2px, var(--scan) 3px);
+      mix-blend-mode: screen;
+    }
+    [data-theme="light"] .scanlines-global { mix-blend-mode: multiply; opacity: .6; }
+
+    .grid-overlay {
+      position:absolute; inset:0; pointer-events:none;
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 3.5rem 3.5rem;
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000 30%, transparent 100%);
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, #000 30%, transparent 100%);
+    }
+    .glow-blob { position:absolute; border-radius:9999px; filter:blur(80px); pointer-events:none; will-change:transform; }
+    .glow-lime { background: radial-gradient(circle, rgba(223,255,0,.28) 0%, rgba(223,255,0,.06) 45%, transparent 70%); }
+    .glow-emerald { background: radial-gradient(circle, rgba(34,197,94,.22) 0%, rgba(34,197,94,.05) 45%, transparent 70%); }
+
+    .crt::before {
+      content:""; position:absolute; inset:0; pointer-events:none; z-index:5;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0px, rgba(0,0,0,.12) 1px, transparent 1px, transparent 2px);
+    }
+
+    /* Botões */
+    .pixel-btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      font-family: ui-monospace, monospace; font-size:.6875rem; font-weight:500; line-height:1.35;
+      padding:8px 14px; color:#000; background:#dfff00; border:2px solid #171717; border-radius:0;
+      text-transform:uppercase; letter-spacing:.08em; cursor:pointer;
+      box-shadow:4px 4px 0 #0f172a; transition:transform .1s ease-out, box-shadow .1s ease-out, background .12s;
+    }
+    .pixel-btn:hover { transform:translate(-1px,-1px); box-shadow:5px 5px 0 #0f172a; }
+    .pixel-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #0f172a; }
+    .pixel-btn:focus-visible { outline:3px solid #0ea5e9; outline-offset:3px; }
+    .pixel-btn.is-outline { background:#fafafa; color:var(--fg); }
+    [data-theme="dark"] .pixel-btn.is-outline {
+      background:#292524; border-color: color-mix(in srgb,#dfff00 55%,#e7e5e4); box-shadow:4px 4px 0 color-mix(in srgb,#dfff00 70%,#000);
+    }
+    .pixel-btn.is-sm { font-size:.625rem; padding:6px 12px; }
+    .pixel-btn.is-lg { font-size:.75rem; padding:14px 20px; }
+    .pixel-btn:disabled, .pixel-btn.is-disabled { opacity:.35; cursor:not-allowed; box-shadow:none; transform:none; filter:grayscale(.5); pointer-events:none; }
+
+    .btn-line {
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      font-family: ui-monospace, monospace; font-size:.6875rem; font-weight:500; line-height:1.35;
+      letter-spacing:.12em; text-transform:uppercase; padding:8px 16px;
+      color:var(--fg); background:transparent; border:2px solid var(--line-strong); border-radius:0; cursor:pointer;
+      transition:transform .12s ease-out, box-shadow .12s ease-out, border-color .12s, color .12s;
+    }
+    .btn-line:hover { border-color:#dfff00; color:#84a700; transform:translate(-1px,-1px); box-shadow:4px 4px 0 #dfff00; }
+    [data-theme="dark"] .btn-line:hover { color:#dfff00; }
+    .btn-line:active { transform:translate(2px,2px); box-shadow:2px 2px 0 #dfff00; }
+    .btn-line.is-sm { font-size:.625rem; padding:6px 12px; }
+
+    .btn-glass {
+      position:relative; display:inline-flex; align-items:center; gap:.6rem; padding:.85rem 1.6rem;
+      border-radius:9999px; font-weight:500; font-size:.9rem; color:var(--fg);
+      background:var(--glass); border:1px solid var(--line-strong); backdrop-filter:blur(16px); overflow:hidden;
+      transition:transform .3s, box-shadow .3s, background .3s; cursor:pointer;
+    }
+    .btn-glass:hover { transform:scale(1.03); box-shadow:0 0 32px -8px rgba(223,255,0,.4); }
+    .btn-beam { position:relative; isolation:isolate; }
+    .btn-beam::before { content:""; position:absolute; inset:-150%; z-index:-2; background:conic-gradient(from 0deg, transparent 0 300deg, #dfff00 360deg); animation:beam-spin 3.5s linear infinite; }
+    .btn-beam::after { content:""; position:absolute; inset:2px; z-index:-1; border-radius:inherit; background:var(--bg); }
+
+    /* Cards */
+    .card-window {
+      --cw-bar:#dfff00; --cw-border:#171717; --cw-shadow:#0f172a;
+      position:relative; overflow:hidden; display:flex; flex-direction:column;
+      border-radius:.125rem; border:2px solid var(--cw-border); background:var(--surface);
+      box-shadow:6px 6px 0 var(--cw-shadow); transition:transform .12s ease-out, box-shadow .12s ease-out;
+    }
+    .card-window:hover { transform:translate(-1px,-1px); box-shadow:7px 7px 0 var(--cw-shadow); }
+    .card-chrome { display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.35rem .5rem; background:var(--cw-bar); color:#000; }
+    .card-chrome-label { font-family:"Press Start 2P",cursive; font-size:10px; letter-spacing:.06em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card-chrome-dots { display:flex; gap:.125rem; }
+    .card-chrome-dots span { width:10px; height:10px; border-radius:2px; border:1px solid rgba(0,0,0,.3); background:rgba(255,255,255,.9); }
+    .card-chrome-dots span:last-child { background:#f87171; }
+    .card-panel { border-top:2px solid rgba(0,0,0,.12); padding:1rem 1.1rem 1.15rem; background:var(--surface); }
+    [data-theme="dark"] .card-panel { border-top-color: rgba(242,240,235,.12); }
+
+    .card-glass {
+      border-radius:1.5rem; border:1px solid var(--line); background:var(--glass); backdrop-filter:blur(16px);
+      transition:transform .35s cubic-bezier(.2,.6,.2,1), border-color .35s, box-shadow .35s;
+    }
+    .card-glass:hover { transform:translateY(-4px); border-color:var(--line-strong); box-shadow:0 20px 48px -24px rgba(223,255,0,.35); }
+
+    .bento-cell {
+      position:relative; overflow:hidden; border-radius:.125rem; border:2px solid var(--cw-border,#171717);
+      background:var(--surface); box-shadow:6px 6px 0 var(--cw-shadow,#0f172a);
+      transition:transform .12s ease-out, box-shadow .12s ease-out;
+    }
+    .bento-cell:hover { transform:translate(-1px,-1px); box-shadow:7px 7px 0 var(--cw-shadow,#0f172a); }
+
+    /* Badges */
+    .badge-pixel {
+      display:inline-flex; align-items:center; gap:.35rem; font-family:"Press Start 2P",cursive; font-size:7px;
+      letter-spacing:.1em; text-transform:uppercase; padding:7px 10px; color:#000; background:#dfff00; border:3px solid #000; border-radius:0; box-shadow:4px 4px 0 #000;
+    }
+    .badge-pill {
+      display:inline-flex; align-items:center; gap:.4rem; font-size:.7rem; font-weight:500; letter-spacing:.16rem;
+      text-transform:uppercase; padding:.35rem .8rem; border-radius:9999px; border:1px solid var(--line-strong); color:var(--muted);
+    }
+
+    /* Kicker / accent */
+    .kicker { font-size:.7rem; font-weight:500; letter-spacing:.18rem; text-transform:uppercase; color:var(--muted); }
+    .kicker-accent { color:#84a700; }
+    [data-theme="dark"] .kicker-accent { color:#dfff00; }
+    .hl-accent { color:#5f7a00; }
+    [data-theme="dark"] .hl-accent { color:#dfff00; }
+
+    /* Module grid (serviços) */
+    .module-grid { display:grid; gap:2px; background:var(--fg); border:2px solid var(--fg); border-radius:.125rem; box-shadow:6px 6px 0 var(--line-strong); overflow:hidden; }
+    .module-cell { position:relative; overflow:hidden; background:var(--surface); padding:1.35rem 1.2rem; transition:background .25s; cursor:pointer; text-align:left; width:100%; }
+    .module-cell::before { content:""; position:absolute; top:0; left:0; height:3px; width:100%; background:linear-gradient(90deg,#dfff00,transparent); transform:scaleX(0); transform-origin:left; transition:transform .45s cubic-bezier(.16,1,.3,1); }
+    .module-cell:hover { background:var(--surface-2); }
+    .module-cell:hover::before { transform:scaleX(1); }
+    .module-cell .m-icon { color:var(--muted); transition:color .25s, transform .25s; }
+    .module-cell:hover .m-icon { color:#84a700; transform:translateY(-3px); }
+    [data-theme="dark"] .module-cell:hover .m-icon { color:#dfff00; }
+
+    /* Pipeline (método) */
+    .pipe-rail { position:absolute; top:27px; left:0; right:0; height:2px; background:var(--line-strong); }
+    .pipe-signal { position:absolute; top:50%; left:0; width:12px; height:12px; transform:translate(-50%,-50%); background:#dfff00; border:2px solid var(--fg); box-shadow:0 0 12px rgba(223,255,0,.85); animation:signal-run 7s linear infinite; }
+    .pipe-node { width:56px; height:56px; display:grid; place-items:center; background:var(--surface); border:2px solid var(--line-strong); color:var(--muted); transition:transform .2s ease-out, box-shadow .2s ease-out, border-color .2s, color .2s; }
+    .pipe-step:hover .pipe-node, .pipe-step:focus-visible .pipe-node { border-color:#dfff00; color:var(--fg); box-shadow:4px 4px 0 #dfff00; transform:translate(-1px,-1px); }
+    .pipe-step:focus-visible { outline:none; }
+
+    /* Terminal de specs */
+    .terminal { border:2px solid var(--fg); border-radius:.125rem; background:var(--surface); box-shadow:6px 6px 0 var(--line-strong); font-family: ui-monospace, monospace; overflow:hidden; }
+    .terminal-bar { display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.55rem .9rem; border-bottom:2px solid var(--fg); background:var(--surface-2); }
+    .terminal-dots { display:flex; gap:.4rem; }
+    .terminal-dots span { width:11px; height:11px; border-radius:9999px; border:1px solid var(--line-strong); }
+    .terminal-row { display:grid; gap:.25rem; padding:.8rem .9rem; border-top:1px solid var(--line); transition:background .2s; }
+    .terminal-row:first-child { border-top:0; }
+    .terminal-row:hover { background: color-mix(in srgb,#dfff00 9%, transparent); }
+
+    /* Stat box */
+    .count-box { border:2px solid var(--line-strong); border-radius:.125rem; background:var(--surface); padding:1rem .8rem; text-align:center; transition:border-color .18s, box-shadow .18s, transform .18s; }
+    .count-box:hover { border-color:#dfff00; box-shadow:4px 4px 0 #dfff00; transform:translate(-1px,-1px); }
+    .count-num { font-family:"DotGothic16",monospace; font-size:clamp(1.7rem,4.5vw,2.5rem); line-height:1; font-variant-numeric:tabular-nums; }
+
+    /* Checklist de entregas */
+    .deliver { display:flex; align-items:flex-start; gap:.7rem; padding:.55rem 0; border-top:1px solid var(--line); }
+    .deliver:first-child { border-top:0; }
+    .deliver .dot { flex-shrink:0; margin-top:2px; display:grid; place-items:center; width:20px; height:20px; background:#dfff00; color:#000; border:2px solid #000; box-shadow:2px 2px 0 #000; }
+    [data-theme="dark"] .deliver .dot { border-color:#000; }
+
+    /* ─── MEDIA FRAME (rico em imagens; placeholder retrô por padrão) ───
+       Solte imagens reais em /references/img/<nome>.jpg — carregam por cima
+       do placeholder. Enquanto não existirem, o placeholder é a arte. */
+    .media-frame {
+      position:relative; overflow:hidden; aspect-ratio:4/3;
+      border:2px solid var(--cw-border,#171717); background:var(--surface-2);
+      box-shadow:6px 6px 0 var(--cw-shadow,#0f172a);
+    }
+    .media-frame.is-tall { aspect-ratio:3/4; }
+    .media-frame.is-wide { aspect-ratio:16/9; }
+    .media-frame > img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; }
+    .media-ph {
+      position:absolute; inset:0; z-index:1; display:grid; place-items:center; gap:.6rem; text-align:center; padding:1rem;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(223,255,0,.12), transparent 55%),
+        repeating-linear-gradient(45deg, rgba(223,255,0,.05) 0 12px, transparent 12px 24px),
+        linear-gradient(135deg, var(--surface-2), var(--surface));
+    }
+    .media-ph .ph-ic { color:var(--muted); opacity:.85; }
+    .media-frame:hover .media-ph .ph-ic { color:#84a700; }
+    [data-theme="dark"] .media-frame:hover .media-ph .ph-ic { color:#dfff00; }
+    .media-tag {
+      position:absolute; z-index:3; left:.6rem; bottom:.6rem; font-family:"Press Start 2P",cursive; font-size:7px;
+      letter-spacing:.08em; text-transform:uppercase; padding:5px 8px; color:#000; background:#dfff00; border:2px solid #000; box-shadow:2px 2px 0 #000;
+    }
+
+    /* Reveal (GSAP define estado final) */
+    .r { opacity:0; transform:translateY(24px); filter:blur(6px); }
+
+    /* ─────────────────────────────────────────────────────────────
+       DECK HORIZONTAL — um slide por vez, navegação lateral
+    ───────────────────────────────────────────────────────────── */
+    #deck { position:fixed; inset:0; z-index:1; }
+    #track { display:flex; height:100%; width:100%; will-change:transform; transition:transform .7s cubic-bezier(.76,0,.24,1); }
+    .slide { position:relative; flex:0 0 100vw; height:100vh; overflow-y:auto; overflow-x:hidden; }
+    .slide::-webkit-scrollbar { width:8px; }
+    .slide::-webkit-scrollbar-thumb { background:var(--line-strong); }
+    .slide-inner { position:relative; z-index:10; min-height:100vh; display:flex; flex-direction:column; justify-content:center; max-width:80rem; margin:0 auto; padding:6.5rem 1.5rem 6rem; }
+    @media (min-width:768px){ .slide-inner { padding:7rem 3rem 6rem; } }
+
+    /* Barra de progresso topo */
+    .deck-progress { position:fixed; top:0; left:0; height:3px; z-index:75; background:linear-gradient(90deg,#dfff00,#22c55e); box-shadow:0 0 10px rgba(223,255,0,.6); transition:width .7s cubic-bezier(.76,0,.24,1); }
+
+    /* Nav dots (rodapé) */
+    .dockbar { position:fixed; left:50%; bottom:1rem; transform:translateX(-50%); z-index:75; display:flex; align-items:center; gap:.5rem; padding:.5rem .6rem; border-radius:9999px; border:1px solid var(--line-strong); background:var(--glass); backdrop-filter:blur(16px); max-width:calc(100vw - 1.5rem); }
+    .nav-arrow { display:grid; place-items:center; width:34px; height:34px; border:2px solid var(--line-strong); background:var(--surface); color:var(--fg); border-radius:0; cursor:pointer; transition:.15s; flex-shrink:0; }
+    .nav-arrow:hover:not(:disabled) { border-color:#dfff00; box-shadow:3px 3px 0 #dfff00; transform:translate(-1px,-1px); color:#84a700; }
+    [data-theme="dark"] .nav-arrow:hover:not(:disabled) { color:#dfff00; }
+    .nav-arrow:disabled { opacity:.3; cursor:not-allowed; }
+    .dots { display:flex; align-items:center; gap:5px; overflow-x:auto; scrollbar-width:none; padding:0 .15rem; }
+    .dots::-webkit-scrollbar { display:none; }
+    .dot { flex-shrink:0; width:9px; height:9px; border:1px solid var(--line-strong); background:transparent; border-radius:0; cursor:pointer; transition:.2s; }
+    .dot:hover { border-color:#dfff00; }
+    .dot.is-active { background:#dfff00; border-color:#dfff00; width:22px; box-shadow:0 0 8px rgba(223,255,0,.7); }
+    .slide-count { font-family:"Press Start 2P",cursive; font-size:8px; letter-spacing:.05em; color:var(--muted); white-space:nowrap; flex-shrink:0; padding:0 .35rem; }
+
+    /* Keyframes */
+    @keyframes beam-spin { to { transform:rotate(360deg); } }
+    @keyframes streakFlow { 0% { stroke-dashoffset:600; } 100% { stroke-dashoffset:-600; } }
+    @keyframes float-y { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-12px); } }
+    @keyframes neon-pulse { 0%,100% { box-shadow:0 0 16px rgba(223,255,0,.4),0 0 36px rgba(223,255,0,.18); } 50% { box-shadow:0 0 26px rgba(223,255,0,.65),0 0 60px rgba(223,255,0,.3); } }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    @keyframes signal-run { 0% { left:0%; opacity:0; } 6% { opacity:1; } 94% { opacity:1; } 100% { left:100%; opacity:0; } }
+    @keyframes marquee { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
+    .anim-float { animation:float-y 6s ease-in-out infinite; }
+    .anim-neon { animation:neon-pulse 2.4s ease-in-out infinite; }
+    .cursor-blink { animation:blink 1s step-end infinite; }
+    .marquee-track { display:flex; width:max-content; animation:marquee 26s linear infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      #track { transition:none; }
+      .anim-float,.anim-neon,.marquee-track,.cursor-blink,.btn-beam::before,.pipe-signal { animation:none !important; }
+      .r { opacity:1; transform:none; filter:none; }
+    }
+  </style>
+</head>
+
+<body class="font-body antialiased">
+  <div class="scanlines-global" aria-hidden="true"></div>
+  <div class="deck-progress" id="progress" style="width:0%"></div>
+
+  <!-- ─────────────────── TOP NAV ─────────────────── -->
+  <header class="fixed inset-x-0 top-4 z-[70] px-4">
+    <nav class="mx-auto flex max-w-5xl items-center justify-between gap-4 rounded-full border px-4 py-2.5 backdrop-blur-2xl"
+         style="background:var(--glass); border-color:var(--line-strong);">
+      <button data-goto="0" class="flex items-center gap-2">
+        <span class="grid h-7 w-7 place-items-center bg-accent text-black" style="box-shadow:3px 3px 0 #000;">
+          <iconify-icon icon="solar:bolt-bold" width="16"></iconify-icon>
+        </span>
+        <span class="font-display text-lg tracking-tight">ELEVATEPRO</span>
+      </button>
+
+      <div class="hidden items-center gap-6 md:flex">
+        <button data-goto="2" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Empresa</button>
+        <button data-goto="3" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Equipe</button>
+        <button data-goto="5" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Serviços</button>
+        <button data-goto="12" class="text-xs uppercase tracking-[0.18rem] text-muted transition hover:text-fg">Contato</button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" aria-label="Alternar tema"
+          class="grid h-9 w-9 place-items-center rounded-full border transition hover:border-accent" style="border-color:var(--line-strong);">
+          <iconify-icon id="themeIcon" icon="solar:moon-bold" width="17"></iconify-icon>
+        </button>
+        <button data-goto="12" class="pixel-btn is-sm hidden sm:inline-flex">Fale conosco</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ─────────────────── DECK ─────────────────── -->
+  <main id="deck" aria-label="Apresentação de serviços">
+    <div id="track">
+
+      <!-- ══════════════ SLIDE 0 — CAPA ══════════════ -->
+      <section class="slide" data-label="Capa" aria-label="Capa">
+        <video class="absolute inset-0 h-full w-full object-cover opacity-[0.22]" autoplay muted loop playsinline aria-hidden="true">
+          <source src="/videofundo3.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 50%, transparent 0%, var(--bg) 100%);"></div>
+        <div class="grid-overlay"></div>
+        <div data-blob class="glow-blob glow-lime left-[8%] top-1/3 h-[min(55vw,460px)] w-[min(55vw,460px)] -translate-y-1/2"></div>
+        <div data-blob class="glow-blob glow-emerald bottom-[12%] right-[6%] h-[min(48vw,400px)] w-[min(48vw,400px)]"></div>
+
+        <svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <path d="M200,0 Q1320,80 1440,180" stroke="#22c55e" stroke-width="6" fill="none" opacity="0.4" stroke-dasharray="100 200" style="animation:streakFlow 28s linear infinite;" stroke-linecap="round"/>
+          <path d="M240,900 Q120,780 0,620" stroke="#dfff00" stroke-width="6" fill="none" opacity="0.42" stroke-dasharray="100 200" style="animation:streakFlow 26s linear infinite 1s;" stroke-linecap="round"/>
+        </svg>
+
+        <div id="glyphLayer" class="pointer-events-none absolute inset-0 z-[9]">
+          <span data-glyph data-depth="0.7" class="absolute left-[12%] top-[24%] text-3xl opacity-40 anim-float">▲</span>
+          <span data-glyph data-depth="1.1" class="absolute right-[14%] top-[20%] text-4xl opacity-40 anim-float" style="animation-delay:.6s; color:#dfff00;">◆</span>
+          <span data-glyph data-depth="0.9" class="absolute left-[18%] bottom-[22%] text-2xl opacity-40 anim-float" style="animation-delay:1.1s; color:#22c55e;">●</span>
+          <span data-glyph data-depth="1.2" class="absolute right-[20%] bottom-[26%] text-3xl opacity-40 anim-float" style="animation-delay:.3s;">✦</span>
+        </div>
+
+        <div class="slide-inner items-center text-center">
+          <div class="r mb-6 flex justify-center">
+            <span class="badge-pill"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span> Proposta comercial · Desde 2021</span>
+          </div>
+          <p class="r font-pixel text-[10px] uppercase tracking-[0.25em] hl-accent mb-4">// Apresentação de serviços</p>
+          <h1 class="r font-display text-[clamp(2.6rem,10vw,6rem)] font-normal leading-[0.9] tracking-tight">
+            ELEVATEPRO<br/><span class="hl-accent">MEDIA</span><span class="cursor-blink font-pixel align-middle text-[0.32em]" style="color:#dfff00;">_</span>
+          </h1>
+          <p class="r mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+            Elevamos o nível das marcas com conteúdo de <span class="hl-accent">alta qualidade</span> — social media, audiovisual, identidade visual e presença digital que geram <span class="hl-accent">resultado</span>.
+          </p>
+          <div class="r mt-9 flex flex-wrap items-center justify-center gap-4">
+            <button data-goto="1" class="pixel-btn is-lg"><iconify-icon icon="solar:play-bold" width="14"></iconify-icon> Iniciar apresentação</button>
+            <button data-goto="5" class="btn-glass btn-beam">Ver serviços <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></button>
+          </div>
+          <div class="r mt-14 flex items-center gap-3 text-muted">
+            <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="anim-float"></iconify-icon>
+            <span class="font-pixel text-[7px] uppercase tracking-[0.2em]">Navegue com as setas ← →</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 1 — JORNADA / ÍNDICE ══════════════ -->
+      <section class="slide" data-label="Jornada" aria-label="Jornada">
+        <div class="grid-overlay opacity-60"></div>
+        <div data-blob class="glow-blob glow-lime -left-20 top-10 h-[320px] w-[320px] opacity-60"></div>
+        <div class="slide-inner">
+          <header class="r mb-10 max-w-2xl">
+            <p class="kicker kicker-accent">// 01 — O roteiro</p>
+            <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">A jornada que faremos juntos</h2>
+            <p class="mt-4 text-muted">Da nossa história ao serviço ideal para a sua marca. Três capítulos até o conteúdo que vai destacar você.</p>
+          </header>
+          <div class="grid gap-5 md:grid-cols-3">
+            <button data-goto="2" class="r bento-cell p-6 text-left">
+              <span class="font-pixel text-[9px] hl-accent">01</span>
+              <div class="mt-4 grid h-12 w-12 place-items-center text-black" style="background:#dfff00; box-shadow:3px 3px 0 #000;"><iconify-icon icon="solar:buildings-3-bold" width="24"></iconify-icon></div>
+              <h3 class="mt-4 font-display text-2xl">Quem somos</h3>
+              <p class="mt-2 text-sm text-muted">A empresa e as pessoas por trás de cada entrega.</p>
+              <span class="mt-4 inline-flex items-center gap-1 text-xs hl-accent">Conhecer <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></span>
+            </button>
+            <button data-goto="4" class="r bento-cell p-6 text-left">
+              <span class="font-pixel text-[9px] hl-accent">02</span>
+              <div class="mt-4 grid h-12 w-12 place-items-center text-black" style="background:#dfff00; box-shadow:3px 3px 0 #000;"><iconify-icon icon="solar:branching-paths-up-bold" width="24"></iconify-icon></div>
+              <h3 class="mt-4 font-display text-2xl">Como trabalhamos</h3>
+              <p class="mt-2 text-sm text-muted">Método claro: planejamento, captação e estratégia.</p>
+              <span class="mt-4 inline-flex items-center gap-1 text-xs hl-accent">Ver método <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></span>
+            </button>
+            <button data-goto="5" class="r bento-cell p-6 text-left">
+              <span class="font-pixel text-[9px] hl-accent">03</span>
+              <div class="mt-4 grid h-12 w-12 place-items-center text-black" style="background:#dfff00; box-shadow:3px 3px 0 #000;"><iconify-icon icon="solar:widget-5-bold" width="24"></iconify-icon></div>
+              <h3 class="mt-4 font-display text-2xl">Nossos serviços</h3>
+              <p class="mt-2 text-sm text-muted">Seis frentes para elevar a sua presença de marca.</p>
+              <span class="mt-4 inline-flex items-center gap-1 text-xs hl-accent">Explorar <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 2 — EMPRESA ══════════════ -->
+      <section class="slide" data-label="Empresa" aria-label="Empresa">
+        <div data-blob class="glow-blob glow-emerald right-0 top-20 h-[360px] w-[360px] opacity-60"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <header class="r mb-6 max-w-xl">
+                <p class="kicker kicker-accent">// 02 — Nossa empresa</p>
+                <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Conteúdo que atrai e converte</h2>
+              </header>
+              <p class="r text-muted leading-relaxed">
+                Desde <span class="hl-accent">2021</span> atuamos no mercado de marketing com foco em redes sociais, desenvolvimento de sites e produção audiovisual. Identificamos uma crescente necessidade por conteúdo de qualidade — e é isso que entregamos.
+              </p>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Acreditamos que um conteúdo bem produzido não apenas atrai atenção, mas gera resultados. Focando na excelência em cada etapa, convertemos vendas e fortalecemos a presença das marcas. Nossa missão é transformar cada projeto em uma <span class="hl-accent">oportunidade de crescimento</span>.
+              </p>
+              <div class="r mt-8 grid grid-cols-4 gap-2.5">
+                <div class="count-box"><div class="count-num" data-count="2021" data-plain="1">2021</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">desde</div></div>
+                <div class="count-box"><div class="count-num" data-count="3">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">especialistas</div></div>
+                <div class="count-box"><div class="count-num" data-count="6" data-suffix="">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">serviços</div></div>
+                <div class="count-box"><div class="count-num" data-count="4" data-suffix="K">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">resolução</div></div>
+              </div>
+            </div>
+            <div class="r">
+              <div class="terminal text-sm">
+                <div class="terminal-bar">
+                  <div class="flex items-center gap-2">
+                    <div class="terminal-dots" aria-hidden="true"><span style="background:#f87171;"></span><span style="background:#fbbf24;"></span><span style="background:#22c55e;"></span></div>
+                    <span class="ml-2 text-[11px] text-muted">elevatepro — manifesto.txt</span>
+                  </div>
+                  <span class="flex items-center gap-1.5 text-[11px]" style="color:#22a06b;"><span class="h-1.5 w-1.5 rounded-full" style="background:#22c55e;"></span> ONLINE</span>
+                </div>
+                <div>
+                  <div class="terminal-row md:grid-cols-[120px_1fr] md:gap-5"><div class="text-xs tracking-widest hl-accent">MISSÃO</div><div class="text-xs text-fg md:text-sm">Elevar o nível das marcas com profissionalismo e qualidade incomparável.</div></div>
+                  <div class="terminal-row md:grid-cols-[120px_1fr] md:gap-5"><div class="text-xs tracking-widest hl-accent">CRENÇA</div><div class="text-xs text-fg md:text-sm">Conteúdo bem produzido gera resultados significativos.</div></div>
+                  <div class="terminal-row md:grid-cols-[120px_1fr] md:gap-5"><div class="text-xs tracking-widest hl-accent">FOCO</div><div class="text-xs text-fg md:text-sm">Excelência em cada etapa → conversão de vendas.</div></div>
+                  <div class="terminal-row md:grid-cols-[120px_1fr] md:gap-5"><div class="text-xs tracking-widest hl-accent">META</div><div class="text-xs text-fg md:text-sm">Cada projeto = uma oportunidade de crescimento.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 3 — EQUIPE ══════════════ -->
+      <section class="slide" data-label="Equipe" aria-label="Equipe">
+        <div class="grid-overlay opacity-50"></div>
+        <div data-blob class="glow-blob glow-lime left-1/2 top-0 h-[320px] w-[320px] -translate-x-1/2 opacity-50"></div>
+        <div class="slide-inner">
+          <header class="r mb-10 max-w-2xl">
+            <p class="kicker kicker-accent">// 03 — Nossa equipe</p>
+            <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Profissionais que entregam</h2>
+            <p class="mt-4 text-muted">Uma equipe enxuta e experiente, pronta para entregar os resultados esperados pela sua empresa.</p>
+          </header>
+          <div class="grid gap-6 md:grid-cols-3">
+            <!-- Eduardo -->
+            <article class="r card-window">
+              <div class="card-chrome"><span class="card-chrome-label">SYS://EQUIPE_01</span><div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div></div>
+              <figure class="media-frame is-wide" style="box-shadow:none; border-left:0; border-right:0; aspect-ratio:16/10;">
+                <!-- solte /references/img/eduardo.jpg -->
+                <img src="/references/img/eduardo.jpg" alt="Eduardo dos Santos" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:user-rounded-bold" width="46"></iconify-icon></div>
+                <span class="media-tag">Foto</span>
+              </figure>
+              <div class="card-panel">
+                <h3 class="font-display text-xl">Eduardo dos Santos</h3>
+                <p class="mt-1 font-pixel text-[8px] uppercase tracking-[0.1em] hl-accent">Gerente de Marketing</p>
+                <p class="mt-3 text-sm text-muted">Tecnólogo em Marketing. Responsável pelas captações, estratégias e planejamentos.</p>
+              </div>
+            </article>
+            <!-- Petrick -->
+            <article class="r card-window">
+              <div class="card-chrome"><span class="card-chrome-label">SYS://EQUIPE_02</span><div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div></div>
+              <figure class="media-frame is-wide" style="box-shadow:none; border-left:0; border-right:0; aspect-ratio:16/10;">
+                <img src="/references/img/petrick.jpg" alt="Petrick Matheus" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:user-rounded-bold" width="46"></iconify-icon></div>
+                <span class="media-tag">Foto</span>
+              </figure>
+              <div class="card-panel">
+                <h3 class="font-display text-xl">Petrick Matheus</h3>
+                <p class="mt-1 font-pixel text-[8px] uppercase tracking-[0.1em] hl-accent">Editor · Gestor de Tráfego</p>
+                <p class="mt-3 text-sm text-muted">Designer gráfico e editor de vídeos desde 2021. Responsável por edições, gestão das páginas e tráfego pago.</p>
+              </div>
+            </article>
+            <!-- Rafael -->
+            <article class="r card-window">
+              <div class="card-chrome"><span class="card-chrome-label">SYS://EQUIPE_03</span><div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div></div>
+              <figure class="media-frame is-wide" style="box-shadow:none; border-left:0; border-right:0; aspect-ratio:16/10;">
+                <img src="/references/img/rafael.jpg" alt="Rafael Gois" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:user-rounded-bold" width="46"></iconify-icon></div>
+                <span class="media-tag">Foto</span>
+              </figure>
+              <div class="card-panel">
+                <h3 class="font-display text-xl">Rafael Gois</h3>
+                <p class="mt-1 font-pixel text-[8px] uppercase tracking-[0.1em] hl-accent">Programador Full Stack</p>
+                <p class="mt-3 text-sm text-muted">Graduando em Engenharia de Software. Atua no desenvolvimento de sites, programas e aplicativos.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 4 — MÉTODO ══════════════ -->
+      <section class="slide" data-label="Método" aria-label="Método">
+        <div data-blob class="glow-blob glow-lime right-0 top-10 h-[340px] w-[340px] opacity-50"></div>
+        <div class="slide-inner">
+          <header class="r mb-10 max-w-2xl">
+            <p class="kicker kicker-accent">// 04 — Como trabalhamos</p>
+            <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Do mercado à conversão</h2>
+            <p class="mt-4 text-muted">Trabalhamos de forma estruturada. Cada etapa alimenta a próxima — uma linha contínua do planejamento ao resultado.</p>
+          </header>
+
+          <article class="r card-window mb-8">
+            <div class="card-chrome"><span class="card-chrome-label">SYS://PIPELINE</span><div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div></div>
+            <div class="card-panel">
+              <div class="relative">
+                <div class="pipe-rail hidden md:block" aria-hidden="true"><span class="pipe-signal"></span></div>
+                <div class="relative grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-5">
+                  <div class="pipe-step group flex flex-col items-center gap-3 text-center">
+                    <span class="pipe-node"><iconify-icon icon="solar:chart-square-linear" width="22"></iconify-icon></span>
+                    <span><span class="block mono text-[10px]" style="color:#84a700;">01</span><span class="mono text-xs tracking-widest">ANÁLISE</span></span>
+                  </div>
+                  <div class="pipe-step group flex flex-col items-center gap-3 text-center">
+                    <span class="pipe-node"><iconify-icon icon="solar:calendar-mark-linear" width="22"></iconify-icon></span>
+                    <span><span class="block mono text-[10px]" style="color:#84a700;">02</span><span class="mono text-xs tracking-widest">PLANEJAMENTO</span></span>
+                  </div>
+                  <div class="pipe-step group flex flex-col items-center gap-3 text-center">
+                    <span class="pipe-node"><iconify-icon icon="solar:check-read-linear" width="22"></iconify-icon></span>
+                    <span><span class="block mono text-[10px]" style="color:#84a700;">03</span><span class="mono text-xs tracking-widest">APROVAÇÃO</span></span>
+                  </div>
+                  <div class="pipe-step group flex flex-col items-center gap-3 text-center">
+                    <span class="pipe-node"><iconify-icon icon="solar:videocamera-record-linear" width="22"></iconify-icon></span>
+                    <span><span class="block mono text-[10px]" style="color:#84a700;">04</span><span class="mono text-xs tracking-widest">CAPTAÇÃO 4K</span></span>
+                  </div>
+                  <div class="pipe-step group flex flex-col items-center gap-3 text-center">
+                    <span class="pipe-node"><iconify-icon icon="solar:graph-up-linear" width="22"></iconify-icon></span>
+                    <span><span class="block mono text-[10px]" style="color:#84a700;">05</span><span class="mono text-xs tracking-widest">ESTRATÉGIA</span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <div class="grid gap-5 md:grid-cols-3">
+            <div class="r card-glass p-6">
+              <span class="grid h-11 w-11 place-items-center rounded-xl text-black" style="background:#dfff00;"><iconify-icon icon="solar:calendar-mark-bold" width="22"></iconify-icon></span>
+              <h4 class="mt-4 font-display text-lg">Planejamento</h4>
+              <p class="mt-1.5 text-sm text-muted">Análise detalhada do mercado para identificar referências e tendências, com plano mensal criado um mês antes.</p>
+            </div>
+            <div class="r card-glass p-6">
+              <span class="grid h-11 w-11 place-items-center rounded-xl text-black" style="background:#dfff00;"><iconify-icon icon="solar:camera-bold" width="22"></iconify-icon></span>
+              <h4 class="mt-4 font-display text-lg">Captação</h4>
+              <p class="mt-1.5 text-sm text-muted">Material de alta resolução em 4K que destaca o produto e proporciona uma experiência visual envolvente.</p>
+            </div>
+            <div class="r card-glass p-6">
+              <span class="grid h-11 w-11 place-items-center rounded-xl text-black" style="background:#dfff00;"><iconify-icon icon="solar:target-bold" width="22"></iconify-icon></span>
+              <h4 class="mt-4 font-display text-lg">Estratégia</h4>
+              <p class="mt-1.5 text-sm text-muted">Tráfego, métricas, melhores horários e legendas atrativas — cada interação vira uma oportunidade de conexão.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 5 — SERVIÇOS (OVERVIEW) ══════════════ -->
+      <section class="slide" data-label="Serviços" aria-label="Serviços">
+        <div class="grid-overlay opacity-50"></div>
+        <div data-blob class="glow-blob glow-lime left-1/2 top-0 h-[320px] w-[320px] -translate-x-1/2 opacity-50"></div>
+        <div class="slide-inner">
+          <header class="r mb-10 max-w-2xl">
+            <p class="kicker kicker-accent">// 05 — Nossos serviços</p>
+            <h2 class="font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Seis formas de elevar sua marca</h2>
+            <p class="mt-4 text-muted">Clique em cada serviço para conhecer o escopo e as entregas em detalhe.</p>
+          </header>
+          <div class="r module-grid grid-cols-2 md:grid-cols-3">
+            <button class="module-cell" data-goto="6">
+              <iconify-icon class="m-icon" icon="solar:hashtag-square-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">SOCIAL MEDIA</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">gestão contínua</div>
+            </button>
+            <button class="module-cell" data-goto="7">
+              <iconify-icon class="m-icon" icon="solar:palette-round-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">IDENTIDADE</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">marca &amp; branding</div>
+            </button>
+            <button class="module-cell" data-goto="8">
+              <iconify-icon class="m-icon" icon="solar:camera-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">CAPTAÇÃO</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">diária foto/vídeo</div>
+            </button>
+            <button class="module-cell" data-goto="9">
+              <iconify-icon class="m-icon" icon="solar:clapperboard-play-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">AUDIOVISUAL</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">pacotes de vídeo</div>
+            </button>
+            <button class="module-cell" data-goto="10">
+              <iconify-icon class="m-icon" icon="solar:confetti-minimalistic-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">EVENTOS</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">cobertura pro</div>
+            </button>
+            <button class="module-cell" data-goto="11">
+              <iconify-icon class="m-icon" icon="solar:programming-linear" width="28"></iconify-icon>
+              <div class="mt-5 mono text-sm tracking-widest">SITE</div>
+              <div class="mt-1 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">presença digital</div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 6 — SOCIAL MEDIA ══════════════ -->
+      <section class="slide" data-label="Social Media" aria-label="Social Media">
+        <div data-blob class="glow-blob glow-emerald right-0 top-20 h-[340px] w-[340px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <p class="r kicker kicker-accent">// Serviço 01 — Gestão contínua</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Social Media</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Atendimento em período integral, com suporte contínuo para garantir a presença estratégica da marca em todos os pontos de contato: cobertura de eventos, flyers, artes digitais, fotos e vídeos profissionais — sempre alinhados à identidade visual.
+              </p>
+
+              <div class="r mt-6">
+                <p class="kicker mb-3">Escopo — selecione o plano</p>
+                <div id="smTiers" class="flex flex-wrap gap-2">
+                  <button class="pixel-btn is-sm is-outline is-active" data-tier="essencial">Essencial</button>
+                  <button class="pixel-btn is-sm is-outline" data-tier="completo">Completo</button>
+                  <button class="pixel-btn is-sm is-outline" data-tier="performance">+ Tráfego</button>
+                </div>
+                <div id="smDeliver" class="mt-5"></div>
+              </div>
+
+              <div class="r mt-6 flex items-center gap-3">
+                <span class="badge-pixel" style="background:#000; color:#dfff00;"><iconify-icon icon="solar:gift-bold" width="10"></iconify-icon> Brinde 6 meses</span>
+                <span class="text-xs text-muted">Fechou 6 meses? Identidade visual por nossa conta.</span>
+              </div>
+            </div>
+
+            <div class="r grid grid-cols-2 gap-4">
+              <figure class="media-frame is-tall">
+                <img src="/references/img/social-1.jpg" alt="Conteúdo para redes sociais" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:gallery-wide-bold" width="42"></iconify-icon></div>
+                <span class="media-tag">Feed</span>
+              </figure>
+              <div class="grid gap-4">
+                <figure class="media-frame">
+                  <img src="/references/img/social-2.jpg" alt="Stories" onerror="this.remove()"/>
+                  <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:smartphone-bold" width="34"></iconify-icon></div>
+                  <span class="media-tag">Stories</span>
+                </figure>
+                <figure class="media-frame">
+                  <img src="/references/img/social-3.jpg" alt="Reels e vídeos" onerror="this.remove()"/>
+                  <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:videocamera-record-bold" width="34"></iconify-icon></div>
+                  <span class="media-tag">Reels</span>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 7 — IDENTIDADE VISUAL ══════════════ -->
+      <section class="slide" data-label="Identidade" aria-label="Identidade Visual">
+        <div class="grid-overlay opacity-50"></div>
+        <div data-blob class="glow-blob glow-lime -left-10 bottom-0 h-[320px] w-[320px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="order-2 lg:order-1 grid grid-cols-2 gap-4">
+              <figure class="media-frame">
+                <img src="/references/img/identidade-1.jpg" alt="Logotipo" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:pen-new-square-bold" width="38"></iconify-icon></div>
+                <span class="media-tag">Logo</span>
+              </figure>
+              <figure class="media-frame">
+                <img src="/references/img/identidade-2.jpg" alt="Paleta e tipografia" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:palette-bold" width="38"></iconify-icon></div>
+                <span class="media-tag">Paleta</span>
+              </figure>
+              <figure class="media-frame is-wide col-span-2">
+                <img src="/references/img/identidade-3.jpg" alt="Mockups da marca" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:t-shirt-bold" width="38"></iconify-icon></div>
+                <span class="media-tag">Mockups</span>
+              </figure>
+            </div>
+            <div class="order-1 lg:order-2">
+              <p class="r kicker kicker-accent">// Serviço 02 — Marca &amp; branding</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Identidade Visual</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                A identidade visual é a principal âncora de uma marca — comunica sua estética, princípios e valores, e fixa na memória do cliente a história da marca. Fazemos uma análise criteriosa de cores, formas, logotipo, tipografia e aplicações, criando uma estética uniforme para tudo que carrega a marca.
+              </p>
+              <div class="r mt-6">
+                <p class="kicker mb-2">O que você recebe</p>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Logotipo em EPS, JPEG e PNG</p><p class="text-xs text-muted">Arquivos vetoriais e de alta resolução para qualquer uso.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Manual de marca</p><p class="text-xs text-muted">Guia de uso: cores, tipografia, aplicações e restrições.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Mockups aplicados</p><p class="text-xs text-muted">Produtos, uniformes, decorações e personalizáveis.</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 8 — DIÁRIA DE CAPTAÇÃO ══════════════ -->
+      <section class="slide" data-label="Captação" aria-label="Diária de Captação">
+        <div data-blob class="glow-blob glow-emerald right-0 top-10 h-[340px] w-[340px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <p class="r kicker kicker-accent">// Serviço 03 — Produção</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Diária de Captação</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Até 7 horas e 30 minutos de gravação dedicados à produção de conteúdos audiovisuais conforme a necessidade do cliente. Registros em foto e vídeo, de acordo com os objetivos e direcionamentos definidos.
+              </p>
+              <div class="r mt-6 grid grid-cols-3 gap-3">
+                <div class="count-box"><div class="count-num">7:30</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">horas</div></div>
+                <div class="count-box"><div class="count-num" data-count="15">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">dias entrega</div></div>
+                <div class="count-box"><div class="count-num" data-count="4" data-suffix="K">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">resolução</div></div>
+              </div>
+              <div class="r mt-6">
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">7h30 de captação em campo</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Material editado em até 15 dias</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Fotos, vídeos ou lives a critério do cliente</p></div></div>
+              </div>
+            </div>
+            <div class="r">
+              <figure class="media-frame is-wide">
+                <img src="/references/img/captacao.jpg" alt="Diária de captação" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:camera-add-bold" width="48"></iconify-icon></div>
+                <span class="media-tag">Bastidores</span>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 9 — AUDIOVISUAL ══════════════ -->
+      <section class="slide" data-label="Audiovisual" aria-label="Audiovisual">
+        <div class="grid-overlay opacity-50"></div>
+        <div data-blob class="glow-blob glow-lime -left-10 top-10 h-[320px] w-[320px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="order-2 lg:order-1">
+              <figure class="media-frame is-wide">
+                <img src="/references/img/audiovisual.jpg" alt="Produção audiovisual" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:clapperboard-play-bold" width="48"></iconify-icon></div>
+                <span class="media-tag">Edição</span>
+              </figure>
+              <div class="mt-5 grid grid-cols-4 gap-2.5" id="avPkgs">
+                <button class="count-box" data-pkg="1"><div class="count-num">1</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">vídeo</div></button>
+                <button class="count-box" data-pkg="2"><div class="count-num">2</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">vídeos</div></button>
+                <button class="count-box" data-pkg="3"><div class="count-num">3</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">vídeos</div></button>
+                <button class="count-box" data-pkg="4"><div class="count-num">4+</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">vídeos</div></button>
+              </div>
+            </div>
+            <div class="order-1 lg:order-2">
+              <p class="r kicker kicker-accent">// Serviço 04 — Vídeo</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Audiovisual</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Pacotes de vídeos editados de acordo com a necessidade do cliente — de vídeos individuais a pacotes de 3, 4 ou mais. A captação é planejada, garantindo qualidade de imagem, enquadramento e narrativa, e todo material passa por edição profissional.
+              </p>
+              <div class="r mt-6">
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Captação planejada</p><p class="text-xs text-muted">Qualidade de imagem, enquadramento e narrativa.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Edição profissional</p><p class="text-xs text-muted">Todo material gravado é tratado e finalizado.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Flexível</p><p class="text-xs text-muted">Escolha o pacote conforme sua demanda.</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 10 — COBERTURA DE EVENTO ══════════════ -->
+      <section class="slide" data-label="Eventos" aria-label="Cobertura de Evento">
+        <div data-blob class="glow-blob glow-emerald right-0 bottom-10 h-[340px] w-[340px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <p class="r kicker kicker-accent">// Serviço 05 — Ao vivo</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Cobertura de Evento</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Registro dos principais momentos do seu evento de forma profissional. A entrega destaca a experiência, o público e os detalhes mais relevantes — com qualidade técnica e pronto para uso em redes sociais, materiais institucionais ou ações promocionais.
+              </p>
+              <div class="r mt-6 grid grid-cols-2 gap-3">
+                <div class="count-box"><div class="count-num">1:30</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">after movie</div></div>
+                <div class="count-box"><div class="count-num" data-count="100" data-suffix="+">0</div><div class="mt-2 font-pixel text-[7px] uppercase tracking-[0.1em] text-muted">fotos tratadas</div></div>
+              </div>
+              <div class="r mt-6">
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">After movie de até 1 min 30 s</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Até 100 fotos tratadas</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Vídeo editado pronto para publicar</p></div></div>
+              </div>
+            </div>
+            <div class="r grid grid-cols-2 gap-4">
+              <figure class="media-frame is-tall col-span-2">
+                <img src="/references/img/evento-1.jpg" alt="Cobertura de evento" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:users-group-two-rounded-bold" width="46"></iconify-icon></div>
+                <span class="media-tag">Público</span>
+              </figure>
+              <figure class="media-frame">
+                <img src="/references/img/evento-2.jpg" alt="Detalhes do evento" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:star-bold" width="32"></iconify-icon></div>
+                <span class="media-tag">Detalhes</span>
+              </figure>
+              <figure class="media-frame">
+                <img src="/references/img/evento-3.jpg" alt="Momentos do evento" onerror="this.remove()"/>
+                <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:clapperboard-bold" width="32"></iconify-icon></div>
+                <span class="media-tag">After movie</span>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 11 — SITE INSTITUCIONAL ══════════════ -->
+      <section class="slide" data-label="Site" aria-label="Site Institucional">
+        <div class="grid-overlay opacity-50"></div>
+        <div data-blob class="glow-blob glow-lime -left-10 top-10 h-[320px] w-[320px] opacity-50"></div>
+        <div class="slide-inner">
+          <div class="grid items-center gap-10 lg:grid-cols-2">
+            <div class="order-2 lg:order-1 r">
+              <article class="card-window">
+                <div class="card-chrome"><span class="card-chrome-label">HTTPS://SUAMARCA.COM</span><div class="card-chrome-dots" aria-hidden><span></span><span></span><span></span></div></div>
+                <figure class="media-frame is-wide" style="box-shadow:none; border:0; aspect-ratio:16/10;">
+                  <img src="/references/img/site.jpg" alt="Site institucional" onerror="this.remove()"/>
+                  <div class="media-ph"><iconify-icon class="ph-ic" icon="solar:monitor-smartphone-bold" width="48"></iconify-icon></div>
+                  <span class="media-tag">Preview</span>
+                </figure>
+                <div class="card-panel">
+                  <p class="mono text-[11px] text-muted">&gt; Responsivo · rápido · otimizado para o Google</p>
+                </div>
+              </article>
+            </div>
+            <div class="order-1 lg:order-2">
+              <p class="r kicker kicker-accent">// Serviço 06 — Presença digital</p>
+              <h2 class="r font-display mt-3 text-4xl leading-tight tracking-tight md:text-5xl">Site Institucional</h2>
+              <p class="r mt-4 text-muted leading-relaxed">
+                Fortaleça a presença digital da sua empresa, transmita credibilidade e autoridade, e facilite o contato com clientes e parceiros. Layout profissional, responsivo e alinhado à identidade visual — com boa navegação, desempenho e visibilidade nos mecanismos de busca.
+              </p>
+              <div class="r mt-6">
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Desenvolvimento personalizado</p><p class="text-xs text-muted">Seguindo a identidade da marca.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">E-mails corporativos</p><p class="text-xs text-muted">Comunicação profissional com o domínio da empresa.</p></div></div>
+                <div class="deliver"><span class="dot"><iconify-icon icon="solar:check-linear" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">Posicionamento no Google</p><p class="text-xs text-muted">Otimização para os mecanismos de busca.</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SLIDE 12 — CONTATO / CTA ══════════════ -->
+      <section class="slide" data-label="Contato" aria-label="Contato">
+        <video class="absolute inset-0 h-full w-full object-cover opacity-[0.18]" autoplay muted loop playsinline aria-hidden="true">
+          <source src="/videofundo3.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 60% at 50% 50%, transparent 0%, var(--bg) 100%);"></div>
+        <div data-blob class="glow-blob glow-lime left-1/2 bottom-0 h-[360px] w-[440px] -translate-x-1/2 opacity-50"></div>
+        <div class="slide-inner items-center text-center">
+          <span class="r grid h-14 w-14 place-items-center bg-accent text-black" style="box-shadow:5px 5px 0 #000;"><iconify-icon icon="solar:bolt-bold" width="28"></iconify-icon></span>
+          <h2 class="r font-display mt-6 text-[clamp(2.2rem,7vw,4rem)] leading-[0.95] tracking-tight">Vamos elevar<br/>a <span class="hl-accent">sua marca</span>?</h2>
+          <p class="r mx-auto mt-5 max-w-xl text-muted">Esperamos poder atender às suas necessidades. Qualquer dúvida, é só entrar em contato — o próximo passo é seu.</p>
+
+          <div class="r mt-8 w-full max-w-lg">
+            <div class="terminal text-left text-sm">
+              <div class="terminal-bar">
+                <div class="flex items-center gap-2">
+                  <div class="terminal-dots" aria-hidden="true"><span style="background:#f87171;"></span><span style="background:#fbbf24;"></span><span style="background:#22c55e;"></span></div>
+                  <span class="ml-2 text-[11px] text-muted">contato.card</span>
+                </div>
+                <span class="text-[11px]" style="color:#22a06b;">DISPONÍVEL</span>
+              </div>
+              <div class="terminal-row md:grid-cols-[110px_1fr] md:gap-4"><div class="text-xs tracking-widest hl-accent">CONTATO</div><div class="text-xs text-fg md:text-sm">Eduardo dos Santos · Gerente de Marketing</div></div>
+              <div class="terminal-row md:grid-cols-[110px_1fr] md:gap-4"><div class="text-xs tracking-widest hl-accent">TELEFONE</div><div class="text-xs text-fg md:text-sm">(49) 98892-0047</div></div>
+              <div class="terminal-row md:grid-cols-[110px_1fr] md:gap-4"><div class="text-xs tracking-widest hl-accent">ENDEREÇO</div><div class="text-xs text-fg md:text-sm">Rua Oricimbo Caetano da Silva, 461 — Curitibanos/SC</div></div>
+            </div>
+          </div>
+
+          <div class="r mt-8 flex flex-wrap items-center justify-center gap-4">
+            <a class="pixel-btn is-lg" href="https://wa.me/5549988920047" target="_blank" rel="noopener"><iconify-icon icon="solar:chat-round-call-bold" width="15"></iconify-icon> Chamar no WhatsApp</a>
+            <a class="btn-glass" href="tel:+5549988920047"><iconify-icon icon="solar:phone-bold" width="16"></iconify-icon> (49) 98892-0047</a>
+          </div>
+          <p class="r font-pixel mt-10 text-[8px] uppercase tracking-[0.15em] text-muted">© 2026 ElevatePro Media · feito com pixels &amp; cuidado</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ─────────────────── DOCKBAR (navegação) ─────────────────── -->
+  <div class="dockbar" role="navigation" aria-label="Navegação de slides">
+    <button class="nav-arrow" id="prevBtn" aria-label="Slide anterior"><iconify-icon icon="solar:alt-arrow-left-linear" width="18"></iconify-icon></button>
+    <div class="dots" id="dots"></div>
+    <span class="slide-count" id="slideCount">01 / 13</span>
+    <button class="nav-arrow" id="nextBtn" aria-label="Próximo slide"><iconify-icon icon="solar:alt-arrow-right-linear" width="18"></iconify-icon></button>
+  </div>
+
+  <script>
+    /* ─── Tema ─── */
+    (function () {
+      const html = document.documentElement, icon = document.getElementById("themeIcon");
+      const saved = localStorage.getItem("elevate-theme");
+      if (saved) html.setAttribute("data-theme", saved);
+      const sync = () => icon.setAttribute("icon", html.getAttribute("data-theme") === "dark" ? "solar:moon-bold" : "solar:sun-bold");
+      sync();
+      document.getElementById("themeToggle").addEventListener("click", () => {
+        const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", next); localStorage.setItem("elevate-theme", next); sync();
+      });
+    })();
+
+    /* ─── Deck controller ─── */
+    const Deck = (function () {
+      const track = document.getElementById("track");
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const dotsWrap = document.getElementById("dots");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const progress = document.getElementById("progress");
+      const counter = document.getElementById("slideCount");
+      const total = slides.length;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let index = 0;
+      const pad = (n) => String(n).padStart(2, "0");
+
+      // dots
+      slides.forEach((s, i) => {
+        const b = document.createElement("button");
+        b.className = "dot"; b.setAttribute("aria-label", s.dataset.label || ("Slide " + (i + 1)));
+        b.title = s.dataset.label || "";
+        b.addEventListener("click", () => go(i));
+        dotsWrap.appendChild(b);
+      });
+      const dots = Array.from(dotsWrap.children);
+
+      function animateSlide(slide) {
+        const items = slide.querySelectorAll(".r");
+        if (!window.gsap || reduce) { items.forEach((el) => { el.style.opacity = 1; el.style.transform = "none"; el.style.filter = "none"; }); return; }
+        gsap.killTweensOf(items);
+        gsap.set(items, { opacity: 0, y: 24, filter: "blur(6px)" });
+        gsap.to(items, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power3.out", stagger: 0.07, overwrite: true });
+        // count-up
+        slide.querySelectorAll("[data-count]").forEach((el) => {
+          const end = parseFloat(el.dataset.count), suffix = el.dataset.suffix || "";
+          if (el.dataset.plain) { el.textContent = end + suffix; return; }
+          const obj = { v: 0 };
+          gsap.to(obj, { v: end, duration: 1.1, ease: "power2.out", onUpdate: () => { el.textContent = Math.round(obj.v) + suffix; } });
+        });
+      }
+
+      function go(i) {
+        index = Math.max(0, Math.min(total - 1, i));
+        track.style.transform = "translateX(" + (-index * 100) + "vw)";
+        dots.forEach((d, di) => d.classList.toggle("is-active", di === index));
+        const active = dots[index]; if (active && active.scrollIntoView) active.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+        prevBtn.disabled = index === 0; nextBtn.disabled = index === total - 1;
+        progress.style.width = ((index + 1) / total * 100) + "%";
+        counter.textContent = pad(index + 1) + " / " + pad(total);
+        slides[index].scrollTop = 0;
+        animateSlide(slides[index]);
+      }
+      const next = () => go(index + 1), prev = () => go(index - 1);
+
+      prevBtn.addEventListener("click", prev);
+      nextBtn.addEventListener("click", next);
+      document.querySelectorAll("[data-goto]").forEach((el) => el.addEventListener("click", () => go(parseInt(el.dataset.goto, 10))));
+
+      // teclado
+      window.addEventListener("keydown", (e) => {
+        if (["ArrowRight", "PageDown"].includes(e.key)) { e.preventDefault(); next(); }
+        else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); prev(); }
+        else if (e.key === "Home") { e.preventDefault(); go(0); }
+        else if (e.key === "End") { e.preventDefault(); go(total - 1); }
+      });
+
+      // swipe (touch)
+      let sx = 0, sy = 0, touching = false;
+      const deck = document.getElementById("deck");
+      deck.addEventListener("touchstart", (e) => { const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; touching = true; }, { passive: true });
+      deck.addEventListener("touchend", (e) => {
+        if (!touching) return; touching = false;
+        const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.3) { dx < 0 ? next() : prev(); }
+      }, { passive: true });
+
+      return { go, next, prev, animateSlide, get index() { return index; } };
+    })();
+
+    /* ─── Social Media: troca de escopo por plano ─── */
+    (function () {
+      const tiers = {
+        essencial: { badge: "Essencial", items: [["solar:videocamera-record-bold","3 vídeos por mês"],["solar:smartphone-bold","2 stories por semana"],["solar:gallery-bold","2 artes de feed"]] },
+        completo:  { badge: "Completo",  items: [["solar:videocamera-record-bold","4 vídeos por mês"],["solar:smartphone-bold","4 stories por semana"],["solar:gallery-bold","4 artes de feed"],["solar:calendar-bold","Opção trimestral"]] },
+        performance:{ badge:"+ Tráfego", items: [["solar:videocamera-record-bold","6 vídeos por mês"],["solar:smartphone-bold","5 stories por semana"],["solar:gallery-bold","4 artes de feed"],["solar:graph-up-bold","Verba de tráfego pago inclusa"]] },
+      };
+      const wrap = document.getElementById("smDeliver");
+      const btns = Array.from(document.querySelectorAll("#smTiers [data-tier]"));
+      function render(key) {
+        const t = tiers[key];
+        wrap.innerHTML = t.items.map(([ic, txt]) =>
+          `<div class="deliver"><span class="dot"><iconify-icon icon="${ic}" width="12"></iconify-icon></span><div><p class="text-sm text-fg font-medium">${txt}</p></div></div>`
+        ).join("");
+        if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          gsap.from(wrap.children, { opacity: 0, x: 12, duration: 0.35, stagger: 0.05, ease: "power2.out" });
+        }
+      }
+      btns.forEach((b) => b.addEventListener("click", () => {
+        btns.forEach((x) => x.classList.remove("is-active"));
+        b.classList.add("is-active");
+        render(b.dataset.tier);
+      }));
+      render("essencial");
+    })();
+
+    /* ─── Audiovisual: destaque de pacote ─── */
+    (function () {
+      const pkgs = Array.from(document.querySelectorAll("#avPkgs [data-pkg]"));
+      pkgs.forEach((p) => p.addEventListener("click", () => {
+        pkgs.forEach((x) => x.style.borderColor = "");
+        pkgs.forEach((x) => x.style.boxShadow = "");
+        p.style.borderColor = "#dfff00"; p.style.boxShadow = "4px 4px 0 #dfff00";
+      }));
+    })();
+
+    /* ─── Init: split do headline da capa + primeiro slide ─── */
+    window.addEventListener("load", function () {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // parallax dos glyphs da capa com o mouse
+      if (window.gsap && !reduce) {
+        const glyphs = gsap.utils.toArray("[data-glyph]");
+        let mx = 0, my = 0, sx = 0, sy = 0;
+        window.addEventListener("pointermove", (e) => { mx = (e.clientX / innerWidth) * 2 - 1; my = (e.clientY / innerHeight) * 2 - 1; }, { passive: true });
+        gsap.ticker.add(() => {
+          sx += (mx - sx) * 0.06; sy += (my - sy) * 0.06;
+          glyphs.forEach((g) => { const d = parseFloat(g.dataset.depth || "1"); g.style.marginLeft = sx * 16 * d + "px"; g.style.marginTop = sy * 16 * d + "px"; });
+        });
+      }
+      Deck.go(0);
+    });
+  </script>
+</body>
+</html>

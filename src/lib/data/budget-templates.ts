@@ -25,7 +25,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
           titulo: budget.name,
           subtitulo:
             budget.description ??
-            "Uma presença digital que reflete a excelência da sua marca.",
+            "Um site que mostra sua empresa com clareza e traz clientes mais preparados para falar com você.",
           investimento: brl(budget.value),
           prazo: "7 semanas",
           entregas: "6 entregas",
@@ -36,67 +36,67 @@ function softwareTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Quem somos",
           descricao:
-            "Somos a Elevate, uma agência especializada em desenvolvimento de produtos digitais de alta performance. Unimos design estratégico, tecnologia de ponta e experiência do usuário para transformar marcas em experiências memoráveis. Nosso time é formado por designers, desenvolvedores e estrategistas apaixonados por resultados.",
+            "Somos a Elevate. Fazemos sites institucionais que ajudam empresas a serem encontradas, compreendidas e escolhidas. Combinamos design que transmite confiança, código moderno e atenção aos resultados que o seu negócio precisa.",
           destaques: [
-            "Mais de 5 anos de mercado",
-            "80+ projetos entregues",
-            "Equipe multidisciplinar certificada",
-            "Suporte dedicado pós-lançamento",
+            "Anos de experiência com projetos institucionais",
+            "Mais de 80 sites entregues e no ar",
+            "Time que une design, desenvolvimento e estratégia",
+            "Acompanhamento depois do lançamento",
           ],
         },
       },
       {
         type: "projeto",
         data: {
-          titulo: "Por que este projeto importa",
+          titulo: "Por que o site importa para o seu negócio",
           descricao:
-            "O site é o ponto em que marca, oferta e confiança se encontram — antes mesmo do primeiro contato humano.",
-          introducao: `Hoje a maioria das decisões de compra começa online. Um site institucional bem estruturado não é apenas “presença na internet”: é a base para ser encontrado, compreendido e escolhido. Abaixo detalhamos por que esse investimento é estratégico para ${clientName} e como cada entrega desta proposta reforça credibilidade, clareza e resultados.`,
+            "O site é onde o cliente forma a primeira opinião sobre sua empresa, antes mesmo de qualquer conversa.",
+          introducao: `A maioria das pessoas pesquisa antes de entrar em contato. Um site bem feito coloca o ${clientName} na frente quando alguém está procurando exatamente o que vocês oferecem. Ele mostra quem são, o que fazem e por que merecem confiança. Cada parte desta proposta foi pensada para isso.`,
           estatisticas: [
             { valor: "24/7", legenda: "Sua marca disponível a qualquer hora" },
-            { valor: "1º", legenda: "Contato muitas vezes acontece no site" },
-            { valor: "SEO", legenda: "Ser encontrado no momento certo" },
-            { valor: "100%", legenda: "Experiência alinhada à identidade" },
+            { valor: "1º", legenda: "Muitos clientes começam pelo site" },
+            { valor: "SEO", legenda: "Aparece quando o cliente procura" },
+            { valor: "100%", legenda: "Tudo com a cara da sua marca" },
           ],
           capitulos: [
             {
               titulo: "Credibilidade antes da conversa",
               corpo:
-                "Clientes e parceiros pesquisam a empresa antes de ligar ou visitar. Um site profissional transmite solidez, organização e cuidado com a imagem — sinais que reduzem o risco percebido e aceleram a confiança.",
+                "Quem pesquisa sua empresa antes de ligar ou visitar precisa ver profissionalismo logo de cara. Um site bem feito passa seriedade, organização e atenção aos detalhes. Isso reduz desconfiança e acelera a decisão de entrar em contato.",
               pontos: [
-                "Primeira impressão alinhada ao posicionamento da marca",
-                "Conteúdo claro sobre história, valores e diferenciais",
-                "Canais de contato e informações institucionais sempre atualizadas",
+                "A primeira impressão combina com o que você quer transmitir",
+                "História, valores e o que torna vocês diferentes ficam fáceis de entender",
+                "Telefone, endereço e formas de contato sempre corretos",
               ],
             },
             {
               titulo: "Clareza na oferta",
               corpo:
-                "Produtos e serviços bem apresentados geram menos dúvidas e mais pedidos qualificados. Estruturamos navegação, hierarquia visual e textos para que o visitante entenda rapidamente o que vocês fazem e para quem.",
+                "Quando o visitante entende rápido o que vocês fazem e para quem, ele avança com mais confiança. Organizamos as informações para que não sobre dúvida e sobre interesse.",
               pontos: [
-                "Páginas pensadas para escaneabilidade e conversão",
-                "Suporte a campanhas e materiais de divulgação",
-                "Base para futuras expansões (blog, catálogo, área logada)",
+                "Textos e seções feitos para quem lê correndo",
+                "Pronto para usar em anúncios e materiais",
+                "Estrutura que permite crescer sem refazer tudo depois",
               ],
             },
             {
               titulo: "Performance e descoberta",
               corpo:
-                "Velocidade e boas práticas de SEO técnico ajudam o Google a indexar bem o site e mantêm a experiência agradável em celular — onde a maior parte do tráfego acontece.",
+                "O site carrega rápido no celular, onde a maioria das pessoas acessa. Seguimos práticas que ajudam o Google a mostrar vocês para quem está procurando.",
               pontos: [
-                "Carregamento rápido e layout responsivo",
-                "Metadados, sitemap e estrutura amigável a buscadores",
-                "Integração com analytics para medir o que importa",
+                "Carrega rápido em qualquer celular",
+                "Preparado para aparecer nas buscas",
+                "Você acompanha quantas pessoas chegam e o que fazem",
               ],
             },
             {
               titulo: "Um ativo que acompanha o negócio",
               corpo:
-                "O projeto foi pensado para evoluir: arquitetura moderna facilita ajustes de conteúdo, novas seções e integrações sem recomeçar do zero a cada mudança de estratégia.",
+                "O site cresce com o negócio. A estrutura que usamos permite trocar textos, adicionar páginas ou integrar ferramentas novas sem começar do zero toda vez.",
               pontos: [
-                "Stack atual (Next.js) com foco em manutenção e escala",
-                "Documentação e handoff para o time interno",
-                "Suporte pós-lançamento para estabilizar o go-live",
+                "Tecnologia moderna que facilita atualizações",
+                "Você recebe tudo organizado para usar ou repassar",
+                "Acompanhamento depois do lançamento até tudo estar rodando bem",
               ],
             },
           ],
@@ -105,14 +105,14 @@ function softwareTemplate(budget: Budget): BudgetContent {
       {
         type: "portfolio",
         data: {
-          titulo: "Sites que já entregamos",
+          titulo: "Projetos que já entregamos",
           subtitulo:
-            "Navegue por alguns dos projetos que desenvolvemos — cada um pensado sob medida para o negócio do cliente.",
+            "Alguns sites institucionais que já colocamos no ar para empresas como a sua.",
           itens: [
             {
               titulo: "Codinome Barbearia",
               descricao:
-                "Site institucional focado em fortalecer o posicionamento da marca no ambiente digital. Desenvolvido com HTML, CSS e JavaScript.",
+                "Site que reforçou a presença da marca e ajudou a transmitir profissionalismo para novos clientes.",
               url: "https://codinomebarbearia.com.br/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.20_i4s3sv.png?q=80&w=800&auto=format",
@@ -121,7 +121,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
             {
               titulo: "Sistemas Elevate",
               descricao:
-                "Sistema completo em Next.js com controle financeiro, inventário, projetos e propostas — integrando o escopo operacional que envolve a empresa.",
+                "Mostra sistemas complexos de forma clara para quem precisa contratar uma solução completa.",
               url: "https://www.sistemaselevate.com/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457305/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.38_fxgvdt.png?q=80&w=800&auto=format",
@@ -136,7 +136,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
             {
               titulo: "Pollis Pollen Intelligence",
               descricao:
-                "Site institucional em HTML, CSS e JavaScript, pensado para apresentar a empresa ao mercado e captar novos clientes.",
+                "Apresenta a empresa com clareza e ajuda a atrair clientes novos no mercado.",
               url: "https://pollenintelligence.com/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.47.50_kuqjnl.png?q=80&w=800&auto=format",
@@ -145,7 +145,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
             {
               titulo: "CTNine",
               descricao:
-                "Site institucional criado para posicionar a marca na internet e captar novos alunos.",
+                "Posiciona a marca e facilita a captação de novos alunos pela internet.",
               url: "https://ctnine.com.br/",
               imagem:
                 "https://res.cloudinary.com/dn454izoh/image/upload/v1774457306/Captura_de_Tela_2026-03-25_a%CC%80s_13.48.05_zulve1.png?q=80&w=800&auto=format",
@@ -159,7 +159,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
         data: {
           titulo: "Seu site, sua identidade",
           subtitulo:
-            "Cada projeto é construído do zero — seguindo a história, os gostos e o posicionamento de cada cliente.",
+            "Fazemos cada projeto do zero. Seguimos a história, o estilo e o posicionamento de quem vai usar.",
         },
       },
       {
@@ -168,33 +168,33 @@ function softwareTemplate(budget: Budget): BudgetContent {
           titulo: "Como vai funcionar",
           etapas: [
             {
-              fase: "Kickoff e alinhamento",
+              fase: "Reunião de início",
               descricao:
-                "Reunião de início para entender a fundo a marca, objetivos e referências visuais. Definimos o escopo final e as entregas esperadas.",
+                "Conversamos para entender sua marca, objetivos e referências. Definimos juntos o que vai ser entregue.",
               duracao: "Semana 1",
             },
             {
-              fase: "Design e prototipação",
+              fase: "Design e aprovação",
               descricao:
-                "Criação dos wireframes e design de alta fidelidade no Figma. Você aprova tudo antes de começarmos a desenvolver.",
-              duracao: "Semanas 2–3",
+                "Criamos o visual completo. Você aprova cada tela antes de passarmos para o código.",
+              duracao: "Semanas 2 a 3",
             },
             {
               fase: "Desenvolvimento",
               descricao:
-                "Implementação do site com Next.js, integrando todos os componentes aprovados no design. Ambiente de staging para revisão.",
-              duracao: "Semanas 4–5",
+                "Colocamos o site no ar em versão de testes. Você revisa tudo antes do lançamento.",
+              duracao: "Semanas 4 a 5",
             },
             {
-              fase: "Testes e revisões",
+              fase: "Testes e ajustes",
               descricao:
-                "Rodada de testes em diferentes dispositivos e navegadores. Ajustes finais com base no seu feedback.",
+                "Testamos em celulares e computadores. Fazemos os ajustes que você pedir.",
               duracao: "Semana 6",
             },
             {
               fase: "Lançamento",
               descricao:
-                "Deploy em produção, configuração de domínio, HTTPS e monitoramento inicial. Entrega das credenciais e documentação.",
+                "Colocamos o site no ar, configuramos o domínio e o certificado de segurança. Você recebe as senhas e o guia de uso.",
               duracao: "Semana 7",
             },
           ],
@@ -207,47 +207,47 @@ function softwareTemplate(budget: Budget): BudgetContent {
           pacotes: [
             {
               nome: "Landing Page",
-              descricao: "Para presença digital objetiva e conversão rápida.",
+              descricao: "Uma página focada em apresentar o essencial e gerar contato rápido.",
               valor: 3000,
               parcelas: "ou 3x de R$ 1.000,00",
               inclui: [
-                "Design de 1 página",
-                "Desenvolvimento responsivo",
-                "Seção de serviços e contato",
-                "Integração com WhatsApp",
-                "SEO básico",
+                "Design feito sob medida para uma página",
+                "Funciona perfeitamente no celular",
+                "Seção de serviços e contato direto",
+                "Botão que abre o WhatsApp",
+                "Preparado para aparecer nas buscas",
               ],
               destaque: false,
             },
             {
               nome: "Site Institucional",
               descricao:
-                "Estrutura completa para apresentar empresa, serviços e diferenciais.",
+                "O site ideal para mostrar quem são, o que oferecem e por que escolher vocês.",
               valor: 4000,
               parcelas: "ou 4x de R$ 1.000,00",
               inclui: [
-                "Design de até 5 páginas",
-                "Desenvolvimento em Next.js",
-                "Responsividade total",
-                "SEO técnico inicial",
-                "Formulário de contato",
-                "30 dias de suporte",
+                "Design exclusivo com até 5 páginas",
+                "Site rápido e feito para durar",
+                "Abre direito no celular e computador",
+                "Configurado para ser encontrado nas buscas",
+                "Formulário que manda direto para você",
+                "Suporte por 30 dias após o lançamento",
               ],
               destaque: true,
             },
             {
               nome: "Site Institucional Completo",
               descricao:
-                "Versão robusta com mais páginas, performance e estratégia digital.",
+                "Para quem quer um site mais completo, com espaço para crescer e ferramentas para medir resultados.",
               valor: 6000,
               parcelas: "ou 6x de R$ 1.000,00",
               inclui: [
                 "Design de até 10 páginas",
-                "Arquitetura e conteúdo estratégico",
-                "SEO técnico completo",
-                "Integração com Analytics",
-                "Blog/CMS básico",
-                "60 dias de suporte",
+                "Arquitetura pensada para evoluir",
+                "SEO configurado de forma completa",
+                "Integração com ferramentas de análise",
+                "Espaço para conteúdo como blog",
+                "Suporte por 60 dias após o lançamento",
               ],
               destaque: false,
             },
@@ -257,10 +257,10 @@ function softwareTemplate(budget: Budget): BudgetContent {
       {
         type: "cta",
         data: {
-          titulo: "Vamos começar?",
+          titulo: "Pronto para ter o site do seu negócio?",
           subtitulo:
-            "Estamos prontos para transformar a presença digital do seu negócio. Entre em contato agora e tire suas dúvidas.",
-          botaoTexto: "Aprovar proposta",
+            `Vamos construir o site que representa bem o ${clientName}. Fale com a gente agora e esclareça qualquer ponto antes de aprovar.`,
+          botaoTexto: "Falar no WhatsApp",
           whatsapp: ELEVATE_WHATSAPP_NUMBER,
         },
       },
