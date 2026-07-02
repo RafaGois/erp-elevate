@@ -201,6 +201,52 @@ function softwareTemplate(budget: Budget): BudgetContent {
         },
       },
       {
+        type: "incluso",
+        data: {
+          titulo: "O site é a base. Mas o que realmente faz diferença vem junto com ele.",
+          subtitulo:
+            "Você está contratando um site institucional completo. E junto com ele recebe um conjunto de ferramentas que ajudam sua marca a ser encontrada, parecer profissional e gerar mais confiança desde o primeiro contato.",
+          produtoTitulo: "Site Institucional",
+          produtoDescricao:
+            "A base sólida da sua presença online. Feito sob medida para transmitir quem você é.",
+          urlExemplo: "suaempresa.com.br",
+          itens: [
+            {
+              tipo: "email",
+              titulo: "E-mail corporativo",
+              descricao:
+                "Você passa a ter um endereço de e-mail com o domínio da sua própria marca. Isso transmite muito mais profissionalismo do que usar um e-mail gratuito.",
+              detalhe: "contato@suaempresa.com",
+            },
+            {
+              tipo: "arte",
+              titulo: "Assinatura e artes de e-mail",
+              descricao:
+                "Criamos uma assinatura padronizada e artes para seus e-mails. Assim toda comunicação que você envia reforça a identidade da marca de forma consistente.",
+            },
+            {
+              tipo: "google",
+              titulo: "Perfil do Google corrigido",
+              descricao:
+                "Ajustamos e otimizamos seu perfil no Google para que as pessoas te encontrem corretamente nas buscas locais e no mapa.",
+            },
+            {
+              tipo: "avaliacao",
+              titulo: "Captação de avaliações",
+              descricao:
+                "Colocamos uma plaquinha simples que direciona seus clientes para deixar avaliações no Google. Avaliações positivas ajudam muito na hora de gerar confiança.",
+            },
+            {
+              tipo: "treino",
+              titulo: "Treinamento da equipe",
+              descricao:
+                "Quando necessário, mostramos para sua equipe como pedir avaliações e captar leads de forma natural e contínua no dia a dia.",
+            },
+          ],
+          nota: "O site institucional vem junto com e-mail profissional, perfil otimizado no Google, sistema para captar avaliações e artes para sua comunicação. Tudo pensado para que sua presença digital funcione de verdade.",
+        },
+      },
+      {
         type: "preco",
         data: {
           titulo: "Investimento",
@@ -227,7 +273,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
               parcelas: "ou 4x de R$ 1.000,00",
               inclui: [
                 "Design exclusivo com até 5 páginas",
-                "Site rápido e feito para durar",
+                "⭐ Captação de fotos profissionais, feita só para o seu site",
                 "Abre direito no celular e computador",
                 "Configurado para ser encontrado nas buscas",
                 "Formulário que manda direto para você",
@@ -243,7 +289,7 @@ function softwareTemplate(budget: Budget): BudgetContent {
               parcelas: "ou 6x de R$ 1.000,00",
               inclui: [
                 "Design de até 10 páginas",
-                "Arquitetura pensada para evoluir",
+                "⭐ Captação de fotos profissionais, feita só para o seu site",
                 "SEO configurado de forma completa",
                 "Integração com ferramentas de análise",
                 "Espaço para conteúdo como blog",

@@ -184,6 +184,39 @@ export interface CustomizacaoBlockData {
   subtitulo?: string;
 }
 
+// ─── Incluso / Ecossistema (resumo do que acompanha o produto) ────────────────
+/** Visual contextual do "aparato": muda o mini-mockup exibido ao lado do item */
+export type InclusoAparatoTipo =
+  | "email"
+  | "arte"
+  | "google"
+  | "avaliacao"
+  | "treino"
+  | "default";
+
+export interface InclusoAparato {
+  titulo: string;
+  descricao: string;
+  /** Controla o ícone e o mini-visual do item */
+  tipo?: InclusoAparatoTipo;
+  /** Texto opcional do "chip" (ex.: contato@suaempresa.com) */
+  detalhe?: string;
+}
+
+export interface InclusoBlockData {
+  titulo?: string;
+  subtitulo?: string;
+  /** Nome do produto principal (o site) */
+  produtoTitulo?: string;
+  produtoDescricao?: string;
+  /** URL de exemplo mostrada no mock do navegador (ex.: suaempresa.com.br) */
+  urlExemplo?: string;
+  /** Os aparatos que acompanham o produto principal */
+  itens: InclusoAparato[];
+  /** Frase de fechamento que amarra tudo */
+  nota?: string;
+}
+
 // ─── Union de todos os blocks ─────────────────────────────────────────────────
 export type BudgetBlock =
   | { type: "hero"; data: HeroBlockData }
@@ -198,7 +231,8 @@ export type BudgetBlock =
   | { type: "equipe"; data: EquipeBlockData }
   | { type: "cta"; data: CtaBlockData }
   | { type: "texto"; data: TextoBlockData }
-  | { type: "customizacao"; data: CustomizacaoBlockData };
+  | { type: "customizacao"; data: CustomizacaoBlockData }
+  | { type: "incluso"; data: InclusoBlockData };
 
 export interface BudgetContent {
   blocks: BudgetBlock[];

@@ -17,12 +17,14 @@ import TextoBlock from "./TextoBlock";
 import MarqueeStrip from "./MarqueeStrip";
 import ProposalNav from "./ProposalNav";
 import CustomizacaoBlock from "./CustomizacaoBlock";
+import InclusoBlock from "./InclusoBlock";
 
 const BLOCK_IDS: Partial<Record<BudgetBlock["type"], string>> = {
   sobre_empresa: "sobre",
   projeto: "projeto",
   servicos: "servicos",
   customizacao: "customizacao",
+  incluso: "incluso",
   timeline: "cronograma",
   depoimentos: "depoimentos",
   equipe: "equipe",
@@ -144,6 +146,10 @@ export default function BlockRenderer({
                   isAdmin={isAdmin}
                   onChange={change(i)}
                 />
+              );
+            case "incluso":
+              return (
+                <InclusoBlock key={i} data={block.data} isAdmin={isAdmin} onChange={change(i)} />
               );
             default:
               return null;

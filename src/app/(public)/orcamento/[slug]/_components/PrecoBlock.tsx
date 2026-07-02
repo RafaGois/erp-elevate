@@ -207,9 +207,17 @@ function PrecoRetroCard({
         )}
 
         <div className="mt-4 flex-1 space-y-1.5">
-          {(pacote.inclui ?? []).map((item, ii) => (
-            <div key={ii} className="group/item flex items-start gap-2 font-mono text-[11px] text-neutral-700">
-              {destaque ? (
+          {(pacote.inclui ?? []).map((item, ii) => {
+            const highlight = item.startsWith("⭐");
+            return (
+            <div
+              key={ii}
+              className={cn(
+                "group/item flex items-start gap-2 font-mono text-[11px]",
+                highlight ? "text-neutral-900" : "text-neutral-700"
+              )}
+            >
+              {destaque || highlight ? (
                 <span className="mt-0.5 flex h-4 w-4 shrink-0 select-none items-center justify-center rounded-sm border border-black bg-[#bdfa3c] text-[10px] font-bold leading-none text-black">
                   ✓
                 </span>
@@ -220,7 +228,7 @@ function PrecoRetroCard({
                 value={item}
                 onChange={(v) => setInclui(pi, ii, v)}
                 isAdmin={isAdmin}
-                className="min-w-0 flex-1"
+                className={cn("min-w-0 flex-1", highlight && "font-bold")}
               />
               {isAdmin && (
                 <button
@@ -235,7 +243,8 @@ function PrecoRetroCard({
                 </button>
               )}
             </div>
-          ))}
+            );
+          })}
           {isAdmin && (
             <button
               type="button"
